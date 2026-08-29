@@ -21,7 +21,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '10.0.x'
+          dotnet-version: '8.0.x'
 
       - name: Restore Dependencies
         run: dotnet restore src/backend/FleetFlow.sln
@@ -30,7 +30,7 @@ jobs:
         run: dotnet build src/backend/FleetFlow.sln --no-restore --configuration Release
 
       - name: Run Tests
-        run: dotnet test src/backend/FleetFlow.sln --no-build --configuration Release
+        run: dotnet test src/backend/FleetFlow.sln --no-build --configuration Release --logger "trx;LogFileName=test-results.trx"
 
   frontend-build:
     runs-on: ubuntu-latest

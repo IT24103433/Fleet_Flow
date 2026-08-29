@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{DC9D8EAF-DA30-4CD9-9570-916F828B6702}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FleetFlow.IdentityService.Tests", "tests\FleetFlow.IdentityService.Tests\FleetFlow.IdentityService.Tests.csproj", "{E6D5283E-A593-4B8F-8FFC-06ACE646F9F7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FleetFlow.VehicleService.Tests", "tests\FleetFlow.VehicleService.Tests\FleetFlow.VehicleService.Tests.csproj", "{BCF3C258-AE65-4700-A3D0-0478F25023D3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E6D5283E-A593-4B8F-8FFC-06ACE646F9F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6D5283E-A593-4B8F-8FFC-06ACE646F9F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6D5283E-A593-4B8F-8FFC-06ACE646F9F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6D5283E-A593-4B8F-8FFC-06ACE646F9F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCF3C258-AE65-4700-A3D0-0478F25023D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCF3C258-AE65-4700-A3D0-0478F25023D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCF3C258-AE65-4700-A3D0-0478F25023D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCF3C258-AE65-4700-A3D0-0478F25023D3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E6D5283E-A593-4B8F-8FFC-06ACE646F9F7} = {DC9D8EAF-DA30-4CD9-9570-916F828B6702}
+		{BCF3C258-AE65-4700-A3D0-0478F25023D3} = {DC9D8EAF-DA30-4CD9-9570-916F828B6702}
+	EndGlobalSection
+EndGlobal

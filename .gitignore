@@ -1,6 +1,8 @@
 # Visual Studio / .NET Core
 bin/
 obj/
+[Bb]in/
+[Oo]bj/
 *.suo
 *.user
 *.userosscache
