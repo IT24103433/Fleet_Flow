@@ -1,11 +1,42 @@
 using Microsoft.EntityFrameworkCore;
 using FleetService.Api.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<FleetDbContext>(options =>
     options.UseNpgsql(GetDatabaseConnectionString(builder.Configuration)));
+
+// Configure JWT Authentication
+var jwtSection = builder.Configuration.GetSection("Jwt");
+var jwtKey = jwtSection["Key"] ?? builder.Configuration["Jwt__Key"];
+if (string.IsNullOrEmpty(jwtKey) || Encoding.UTF8.GetByteCount(jwtKey) < 32)
+{
+    throw new InvalidOperationException("JWT Signing Key is missing or too short. A minimum of 32 bytes (256 bits) is required.");
+}
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtSection["Issuer"],
+        ValidAudience = jwtSection["Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
+        ClockSkew = TimeSpan.Zero
+    };
+});
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -42,6 +73,7 @@ app.UseHttpsRedirection();
 
 app.UseCors();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
