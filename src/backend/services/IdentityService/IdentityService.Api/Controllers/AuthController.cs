@@ -10,10 +10,14 @@ namespace IdentityService.Api.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly IRegistrationService _registrationService;
+    private readonly IAuthenticationService _authenticationService;
 
-    public AuthController(IRegistrationService registrationService)
+    public AuthController(
+        IRegistrationService registrationService,
+        IAuthenticationService authenticationService)
     {
         _registrationService = registrationService;
+        _authenticationService = authenticationService;
     }
 
     [HttpPost("register")]
@@ -27,6 +31,20 @@ public class AuthController : ControllerBase
         catch (DuplicateException ex)
         {
             return Conflict(new { message = ex.Message });
+        }
+    }
+
+    [HttpPost("login")]
+    public async Task<ActionResult<LoginResponse>> Login([FromBody] LoginRequest request)
+    {
+        try
+        {
+            var response = await _authenticationService.LoginAsync(request);
+            return Ok(response);
+        }
+        catch (InvalidCredentialsException ex)
+        {
+            return Unauthorized(new { message = ex.Message });
         }
     }
 }
