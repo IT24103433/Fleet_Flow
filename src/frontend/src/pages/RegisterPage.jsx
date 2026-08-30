@@ -4,7 +4,7 @@ import Alert from '../components/Alert';
 import { validateRegister } from '../validation/registerValidation';
 import { registerUser } from '../services/authService';
 
-const RegisterPage = () => {
+const RegisterPage = ({ onNavigateToLogin }) => {
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -184,6 +184,17 @@ const RegisterPage = () => {
         >
           {isLoading ? 'Creating Account...' : 'Register'}
         </button>
+        <div className="auth-switch-link">
+          Already have an account?{' '}
+          <button
+            type="button"
+            className="link-btn"
+            onClick={onNavigateToLogin}
+            disabled={isLoading}
+          >
+            Log In
+          </button>
+        </div>
       </form>
     </div>
   );
