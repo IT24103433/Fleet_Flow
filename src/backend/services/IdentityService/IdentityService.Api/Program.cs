@@ -66,7 +66,29 @@ using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<IdentityDbContext>();
     await dbContext.Database.EnsureCreatedAsync();
+
+    // Idempotent Role Seeding
+    var defaultRoles = new[] { "CUSTOMER", "FLEET_MANAGER", "ADMIN" };
+    bool hasChanges = false;
+    foreach (var roleName in defaultRoles)
+    {
+        var roleExists = await dbContext.Roles.AnyAsync(r => r.Name.ToUpper() == roleName.ToUpper());
+        if (!roleExists)
+        {
+            dbContext.Roles.Add(new Role
+            {
+                Id = Guid.NewGuid(),
+                Name = roleName
+            });
+            hasChanges = true;
+        }
+    }
+    if (hasChanges)
+    {
+        await dbContext.SaveChangesAsync();
+    }
 }
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
