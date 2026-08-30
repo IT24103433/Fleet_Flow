@@ -229,3 +229,28 @@
     box-shadow: none;
   }
 }
+
+.auth-switch-link {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+  color: var(--text);
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+  font-size: inherit;
+  transition: color 0.2s;
+}
+
+.link-btn:hover {
+  text-decoration: underline;
+  opacity: 0.9;
+}
+
