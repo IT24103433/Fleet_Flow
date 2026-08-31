@@ -958,5 +958,645 @@
     "operationalStatus": "Available",
     "dailyRateLkr": 10000,
     "mileageKm": 28200
+  },
+  {
+    "vehicleId": "VEH-0121",
+    "plateNumber": "WP-CA-1121",
+    "category": "SUV",
+    "operationalStatus": "Rented",
+    "dailyRateLkr": 11500,
+    "mileageKm": 28335
+  },
+  {
+    "vehicleId": "VEH-0122",
+    "plateNumber": "WP-CA-1122",
+    "category": "Van",
+    "operationalStatus": "Maintenance",
+    "dailyRateLkr": 13000,
+    "mileageKm": 28470
+  },
+  {
+    "vehicleId": "VEH-0123",
+    "plateNumber": "WP-CA-1123",
+    "category": "Hatchback",
+    "operationalStatus": "Reserved",
+    "dailyRateLkr": 14500,
+    "mileageKm": 28605
+  },
+  {
+    "vehicleId": "VEH-0124",
+    "plateNumber": "WP-CA-1124",
+    "category": "Pickup",
+    "operationalStatus": "Available",
+    "dailyRateLkr": 16000,
+    "mileageKm": 28740
+  },
+  {
+    "vehicleId": "VEH-0125",
+    "plateNumber": "WP-CA-1125",
+    "category": "Sedan",
+    "operationalStatus": "Rented",
+    "dailyRateLkr": 17500,
+    "mileageKm": 28875
+  },
+  {
+    "vehicleId": "VEH-0126",
+    "plateNumber": "WP-CA-1126",
+    "category": "SUV",
+    "operationalStatus": "Maintenance",
+    "dailyRateLkr": 8500,
+    "mileageKm": 29010
+  },
+  {
+    "vehicleId": "VEH-0127",
+    "plateNumber": "WP-CA-1127",
+    "category": "Van",
+    "operationalStatus": "Reserved",
+    "dailyRateLkr": 10000,
+    "mileageKm": 29145
+  },
+  {
+    "vehicleId": "VEH-0128",
+    "plateNumber": "WP-CA-1128",
+    "category": "Hatchback",
+    "operationalStatus": "Available",
+    "dailyRateLkr": 11500,
+    "mileageKm": 29280
+  },
+  {
+    "vehicleId": "VEH-0129",
+    "plateNumber": "WP-CA-1129",
+    "category": "Pickup",
+    "operationalStatus": "Rented",
+    "dailyRateLkr": 13000,
+    "mileageKm": 29415
+  },
+  {
+    "vehicleId": "VEH-0130",
+    "plateNumber": "WP-CA-1130",
+    "category": "Sedan",
+    "operationalStatus": "Maintenance",
+    "dailyRateLkr": 14500,
+    "mileageKm": 29550
+  },
+  {
+    "vehicleId": "VEH-0131",
+    "plateNumber": "WP-CA-1131",
+    "category": "SUV",
+    "operationalStatus": "Reserved",
+    "dailyRateLkr": 16000,
+    "mileageKm": 29685
+  },
+  {
+    "vehicleId": "VEH-0132",
+    "plateNumber": "WP-CA-1132",
+    "category": "Van",
+    "operationalStatus": "Available",
+    "dailyRateLkr": 17500,
+    "mileageKm": 29820
+  },
+  {
+    "vehicleId": "VEH-0133",
+    "plateNumber": "WP-CA-1133",
+    "category": "Hatchback",
+    "operationalStatus": "Rented",
+    "dailyRateLkr": 8500,
+    "mileageKm": 29955
+  },
+  {
+    "vehicleId": "VEH-0134",
+    "plateNumber": "WP-CA-1134",
+    "category": "Pickup",
+    "operationalStatus": "Maintenance",
+    "dailyRateLkr": 10000,
+    "mileageKm": 30090
+  },
+  {
+    "vehicleId": "VEH-0135",
+    "plateNumber": "WP-CA-1135",
+    "category": "Sedan",
+    "operationalStatus": "Reserved",
+    "dailyRateLkr": 11500,
+    "mileageKm": 30225
+  },
+  {
+    "vehicleId": "VEH-0136",
+    "plateNumber": "WP-CA-1136",
+    "category": "SUV",
+    "operationalStatus": "Available",
+    "dailyRateLkr": 13000,
+    "mileageKm": 30360
+  },
+  {
+    "vehicleId": "VEH-0137",
+    "plateNumber": "WP-CA-1137",
+    "category": "Van",
+    "operationalStatus": "Rented",
+    "dailyRateLkr": 14500,
+    "mileageKm": 30495
+  },
+  {
+    "vehicleId": "VEH-0138",
+    "plateNumber": "WP-CA-1138",
+    "category": "Hatchback",
+    "operationalStatus": "Maintenance",
+    "dailyRateLkr": 16000,
+    "mileageKm": 30630
+  },
+  {
+    "vehicleId": "VEH-0139",
+    "plateNumber": "WP-CA-1139",
+    "category": "Pickup",
+    "operationalStatus": "Reserved",
+    "dailyRateLkr": 17500,
+    "mileageKm": 30765
+  },
+  {
+    "vehicleId": "VEH-0140",
+    "plateNumber": "WP-CA-1140",
+    "category": "Sedan",
+    "operationalStatus": "Available",
+    "dailyRateLkr": 8500,
+    "mileageKm": 30900
+  },
+  {
+    "vehicleId": "VEH-0141",
+    "plateNumber": "WP-CA-1141",
+    "category": "SUV",
+    "operationalStatus": "Rented",
+    "dailyRateLkr": 10000,
+    "mileageKm": 31035
+  },
+  {
+    "vehicleId": "VEH-0142",
+    "plateNumber": "WP-CA-1142",
+    "category": "Van",
+    "operationalStatus": "Maintenance",
+    "dailyRateLkr": 11500,
+    "mileageKm": 31170
+  },
+  {
+    "vehicleId": "VEH-0143",
+    "plateNumber": "WP-CA-1143",
+    "category": "Hatchback",
+    "operationalStatus": "Reserved",
+    "dailyRateLkr": 13000,
+    "mileageKm": 31305
+  },
+  {
+    "vehicleId": "VEH-0144",
+    "plateNumber": "WP-CA-1144",
+    "category": "Pickup",
+    "operationalStatus": "Available",
+    "dailyRateLkr": 14500,
+    "mileageKm": 31440
+  },
+  {
+    "vehicleId": "VEH-0145",
+    "plateNumber": "WP-CA-1145",
+    "category": "Sedan",
+    "operationalStatus": "Rented",
+    "dailyRateLkr": 16000,
+    "mileageKm": 31575
+  },
+  {
+    "vehicleId": "VEH-0146",
+    "plateNumber": "WP-CA-1146",
+    "category": "SUV",
+    "operationalStatus": "Maintenance",
+    "dailyRateLkr": 17500,
+    "mileageKm": 31710
+  },
+  {
+    "vehicleId": "VEH-0147",
+    "plateNumber": "WP-CA-1147",
+    "category": "Van",
+    "operationalStatus": "Reserved",
+    "dailyRateLkr": 8500,
+    "mileageKm": 31845
+  },
+  {
+    "vehicleId": "VEH-0148",
+    "plateNumber": "WP-CA-1148",
+    "category": "Hatchback",
+    "operationalStatus": "Available",
+    "dailyRateLkr": 10000,
+    "mileageKm": 31980
+  },
+  {
+    "vehicleId": "VEH-0149",
+    "plateNumber": "WP-CA-1149",
+    "category": "Pickup",
+    "operationalStatus": "Rented",
+    "dailyRateLkr": 11500,
+    "mileageKm": 32115
+  },
+  {
+    "vehicleId": "VEH-0150",
+    "plateNumber": "WP-CA-1150",
+    "category": "Sedan",
+    "operationalStatus": "Maintenance",
+    "dailyRateLkr": 13000,
+    "mileageKm": 32250
+  },
+  {
+    "vehicleId": "VEH-0151",
+    "plateNumber": "WP-CA-1151",
+    "category": "SUV",
+    "operationalStatus": "Reserved",
+    "dailyRateLkr": 14500,
+    "mileageKm": 32385
+  },
+  {
+    "vehicleId": "VEH-0152",
+    "plateNumber": "WP-CA-1152",
+    "category": "Van",
+    "operationalStatus": "Available",
+    "dailyRateLkr": 16000,
+    "mileageKm": 32520
+  },
+  {
+    "vehicleId": "VEH-0153",
+    "plateNumber": "WP-CA-1153",
+    "category": "Hatchback",
+    "operationalStatus": "Rented",
+    "dailyRateLkr": 17500,
+    "mileageKm": 32655
+  },
+  {
+    "vehicleId": "VEH-0154",
+    "plateNumber": "WP-CA-1154",
+    "category": "Pickup",
+    "operationalStatus": "Maintenance",
+    "dailyRateLkr": 8500,
+    "mileageKm": 32790
+  },
+  {
+    "vehicleId": "VEH-0155",
+    "plateNumber": "WP-CA-1155",
+    "category": "Sedan",
+    "operationalStatus": "Reserved",
+    "dailyRateLkr": 10000,
+    "mileageKm": 32925
+  },
+  {
+    "vehicleId": "VEH-0156",
+    "plateNumber": "WP-CA-1156",
+    "category": "SUV",
+    "operationalStatus": "Available",
+    "dailyRateLkr": 11500,
+    "mileageKm": 33060
+  },
+  {
+    "vehicleId": "VEH-0157",
+    "plateNumber": "WP-CA-1157",
+    "category": "Van",
+    "operationalStatus": "Rented",
+    "dailyRateLkr": 13000,
+    "mileageKm": 33195
+  },
+  {
+    "vehicleId": "VEH-0158",
+    "plateNumber": "WP-CA-1158",
+    "category": "Hatchback",
+    "operationalStatus": "Maintenance",
+    "dailyRateLkr": 14500,
+    "mileageKm": 33330
+  },
+  {
+    "vehicleId": "VEH-0159",
+    "plateNumber": "WP-CA-1159",
+    "category": "Pickup",
+    "operationalStatus": "Reserved",
+    "dailyRateLkr": 16000,
+    "mileageKm": 33465
+  },
+  {
+    "vehicleId": "VEH-0160",
+    "plateNumber": "WP-CA-1160",
+    "category": "Sedan",
+    "operationalStatus": "Available",
+    "dailyRateLkr": 17500,
+    "mileageKm": 33600
+  },
+  {
+    "vehicleId": "VEH-0161",
+    "plateNumber": "WP-CA-1161",
+    "category": "SUV",
+    "operationalStatus": "Rented",
+    "dailyRateLkr": 8500,
+    "mileageKm": 33735
+  },
+  {
+    "vehicleId": "VEH-0162",
+    "plateNumber": "WP-CA-1162",
+    "category": "Van",
+    "operationalStatus": "Maintenance",
+    "dailyRateLkr": 10000,
+    "mileageKm": 33870
+  },
+  {
+    "vehicleId": "VEH-0163",
+    "plateNumber": "WP-CA-1163",
+    "category": "Hatchback",
+    "operationalStatus": "Reserved",
+    "dailyRateLkr": 11500,
+    "mileageKm": 34005
+  },
+  {
+    "vehicleId": "VEH-0164",
+    "plateNumber": "WP-CA-1164",
+    "category": "Pickup",
+    "operationalStatus": "Available",
+    "dailyRateLkr": 13000,
+    "mileageKm": 34140
+  },
+  {
+    "vehicleId": "VEH-0165",
+    "plateNumber": "WP-CA-1165",
+    "category": "Sedan",
+    "operationalStatus": "Rented",
+    "dailyRateLkr": 14500,
+    "mileageKm": 34275
+  },
+  {
+    "vehicleId": "VEH-0166",
+    "plateNumber": "WP-CA-1166",
+    "category": "SUV",
+    "operationalStatus": "Maintenance",
+    "dailyRateLkr": 16000,
+    "mileageKm": 34410
+  },
+  {
+    "vehicleId": "VEH-0167",
+    "plateNumber": "WP-CA-1167",
+    "category": "Van",
+    "operationalStatus": "Reserved",
+    "dailyRateLkr": 17500,
+    "mileageKm": 34545
+  },
+  {
+    "vehicleId": "VEH-0168",
+    "plateNumber": "WP-CA-1168",
+    "category": "Hatchback",
+    "operationalStatus": "Available",
+    "dailyRateLkr": 8500,
+    "mileageKm": 34680
+  },
+  {
+    "vehicleId": "VEH-0169",
+    "plateNumber": "WP-CA-1169",
+    "category": "Pickup",
+    "operationalStatus": "Rented",
+    "dailyRateLkr": 10000,
+    "mileageKm": 34815
+  },
+  {
+    "vehicleId": "VEH-0170",
+    "plateNumber": "WP-CA-1170",
+    "category": "Sedan",
+    "operationalStatus": "Maintenance",
+    "dailyRateLkr": 11500,
+    "mileageKm": 34950
+  },
+  {
+    "vehicleId": "VEH-0171",
+    "plateNumber": "WP-CA-1171",
+    "category": "SUV",
+    "operationalStatus": "Reserved",
+    "dailyRateLkr": 13000,
+    "mileageKm": 35085
+  },
+  {
+    "vehicleId": "VEH-0172",
+    "plateNumber": "WP-CA-1172",
+    "category": "Van",
+    "operationalStatus": "Available",
+    "dailyRateLkr": 14500,
+    "mileageKm": 35220
+  },
+  {
+    "vehicleId": "VEH-0173",
+    "plateNumber": "WP-CA-1173",
+    "category": "Hatchback",
+    "operationalStatus": "Rented",
+    "dailyRateLkr": 16000,
+    "mileageKm": 35355
+  },
+  {
+    "vehicleId": "VEH-0174",
+    "plateNumber": "WP-CA-1174",
+    "category": "Pickup",
+    "operationalStatus": "Maintenance",
+    "dailyRateLkr": 17500,
+    "mileageKm": 35490
+  },
+  {
+    "vehicleId": "VEH-0175",
+    "plateNumber": "WP-CA-1175",
+    "category": "Sedan",
+    "operationalStatus": "Reserved",
+    "dailyRateLkr": 8500,
+    "mileageKm": 35625
+  },
+  {
+    "vehicleId": "VEH-0176",
+    "plateNumber": "WP-CA-1176",
+    "category": "SUV",
+    "operationalStatus": "Available",
+    "dailyRateLkr": 10000,
+    "mileageKm": 35760
+  },
+  {
+    "vehicleId": "VEH-0177",
+    "plateNumber": "WP-CA-1177",
+    "category": "Van",
+    "operationalStatus": "Rented",
+    "dailyRateLkr": 11500,
+    "mileageKm": 35895
+  },
+  {
+    "vehicleId": "VEH-0178",
+    "plateNumber": "WP-CA-1178",
+    "category": "Hatchback",
+    "operationalStatus": "Maintenance",
+    "dailyRateLkr": 13000,
+    "mileageKm": 36030
+  },
+  {
+    "vehicleId": "VEH-0179",
+    "plateNumber": "WP-CA-1179",
+    "category": "Pickup",
+    "operationalStatus": "Reserved",
+    "dailyRateLkr": 14500,
+    "mileageKm": 36165
+  },
+  {
+    "vehicleId": "VEH-0180",
+    "plateNumber": "WP-CA-1180",
+    "category": "Sedan",
+    "operationalStatus": "Available",
+    "dailyRateLkr": 16000,
+    "mileageKm": 36300
+  },
+  {
+    "vehicleId": "VEH-0181",
+    "plateNumber": "WP-CA-1181",
+    "category": "SUV",
+    "operationalStatus": "Rented",
+    "dailyRateLkr": 17500,
+    "mileageKm": 36435
+  },
+  {
+    "vehicleId": "VEH-0182",
+    "plateNumber": "WP-CA-1182",
+    "category": "Van",
+    "operationalStatus": "Maintenance",
+    "dailyRateLkr": 8500,
+    "mileageKm": 36570
+  },
+  {
+    "vehicleId": "VEH-0183",
+    "plateNumber": "WP-CA-1183",
+    "category": "Hatchback",
+    "operationalStatus": "Reserved",
+    "dailyRateLkr": 10000,
+    "mileageKm": 36705
+  },
+  {
+    "vehicleId": "VEH-0184",
+    "plateNumber": "WP-CA-1184",
+    "category": "Pickup",
+    "operationalStatus": "Available",
+    "dailyRateLkr": 11500,
+    "mileageKm": 36840
+  },
+  {
+    "vehicleId": "VEH-0185",
+    "plateNumber": "WP-CA-1185",
+    "category": "Sedan",
+    "operationalStatus": "Rented",
+    "dailyRateLkr": 13000,
+    "mileageKm": 36975
+  },
+  {
+    "vehicleId": "VEH-0186",
+    "plateNumber": "WP-CA-1186",
+    "category": "SUV",
+    "operationalStatus": "Maintenance",
+    "dailyRateLkr": 14500,
+    "mileageKm": 37110
+  },
+  {
+    "vehicleId": "VEH-0187",
+    "plateNumber": "WP-CA-1187",
+    "category": "Van",
+    "operationalStatus": "Reserved",
+    "dailyRateLkr": 16000,
+    "mileageKm": 37245
+  },
+  {
+    "vehicleId": "VEH-0188",
+    "plateNumber": "WP-CA-1188",
+    "category": "Hatchback",
+    "operationalStatus": "Available",
+    "dailyRateLkr": 17500,
+    "mileageKm": 37380
+  },
+  {
+    "vehicleId": "VEH-0189",
+    "plateNumber": "WP-CA-1189",
+    "category": "Pickup",
+    "operationalStatus": "Rented",
+    "dailyRateLkr": 8500,
+    "mileageKm": 37515
+  },
+  {
+    "vehicleId": "VEH-0190",
+    "plateNumber": "WP-CA-1190",
+    "category": "Sedan",
+    "operationalStatus": "Maintenance",
+    "dailyRateLkr": 10000,
+    "mileageKm": 37650
+  },
+  {
+    "vehicleId": "VEH-0191",
+    "plateNumber": "WP-CA-1191",
+    "category": "SUV",
+    "operationalStatus": "Reserved",
+    "dailyRateLkr": 11500,
+    "mileageKm": 37785
+  },
+  {
+    "vehicleId": "VEH-0192",
+    "plateNumber": "WP-CA-1192",
+    "category": "Van",
+    "operationalStatus": "Available",
+    "dailyRateLkr": 13000,
+    "mileageKm": 37920
+  },
+  {
+    "vehicleId": "VEH-0193",
+    "plateNumber": "WP-CA-1193",
+    "category": "Hatchback",
+    "operationalStatus": "Rented",
+    "dailyRateLkr": 14500,
+    "mileageKm": 38055
+  },
+  {
+    "vehicleId": "VEH-0194",
+    "plateNumber": "WP-CA-1194",
+    "category": "Pickup",
+    "operationalStatus": "Maintenance",
+    "dailyRateLkr": 16000,
+    "mileageKm": 38190
+  },
+  {
+    "vehicleId": "VEH-0195",
+    "plateNumber": "WP-CA-1195",
+    "category": "Sedan",
+    "operationalStatus": "Reserved",
+    "dailyRateLkr": 17500,
+    "mileageKm": 38325
+  },
+  {
+    "vehicleId": "VEH-0196",
+    "plateNumber": "WP-CA-1196",
+    "category": "SUV",
+    "operationalStatus": "Available",
+    "dailyRateLkr": 8500,
+    "mileageKm": 38460
+  },
+  {
+    "vehicleId": "VEH-0197",
+    "plateNumber": "WP-CA-1197",
+    "category": "Van",
+    "operationalStatus": "Rented",
+    "dailyRateLkr": 10000,
+    "mileageKm": 38595
+  },
+  {
+    "vehicleId": "VEH-0198",
+    "plateNumber": "WP-CA-1198",
+    "category": "Hatchback",
+    "operationalStatus": "Maintenance",
+    "dailyRateLkr": 11500,
+    "mileageKm": 38730
+  },
+  {
+    "vehicleId": "VEH-0199",
+    "plateNumber": "WP-CA-1199",
+    "category": "Pickup",
+    "operationalStatus": "Reserved",
+    "dailyRateLkr": 13000,
+    "mileageKm": 38865
+  },
+  {
+    "vehicleId": "VEH-0200",
+    "plateNumber": "WP-CA-1200",
+    "category": "Sedan",
+    "operationalStatus": "Available",
+    "dailyRateLkr": 14500,
+    "mileageKm": 39000
   }
 ]
