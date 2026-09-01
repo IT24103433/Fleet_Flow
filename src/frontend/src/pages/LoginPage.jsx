@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import InputField from '../components/InputField';
 import Alert from '../components/Alert';
+import Button from '../components/common/Button';
 import { validateLogin } from '../validation/loginValidation';
 import { loginUser } from '../services/authService';
 import { useAuth } from '../context/AuthContext';
 
-const LoginPage = ({ onNavigateToRegister }) => {
+const LoginPage = ({ onNavigateToRegister, onNavigateToStaffLogin }) => {
   const { login } = useAuth();
   const [formData, setFormData] = useState({
     usernameOrEmail: '',
@@ -23,14 +24,12 @@ const LoginPage = ({ onNavigateToRegister }) => {
       [name]: value,
     }));
 
-    // Clear field-specific error as user types
     if (errors[name]) {
       setErrors((prev) => ({
         ...prev,
         [name]: '',
       }));
     }
-    // Clear global error
     if (globalError) {
       setGlobalError('');
     }
@@ -41,11 +40,9 @@ const LoginPage = ({ onNavigateToRegister }) => {
     setErrors({});
     setGlobalError('');
 
-    // Client-side validation
     const validationErrors = validateLogin(formData);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
-      // Focus first field with error for better accessibility
       const firstErrorKey = Object.keys(validationErrors)[0];
       const element = document.getElementById(firstErrorKey);
       if (element) element.focus();
@@ -54,17 +51,14 @@ const LoginPage = ({ onNavigateToRegister }) => {
 
     setIsLoading(true);
 
-    // Call service API
     const result = await loginUser(formData.usernameOrEmail, formData.password);
 
     setIsLoading(false);
 
     if (result.success) {
-      // successful login
       login(result.data.token, result.data.user);
     } else {
       if (result.status === 400 && result.errors) {
-        // Map backend validation errors (e.g. "UsernameOrEmail", "Password") case-insensitively
         const fieldErrors = {};
         Object.keys(result.errors).forEach((key) => {
           const normalizedKey = key.charAt(0).toLowerCase() + key.slice(1);
@@ -80,60 +74,81 @@ const LoginPage = ({ onNavigateToRegister }) => {
   };
 
   return (
-    <div className="register-card">
-      <div className="register-header">
-        <h2 className="register-title">Sign In</h2>
-        <p className="register-subtitle">Log in to manage your FleetFlow account</p>
-      </div>
-
-      <Alert type="error" message={globalError} />
-
-      <form onSubmit={handleFormSubmit} noValidate>
-        <InputField
-          label="Username or Email"
-          id="usernameOrEmail"
-          name="usernameOrEmail"
-          value={formData.usernameOrEmail}
-          onChange={handleInputChange}
-          error={errors.usernameOrEmail}
-          placeholder="Enter username or email address"
-          required
-          disabled={isLoading}
-        />
-
-        <InputField
-          label="Password"
-          type="password"
-          id="password"
-          name="password"
-          value={formData.password}
-          onChange={handleInputChange}
-          error={errors.password}
-          placeholder="Enter your password"
-          required
-          disabled={isLoading}
-        />
-
-        <button
-          type="submit"
-          className="btn btn-primary btn-block"
-          disabled={isLoading}
-        >
-          {isLoading ? 'Signing In...' : 'Log In'}
-        </button>
-
-        <div className="auth-switch-link">
-          Don't have an account?{' '}
-          <button
-            type="button"
-            className="link-btn"
-            onClick={onNavigateToRegister}
-            disabled={isLoading}
-          >
-            Register
-          </button>
+    <div className="auth-page-layout">
+      <div className="auth-card">
+        <div className="auth-header">
+          <div className="auth-badge-pill">Customer Portal</div>
+          <h2 className="auth-title">Sign In to FleetFlow</h2>
+          <p className="auth-subtitle">Access personal vehicle bookings, reservations, and account details.</p>
         </div>
-      </form>
+
+        <Alert type="error" message={globalError} />
+
+        <form onSubmit={handleFormSubmit} noValidate className="auth-form">
+          <InputField
+            label="Username or Email"
+            id="usernameOrEmail"
+            name="usernameOrEmail"
+            value={formData.usernameOrEmail}
+            onChange={handleInputChange}
+            error={errors.usernameOrEmail}
+            placeholder="e.g. alex@example.com or alex_drive"
+            required
+            disabled={isLoading}
+          />
+
+          <InputField
+            label="Password"
+            type="password"
+            id="password"
+            name="password"
+            value={formData.password}
+            onChange={handleInputChange}
+            error={errors.password}
+            placeholder="Enter your account password"
+            required
+            disabled={isLoading}
+          />
+
+          <Button
+            type="submit"
+            variant="primary"
+            size="lg"
+            fullWidth
+            isLoading={isLoading}
+          >
+            Sign In
+          </Button>
+
+          <div className="auth-footer-links">
+            <p className="auth-switch-text">
+              Don't have an account?{' '}
+              <button
+                type="button"
+                className="inline-link-btn"
+                onClick={onNavigateToRegister}
+                disabled={isLoading}
+              >
+                Create Account
+              </button>
+            </p>
+
+            {onNavigateToStaffLogin && (
+              <div className="staff-portal-switch-divider">
+                <span>Internal Staff Member?</span>
+                <button
+                  type="button"
+                  className="staff-switch-link"
+                  onClick={onNavigateToStaffLogin}
+                  disabled={isLoading}
+                >
+                  Go to Staff Portal Login →
+                </button>
+              </div>
+            )}
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
