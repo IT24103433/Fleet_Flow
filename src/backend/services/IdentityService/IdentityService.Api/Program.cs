@@ -68,7 +68,7 @@ using (var scope = app.Services.CreateScope())
     await dbContext.Database.EnsureCreatedAsync();
 
     // Idempotent Role Seeding
-    var defaultRoles = new[] { "CUSTOMER", "FLEET_MANAGER", "ADMIN" };
+    var defaultRoles = new[] { "CUSTOMER", "FLEET_MANAGER", "MAINTENANCE_STAFF", "ADMIN" };
     bool hasChanges = false;
     foreach (var roleName in defaultRoles)
     {

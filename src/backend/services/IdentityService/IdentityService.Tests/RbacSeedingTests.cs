@@ -21,7 +21,7 @@ public class RbacSeedingTests
 
     private async Task SeedRolesAsync(IdentityDbContext dbContext)
     {
-        var defaultRoles = new[] { "CUSTOMER", "FLEET_MANAGER", "ADMIN" };
+        var defaultRoles = new[] { "CUSTOMER", "FLEET_MANAGER", "MAINTENANCE_STAFF", "ADMIN" };
         bool hasChanges = false;
         foreach (var roleName in defaultRoles)
         {
@@ -43,7 +43,7 @@ public class RbacSeedingTests
     }
 
     [Fact]
-    public async Task SeedRoles_OnEmptyDatabase_SeedsAllThreeDefaultRoles()
+    public async Task SeedRoles_OnEmptyDatabase_SeedsAllFourDefaultRoles()
     {
         // Arrange
         using var context = new IdentityDbContext(_dbContextOptions);
@@ -53,9 +53,10 @@ public class RbacSeedingTests
 
         // Assert
         var roles = await context.Roles.ToListAsync();
-        Assert.Equal(3, roles.Count);
+        Assert.Equal(4, roles.Count);
         Assert.Contains(roles, r => r.Name == "CUSTOMER");
         Assert.Contains(roles, r => r.Name == "FLEET_MANAGER");
+        Assert.Contains(roles, r => r.Name == "MAINTENANCE_STAFF");
         Assert.Contains(roles, r => r.Name == "ADMIN");
     }
 
@@ -72,6 +73,6 @@ public class RbacSeedingTests
 
         // Assert
         var roles = await context.Roles.ToListAsync();
-        Assert.Equal(3, roles.Count);
+        Assert.Equal(4, roles.Count);
     }
 }
