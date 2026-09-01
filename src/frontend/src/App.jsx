@@ -4,21 +4,56 @@ import CustomerNav from './components/layout/CustomerNav';
 import Footer from './components/layout/Footer';
 import StaffSidebar from './components/layout/StaffSidebar';
 import StaffHeader from './components/layout/StaffHeader';
+
+// Customer Pages
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import BrowseFleetPage from './pages/BrowseFleetPage';
+import VehicleDetailsPage from './pages/customer/VehicleDetailsPage';
+import CustomerHomePage from './pages/customer/CustomerHomePage';
+import CustomerProfilePage from './pages/customer/CustomerProfilePage';
+
+// Staff & Admin Pages
 import StaffLoginPage from './pages/StaffLoginPage';
 import StaffDashboardPage from './pages/StaffDashboardPage';
-import BrowseFleetPage from './pages/BrowseFleetPage';
+import StaffProfilePage from './pages/staff/StaffProfilePage';
+import AdminDashboardPage from './pages/admin/AdminDashboardPage';
+import AdminUserListPage from './pages/admin/AdminUserListPage';
+import AdminCreateUserPage from './pages/admin/AdminCreateUserPage';
+import AdminUserDetailsPage from './pages/admin/AdminUserDetailsPage';
+
+// Vehicle Management Pages
+import ManageFleetPage from './pages/vehicle/ManageFleetPage';
+import AddVehiclePage from './pages/vehicle/AddVehiclePage';
+import VehicleImageManagementPage from './pages/vehicle/VehicleImageManagementPage';
+
+// Security Pages
+import ForcePasswordChangePage from './pages/security/ForcePasswordChangePage';
+
+import { INITIAL_VEHICLES } from './data/vehicleData';
 import './App.css';
 
 const STAFF_ROLES = ['FLEET_MANAGER', 'MAINTENANCE_STAFF', 'ADMIN'];
+const STAFF_VIEWS = [
+  'staff-dashboard',
+  'admin-dashboard',
+  'admin-users',
+  'admin-create-user',
+  'admin-user-details',
+  'staff-profile',
+  'manage-fleet',
+  'add-vehicle',
+  'vehicle-images',
+];
 
 function AppContent() {
-  const { isAuthenticated, roles, isLoading } = useAuth();
+  const { isAuthenticated, user, roles, isLoading } = useAuth();
   const [currentView, setCurrentView] = useState('landing');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const [selectedAdminUser, setSelectedAdminUser] = useState(null);
+  const [selectedVehicle, setSelectedVehicle] = useState(INITIAL_VEHICLES[0]);
 
   // Sync hash routing with view state
   useEffect(() => {
@@ -34,7 +69,13 @@ function AppContent() {
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
-  const navigateTo = (viewName) => {
+  const navigateTo = (viewName, params) => {
+    if (params?.user) {
+      setSelectedAdminUser(params.user);
+    }
+    if (params?.vehicle) {
+      setSelectedVehicle(params.vehicle);
+    }
     setCurrentView(viewName);
     window.location.hash = `#/${viewName}`;
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -42,6 +83,7 @@ function AppContent() {
 
   const userRoles = roles || [];
   const isStaffUser = isAuthenticated && userRoles.some((r) => STAFF_ROLES.includes(String(r).toUpperCase()));
+  const isAdminUser = isAuthenticated && userRoles.includes('ADMIN');
 
   if (isLoading) {
     return (
@@ -54,19 +96,67 @@ function AppContent() {
     );
   }
 
-  // If in Staff View and authenticated as Staff
-  if (currentView === 'staff-dashboard') {
+  // Handle Staff & Admin Views
+  if (STAFF_VIEWS.includes(currentView)) {
     if (!isStaffUser) {
-      // Redirect unauthenticated or customer users to staff login
+      // Role Gate: Redirect unauthorized customers/visitors to staff login
       return (
         <div className="app-shell">
           <StaffLoginPage
             onNavigateToCustomerLogin={() => navigateTo('login')}
-            onLoginSuccess={() => navigateTo('staff-dashboard')}
+            onLoginSuccess={() => navigateTo(isAdminUser ? 'admin-dashboard' : 'staff-dashboard')}
           />
         </div>
       );
     }
+
+    const renderStaffContent = () => {
+      switch (currentView) {
+        case 'admin-dashboard':
+          return <AdminDashboardPage onNavigate={navigateTo} />;
+        case 'admin-users':
+          return <AdminUserListPage onNavigate={navigateTo} onSelectUser={setSelectedAdminUser} />;
+        case 'admin-create-user':
+          return <AdminCreateUserPage onNavigate={navigateTo} />;
+        case 'admin-user-details':
+          return <AdminUserDetailsPage selectedUser={selectedAdminUser} onNavigate={navigateTo} />;
+        case 'staff-profile':
+          return <StaffProfilePage onNavigate={navigateTo} />;
+        case 'manage-fleet':
+          return <ManageFleetPage onNavigate={navigateTo} onSelectVehicle={setSelectedVehicle} />;
+        case 'add-vehicle':
+          return <AddVehiclePage onNavigate={navigateTo} />;
+        case 'vehicle-images':
+          return <VehicleImageManagementPage selectedVehicle={selectedVehicle} onNavigate={navigateTo} />;
+        case 'staff-dashboard':
+        default:
+          return <StaffDashboardPage onNavigate={navigateTo} />;
+      }
+    };
+
+    const getStaffHeaderTitle = () => {
+      switch (currentView) {
+        case 'admin-dashboard':
+          return 'Administrator Workspace';
+        case 'admin-users':
+          return 'User Directory & Roles';
+        case 'admin-create-user':
+          return 'Provision New Account';
+        case 'admin-user-details':
+          return 'User Account Inspection';
+        case 'staff-profile':
+          return 'Staff Identity & Credentials';
+        case 'manage-fleet':
+          return 'Fleet Inventory & Operations';
+        case 'add-vehicle':
+          return 'Ingest New Fleet Unit';
+        case 'vehicle-images':
+          return 'Vehicle Photo Asset Workspace';
+        case 'staff-dashboard':
+        default:
+          return 'Operations Workspace';
+      }
+    };
 
     return (
       <div className="staff-layout-container">
@@ -81,18 +171,18 @@ function AppContent() {
 
         <div className="staff-main-canvas">
           <StaffHeader
-            title="Operations Dashboard"
+            title={getStaffHeaderTitle()}
             onToggleSidebar={() => setMobileSidebarOpen(!mobileSidebarOpen)}
           />
           <main tabIndex={-1}>
-            <StaffDashboardPage onNavigate={navigateTo} />
+            {renderStaffContent()}
           </main>
         </div>
       </div>
     );
   }
 
-  // If in Staff Login view
+  // Handle Staff Login view
   if (currentView === 'staff-login') {
     return (
       <div className="app-shell">
@@ -100,7 +190,7 @@ function AppContent() {
         <main className="customer-main-content">
           <StaffLoginPage
             onNavigateToCustomerLogin={() => navigateTo('login')}
-            onLoginSuccess={() => navigateTo('staff-dashboard')}
+            onLoginSuccess={() => navigateTo(isAdminUser ? 'admin-dashboard' : 'staff-dashboard')}
           />
         </main>
         <Footer onNavigate={navigateTo} />
@@ -108,7 +198,23 @@ function AppContent() {
     );
   }
 
-  // Customer Portal Views (Landing, Login, Register, Browse, Customer Dashboard)
+  // Handle Force Password Change view
+  if (currentView === 'force-password-change') {
+    return (
+      <div className="app-shell">
+        <CustomerNav currentView={currentView} onNavigate={navigateTo} />
+        <main className="customer-main-content">
+          <ForcePasswordChangePage
+            username={user?.username || 'User'}
+            onComplete={() => navigateTo(isStaffUser ? 'staff-dashboard' : 'customer-home')}
+          />
+        </main>
+        <Footer onNavigate={navigateTo} />
+      </div>
+    );
+  }
+
+  // Customer Portal Views
   const renderCustomerView = () => {
     switch (currentView) {
       case 'login':
@@ -127,6 +233,26 @@ function AppContent() {
       case 'browse':
         return (
           <BrowseFleetPage
+            onNavigate={navigateTo}
+            onSelectVehicle={setSelectedVehicle}
+          />
+        );
+      case 'vehicle-details':
+        return (
+          <VehicleDetailsPage
+            selectedVehicle={selectedVehicle}
+            onNavigate={navigateTo}
+          />
+        );
+      case 'customer-home':
+        return (
+          <CustomerHomePage
+            onNavigate={navigateTo}
+          />
+        );
+      case 'customer-profile':
+        return (
+          <CustomerProfilePage
             onNavigate={navigateTo}
           />
         );

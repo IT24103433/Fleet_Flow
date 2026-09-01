@@ -18,7 +18,13 @@ const CustomerNav = ({ currentView, onNavigate }) => {
     <header className="customer-nav-header">
       <div className="customer-nav-container">
         {/* Brand Identity */}
-        <div className="customer-nav-brand" onClick={() => handleNavClick('landing')} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && handleNavClick('landing')}>
+        <div
+          className="customer-nav-brand"
+          onClick={() => handleNavClick(isAuthenticated ? 'customer-home' : 'landing')}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => e.key === 'Enter' && handleNavClick(isAuthenticated ? 'customer-home' : 'landing')}
+        >
           <div className="brand-logo-mark">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C2.1 10.7 2 10.8 2 11v5c0 .6.4 1 1 1h2" />
@@ -34,26 +40,27 @@ const CustomerNav = ({ currentView, onNavigate }) => {
         <nav className="customer-nav-links" aria-label="Main Navigation">
           <button
             type="button"
-            className={`nav-link ${currentView === 'landing' ? 'active' : ''}`}
-            onClick={() => handleNavClick('landing')}
+            className={`nav-link ${currentView === 'landing' || currentView === 'customer-home' ? 'active' : ''}`}
+            onClick={() => handleNavClick(isAuthenticated ? 'customer-home' : 'landing')}
           >
-            Home
+            {isAuthenticated ? 'My Dashboard' : 'Home'}
           </button>
           <button
             type="button"
-            className={`nav-link ${currentView === 'browse' ? 'active' : ''}`}
+            className={`nav-link ${currentView === 'browse' || currentView === 'vehicle-details' ? 'active' : ''}`}
             onClick={() => handleNavClick('browse')}
           >
             Explore Fleet
           </button>
-          <button
-            type="button"
-            className="nav-link nav-link-muted"
-            onClick={() => handleNavClick('landing')}
-            title="Feature planned for upcoming phase"
-          >
-            About
-          </button>
+          {isAuthenticated && (
+            <button
+              type="button"
+              className={`nav-link ${currentView === 'customer-profile' ? 'active' : ''}`}
+              onClick={() => handleNavClick('customer-profile')}
+            >
+              Profile & Security
+            </button>
+          )}
         </nav>
 
         {/* Desktop Auth & Switcher Actions */}
@@ -72,7 +79,14 @@ const CustomerNav = ({ currentView, onNavigate }) => {
 
           {isAuthenticated ? (
             <div className="user-profile-menu">
-              <div className="user-info-chip">
+              <div
+                className="user-info-chip clickable"
+                onClick={() => handleNavClick('customer-profile')}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => e.key === 'Enter' && handleNavClick('customer-profile')}
+                title="View Profile Details"
+              >
                 <span className="user-greeting">Hi, <strong>{user?.username}</strong></span>
                 {primaryRole && <RoleBadge role={primaryRole} />}
               </div>
@@ -126,10 +140,10 @@ const CustomerNav = ({ currentView, onNavigate }) => {
           <nav className="mobile-nav-list">
             <button
               type="button"
-              className={`mobile-nav-link ${currentView === 'landing' ? 'active' : ''}`}
-              onClick={() => handleNavClick('landing')}
+              className={`mobile-nav-link ${currentView === 'landing' || currentView === 'customer-home' ? 'active' : ''}`}
+              onClick={() => handleNavClick(isAuthenticated ? 'customer-home' : 'landing')}
             >
-              Home
+              {isAuthenticated ? 'My Dashboard' : 'Home'}
             </button>
             <button
               type="button"
@@ -138,6 +152,15 @@ const CustomerNav = ({ currentView, onNavigate }) => {
             >
               Explore Fleet
             </button>
+            {isAuthenticated && (
+              <button
+                type="button"
+                className={`mobile-nav-link ${currentView === 'customer-profile' ? 'active' : ''}`}
+                onClick={() => handleNavClick('customer-profile')}
+              >
+                Profile & Security
+              </button>
+            )}
             <button
               type="button"
               className="mobile-nav-link staff-link"
@@ -149,7 +172,7 @@ const CustomerNav = ({ currentView, onNavigate }) => {
             <div className="mobile-drawer-auth">
               {isAuthenticated ? (
                 <div className="mobile-auth-status">
-                  <div className="mobile-user-card">
+                  <div className="mobile-user-card" onClick={() => handleNavClick('customer-profile')}>
                     <p className="mobile-user-name">Signed in as <strong>{user?.username}</strong></p>
                     {primaryRole && <RoleBadge role={primaryRole} />}
                   </div>
