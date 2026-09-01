@@ -220,6 +220,12 @@
   border: 1px solid var(--accent-border);
 }
 
+.badge-maintenance-staff {
+  background: rgba(234, 179, 8, 0.12);
+  color: #b45309;
+  border: 1px solid rgba(234, 179, 8, 0.3);
+}
+
 .badge-admin {
   background: rgba(239, 68, 68, 0.12);
   color: #b91c1c;

@@ -136,6 +136,21 @@ public class RbacTests : IClassFixture<WebApplicationFactory<WeatherForecastCont
     }
 
     [Fact]
+    public async Task GetWeatherForecast_WithMaintenanceStaffRole_Returns403Forbidden()
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+        var token = GenerateToken("maintenanceUser", "maintenance@example.com", "MAINTENANCE_STAFF");
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        // Act
+        var response = await client.GetAsync("/weatherforecast");
+
+        // Assert
+        Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+    }
+
+    [Fact]
     public async Task GetWeatherForecast_WithFleetManagerRole_Returns200Ok()
     {
         // Arrange

@@ -6,7 +6,7 @@ This document outlines the backend Role-Based Access Control (RBAC) architecture
 
 ## 1. System Roles
 
-The FleetFlow platform defines three standard roles:
+The FleetFlow platform defines four standard roles:
 
 1. **`CUSTOMER`**:
    - Default role automatically assigned to standard users during public registration.
@@ -15,15 +15,20 @@ The FleetFlow platform defines three standard roles:
 
 2. **`FLEET_MANAGER`**:
    - Dedicated role for fleet and operations staff.
-   - Authorized to manage vehicles, maintenance schedules, and operational assignments.
+   - Authorized to manage vehicles, assignments, and fleet operations.
    - Assigned only via administrative mechanisms (never assigned during public self-registration).
 
-3. **`ADMIN`**:
+3. **`MAINTENANCE_STAFF`**:
+   - Dedicated role for vehicle service and maintenance personnel.
+   - Authorized to access vehicle service logs, record maintenance tasks, and update vehicle operational health status.
+   - Assigned only via administrative mechanisms (never assigned during public self-registration).
+
+4. **`ADMIN`**:
    - System administrator role with global supervisory access.
    - Authorized to access administrative, operational, and auditing endpoints across all services.
 
 ### Idempotent Startup Seeding
-During startup initialization (`IdentityService`), an idempotent role-seeding routine guarantees that the `CUSTOMER`, `FLEET_MANAGER`, and `ADMIN` roles exist in the database without producing duplicates, altering existing user profiles, or modifying existing `UserRoles` relationships.
+During startup initialization (`IdentityService`), an idempotent role-seeding routine guarantees that the `CUSTOMER`, `FLEET_MANAGER`, `MAINTENANCE_STAFF`, and `ADMIN` roles exist in the database without producing duplicates, altering existing user profiles, or modifying existing `UserRoles` relationships.
 
 ---
 
@@ -72,6 +77,7 @@ To verify cross-service RBAC without prematurely coupling domain logic or exposi
      - **Anonymous / No Token:** `401 Unauthorized`
      - **Invalid / Expired Token:** `401 Unauthorized`
      - **`CUSTOMER` Token:** `403 Forbidden`
+     - **`MAINTENANCE_STAFF` Token:** `403 Forbidden`
      - **`FLEET_MANAGER` Token:** `200 OK`
      - **`ADMIN` Token:** `200 OK`
 

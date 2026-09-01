@@ -15,6 +15,11 @@ const ROLE_CONFIG = {
     badgeClass: 'badge-fleet-manager',
     description: 'Fleet management and vehicle operation privileges.',
   },
+  MAINTENANCE_STAFF: {
+    title: 'Maintenance Staff',
+    badgeClass: 'badge-maintenance-staff',
+    description: 'Vehicle maintenance and inspection operations.',
+  },
   ADMIN: {
     title: 'Administrator',
     badgeClass: 'badge-admin',
