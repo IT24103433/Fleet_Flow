@@ -50,6 +50,7 @@ docs/aqqil/
 | Run ID | Date | Target Service | Concurrency (VUs) | Target Endpoint | Observed p95 (ms) | Target SLO (ms) | Status | Commit / Changes |
 |:-------|:-----|:---------------|:------------------|:----------------|:------------------|:----------------|:-------|:-----------------|
 | BM-101 | 2026-09-01 | Workspace Init | N/A | N/A | N/A | N/A | INITIALIZED | Initialized benchmark workspace |
+| BM-102 | 2026-09-02 | Cross-Service Specs | 10-500 VUs | All Services | N/A | Defined in Specs | BASELINED | Drafted Concurrency Targets & p95 SLOs |
 
 ---
 
