@@ -1,0 +1,1589 @@
+{
+  "metadata": {
+    "version": "1.0.0-sprint1",
+    "author": "Aqqil Mohammed (IT24104314)",
+    "generated_date": "2026-09-04",
+    "purpose": "Synthetic high-volume stress payloads for FleetFlow IdentityService endpoints"
+  },
+  "identity_service": {
+    "registration_batches": [
+      {
+        "test_case_id": "REG-TC-0001",
+        "payload_type": "FLEET_OPERATOR",
+        "request": {
+          "email": "benchmark.user.1@fleetflow-test.org",
+          "password": "SecurePass@2026#001",
+          "firstName": "TestFirst1",
+          "lastName": "TestLast1",
+          "phoneNumber": "+1-555-0101",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1991-02-15",
+          "driverLicenseNumber": "DL-CA-2026-000001",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 341,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0002",
+        "payload_type": "INDIVIDUAL_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.2@fleetflow-test.org",
+          "password": "SecurePass@2026#002",
+          "firstName": "TestFirst2",
+          "lastName": "TestLast2",
+          "phoneNumber": "+1-555-0102",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1992-03-15",
+          "driverLicenseNumber": "DL-CA-2026-000002",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 342,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0003",
+        "payload_type": "CORPORATE_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.3@fleetflow-test.org",
+          "password": "SecurePass@2026#003",
+          "firstName": "TestFirst3",
+          "lastName": "TestLast3",
+          "phoneNumber": "+1-555-0103",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1993-04-15",
+          "driverLicenseNumber": "DL-CA-2026-000003",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 343,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0004",
+        "payload_type": "INDIVIDUAL_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.4@fleetflow-test.org",
+          "password": "SecurePass@2026#004",
+          "firstName": "TestFirst4",
+          "lastName": "TestLast4",
+          "phoneNumber": "+1-555-0104",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1994-05-15",
+          "driverLicenseNumber": "DL-CA-2026-000004",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 344,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0005",
+        "payload_type": "FLEET_OPERATOR",
+        "request": {
+          "email": "benchmark.user.5@fleetflow-test.org",
+          "password": "SecurePass@2026#005",
+          "firstName": "TestFirst5",
+          "lastName": "TestLast5",
+          "phoneNumber": "+1-555-0105",
+          "accountRole": "FLEET_MANAGER",
+          "dateOfBirth": "1995-06-15",
+          "driverLicenseNumber": "DL-CA-2026-000005",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 345,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0006",
+        "payload_type": "CORPORATE_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.6@fleetflow-test.org",
+          "password": "SecurePass@2026#006",
+          "firstName": "TestFirst6",
+          "lastName": "TestLast6",
+          "phoneNumber": "+1-555-0106",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1996-07-15",
+          "driverLicenseNumber": "DL-CA-2026-000006",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 346,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0007",
+        "payload_type": "FLEET_OPERATOR",
+        "request": {
+          "email": "benchmark.user.7@fleetflow-test.org",
+          "password": "SecurePass@2026#007",
+          "firstName": "TestFirst7",
+          "lastName": "TestLast7",
+          "phoneNumber": "+1-555-0107",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1997-08-15",
+          "driverLicenseNumber": "DL-CA-2026-000007",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 347,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0008",
+        "payload_type": "INDIVIDUAL_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.8@fleetflow-test.org",
+          "password": "SecurePass@2026#008",
+          "firstName": "TestFirst8",
+          "lastName": "TestLast8",
+          "phoneNumber": "+1-555-0108",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1998-01-15",
+          "driverLicenseNumber": "DL-CA-2026-000008",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 348,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0009",
+        "payload_type": "CORPORATE_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.9@fleetflow-test.org",
+          "password": "SecurePass@2026#009",
+          "firstName": "TestFirst9",
+          "lastName": "TestLast9",
+          "phoneNumber": "+1-555-0109",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1990-02-15",
+          "driverLicenseNumber": "DL-CA-2026-000009",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 349,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0010",
+        "payload_type": "INDIVIDUAL_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.10@fleetflow-test.org",
+          "password": "SecurePass@2026#010",
+          "firstName": "TestFirst10",
+          "lastName": "TestLast10",
+          "phoneNumber": "+1-555-0110",
+          "accountRole": "FLEET_MANAGER",
+          "dateOfBirth": "1991-03-15",
+          "driverLicenseNumber": "DL-CA-2026-000010",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 350,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0011",
+        "payload_type": "FLEET_OPERATOR",
+        "request": {
+          "email": "benchmark.user.11@fleetflow-test.org",
+          "password": "SecurePass@2026#011",
+          "firstName": "TestFirst11",
+          "lastName": "TestLast11",
+          "phoneNumber": "+1-555-0111",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1992-04-15",
+          "driverLicenseNumber": "DL-CA-2026-000011",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 351,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0012",
+        "payload_type": "CORPORATE_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.12@fleetflow-test.org",
+          "password": "SecurePass@2026#012",
+          "firstName": "TestFirst12",
+          "lastName": "TestLast12",
+          "phoneNumber": "+1-555-0112",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1993-05-15",
+          "driverLicenseNumber": "DL-CA-2026-000012",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 352,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0013",
+        "payload_type": "FLEET_OPERATOR",
+        "request": {
+          "email": "benchmark.user.13@fleetflow-test.org",
+          "password": "SecurePass@2026#013",
+          "firstName": "TestFirst13",
+          "lastName": "TestLast13",
+          "phoneNumber": "+1-555-0113",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1994-06-15",
+          "driverLicenseNumber": "DL-CA-2026-000013",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 353,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0014",
+        "payload_type": "INDIVIDUAL_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.14@fleetflow-test.org",
+          "password": "SecurePass@2026#014",
+          "firstName": "TestFirst14",
+          "lastName": "TestLast14",
+          "phoneNumber": "+1-555-0114",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1995-07-15",
+          "driverLicenseNumber": "DL-CA-2026-000014",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 354,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0015",
+        "payload_type": "CORPORATE_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.15@fleetflow-test.org",
+          "password": "SecurePass@2026#015",
+          "firstName": "TestFirst15",
+          "lastName": "TestLast15",
+          "phoneNumber": "+1-555-0115",
+          "accountRole": "FLEET_MANAGER",
+          "dateOfBirth": "1996-08-15",
+          "driverLicenseNumber": "DL-CA-2026-000015",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 355,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0016",
+        "payload_type": "INDIVIDUAL_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.16@fleetflow-test.org",
+          "password": "SecurePass@2026#016",
+          "firstName": "TestFirst16",
+          "lastName": "TestLast16",
+          "phoneNumber": "+1-555-0116",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1997-01-15",
+          "driverLicenseNumber": "DL-CA-2026-000016",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 356,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0017",
+        "payload_type": "FLEET_OPERATOR",
+        "request": {
+          "email": "benchmark.user.17@fleetflow-test.org",
+          "password": "SecurePass@2026#017",
+          "firstName": "TestFirst17",
+          "lastName": "TestLast17",
+          "phoneNumber": "+1-555-0117",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1998-02-15",
+          "driverLicenseNumber": "DL-CA-2026-000017",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 357,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0018",
+        "payload_type": "CORPORATE_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.18@fleetflow-test.org",
+          "password": "SecurePass@2026#018",
+          "firstName": "TestFirst18",
+          "lastName": "TestLast18",
+          "phoneNumber": "+1-555-0118",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1990-03-15",
+          "driverLicenseNumber": "DL-CA-2026-000018",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 358,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0019",
+        "payload_type": "FLEET_OPERATOR",
+        "request": {
+          "email": "benchmark.user.19@fleetflow-test.org",
+          "password": "SecurePass@2026#019",
+          "firstName": "TestFirst19",
+          "lastName": "TestLast19",
+          "phoneNumber": "+1-555-0119",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1991-04-15",
+          "driverLicenseNumber": "DL-CA-2026-000019",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 359,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0020",
+        "payload_type": "INDIVIDUAL_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.20@fleetflow-test.org",
+          "password": "SecurePass@2026#020",
+          "firstName": "TestFirst20",
+          "lastName": "TestLast20",
+          "phoneNumber": "+1-555-0120",
+          "accountRole": "FLEET_MANAGER",
+          "dateOfBirth": "1992-05-15",
+          "driverLicenseNumber": "DL-CA-2026-000020",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 340,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0021",
+        "payload_type": "CORPORATE_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.21@fleetflow-test.org",
+          "password": "SecurePass@2026#021",
+          "firstName": "TestFirst21",
+          "lastName": "TestLast21",
+          "phoneNumber": "+1-555-0121",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1993-06-15",
+          "driverLicenseNumber": "DL-CA-2026-000021",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 341,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0022",
+        "payload_type": "INDIVIDUAL_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.22@fleetflow-test.org",
+          "password": "SecurePass@2026#022",
+          "firstName": "TestFirst22",
+          "lastName": "TestLast22",
+          "phoneNumber": "+1-555-0122",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1994-07-15",
+          "driverLicenseNumber": "DL-CA-2026-000022",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 342,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0023",
+        "payload_type": "FLEET_OPERATOR",
+        "request": {
+          "email": "benchmark.user.23@fleetflow-test.org",
+          "password": "SecurePass@2026#023",
+          "firstName": "TestFirst23",
+          "lastName": "TestLast23",
+          "phoneNumber": "+1-555-0123",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1995-08-15",
+          "driverLicenseNumber": "DL-CA-2026-000023",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 343,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0024",
+        "payload_type": "CORPORATE_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.24@fleetflow-test.org",
+          "password": "SecurePass@2026#024",
+          "firstName": "TestFirst24",
+          "lastName": "TestLast24",
+          "phoneNumber": "+1-555-0124",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1996-01-15",
+          "driverLicenseNumber": "DL-CA-2026-000024",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 344,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0025",
+        "payload_type": "FLEET_OPERATOR",
+        "request": {
+          "email": "benchmark.user.25@fleetflow-test.org",
+          "password": "SecurePass@2026#025",
+          "firstName": "TestFirst25",
+          "lastName": "TestLast25",
+          "phoneNumber": "+1-555-0125",
+          "accountRole": "FLEET_MANAGER",
+          "dateOfBirth": "1997-02-15",
+          "driverLicenseNumber": "DL-CA-2026-000025",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 345,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0026",
+        "payload_type": "INDIVIDUAL_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.26@fleetflow-test.org",
+          "password": "SecurePass@2026#026",
+          "firstName": "TestFirst26",
+          "lastName": "TestLast26",
+          "phoneNumber": "+1-555-0126",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1998-03-15",
+          "driverLicenseNumber": "DL-CA-2026-000026",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 346,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0027",
+        "payload_type": "CORPORATE_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.27@fleetflow-test.org",
+          "password": "SecurePass@2026#027",
+          "firstName": "TestFirst27",
+          "lastName": "TestLast27",
+          "phoneNumber": "+1-555-0127",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1990-04-15",
+          "driverLicenseNumber": "DL-CA-2026-000027",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 347,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0028",
+        "payload_type": "INDIVIDUAL_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.28@fleetflow-test.org",
+          "password": "SecurePass@2026#028",
+          "firstName": "TestFirst28",
+          "lastName": "TestLast28",
+          "phoneNumber": "+1-555-0128",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1991-05-15",
+          "driverLicenseNumber": "DL-CA-2026-000028",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 348,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0029",
+        "payload_type": "FLEET_OPERATOR",
+        "request": {
+          "email": "benchmark.user.29@fleetflow-test.org",
+          "password": "SecurePass@2026#029",
+          "firstName": "TestFirst29",
+          "lastName": "TestLast29",
+          "phoneNumber": "+1-555-0129",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1992-06-15",
+          "driverLicenseNumber": "DL-CA-2026-000029",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 349,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0030",
+        "payload_type": "CORPORATE_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.30@fleetflow-test.org",
+          "password": "SecurePass@2026#030",
+          "firstName": "TestFirst30",
+          "lastName": "TestLast30",
+          "phoneNumber": "+1-555-0130",
+          "accountRole": "FLEET_MANAGER",
+          "dateOfBirth": "1993-07-15",
+          "driverLicenseNumber": "DL-CA-2026-000030",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 350,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0031",
+        "payload_type": "FLEET_OPERATOR",
+        "request": {
+          "email": "benchmark.user.31@fleetflow-test.org",
+          "password": "SecurePass@2026#031",
+          "firstName": "TestFirst31",
+          "lastName": "TestLast31",
+          "phoneNumber": "+1-555-0131",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1994-08-15",
+          "driverLicenseNumber": "DL-CA-2026-000031",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 351,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0032",
+        "payload_type": "INDIVIDUAL_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.32@fleetflow-test.org",
+          "password": "SecurePass@2026#032",
+          "firstName": "TestFirst32",
+          "lastName": "TestLast32",
+          "phoneNumber": "+1-555-0132",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1995-01-15",
+          "driverLicenseNumber": "DL-CA-2026-000032",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 352,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0033",
+        "payload_type": "CORPORATE_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.33@fleetflow-test.org",
+          "password": "SecurePass@2026#033",
+          "firstName": "TestFirst33",
+          "lastName": "TestLast33",
+          "phoneNumber": "+1-555-0133",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1996-02-15",
+          "driverLicenseNumber": "DL-CA-2026-000033",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 353,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0034",
+        "payload_type": "INDIVIDUAL_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.34@fleetflow-test.org",
+          "password": "SecurePass@2026#034",
+          "firstName": "TestFirst34",
+          "lastName": "TestLast34",
+          "phoneNumber": "+1-555-0134",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1997-03-15",
+          "driverLicenseNumber": "DL-CA-2026-000034",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 354,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0035",
+        "payload_type": "FLEET_OPERATOR",
+        "request": {
+          "email": "benchmark.user.35@fleetflow-test.org",
+          "password": "SecurePass@2026#035",
+          "firstName": "TestFirst35",
+          "lastName": "TestLast35",
+          "phoneNumber": "+1-555-0135",
+          "accountRole": "FLEET_MANAGER",
+          "dateOfBirth": "1998-04-15",
+          "driverLicenseNumber": "DL-CA-2026-000035",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 355,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0036",
+        "payload_type": "CORPORATE_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.36@fleetflow-test.org",
+          "password": "SecurePass@2026#036",
+          "firstName": "TestFirst36",
+          "lastName": "TestLast36",
+          "phoneNumber": "+1-555-0136",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1990-05-15",
+          "driverLicenseNumber": "DL-CA-2026-000036",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 356,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0037",
+        "payload_type": "FLEET_OPERATOR",
+        "request": {
+          "email": "benchmark.user.37@fleetflow-test.org",
+          "password": "SecurePass@2026#037",
+          "firstName": "TestFirst37",
+          "lastName": "TestLast37",
+          "phoneNumber": "+1-555-0137",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1991-06-15",
+          "driverLicenseNumber": "DL-CA-2026-000037",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 357,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0038",
+        "payload_type": "INDIVIDUAL_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.38@fleetflow-test.org",
+          "password": "SecurePass@2026#038",
+          "firstName": "TestFirst38",
+          "lastName": "TestLast38",
+          "phoneNumber": "+1-555-0138",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1992-07-15",
+          "driverLicenseNumber": "DL-CA-2026-000038",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 358,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0039",
+        "payload_type": "CORPORATE_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.39@fleetflow-test.org",
+          "password": "SecurePass@2026#039",
+          "firstName": "TestFirst39",
+          "lastName": "TestLast39",
+          "phoneNumber": "+1-555-0139",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1993-08-15",
+          "driverLicenseNumber": "DL-CA-2026-000039",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 359,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0040",
+        "payload_type": "INDIVIDUAL_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.40@fleetflow-test.org",
+          "password": "SecurePass@2026#040",
+          "firstName": "TestFirst40",
+          "lastName": "TestLast40",
+          "phoneNumber": "+1-555-0140",
+          "accountRole": "FLEET_MANAGER",
+          "dateOfBirth": "1994-01-15",
+          "driverLicenseNumber": "DL-CA-2026-000040",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 340,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0041",
+        "payload_type": "FLEET_OPERATOR",
+        "request": {
+          "email": "benchmark.user.41@fleetflow-test.org",
+          "password": "SecurePass@2026#041",
+          "firstName": "TestFirst41",
+          "lastName": "TestLast41",
+          "phoneNumber": "+1-555-0141",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1995-02-15",
+          "driverLicenseNumber": "DL-CA-2026-000041",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 341,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0042",
+        "payload_type": "CORPORATE_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.42@fleetflow-test.org",
+          "password": "SecurePass@2026#042",
+          "firstName": "TestFirst42",
+          "lastName": "TestLast42",
+          "phoneNumber": "+1-555-0142",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1996-03-15",
+          "driverLicenseNumber": "DL-CA-2026-000042",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 342,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0043",
+        "payload_type": "FLEET_OPERATOR",
+        "request": {
+          "email": "benchmark.user.43@fleetflow-test.org",
+          "password": "SecurePass@2026#043",
+          "firstName": "TestFirst43",
+          "lastName": "TestLast43",
+          "phoneNumber": "+1-555-0143",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1997-04-15",
+          "driverLicenseNumber": "DL-CA-2026-000043",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 343,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0044",
+        "payload_type": "INDIVIDUAL_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.44@fleetflow-test.org",
+          "password": "SecurePass@2026#044",
+          "firstName": "TestFirst44",
+          "lastName": "TestLast44",
+          "phoneNumber": "+1-555-0144",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1998-05-15",
+          "driverLicenseNumber": "DL-CA-2026-000044",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 344,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0045",
+        "payload_type": "CORPORATE_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.45@fleetflow-test.org",
+          "password": "SecurePass@2026#045",
+          "firstName": "TestFirst45",
+          "lastName": "TestLast45",
+          "phoneNumber": "+1-555-0145",
+          "accountRole": "FLEET_MANAGER",
+          "dateOfBirth": "1990-06-15",
+          "driverLicenseNumber": "DL-CA-2026-000045",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 345,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0046",
+        "payload_type": "INDIVIDUAL_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.46@fleetflow-test.org",
+          "password": "SecurePass@2026#046",
+          "firstName": "TestFirst46",
+          "lastName": "TestLast46",
+          "phoneNumber": "+1-555-0146",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1991-07-15",
+          "driverLicenseNumber": "DL-CA-2026-000046",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 346,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0047",
+        "payload_type": "FLEET_OPERATOR",
+        "request": {
+          "email": "benchmark.user.47@fleetflow-test.org",
+          "password": "SecurePass@2026#047",
+          "firstName": "TestFirst47",
+          "lastName": "TestLast47",
+          "phoneNumber": "+1-555-0147",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1992-08-15",
+          "driverLicenseNumber": "DL-CA-2026-000047",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 347,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0048",
+        "payload_type": "CORPORATE_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.48@fleetflow-test.org",
+          "password": "SecurePass@2026#048",
+          "firstName": "TestFirst48",
+          "lastName": "TestLast48",
+          "phoneNumber": "+1-555-0148",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1993-01-15",
+          "driverLicenseNumber": "DL-CA-2026-000048",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 348,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0049",
+        "payload_type": "FLEET_OPERATOR",
+        "request": {
+          "email": "benchmark.user.49@fleetflow-test.org",
+          "password": "SecurePass@2026#049",
+          "firstName": "TestFirst49",
+          "lastName": "TestLast49",
+          "phoneNumber": "+1-555-0149",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1994-02-15",
+          "driverLicenseNumber": "DL-CA-2026-000049",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 349,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0050",
+        "payload_type": "INDIVIDUAL_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.50@fleetflow-test.org",
+          "password": "SecurePass@2026#050",
+          "firstName": "TestFirst50",
+          "lastName": "TestLast50",
+          "phoneNumber": "+1-555-0150",
+          "accountRole": "FLEET_MANAGER",
+          "dateOfBirth": "1995-03-15",
+          "driverLicenseNumber": "DL-CA-2026-000050",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 350,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      }
+    ],
+    "login_fixtures": [
+      {
+        "fixture_id": "AUTH-FIX-0001",
+        "channel": "MOBILE_APP",
+        "request": {
+          "email": "benchmark.user.1@fleetflow-test.org",
+          "password": "SecurePass@2026#001",
+          "rememberMe": false,
+          "clientDeviceId": "device-uuid-00001"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0002",
+        "channel": "WEB_PORTAL",
+        "request": {
+          "email": "benchmark.user.2@fleetflow-test.org",
+          "password": "SecurePass@2026#002",
+          "rememberMe": true,
+          "clientDeviceId": "device-uuid-00002"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0003",
+        "channel": "MOBILE_APP",
+        "request": {
+          "email": "benchmark.user.3@fleetflow-test.org",
+          "password": "SecurePass@2026#003",
+          "rememberMe": false,
+          "clientDeviceId": "device-uuid-00003"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0004",
+        "channel": "WEB_PORTAL",
+        "request": {
+          "email": "benchmark.user.4@fleetflow-test.org",
+          "password": "SecurePass@2026#004",
+          "rememberMe": true,
+          "clientDeviceId": "device-uuid-00004"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0005",
+        "channel": "MOBILE_APP",
+        "request": {
+          "email": "benchmark.user.5@fleetflow-test.org",
+          "password": "SecurePass@2026#005",
+          "rememberMe": false,
+          "clientDeviceId": "device-uuid-00005"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "FLEET_MANAGER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0006",
+        "channel": "WEB_PORTAL",
+        "request": {
+          "email": "benchmark.user.6@fleetflow-test.org",
+          "password": "SecurePass@2026#006",
+          "rememberMe": true,
+          "clientDeviceId": "device-uuid-00006"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0007",
+        "channel": "MOBILE_APP",
+        "request": {
+          "email": "benchmark.user.7@fleetflow-test.org",
+          "password": "SecurePass@2026#007",
+          "rememberMe": false,
+          "clientDeviceId": "device-uuid-00007"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0008",
+        "channel": "WEB_PORTAL",
+        "request": {
+          "email": "benchmark.user.8@fleetflow-test.org",
+          "password": "SecurePass@2026#008",
+          "rememberMe": true,
+          "clientDeviceId": "device-uuid-00008"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0009",
+        "channel": "MOBILE_APP",
+        "request": {
+          "email": "benchmark.user.9@fleetflow-test.org",
+          "password": "SecurePass@2026#009",
+          "rememberMe": false,
+          "clientDeviceId": "device-uuid-00009"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0010",
+        "channel": "WEB_PORTAL",
+        "request": {
+          "email": "benchmark.user.10@fleetflow-test.org",
+          "password": "SecurePass@2026#010",
+          "rememberMe": true,
+          "clientDeviceId": "device-uuid-00010"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "FLEET_MANAGER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0011",
+        "channel": "MOBILE_APP",
+        "request": {
+          "email": "benchmark.user.11@fleetflow-test.org",
+          "password": "SecurePass@2026#011",
+          "rememberMe": false,
+          "clientDeviceId": "device-uuid-00011"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0012",
+        "channel": "WEB_PORTAL",
+        "request": {
+          "email": "benchmark.user.12@fleetflow-test.org",
+          "password": "SecurePass@2026#012",
+          "rememberMe": true,
+          "clientDeviceId": "device-uuid-00012"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0013",
+        "channel": "MOBILE_APP",
+        "request": {
+          "email": "benchmark.user.13@fleetflow-test.org",
+          "password": "SecurePass@2026#013",
+          "rememberMe": false,
+          "clientDeviceId": "device-uuid-00013"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0014",
+        "channel": "WEB_PORTAL",
+        "request": {
+          "email": "benchmark.user.14@fleetflow-test.org",
+          "password": "SecurePass@2026#014",
+          "rememberMe": true,
+          "clientDeviceId": "device-uuid-00014"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0015",
+        "channel": "MOBILE_APP",
+        "request": {
+          "email": "benchmark.user.15@fleetflow-test.org",
+          "password": "SecurePass@2026#015",
+          "rememberMe": false,
+          "clientDeviceId": "device-uuid-00015"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "FLEET_MANAGER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0016",
+        "channel": "WEB_PORTAL",
+        "request": {
+          "email": "benchmark.user.16@fleetflow-test.org",
+          "password": "SecurePass@2026#016",
+          "rememberMe": true,
+          "clientDeviceId": "device-uuid-00016"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0017",
+        "channel": "MOBILE_APP",
+        "request": {
+          "email": "benchmark.user.17@fleetflow-test.org",
+          "password": "SecurePass@2026#017",
+          "rememberMe": false,
+          "clientDeviceId": "device-uuid-00017"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0018",
+        "channel": "WEB_PORTAL",
+        "request": {
+          "email": "benchmark.user.18@fleetflow-test.org",
+          "password": "SecurePass@2026#018",
+          "rememberMe": true,
+          "clientDeviceId": "device-uuid-00018"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0019",
+        "channel": "MOBILE_APP",
+        "request": {
+          "email": "benchmark.user.19@fleetflow-test.org",
+          "password": "SecurePass@2026#019",
+          "rememberMe": false,
+          "clientDeviceId": "device-uuid-00019"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0020",
+        "channel": "WEB_PORTAL",
+        "request": {
+          "email": "benchmark.user.20@fleetflow-test.org",
+          "password": "SecurePass@2026#020",
+          "rememberMe": true,
+          "clientDeviceId": "device-uuid-00020"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "FLEET_MANAGER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0021",
+        "channel": "MOBILE_APP",
+        "request": {
+          "email": "benchmark.user.21@fleetflow-test.org",
+          "password": "SecurePass@2026#021",
+          "rememberMe": false,
+          "clientDeviceId": "device-uuid-00021"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0022",
+        "channel": "WEB_PORTAL",
+        "request": {
+          "email": "benchmark.user.22@fleetflow-test.org",
+          "password": "SecurePass@2026#022",
+          "rememberMe": true,
+          "clientDeviceId": "device-uuid-00022"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0023",
+        "channel": "MOBILE_APP",
+        "request": {
+          "email": "benchmark.user.23@fleetflow-test.org",
+          "password": "SecurePass@2026#023",
+          "rememberMe": false,
+          "clientDeviceId": "device-uuid-00023"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0024",
+        "channel": "WEB_PORTAL",
+        "request": {
+          "email": "benchmark.user.24@fleetflow-test.org",
+          "password": "SecurePass@2026#024",
+          "rememberMe": true,
+          "clientDeviceId": "device-uuid-00024"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0025",
+        "channel": "MOBILE_APP",
+        "request": {
+          "email": "benchmark.user.25@fleetflow-test.org",
+          "password": "SecurePass@2026#025",
+          "rememberMe": false,
+          "clientDeviceId": "device-uuid-00025"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "FLEET_MANAGER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0026",
+        "channel": "WEB_PORTAL",
+        "request": {
+          "email": "benchmark.user.26@fleetflow-test.org",
+          "password": "SecurePass@2026#026",
+          "rememberMe": true,
+          "clientDeviceId": "device-uuid-00026"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0027",
+        "channel": "MOBILE_APP",
+        "request": {
+          "email": "benchmark.user.27@fleetflow-test.org",
+          "password": "SecurePass@2026#027",
+          "rememberMe": false,
+          "clientDeviceId": "device-uuid-00027"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0028",
+        "channel": "WEB_PORTAL",
+        "request": {
+          "email": "benchmark.user.28@fleetflow-test.org",
+          "password": "SecurePass@2026#028",
+          "rememberMe": true,
+          "clientDeviceId": "device-uuid-00028"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0029",
+        "channel": "MOBILE_APP",
+        "request": {
+          "email": "benchmark.user.29@fleetflow-test.org",
+          "password": "SecurePass@2026#029",
+          "rememberMe": false,
+          "clientDeviceId": "device-uuid-00029"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0030",
+        "channel": "WEB_PORTAL",
+        "request": {
+          "email": "benchmark.user.30@fleetflow-test.org",
+          "password": "SecurePass@2026#030",
+          "rememberMe": true,
+          "clientDeviceId": "device-uuid-00030"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "FLEET_MANAGER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0031",
+        "channel": "MOBILE_APP",
+        "request": {
+          "email": "benchmark.user.31@fleetflow-test.org",
+          "password": "SecurePass@2026#031",
+          "rememberMe": false,
+          "clientDeviceId": "device-uuid-00031"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0032",
+        "channel": "WEB_PORTAL",
+        "request": {
+          "email": "benchmark.user.32@fleetflow-test.org",
+          "password": "SecurePass@2026#032",
+          "rememberMe": true,
+          "clientDeviceId": "device-uuid-00032"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0033",
+        "channel": "MOBILE_APP",
+        "request": {
+          "email": "benchmark.user.33@fleetflow-test.org",
+          "password": "SecurePass@2026#033",
+          "rememberMe": false,
+          "clientDeviceId": "device-uuid-00033"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0034",
+        "channel": "WEB_PORTAL",
+        "request": {
+          "email": "benchmark.user.34@fleetflow-test.org",
+          "password": "SecurePass@2026#034",
+          "rememberMe": true,
+          "clientDeviceId": "device-uuid-00034"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0035",
+        "channel": "MOBILE_APP",
+        "request": {
+          "email": "benchmark.user.35@fleetflow-test.org",
+          "password": "SecurePass@2026#035",
+          "rememberMe": false,
+          "clientDeviceId": "device-uuid-00035"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "FLEET_MANAGER",
+          "token_ttl_seconds": 3600
+        }
+      }
+    ]
+  }
+}
