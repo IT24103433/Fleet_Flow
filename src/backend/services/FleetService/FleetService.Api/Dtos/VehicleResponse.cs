@@ -1,6 +1,9 @@
-namespace FleetService.Api.Entities;
+using System;
+using FleetService.Api.Entities;
 
-public class Vehicle
+namespace FleetService.Api.Dtos;
+
+public class VehicleResponse
 {
     public Guid Id { get; set; }
     public string Vin { get; set; } = string.Empty;
@@ -8,17 +11,15 @@ public class Vehicle
     public string Make { get; set; } = string.Empty;
     public string Model { get; set; } = string.Empty;
     public int Year { get; set; }
+    public string CategoryName { get; set; } = string.Empty;
+    public Guid VehicleCategoryId { get; set; }
     public decimal DailyRate { get; set; }
     public string Transmission { get; set; } = string.Empty;
     public string FuelType { get; set; } = string.Empty;
     public string SeatingCapacity { get; set; } = string.Empty;
     public string HubLocation { get; set; } = string.Empty;
     public int Mileage { get; set; }
-    public VehicleStatus Status { get; set; } = VehicleStatus.Available;
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public VehicleStatus Status { get; set; }
+    public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
-
-    // Foreign Key and Navigation property
-    public Guid VehicleCategoryId { get; set; }
-    public VehicleCategory? Category { get; set; }
 }
