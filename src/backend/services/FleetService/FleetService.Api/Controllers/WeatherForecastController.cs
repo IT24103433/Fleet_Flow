@@ -1,7 +1,9 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FleetService.Api.Controllers;
 
+[Authorize(Roles = "FLEET_MANAGER,ADMIN")]
 [ApiController]
 [Route("[controller]")]
 public class WeatherForecastController : ControllerBase

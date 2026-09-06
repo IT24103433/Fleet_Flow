@@ -30,7 +30,7 @@ export const registerUser = async (username, email, password) => {
       status: response.status,
       data
     };
-  } catch (error) {
+  } catch {
     return {
       success: false,
       status: 0,
@@ -76,7 +76,7 @@ export const loginUser = async (usernameOrEmail, password) => {
       status: response.status,
       data
     };
-  } catch (error) {
+  } catch {
     return {
       success: false,
       status: 0,

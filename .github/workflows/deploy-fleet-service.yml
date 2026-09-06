@@ -1,0 +1,36 @@
+name: Deploy FleetService to Azure App Service
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore src/backend/services/FleetService/FleetService.Api/FleetService.Api.csproj
+
+      - name: Build
+        run: dotnet build src/backend/services/FleetService/FleetService.Api/FleetService.Api.csproj --configuration Release --no-restore
+
+      - name: Publish
+        run: dotnet publish src/backend/services/FleetService/FleetService.Api/FleetService.Api.csproj --configuration Release --output ${{ runner.temp }}/fleet-app
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ secrets.AZURE_FLEET_SERVICE_APP_NAME }}
+          publish-profile: ${{ secrets.AZURE_FLEET_SERVICE_PUBLISH_PROFILE }}
+          package: ${{ runner.temp }}/fleet-app
