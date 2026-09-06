@@ -9,6 +9,10 @@ const STATUS_CONFIGS = {
     label: 'In Use',
     badgeClass: 'status-badge-in-use',
   },
+  INUSE: {
+    label: 'In Use',
+    badgeClass: 'status-badge-in-use',
+  },
   RENTED: {
     label: 'Rented',
     badgeClass: 'status-badge-in-use',

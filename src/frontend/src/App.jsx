@@ -31,7 +31,6 @@ import VehicleImageManagementPage from './pages/vehicle/VehicleImageManagementPa
 // Security Pages
 import ForcePasswordChangePage from './pages/security/ForcePasswordChangePage';
 
-import { INITIAL_VEHICLES } from './data/vehicleData';
 import './App.css';
 
 const STAFF_ROLES = ['FLEET_MANAGER', 'MAINTENANCE_STAFF', 'ADMIN'];
@@ -53,7 +52,7 @@ function AppContent() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [selectedAdminUser, setSelectedAdminUser] = useState(null);
-  const [selectedVehicle, setSelectedVehicle] = useState(INITIAL_VEHICLES[0]);
+  const [selectedVehicle, setSelectedVehicle] = useState(null);
 
   // Sync hash routing with view state
   useEffect(() => {
