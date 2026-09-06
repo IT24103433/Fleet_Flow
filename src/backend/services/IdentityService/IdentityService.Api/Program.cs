@@ -58,31 +58,38 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
+try
 {
-    var dbContext = scope.ServiceProvider.GetRequiredService<IdentityDbContext>();
-    await dbContext.Database.EnsureCreatedAsync();
-
-    // Idempotent Role Seeding
-    var defaultRoles = new[] { "CUSTOMER", "FLEET_MANAGER", "MAINTENANCE_STAFF", "ADMIN" };
-    bool hasChanges = false;
-    foreach (var roleName in defaultRoles)
+    using (var scope = app.Services.CreateScope())
     {
-        var roleExists = await dbContext.Roles.AnyAsync(r => r.Name.ToUpper() == roleName.ToUpper());
-        if (!roleExists)
+        var dbContext = scope.ServiceProvider.GetRequiredService<IdentityDbContext>();
+        await dbContext.Database.EnsureCreatedAsync();
+
+        // Idempotent Role Seeding
+        var defaultRoles = new[] { "CUSTOMER", "FLEET_MANAGER", "MAINTENANCE_STAFF", "ADMIN" };
+        bool hasChanges = false;
+        foreach (var roleName in defaultRoles)
         {
-            dbContext.Roles.Add(new Role
+            var roleExists = await dbContext.Roles.AnyAsync(r => r.Name.ToUpper() == roleName.ToUpper());
+            if (!roleExists)
             {
-                Id = Guid.NewGuid(),
-                Name = roleName
-            });
-            hasChanges = true;
+                dbContext.Roles.Add(new Role
+                {
+                    Id = Guid.NewGuid(),
+                    Name = roleName
+                });
+                hasChanges = true;
+            }
+        }
+        if (hasChanges)
+        {
+            await dbContext.SaveChangesAsync();
         }
     }
-    if (hasChanges)
-    {
-        await dbContext.SaveChangesAsync();
-    }
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"[Startup Warning] Database initialization deferred: {ex.Message}");
 }
 
 
