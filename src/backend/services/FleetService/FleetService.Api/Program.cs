@@ -1,14 +1,19 @@
-using Microsoft.EntityFrameworkCore;
-using FleetService.Api.Data;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using FleetService.Api.Data;
+using FleetService.Api.Entities;
+using FleetService.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<FleetDbContext>(options =>
     options.UseNpgsql(GetDatabaseConnectionString(builder.Configuration)));
+
+builder.Services.AddScoped<IVehicleService, VehicleService>();
 
 // Configure JWT Authentication
 var jwtSection = builder.Configuration.GetSection("Jwt");
@@ -38,7 +43,12 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
+
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
@@ -57,6 +67,44 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+// Startup Database Creation and Category Seeding
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<FleetDbContext>();
+    await dbContext.Database.EnsureCreatedAsync();
+
+    // Idempotent Default Category Seeding
+    var defaultCategories = new (string Name, string Description)[]
+    {
+        ("Executive Sedan", "Luxury and executive passenger sedans for corporate and premium mobility."),
+        ("Full-Size SUV", "Spacious premium sport utility vehicles with high capacity and all-weather capability."),
+        ("Commercial Cargo", "Heavy-duty cargo vans and commercial transport vehicles for logistics."),
+        ("Compact EV", "High-efficiency 100% electric urban compact vehicles."),
+        ("Premium Coupe", "High-performance premium sport and luxury coupes.")
+    };
+
+    bool hasChanges = false;
+    foreach (var (name, description) in defaultCategories)
+    {
+        var exists = await dbContext.VehicleCategories.AnyAsync(c => c.Name.ToUpper() == name.ToUpper());
+        if (!exists)
+        {
+            dbContext.VehicleCategories.Add(new VehicleCategory
+            {
+                Id = Guid.NewGuid(),
+                Name = name,
+                Description = description
+            });
+            hasChanges = true;
+        }
+    }
+
+    if (hasChanges)
+    {
+        await dbContext.SaveChangesAsync();
+    }
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
