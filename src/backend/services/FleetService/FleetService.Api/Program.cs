@@ -65,41 +65,48 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 // Startup Database Creation and Category Seeding
-using (var scope = app.Services.CreateScope())
+try
 {
-    var dbContext = scope.ServiceProvider.GetRequiredService<FleetDbContext>();
-    await dbContext.Database.EnsureCreatedAsync();
-
-    // Idempotent Default Category Seeding
-    var defaultCategories = new (string Name, string Description)[]
+    using (var scope = app.Services.CreateScope())
     {
-        ("Executive Sedan", "Luxury and executive passenger sedans for corporate and premium mobility."),
-        ("Full-Size SUV", "Spacious premium sport utility vehicles with high capacity and all-weather capability."),
-        ("Commercial Cargo", "Heavy-duty cargo vans and commercial transport vehicles for logistics."),
-        ("Compact EV", "High-efficiency 100% electric urban compact vehicles."),
-        ("Premium Coupe", "High-performance premium sport and luxury coupes.")
-    };
+        var dbContext = scope.ServiceProvider.GetRequiredService<FleetDbContext>();
+        await dbContext.Database.EnsureCreatedAsync();
 
-    bool hasChanges = false;
-    foreach (var (name, description) in defaultCategories)
-    {
-        var exists = await dbContext.VehicleCategories.AnyAsync(c => c.Name.ToUpper() == name.ToUpper());
-        if (!exists)
+        // Idempotent Default Category Seeding
+        var defaultCategories = new (string Name, string Description)[]
         {
-            dbContext.VehicleCategories.Add(new VehicleCategory
+            ("Executive Sedan", "Luxury and executive passenger sedans for corporate and premium mobility."),
+            ("Full-Size SUV", "Spacious premium sport utility vehicles with high capacity and all-weather capability."),
+            ("Commercial Cargo", "Heavy-duty cargo vans and commercial transport vehicles for logistics."),
+            ("Compact EV", "High-efficiency 100% electric urban compact vehicles."),
+            ("Premium Coupe", "High-performance premium sport and luxury coupes.")
+        };
+
+        bool hasChanges = false;
+        foreach (var (name, description) in defaultCategories)
+        {
+            var exists = await dbContext.VehicleCategories.AnyAsync(c => c.Name.ToUpper() == name.ToUpper());
+            if (!exists)
             {
-                Id = Guid.NewGuid(),
-                Name = name,
-                Description = description
-            });
-            hasChanges = true;
+                dbContext.VehicleCategories.Add(new VehicleCategory
+                {
+                    Id = Guid.NewGuid(),
+                    Name = name,
+                    Description = description
+                });
+                hasChanges = true;
+            }
+        }
+
+        if (hasChanges)
+        {
+            await dbContext.SaveChangesAsync();
         }
     }
-
-    if (hasChanges)
-    {
-        await dbContext.SaveChangesAsync();
-    }
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"[Startup Warning] Database initialization deferred: {ex.Message}");
 }
 
 // Configure the HTTP request pipeline.
