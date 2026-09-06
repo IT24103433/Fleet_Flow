@@ -16,21 +16,16 @@ using Xunit;
 
 namespace FleetService.Tests;
 
-public class RbacTests : IClassFixture<WebApplicationFactory<WeatherForecastController>>
+public class RbacTests : IClassFixture<CustomWebApplicationFactory<WeatherForecastController>>
 {
-    private readonly WebApplicationFactory<WeatherForecastController> _factory;
+    private readonly CustomWebApplicationFactory<WeatherForecastController> _factory;
     private const string JwtKey = "TestSigningKeyAtLeast32BytesLongSoItIsValidAndDoesNotError";
     private const string Issuer = "FleetFlow.IdentityService";
     private const string Audience = "FleetFlow.Client";
 
-    public RbacTests(WebApplicationFactory<WeatherForecastController> factory)
+    public RbacTests(CustomWebApplicationFactory<WeatherForecastController> factory)
     {
-        _factory = factory.WithWebHostBuilder(builder =>
-        {
-            builder.UseSetting("Jwt:Issuer", Issuer);
-            builder.UseSetting("Jwt:Audience", Audience);
-            builder.UseSetting("Jwt:Key", JwtKey);
-        });
+        _factory = factory;
     }
 
     private string GenerateToken(string username, string email, string role)

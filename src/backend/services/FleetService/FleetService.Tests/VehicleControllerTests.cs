@@ -23,42 +23,16 @@ using Xunit;
 
 namespace FleetService.Tests;
 
-public class VehicleControllerTests : IClassFixture<WebApplicationFactory<VehiclesController>>
+public class VehicleControllerTests : IClassFixture<CustomWebApplicationFactory<VehiclesController>>
 {
-    private readonly WebApplicationFactory<VehiclesController> _factory;
+    private readonly CustomWebApplicationFactory<VehiclesController> _factory;
     private const string JwtKey = "TestSigningKeyAtLeast32BytesLongSoItIsValidAndDoesNotError";
     private const string Issuer = "FleetFlow.IdentityService";
     private const string Audience = "FleetFlow.Client";
 
-    public VehicleControllerTests(WebApplicationFactory<VehiclesController> factory)
+    public VehicleControllerTests(CustomWebApplicationFactory<VehiclesController> factory)
     {
-        var dbName = "FleetTestDb_" + Guid.NewGuid();
-        _factory = factory.WithWebHostBuilder(builder =>
-        {
-            builder.UseSetting("Jwt:Issuer", Issuer);
-            builder.UseSetting("Jwt:Audience", Audience);
-            builder.UseSetting("Jwt:Key", JwtKey);
-
-            builder.ConfigureServices(services =>
-            {
-                var efDescriptors = services.Where(d =>
-                    d.ServiceType == typeof(DbContextOptions<FleetDbContext>) ||
-                    d.ServiceType == typeof(DbContextOptions) ||
-                    d.ServiceType == typeof(FleetDbContext) ||
-                    d.ServiceType.FullName?.Contains("EntityFrameworkCore") == true ||
-                    d.ServiceType.FullName?.Contains("Npgsql") == true).ToList();
-
-                foreach (var descriptor in efDescriptors)
-                {
-                    services.Remove(descriptor);
-                }
-
-                services.AddDbContext<FleetDbContext>(options =>
-                {
-                    options.UseInMemoryDatabase(dbName);
-                });
-            });
-        });
+        _factory = factory;
     }
 
     private static string GenerateToken(string username, string email, string role)
