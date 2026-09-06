@@ -26,6 +26,12 @@ jobs:
         run: npm run build
         working-directory: src/frontend
 
+      - name: Prepare Server Files
+        run: |
+          cp server.js dist/server.js
+          cp package.deploy.json dist/package.json
+        working-directory: src/frontend
+
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
