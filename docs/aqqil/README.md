@@ -53,6 +53,7 @@ docs/aqqil/
 | BM-102 | 2026-09-02 | Cross-Service Specs | 10-500 VUs | All Services | N/A | Defined in Specs | BASELINED | Drafted Concurrency Targets & p95 SLOs |
 | BM-103 | 2026-09-04 | IdentityService | 50 VUs | /api/auth/register, /login | N/A | < 65 ms | PREPARED | Added 85 structured Auth stress fixtures |
 | BM-104 | 2026-09-05 | Identity & Fleet | 10-50 VUs | /auth/login, /vehicles | 28.4 ms | < 65 ms | PASSED | Recorded baseline latency CSV metrics |
+| BM-105 | 2026-09-07 | FleetService | 100 VUs | /api/vehicles/search | N/A | < 75 ms | PREPARED | Expanded payloads with Fleet search & filter matrices |
 
 ---
 
