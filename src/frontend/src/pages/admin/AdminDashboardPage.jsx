@@ -16,9 +16,9 @@ const AdminDashboardPage = ({ onNavigate }) => {
             <span className="admin-pulse-dot" aria-hidden="true" />
             <span>Administrator Session Active</span>
           </div>
-          <h1 className="admin-welcome-title">System Administration & RBAC Control</h1>
+          <h1 className="admin-welcome-title">System Administration & Role Management</h1>
           <p className="admin-welcome-subtitle">
-            Centralized governance for user provisioning, role-based access control, security policies, and identity audit logs.
+            Centralized governance for user provisioning, role-based access control, security policies, and identity management.
           </p>
           <div className="admin-user-meta-row">
             <span className="admin-logged-as">Admin User: <strong>{user?.username}</strong></span>
@@ -28,7 +28,7 @@ const AdminDashboardPage = ({ onNavigate }) => {
 
         <div className="admin-header-actions">
           <Button variant="primary" size="md" onClick={() => onNavigate('admin-create-user')}>
-            + Provision New User
+            + Create User
           </Button>
           <Button variant="outline" size="md" onClick={() => onNavigate('admin-users')}>
             Manage User Directory
@@ -36,15 +36,15 @@ const AdminDashboardPage = ({ onNavigate }) => {
         </div>
       </div>
 
-      {/* Identity & Role Distribution Cards */}
+      {/* Admin Quick Metrics Strip */}
       <div className="admin-stats-grid">
         <div className="admin-stat-card">
           <div className="stat-top">
-            <span className="stat-title">RBAC Roles Defined</span>
-            <span className="stat-badge">System Verified</span>
+            <span className="stat-title">System Roles</span>
+            <span className="stat-badge">Standard</span>
           </div>
           <span className="stat-number">4</span>
-          <span className="stat-detail">CUSTOMER, FLEET_MGR, MAINT, ADMIN</span>
+          <span className="stat-detail">Customer, Fleet Manager, Maintenance, Admin</span>
         </div>
 
         <div className="admin-stat-card">
@@ -53,7 +53,7 @@ const AdminDashboardPage = ({ onNavigate }) => {
             <span className="stat-badge success">Online</span>
           </div>
           <span className="stat-number">Active</span>
-          <span className="stat-detail">ASP.NET Identity Core + EF Core</span>
+          <span className="stat-detail">Identity and authorization service</span>
         </div>
 
         <div className="admin-stat-card">
@@ -61,17 +61,17 @@ const AdminDashboardPage = ({ onNavigate }) => {
             <span className="stat-title">Token Security</span>
             <span className="stat-badge success">Enforced</span>
           </div>
-          <span className="stat-number">HS256</span>
-          <span className="stat-detail">Signed JWT with ClaimTypes.Role</span>
+          <span className="stat-number">Active</span>
+          <span className="stat-detail">Signed and protected session tokens</span>
         </div>
 
         <div className="admin-stat-card">
           <div className="stat-top">
             <span className="stat-title">Audit Log Status</span>
-            <span className="stat-badge">Phase 2 API</span>
+            <span className="stat-badge">Planned</span>
           </div>
           <span className="stat-number">—</span>
-          <span className="stat-detail">Awaiting audit persistence stream</span>
+          <span className="stat-detail">Security activity log streaming</span>
         </div>
       </div>
 
@@ -95,8 +95,8 @@ const AdminDashboardPage = ({ onNavigate }) => {
                 </svg>
               </div>
               <div className="shortcut-meta">
-                <strong>User Directory & Security Claims</strong>
-                <p>Inspect user accounts, inspect roles, reset passwords, or force password changes.</p>
+                <strong>User Directory & Accounts</strong>
+                <p>Inspect user accounts, assign roles, and view user profile details.</p>
               </div>
             </button>
 

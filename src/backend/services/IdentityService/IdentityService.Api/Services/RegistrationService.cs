@@ -20,6 +20,31 @@ public class RegistrationService : IRegistrationService
 
     public async Task<UserResponse> RegisterAsync(RegisterRequest request)
     {
+        if (request == null)
+        {
+            throw new ArgumentNullException(nameof(request));
+        }
+
+        if (string.IsNullOrWhiteSpace(request.FullName))
+        {
+            throw new ArgumentException("Full name is required.", nameof(request.FullName));
+        }
+
+        if (string.IsNullOrWhiteSpace(request.PhoneNumber))
+        {
+            throw new ArgumentException("Phone number is required.", nameof(request.PhoneNumber));
+        }
+
+        if (string.IsNullOrWhiteSpace(request.Address))
+        {
+            throw new ArgumentException("Address is required.", nameof(request.Address));
+        }
+
+        if (string.IsNullOrWhiteSpace(request.DrivingLicenseNumber))
+        {
+            throw new ArgumentException("Driving license number is required.", nameof(request.DrivingLicenseNumber));
+        }
+
         var usernameExists = await _dbContext.Users
             .AnyAsync(u => u.Username.ToLower() == request.Username.ToLower());
         if (usernameExists)
@@ -57,8 +82,12 @@ public class RegistrationService : IRegistrationService
         var user = new User
         {
             Id = Guid.NewGuid(),
-            Username = request.Username,
-            Email = request.Email,
+            FullName = request.FullName.Trim(),
+            Username = request.Username.Trim(),
+            Email = request.Email.Trim(),
+            PhoneNumber = request.PhoneNumber.Trim(),
+            Address = request.Address.Trim(),
+            DrivingLicenseNumber = request.DrivingLicenseNumber.Trim(),
             CreatedAt = DateTime.UtcNow
         };
 
@@ -71,8 +100,13 @@ public class RegistrationService : IRegistrationService
         return new UserResponse
         {
             Id = user.Id,
+            FullName = user.FullName,
             Username = user.Username,
             Email = user.Email,
+            PhoneNumber = user.PhoneNumber,
+            Address = user.Address,
+            DrivingLicenseNumber = user.DrivingLicenseNumber,
+            ProfileImageUrl = user.ProfileImageUrl,
             CreatedAt = user.CreatedAt
         };
     }

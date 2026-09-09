@@ -6,9 +6,11 @@ import InputField from '../../components/InputField';
 import Modal from '../../components/common/Modal';
 import Alert from '../../components/Alert';
 import ChangePasswordModal from '../../components/security/ChangePasswordModal';
+import { uploadProfilePicture, deleteProfilePicture } from '../../services/authService';
+import { getProfileImageUrl } from '../../utils/imageUrlUtils';
 
 const StaffProfilePage = () => {
-  const { user, roles } = useAuth();
+  const { user, roles, token, updateUser } = useAuth();
   const primaryRole = roles?.[0] || 'FLEET_MANAGER';
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -16,17 +18,22 @@ const StaffProfilePage = () => {
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
 
   const [staffInfo, setStaffInfo] = useState({
-    staffId: 'FF-OPS-' + (user?.username ? user.username.toUpperCase().slice(0, 4) : '7890'),
-    department: primaryRole === 'MAINTENANCE_STAFF' ? 'Technical Services & Fleet Maintenance' : 'Operations & Logistics',
-    workPhone: '+1 (555) 890-1234',
-    officeLocation: 'Operations Hub A - Station 4',
-    assignedShift: 'Standard Day (08:00 - 17:00 UTC)',
+    staffId: user?.id ? String(user.id).slice(0, 8).toUpperCase() : '—',
+    department: primaryRole === 'MAINTENANCE_STAFF' ? 'Technical Services & Fleet Maintenance' : (primaryRole === 'ADMIN' ? 'Executive Administration' : 'Operations & Logistics'),
+    workPhone: user?.phoneNumber || '—',
+    officeLocation: user?.address || '—',
+    assignedShift: 'Standard Operational Shift',
   });
 
   const [editFormData, setEditFormData] = useState({ ...staffInfo });
   const [notice, setNotice] = useState(null);
-  const [selectedPhoto, setSelectedPhoto] = useState(null);
-  const [photoProgress, setPhotoProgress] = useState('idle');
+
+  // Persistent photo upload state
+  const [photoFile, setPhotoFile] = useState(null);
+  const [photoPreview, setPhotoPreview] = useState(null);
+  const [isSavingPhoto, setIsSavingPhoto] = useState(false);
+  const [isDeletingPhoto, setIsDeletingPhoto] = useState(false);
+  const [photoError, setPhotoError] = useState(null);
 
   const handleEditOpen = () => {
     setEditFormData({ ...staffInfo });
@@ -44,15 +51,70 @@ const StaffProfilePage = () => {
     });
   };
 
+  const handleOpenPhotoModal = () => {
+    setPhotoFile(null);
+    setPhotoPreview(user?.profileImageUrl ? getProfileImageUrl(user.profileImageUrl) : null);
+    setPhotoError(null);
+    setIsPhotoModalOpen(true);
+  };
+
   const handlePhotoSelect = (e) => {
     const file = e.target.files?.[0];
     if (file) {
-      const url = URL.createObjectURL(file);
-      setSelectedPhoto(url);
-      setPhotoProgress('uploading');
-      setTimeout(() => {
-        setPhotoProgress('ready');
-      }, 700);
+      if (file.size > 5 * 1024 * 1024) {
+        setPhotoError('Selected image exceeds the 5 MB limit.');
+        return;
+      }
+      setPhotoFile(file);
+      setPhotoPreview(URL.createObjectURL(file));
+      setPhotoError(null);
+    }
+  };
+
+  const handleSavePhoto = async () => {
+    if (!photoFile) {
+      setPhotoError('Please select a photo file first.');
+      return;
+    }
+
+    setIsSavingPhoto(true);
+    setPhotoError(null);
+
+    const result = await uploadProfilePicture(photoFile, token);
+    setIsSavingPhoto(false);
+
+    if (result.success && result.data?.profileImageUrl) {
+      updateUser({ profileImageUrl: result.data.profileImageUrl });
+      setIsPhotoModalOpen(false);
+      setNotice({
+        type: 'success',
+        title: 'Staff Photo Updated',
+        message: 'Your official identification photo was uploaded successfully.',
+      });
+    } else {
+      setPhotoError(result.message || 'Failed to upload identification photo.');
+    }
+  };
+
+  const handleDeletePhoto = async () => {
+    setIsDeletingPhoto(true);
+    setPhotoError(null);
+
+    const result = await deleteProfilePicture(token);
+    setIsDeletingPhoto(false);
+
+    if (result.success) {
+      updateUser({ profileImageUrl: null });
+      setPhotoPreview(null);
+      setPhotoFile(null);
+      setIsPhotoModalOpen(false);
+      setNotice({
+        type: 'success',
+        title: 'Staff Photo Removed',
+        message: 'Your identification photo was removed.',
+      });
+    } else {
+      setPhotoError(result.message || 'Failed to remove identification photo.');
     }
   };
 
@@ -64,8 +126,8 @@ const StaffProfilePage = () => {
       <div className="staff-profile-hero">
         <div className="staff-avatar-box">
           <div className="staff-avatar-large">
-            {selectedPhoto ? (
-              <img src={selectedPhoto} alt="Staff profile" className="avatar-img" />
+            {user?.profileImageUrl ? (
+              <img src={getProfileImageUrl(user.profileImageUrl)} alt="Staff profile" className="avatar-img" />
             ) : (
               <span>{user?.username?.charAt(0)?.toUpperCase() || 'S'}</span>
             )}
@@ -73,7 +135,7 @@ const StaffProfilePage = () => {
           <button
             type="button"
             className="change-photo-btn staff-theme"
-            onClick={() => setIsPhotoModalOpen(true)}
+            onClick={handleOpenPhotoModal}
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="14" height="14">
               <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
@@ -92,7 +154,7 @@ const StaffProfilePage = () => {
           <div className="staff-badge-strip">
             <span className="staff-tag">ID: {staffInfo.staffId}</span>
             <span className="staff-tag active">Security Cleared</span>
-            <span className="staff-tag">JWT Claim Verified</span>
+            <span className="staff-tag">Verified Session</span>
           </div>
         </div>
 
@@ -164,8 +226,8 @@ const StaffProfilePage = () => {
               <span className="info-value">{staffInfo.officeLocation}</span>
             </div>
             <div className="info-row">
-              <span className="info-label">Authentication Token</span>
-              <span className="info-value" style={{ color: '#10B981' }}>256-bit Signed JWT</span>
+              <span className="info-label">Session Status</span>
+              <span className="info-value" style={{ color: '#10B981' }}>Active</span>
             </div>
           </div>
         </div>
@@ -227,12 +289,18 @@ const StaffProfilePage = () => {
         isOpen={isPhotoModalOpen}
         onClose={() => setIsPhotoModalOpen(false)}
         title="Update Staff Identification Photo"
-        subtitle="Select an official employee photo file."
+        subtitle="Select an official employee photo file (PNG, JPG, WebP up to 5 MB)."
       >
         <div className="photo-modal-body">
+          {photoError && (
+            <div style={{ marginBottom: '16px' }}>
+              <Alert type="error" title="Photo Error" message={photoError} />
+            </div>
+          )}
+
           <div className="photo-preview-box">
-            {selectedPhoto ? (
-              <img src={selectedPhoto} alt="Selected staff preview" className="modal-avatar-preview" />
+            {photoPreview ? (
+              <img src={photoPreview} alt="Selected staff preview" className="modal-avatar-preview" />
             ) : (
               <div className="avatar-placeholder-large">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" width="48" height="48">
@@ -247,9 +315,10 @@ const StaffProfilePage = () => {
             <input
               type="file"
               id="staffPhotoFile"
-              accept="image/*"
+              accept="image/jpeg,image/png,image/webp"
               onChange={handlePhotoSelect}
               className="file-input-native"
+              disabled={isSavingPhoto || isDeletingPhoto}
             />
             <label htmlFor="staffPhotoFile" className="file-input-label">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="18" height="18">
@@ -257,25 +326,33 @@ const StaffProfilePage = () => {
                 <polyline points="17 8 12 3 7 8" />
                 <line x1="12" y1="3" x2="12" y2="15" />
               </svg>
-              <span>Choose Photo File</span>
+              <span>{photoFile ? photoFile.name : 'Choose Photo File'}</span>
             </label>
           </div>
 
-          {photoProgress === 'uploading' && (
-            <div className="upload-progress-bar">
-              <div className="progress-fill" />
-              <span className="progress-text">Generating visual preview...</span>
-            </div>
-          )}
-
-          <div className="photo-integration-notice">
-            <span className="info-icon-dot" aria-hidden="true" />
-            <span>Staff photo persistence endpoint will connect to IdentityService in Sprint 2.</span>
-          </div>
-
-          <div className="modal-actions-row">
-            <Button variant="primary" fullWidth onClick={() => setIsPhotoModalOpen(false)}>
-              Done
+          <div className="modal-actions-row" style={{ display: 'flex', gap: '8px', marginTop: '16px' }}>
+            <Button
+              variant="outline"
+              onClick={() => setIsPhotoModalOpen(false)}
+              disabled={isSavingPhoto || isDeletingPhoto}
+            >
+              Cancel
+            </Button>
+            {user?.profileImageUrl && (
+              <Button
+                variant="danger"
+                onClick={handleDeletePhoto}
+                disabled={isSavingPhoto || isDeletingPhoto}
+              >
+                {isDeletingPhoto ? 'Removing...' : 'Remove Photo'}
+              </Button>
+            )}
+            <Button
+              variant="primary"
+              onClick={handleSavePhoto}
+              disabled={!photoFile || isSavingPhoto || isDeletingPhoto}
+            >
+              {isSavingPhoto ? 'Uploading...' : 'Save Photo'}
             </Button>
           </div>
         </div>

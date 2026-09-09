@@ -1,37 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import { extractRolesFromToken, isTokenExpired } from '../utils/roleUtils';
 
 const AuthContext = createContext(null);
-
-const extractRolesFromToken = (token) => {
-  try {
-    if (!token || typeof token !== 'string') return [];
-    const parts = token.split('.');
-    if (parts.length < 2) return [];
-    const base64Url = parts[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split('')
-        .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-        .join('')
-    );
-    const payload = JSON.parse(jsonPayload);
-    const rawRole =
-      payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] ??
-      payload['role'] ??
-      [];
-
-    if (Array.isArray(rawRole)) {
-      return rawRole.filter((r) => typeof r === 'string' && r.trim().length > 0);
-    }
-    if (typeof rawRole === 'string' && rawRole.trim().length > 0) {
-      return [rawRole.trim()];
-    }
-    return [];
-  } catch {
-    return [];
-  }
-};
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
@@ -41,27 +11,41 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const loadStoredAuth = () => {
+      // 1. Purge legacy stale authentication keys from localStorage
       try {
-        const storedToken = localStorage.getItem('token');
-        const storedUser = localStorage.getItem('user');
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+      } catch {
+        // ignore storage access restrictions
+      }
+
+      // 2. Load active authentication session from sessionStorage
+      try {
+        const storedToken = sessionStorage.getItem('token');
+        const storedUser = sessionStorage.getItem('user');
 
         if (storedToken && storedUser) {
-          const parsedUser = JSON.parse(storedUser);
-          const roles = Array.isArray(parsedUser.roles)
-            ? parsedUser.roles
-            : extractRolesFromToken(storedToken);
+          // 3. Validate token expiration
+          if (isTokenExpired(storedToken)) {
+            sessionStorage.removeItem('token');
+            sessionStorage.removeItem('user');
+          } else {
+            const parsedUser = JSON.parse(storedUser);
+            const roles = Array.isArray(parsedUser.roles)
+              ? parsedUser.roles
+              : extractRolesFromToken(storedToken);
 
-          const userWithRoles = { ...parsedUser, roles };
-          setToken(storedToken);
-          setUser(userWithRoles);
-          setIsAuthenticated(true);
+            const userWithRoles = { ...parsedUser, roles };
+            setToken(storedToken);
+            setUser(userWithRoles);
+            setIsAuthenticated(true);
+          }
         }
       } catch (error) {
-        console.error("Error loading authentication state from localStorage:", error);
-        // Clear corrupt data
+        console.error("Error loading authentication state from sessionStorage:", error);
         try {
-          localStorage.removeItem('token');
-          localStorage.removeItem('user');
+          sessionStorage.removeItem('token');
+          sessionStorage.removeItem('user');
         } catch {
           // ignore
         }
@@ -78,39 +62,71 @@ export const AuthProvider = ({ children }) => {
       const roles = extractRolesFromToken(newToken);
       const userWithRoles = { ...newUser, roles };
 
-      localStorage.setItem('token', newToken);
-      localStorage.setItem('user', JSON.stringify(userWithRoles));
-      
+      // Store in sessionStorage (active tab session only)
+      sessionStorage.setItem('token', newToken);
+      sessionStorage.setItem('user', JSON.stringify(userWithRoles));
+
+      // Clean up legacy localStorage keys
+      try {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+      } catch {
+        // ignore
+      }
+
       setToken(newToken);
       setUser(userWithRoles);
       setIsAuthenticated(true);
     } catch (error) {
-      console.error("Error saving authentication state to localStorage:", error);
+      console.error("Error saving authentication state to sessionStorage:", error);
     }
   };
 
   const logout = () => {
     try {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      
+      // Clear sessionStorage active session
+      sessionStorage.removeItem('token');
+      sessionStorage.removeItem('user');
+
+      // Clear legacy localStorage keys
+      try {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+      } catch {
+        // ignore
+      }
+
       setToken(null);
       setUser(null);
       setIsAuthenticated(false);
     } catch (error) {
-      console.error("Error removing authentication state from localStorage:", error);
+      console.error("Error removing authentication state from sessionStorage:", error);
     }
+  };
+
+  const updateUser = (partialUser) => {
+    setUser((prevUser) => {
+      if (!prevUser) return prevUser;
+      const updated = { ...prevUser, ...partialUser };
+      try {
+        sessionStorage.setItem('user', JSON.stringify(updated));
+      } catch (error) {
+        console.error("Error updating user in sessionStorage:", error);
+      }
+      return updated;
+    });
   };
 
   const roles = user?.roles || [];
   const hasRole = (roleName) => roles.includes(roleName);
 
   return (
-    <AuthContext.Provider value={{ token, user, roles, hasRole, isAuthenticated, isLoading, login, logout }}>
+    <AuthContext.Provider value={{ token, user, roles, hasRole, isAuthenticated, isLoading, login, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   );
 };
+
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => {
@@ -120,4 +136,3 @@ export const useAuth = () => {
   }
   return context;
 };
-

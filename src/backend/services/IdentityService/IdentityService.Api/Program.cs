@@ -13,6 +13,9 @@ builder.Services.AddDbContext<IdentityDbContext>(options =>
 builder.Services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<IRegistrationService, RegistrationService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<IAdminUserService, AdminUserService>();
+builder.Services.AddScoped<IProfileImageService, ProfileImageService>();
+
 
 // Configure JWT Authentication
 var jwtSection = builder.Configuration.GetSection("Jwt");
@@ -85,6 +88,18 @@ try
         {
             await dbContext.SaveChangesAsync();
         }
+
+        // Ensure ProfileImageUrl column exists on pre-existing database
+        try
+        {
+            await dbContext.Database.ExecuteSqlRawAsync(@"
+                ALTER TABLE ""Users"" ADD COLUMN IF NOT EXISTS ""ProfileImageUrl"" character varying(500) NULL;
+            ");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[Startup Warning] Column check: {ex.Message}");
+        }
     }
 }
 catch (Exception ex)
@@ -103,7 +118,22 @@ app.UseSwaggerUI(options =>
 
 app.UseHttpsRedirection();
 
+// Static file serving for uploads (/uploads/profiles/...)
+var uploadRoot = builder.Configuration["IDENTITY_UPLOAD_ROOT"];
+if (string.IsNullOrWhiteSpace(uploadRoot))
+{
+    uploadRoot = Path.Combine(builder.Environment.ContentRootPath, "wwwroot", "uploads");
+}
+Directory.CreateDirectory(Path.Combine(uploadRoot, "profiles"));
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(uploadRoot),
+    RequestPath = "/uploads"
+});
+
 app.UseCors();
+
 
 app.UseAuthentication();
 app.UseAuthorization();

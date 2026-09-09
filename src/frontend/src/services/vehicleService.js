@@ -195,3 +195,66 @@ export const createVehicle = async (vehicleData, token) => {
     };
   }
 };
+
+export const updateVehicle = async (id, vehicleData, token) => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    };
+
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const response = await fetch(`${FLEET_API_URL}/api/vehicles/${id}`, {
+      method: 'PUT',
+      headers,
+      body: JSON.stringify(vehicleData),
+    });
+
+    const contentType = response.headers.get('content-type');
+    let data = null;
+    if (contentType && contentType.includes('application/json')) {
+      data = await response.json();
+    }
+
+    if (!response.ok) {
+      let message = data?.message;
+      if (!message) {
+        if (response.status === 401) {
+          message = 'Authentication required. Please log in as Fleet Manager or Admin.';
+        } else if (response.status === 403) {
+          message = 'Access denied. You do not have permission to edit vehicle records.';
+        } else if (response.status === 404) {
+          message = 'The specified vehicle was not found in the fleet catalog.';
+        } else if (response.status === 409) {
+          message = 'A vehicle with this license plate or VIN already exists.';
+        } else if (response.status === 400) {
+          message = 'Invalid vehicle parameters. Please check your input fields.';
+        } else {
+          message = 'An unexpected error occurred while updating the vehicle.';
+        }
+      }
+
+      return {
+        success: false,
+        status: response.status,
+        message,
+        errors: data?.errors || null,
+      };
+    }
+
+    return {
+      success: true,
+      status: response.status,
+      data,
+    };
+  } catch {
+    return {
+      success: false,
+      status: 0,
+      message: 'The fleet service is currently unreachable. Please check your network and try again.',
+    };
+  }
+};

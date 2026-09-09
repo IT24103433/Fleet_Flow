@@ -1,33 +1,33 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import RoleBadge from '../../components/common/RoleBadge';
 import StatusBadge from '../../components/common/StatusBadge';
 import Button from '../../components/common/Button';
+import { getVehicles } from '../../services/vehicleService';
+import { formatDailyRate } from '../../utils/currencyUtils';
 
-const RECOMMENDED_FLEET = [
-  {
-    id: 'sedan-1',
-    name: 'Aero Executive Sedan',
-    category: 'Executive Sedan',
-    transmission: 'Automatic',
-    fuel: 'Hybrid',
-    rate: '$85 / day',
-    status: 'AVAILABLE',
-  },
-  {
-    id: 'suv-1',
-    name: 'Summit Pro SUV',
-    category: 'Full-Size SUV',
-    transmission: 'AWD Automatic',
-    fuel: 'Electric',
-    rate: '$120 / day',
-    status: 'AVAILABLE',
-  },
-];
-
-const CustomerHomePage = ({ onNavigate }) => {
+const CustomerHomePage = ({ onNavigate, onSelectVehicle }) => {
   const { user, roles } = useAuth();
   const primaryRole = roles?.[0] || 'CUSTOMER';
+
+  const [recommendedVehicles, setRecommendedVehicles] = useState([]);
+  const [isLoadingVehicles, setIsLoadingVehicles] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+    getVehicles({ status: 'Available', pageSize: 4 }).then((result) => {
+      if (!isMounted) return;
+      if (result.success && Array.isArray(result.data)) {
+        setRecommendedVehicles(result.data);
+      } else {
+        setRecommendedVehicles([]);
+      }
+      setIsLoadingVehicles(false);
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <div className="customer-home-container">
@@ -130,32 +130,68 @@ const CustomerHomePage = ({ onNavigate }) => {
           </button>
         </div>
 
-        <div className="recommended-grid">
-          {RECOMMENDED_FLEET.map((vehicle) => (
-            <div key={vehicle.id} className="recommended-card">
-              <div className="rec-img-placeholder">
-                <span>{vehicle.category} Visual Model</span>
-              </div>
-              <div className="rec-body">
-                <div className="rec-title-row">
-                  <h4 className="rec-name">{vehicle.name}</h4>
-                  <StatusBadge status={vehicle.status} />
+        {isLoadingVehicles && (
+          <div style={{ textAlign: 'center', padding: 'var(--space-6) 0', color: 'var(--color-text-secondary)' }}>
+            <div className="spinner" style={{ width: '24px', height: '24px', borderTopColor: 'var(--color-primary)', borderRightColor: 'var(--color-primary)', margin: '0 auto 8px' }} />
+            <p style={{ fontSize: '13px' }}>Loading fleet recommendations...</p>
+          </div>
+        )}
+
+        {!isLoadingVehicles && recommendedVehicles.length === 0 && (
+          <div className="empty-state-card" style={{ padding: 'var(--space-6)', textAlign: 'center' }}>
+            <p style={{ color: 'var(--color-text-secondary)', marginBottom: '12px' }}>
+              Browse our complete vehicle catalog to discover and reserve available mobility units.
+            </p>
+            <Button variant="primary" size="sm" onClick={() => onNavigate('browse')}>
+              Browse Vehicle Catalog
+            </Button>
+          </div>
+        )}
+
+        {!isLoadingVehicles && recommendedVehicles.length > 0 && (
+          <div className="recommended-grid">
+            {recommendedVehicles.map((vehicle) => {
+              const vehicleName = `${vehicle.year} ${vehicle.make} ${vehicle.model}`;
+              const categoryName = vehicle.categoryName || vehicle.category || '—';
+              const fuel = vehicle.fuelType || vehicle.fuel || '—';
+              const transmission = vehicle.transmission || '—';
+
+              return (
+                <div key={vehicle.id} className="recommended-card">
+                  <div className="rec-img-placeholder">
+                    <span>{categoryName} Visual Model</span>
+                  </div>
+                  <div className="rec-body">
+                    <div className="rec-title-row">
+                      <h4 className="rec-name">{vehicleName}</h4>
+                      <StatusBadge status={vehicle.status} />
+                    </div>
+                    <div className="rec-specs">
+                      <span>{fuel}</span>
+                      <span>•</span>
+                      <span>{transmission}</span>
+                    </div>
+                    <div className="rec-footer">
+                      <span className="rec-rate">{formatDailyRate(vehicle.dailyRate)}</span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          if (onSelectVehicle) {
+                            onSelectVehicle(vehicle);
+                          }
+                          onNavigate('vehicle-details');
+                        }}
+                      >
+                        View Details
+                      </Button>
+                    </div>
+                  </div>
                 </div>
-                <div className="rec-specs">
-                  <span>{vehicle.fuel}</span>
-                  <span>•</span>
-                  <span>{vehicle.transmission}</span>
-                </div>
-                <div className="rec-footer">
-                  <span className="rec-rate">{vehicle.rate}</span>
-                  <Button variant="outline" size="sm" onClick={() => onNavigate('browse')}>
-                    View Details
-                  </Button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+              );
+            })}
+          </div>
+        )}
       </section>
     </div>
   );

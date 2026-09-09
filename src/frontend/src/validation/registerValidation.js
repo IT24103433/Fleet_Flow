@@ -1,6 +1,13 @@
 export const validateRegister = (values) => {
   const errors = {};
 
+  // Full Name
+  if (!values.fullName || values.fullName.trim() === '') {
+    errors.fullName = "Full name is required.";
+  } else if (values.fullName.trim().length < 2 || values.fullName.trim().length > 100) {
+    errors.fullName = "Full name must be between 2 and 100 characters.";
+  }
+
   // Username
   if (!values.username || values.username.trim() === '') {
     errors.username = "Username is required.";
@@ -17,6 +24,29 @@ export const validateRegister = (values) => {
     errors.email = "Email must not exceed 100 characters.";
   } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) {
     errors.email = "Email is not a valid email address.";
+  }
+
+  // Phone Number
+  if (!values.phoneNumber || values.phoneNumber.trim() === '') {
+    errors.phoneNumber = "Phone number is required.";
+  } else if (values.phoneNumber.trim().length < 7 || values.phoneNumber.trim().length > 20) {
+    errors.phoneNumber = "Phone number must be between 7 and 20 characters.";
+  } else if (!/^(\+?[0-9\s\-().]{7,20})$/.test(values.phoneNumber.trim())) {
+    errors.phoneNumber = "Please enter a valid phone number.";
+  }
+
+  // Address
+  if (!values.address || values.address.trim() === '') {
+    errors.address = "Address is required.";
+  } else if (values.address.trim().length < 5 || values.address.trim().length > 250) {
+    errors.address = "Address must be between 5 and 250 characters.";
+  }
+
+  // Driving License Number
+  if (!values.drivingLicenseNumber || values.drivingLicenseNumber.trim() === '') {
+    errors.drivingLicenseNumber = "Driving license number is required.";
+  } else if (values.drivingLicenseNumber.trim().length < 4 || values.drivingLicenseNumber.trim().length > 50) {
+    errors.drivingLicenseNumber = "Driving license number must be between 4 and 50 characters.";
   }
 
   // Password

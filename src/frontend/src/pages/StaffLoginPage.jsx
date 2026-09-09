@@ -85,7 +85,7 @@ const StaffLoginPage = ({ onNavigateToCustomerLogin, onLoginSuccess }) => {
 
     setIsLoading(true);
 
-    const result = await loginUser(formData.usernameOrEmail, formData.password);
+    const result = await loginUser(formData.usernameOrEmail, formData.password, 'staff');
 
     setIsLoading(false);
 
@@ -96,16 +96,18 @@ const StaffLoginPage = ({ onNavigateToCustomerLogin, onLoginSuccess }) => {
       if (hasStaffPrivilege) {
         login(result.data.token, result.data.user);
         if (onLoginSuccess) {
-          onLoginSuccess();
+          onLoginSuccess(result.data.token);
         }
       } else {
-        // Customer attempted staff login: deny entry to staff portal
+        // Secondary frontend guard (server should have already blocked this)
         setAccessDeniedMessage(
           'Access Denied: Your account does not have staff operational privileges (Fleet Manager, Maintenance Staff, or Administrator required).'
         );
       }
     } else {
-      if (result.status === 400 && result.errors) {
+      if (result.status === 403) {
+        setAccessDeniedMessage(result.message || 'Your account does not have access to the Staff Portal.');
+      } else if (result.status === 400 && result.errors) {
         const fieldErrors = {};
         Object.keys(result.errors).forEach((key) => {
           const normalizedKey = key.charAt(0).toLowerCase() + key.slice(1);

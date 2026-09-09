@@ -20,13 +20,19 @@ public class IdentityDbContext : DbContext
         {
             entity.ToTable("Users");
             entity.HasKey(e => e.Id);
+            entity.Property(e => e.FullName).HasMaxLength(100).HasDefaultValue(string.Empty);
             entity.Property(e => e.Username).IsRequired().HasMaxLength(50);
             entity.HasIndex(e => e.Username).IsUnique();
             entity.Property(e => e.Email).IsRequired().HasMaxLength(100);
             entity.HasIndex(e => e.Email).IsUnique();
+            entity.Property(e => e.PhoneNumber).HasMaxLength(20).HasDefaultValue(string.Empty);
+            entity.Property(e => e.Address).HasMaxLength(250).HasDefaultValue(string.Empty);
+            entity.Property(e => e.DrivingLicenseNumber).HasMaxLength(50).HasDefaultValue(string.Empty);
             entity.Property(e => e.PasswordHash).IsRequired();
+            entity.Property(e => e.ProfileImageUrl).HasMaxLength(500);
             entity.Property(e => e.CreatedAt).IsRequired();
         });
+
 
         modelBuilder.Entity<Role>(entity =>
         {

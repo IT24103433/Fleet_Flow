@@ -138,8 +138,8 @@ const StaffDashboardPage = ({ onNavigate }) => {
         {/* Module Status Card */}
         <div className="dashboard-panel-card">
           <div className="panel-card-header">
-            <h4 className="panel-title">Operations Module Verification</h4>
-            <span className="panel-status-tag">Sprint 1 Passed</span>
+            <h4 className="panel-title">Operations Services Status</h4>
+            <span className="panel-status-tag">Operational</span>
           </div>
 
           <div className="module-status-list">
@@ -147,44 +147,44 @@ const StaffDashboardPage = ({ onNavigate }) => {
               <div className="module-item-left">
                 <span className="status-indicator-dot ready" aria-hidden="true" />
                 <div>
-                  <strong className="module-name">Four-Role RBAC Identity</strong>
-                  <p className="module-desc">Customer, Fleet Manager, Maintenance, Admin</p>
+                  <strong className="module-name">Fleet Inventory Management</strong>
+                  <p className="module-desc">Vehicle catalog, availability, and pricing management</p>
                 </div>
               </div>
-              <span className="module-badge ready">Verified</span>
+              <span className="module-badge ready">Active</span>
             </div>
 
             <div className="module-status-item ready">
               <div className="module-item-left">
                 <span className="status-indicator-dot ready" aria-hidden="true" />
                 <div>
-                  <strong className="module-name">Staff Portal Role Gate</strong>
-                  <p className="module-desc">Enforces authorized staff session claims</p>
+                  <strong className="module-name">Staff Access & Permissions</strong>
+                  <p className="module-desc">Role-authorized operational workspace controls</p>
                 </div>
               </div>
-              <span className="module-badge ready">Verified</span>
+              <span className="module-badge ready">Active</span>
             </div>
 
             <div className="module-status-item ready">
               <div className="module-item-left">
                 <span className="status-indicator-dot ready" aria-hidden="true" />
                 <div>
-                  <strong className="module-name">Stitch UI Design System</strong>
-                  <p className="module-desc">Navy tokens, Inter fonts, responsive layout</p>
+                  <strong className="module-name">Operations Console</strong>
+                  <p className="module-desc">Unified interface for fleet monitoring and controls</p>
                 </div>
               </div>
-              <span className="module-badge ready">Verified</span>
+              <span className="module-badge ready">Active</span>
             </div>
 
             <div className="module-status-item pending">
               <div className="module-item-left">
                 <span className="status-indicator-dot pending" aria-hidden="true" />
                 <div>
-                  <strong className="module-name">Vehicle CRUD Endpoints</strong>
-                  <p className="module-desc">Fleet ingestion & vehicle database APIs</p>
+                  <strong className="module-name">Maintenance & Telematics</strong>
+                  <p className="module-desc">Vehicle maintenance scheduling and status tracking</p>
                 </div>
               </div>
-              <span className="module-badge pending">Sprint 2 Target</span>
+              <span className="module-badge pending">Planned</span>
             </div>
           </div>
         </div>
@@ -230,22 +230,6 @@ const StaffDashboardPage = ({ onNavigate }) => {
                 </div>
               </button>
             )}
-
-            <button
-              type="button"
-              className="shortcut-action-btn"
-              onClick={() => onNavigate('landing')}
-            >
-              <div className="shortcut-icon-box">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                </svg>
-              </div>
-              <div className="shortcut-text">
-                <span className="shortcut-title">Customer Experience Portal</span>
-                <span className="shortcut-subtitle">Inspect customer landing and vehicle exploration flow</span>
-              </div>
-            </button>
           </div>
         </div>
       </div>

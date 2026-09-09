@@ -56,22 +56,22 @@ const LandingPage = ({ onNavigate }) => {
         <div className="hero-visual-card">
           <div className="visual-card-inner">
             <div className="visual-card-header">
-              <div className="visual-card-badge">Fleet Category Showcase</div>
-              <span className="visual-card-model">Fleet Mobility Spec</span>
+              <div className="visual-card-badge">Fleet Mobility</div>
+              <span className="visual-card-model">Vehicle Operations Overview</span>
             </div>
 
             <div className="visual-card-metrics">
               <div className="metric-item">
-                <span className="metric-label">Access Model</span>
-                <span className="metric-value">Self-Service</span>
+                <span className="metric-label">Service Model</span>
+                <span className="metric-value">On-Demand</span>
               </div>
               <div className="metric-item">
-                <span className="metric-label">Operational Roles</span>
-                <span className="metric-value">4-Role RBAC</span>
+                <span className="metric-label">Fleet Network</span>
+                <span className="metric-value">Island-wide</span>
               </div>
               <div className="metric-item">
-                <span className="metric-label">Platform Status</span>
-                <span className="metric-value status-active">Active</span>
+                <span className="metric-label">Vehicle Readiness</span>
+                <span className="metric-value status-active">Available</span>
               </div>
             </div>
 
@@ -81,7 +81,7 @@ const LandingPage = ({ onNavigate }) => {
                 <span className="bar-segment active" />
                 <span className="bar-segment" />
               </div>
-              <span className="visual-note">Phase 1 Design Token Foundation</span>
+              <span className="visual-note">Inspected & Maintained Fleet</span>
             </div>
           </div>
         </div>
@@ -116,9 +116,9 @@ const LandingPage = ({ onNavigate }) => {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
               </svg>
             </div>
-            <h3 className="feature-card-title">Four-Role RBAC Security</h3>
+            <h3 className="feature-card-title">Secure Platform Access</h3>
             <p className="feature-card-text">
-              Strict identity separation protecting Customers, Fleet Managers, Maintenance Staff, and Administrators with verified JWT claims.
+              Protected authentication and dedicated access control for customers and operational staff members.
             </p>
           </div>
 
@@ -130,9 +130,9 @@ const LandingPage = ({ onNavigate }) => {
                 <line x1="9" y1="21" x2="9" y2="9" />
               </svg>
             </div>
-            <h3 className="feature-card-title">Dedicated Staff Portal</h3>
+            <h3 className="feature-card-title">Fleet Operations Management</h3>
             <p className="feature-card-text">
-              Operations personnel benefit from a tailored workspace for managing inventory, tracking maintenance, and monitoring fleet health.
+              Operational tools for managing inventory, tracking maintenance schedules, and monitoring fleet availability.
             </p>
           </div>
         </div>

@@ -3,6 +3,7 @@ import StatusBadge from '../components/common/StatusBadge';
 import Button from '../components/common/Button';
 import Alert from '../components/Alert';
 import { getVehicles, getCategories } from '../services/vehicleService';
+import { formatPriceNumber } from '../utils/currencyUtils';
 
 const POWERTRAIN_OPTIONS = [
   'All Powertrains',
@@ -208,10 +209,10 @@ const BrowseFleetPage = ({ onNavigate, onSelectVehicle }) => {
       {!isLoading && !errorMessage && vehicles.length > 0 && (
         <div className="catalog-grid">
           {vehicles.map((vehicle) => {
-            const categoryName = vehicle.categoryName || vehicle.category || 'Standard';
-            const fuelType = vehicle.fuelType || vehicle.fuel || 'Hybrid';
-            const transmission = vehicle.transmission || 'Automatic';
-            const seating = vehicle.seatingCapacity || vehicle.seating || '5 Seats';
+            const categoryName = vehicle.categoryName || vehicle.category || '—';
+            const fuelType = vehicle.fuelType || vehicle.fuel || '—';
+            const transmission = vehicle.transmission || '—';
+            const seating = vehicle.seatingCapacity || vehicle.seating || '—';
 
             return (
               <article key={vehicle.id} className="vehicle-catalog-card">
@@ -249,8 +250,14 @@ const BrowseFleetPage = ({ onNavigate, onSelectVehicle }) => {
 
                   <div className="vehicle-rate-and-cta">
                     <div className="rate-block">
-                      <span className="price-number">${Number(vehicle.dailyRate).toFixed(0)}</span>
-                      <span className="price-period">/ day</span>
+                      {vehicle.dailyRate != null && !isNaN(Number(vehicle.dailyRate)) ? (
+                        <>
+                          <span className="price-number">LKR {formatPriceNumber(vehicle.dailyRate)}</span>
+                          <span className="price-period">/day</span>
+                        </>
+                      ) : (
+                        <span className="price-number">—</span>
+                      )}
                     </div>
                     <Button
                       variant="primary"

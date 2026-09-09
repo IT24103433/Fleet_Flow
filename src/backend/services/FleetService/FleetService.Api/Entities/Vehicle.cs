@@ -21,4 +21,7 @@ public class Vehicle
     // Foreign Key and Navigation property
     public Guid VehicleCategoryId { get; set; }
     public VehicleCategory? Category { get; set; }
+
+    // Images navigation property
+    public ICollection<VehicleImage> Images { get; set; } = new List<VehicleImage>();
 }

@@ -11,6 +11,7 @@ public class FleetDbContext : DbContext
 
     public DbSet<Vehicle> Vehicles => Set<Vehicle>();
     public DbSet<VehicleCategory> VehicleCategories => Set<VehicleCategory>();
+    public DbSet<VehicleImage> VehicleImages => Set<VehicleImage>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -53,6 +54,25 @@ public class FleetDbContext : DbContext
                 .WithMany(c => c.Vehicles)
                 .HasForeignKey(v => v.VehicleCategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<VehicleImage>(entity =>
+        {
+            entity.ToTable("VehicleImages");
+            entity.HasKey(e => e.Id);
+
+            entity.Property(e => e.FileName).IsRequired().HasMaxLength(255);
+            entity.Property(e => e.OriginalFileName).IsRequired().HasMaxLength(255);
+            entity.Property(e => e.ContentType).IsRequired().HasMaxLength(100);
+            entity.Property(e => e.FileSize).IsRequired();
+            entity.Property(e => e.RelativeUrl).IsRequired().HasMaxLength(500);
+            entity.Property(e => e.Caption).HasMaxLength(255);
+            entity.Property(e => e.CreatedAt).IsRequired();
+
+            entity.HasOne(vi => vi.Vehicle)
+                .WithMany(v => v.Images)
+                .HasForeignKey(vi => vi.VehicleId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
     }
 }

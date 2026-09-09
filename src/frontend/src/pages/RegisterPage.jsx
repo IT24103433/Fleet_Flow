@@ -7,8 +7,12 @@ import { registerUser } from '../services/authService';
 
 const RegisterPage = ({ onNavigateToLogin }) => {
   const [formData, setFormData] = useState({
+    fullName: '',
     username: '',
     email: '',
+    phoneNumber: '',
+    address: '',
+    drivingLicenseNumber: '',
     password: '',
     confirmPassword: '',
   });
@@ -53,21 +57,25 @@ const RegisterPage = ({ onNavigateToLogin }) => {
 
     setIsLoading(true);
 
-    const result = await registerUser(formData.username, formData.email, formData.password);
+    const result = await registerUser(formData);
 
     setIsLoading(false);
 
     if (result.success) {
       setIsSuccess(true);
       setRegisteredUser({
+        fullName: result.data.fullName,
         username: result.data.username,
         email: result.data.email,
+        phoneNumber: result.data.phoneNumber,
+        address: result.data.address,
+        drivingLicenseNumber: result.data.drivingLicenseNumber,
       });
     } else {
       if (result.errors) {
         const fieldErrors = {};
         Object.keys(result.errors).forEach((key) => {
-          const normalizedKey = key.toLowerCase();
+          const normalizedKey = key.charAt(0).toLowerCase() + key.slice(1);
           fieldErrors[normalizedKey] = Array.isArray(result.errors[key]) 
             ? result.errors[key].join(' ') 
             : result.errors[key];
@@ -89,9 +97,13 @@ const RegisterPage = ({ onNavigateToLogin }) => {
             </svg>
           </div>
           <h2 className="auth-title">Account Created Successfully!</h2>
-          <p className="auth-subtitle">Welcome to FleetFlow Mobility, <strong>{registeredUser.username}</strong>.</p>
+          <p className="auth-subtitle">Welcome to FleetFlow Mobility, <strong>{registeredUser.fullName || registeredUser.username}</strong>.</p>
           
           <div className="registration-meta-box">
+            <div className="meta-row">
+              <span className="meta-label">Full Name</span>
+              <span className="meta-val">{registeredUser.fullName}</span>
+            </div>
             <div className="meta-row">
               <span className="meta-label">Username</span>
               <span className="meta-val">{registeredUser.username}</span>
@@ -99,6 +111,18 @@ const RegisterPage = ({ onNavigateToLogin }) => {
             <div className="meta-row">
               <span className="meta-label">Registered Email</span>
               <span className="meta-val">{registeredUser.email}</span>
+            </div>
+            <div className="meta-row">
+              <span className="meta-label">Phone Number</span>
+              <span className="meta-val">{registeredUser.phoneNumber}</span>
+            </div>
+            <div className="meta-row">
+              <span className="meta-label">Address</span>
+              <span className="meta-val">{registeredUser.address}</span>
+            </div>
+            <div className="meta-row">
+              <span className="meta-label">Driving License</span>
+              <span className="meta-val">{registeredUser.drivingLicenseNumber}</span>
             </div>
             <div className="meta-row">
               <span className="meta-label">Assigned Role</span>
@@ -121,7 +145,16 @@ const RegisterPage = ({ onNavigateToLogin }) => {
               onClick={() => {
                 setIsSuccess(false);
                 setRegisteredUser(null);
-                setFormData({ username: '', email: '', password: '', confirmPassword: '' });
+                setFormData({
+                  fullName: '',
+                  username: '',
+                  email: '',
+                  phoneNumber: '',
+                  address: '',
+                  drivingLicenseNumber: '',
+                  password: '',
+                  confirmPassword: '',
+                });
               }}
             >
               Register Another Customer
@@ -145,6 +178,18 @@ const RegisterPage = ({ onNavigateToLogin }) => {
 
         <form onSubmit={handleFormSubmit} noValidate className="auth-form">
           <InputField
+            label="Full Legal Name"
+            id="fullName"
+            name="fullName"
+            value={formData.fullName}
+            onChange={handleInputChange}
+            error={errors.fullName}
+            placeholder="e.g. Alex Morgan"
+            required
+            disabled={isLoading}
+          />
+
+          <InputField
             label="Username"
             id="username"
             name="username"
@@ -165,6 +210,43 @@ const RegisterPage = ({ onNavigateToLogin }) => {
             onChange={handleInputChange}
             error={errors.email}
             placeholder="e.g. alex@example.com"
+            required
+            disabled={isLoading}
+          />
+
+          <InputField
+            label="Phone Number"
+            type="tel"
+            id="phoneNumber"
+            name="phoneNumber"
+            value={formData.phoneNumber}
+            onChange={handleInputChange}
+            error={errors.phoneNumber}
+            placeholder="e.g. +1 555 234 5678"
+            required
+            disabled={isLoading}
+          />
+
+          <InputField
+            label="Home / Billing Address"
+            id="address"
+            name="address"
+            value={formData.address}
+            onChange={handleInputChange}
+            error={errors.address}
+            placeholder="e.g. 100 Mobility Way, Metro City"
+            required
+            disabled={isLoading}
+          />
+
+          <InputField
+            label="Driving License Number"
+            id="drivingLicenseNumber"
+            name="drivingLicenseNumber"
+            value={formData.drivingLicenseNumber}
+            onChange={handleInputChange}
+            error={errors.drivingLicenseNumber}
+            placeholder="e.g. DL-8492048-A"
             required
             disabled={isLoading}
           />

@@ -6,11 +6,13 @@ import Button from '../../components/common/Button';
 import { getCategories, createVehicle } from '../../services/vehicleService';
 
 const HUB_OPTIONS = [
-  'Metro Hub - Terminal A',
-  'Uptown Station - Bay 12',
-  'Logistics Depot - Gate 3',
-  'Central Service Depot',
-  'Airport Express Terminal',
+  'Colombo Fort Hub',
+  'Bandaranaike International Airport (CMB)',
+  'Colombo City - Galle Face',
+  'Colombo Port Logistics Terminal',
+  'Battaramulla Administrative Hub',
+  'Kandy Central Station',
+  'Jaffna Station',
 ];
 
 const TRANSMISSION_OPTIONS = ['Automatic', 'Manual', 'Single-Speed Fixed Gear'];
@@ -33,7 +35,7 @@ const AddVehiclePage = ({ onNavigate }) => {
     fuelType: '100% Electric',
     seatingCapacity: '5 Passengers',
     dailyRate: '85',
-    hubLocation: 'Metro Hub - Terminal A',
+    hubLocation: 'Colombo Fort Hub',
     mileage: '0',
   });
 
@@ -77,7 +79,7 @@ const AddVehiclePage = ({ onNavigate }) => {
     const trimmedVin = formData.vin.trim().toUpperCase();
     if (!trimmedVin) {
       newErrors.vin = '17-character VIN is required.';
-    } else if (trimmedVin.length !== 17) {
+    } else if (trimmedVin.length !== 17 || !/^[A-Z0-9]{17}$/.test(trimmedVin)) {
       newErrors.vin = 'VIN must be exactly 17 alphanumeric characters.';
     }
 
@@ -104,7 +106,7 @@ const AddVehiclePage = ({ onNavigate }) => {
 
     const rateNum = parseFloat(formData.dailyRate);
     if (!formData.dailyRate || isNaN(rateNum) || rateNum <= 0) {
-      newErrors.dailyRate = 'Valid daily rental rate greater than $0 required.';
+      newErrors.dailyRate = 'Valid daily rental rate greater than LKR 0 required.';
     }
 
     const mileageNum = parseInt(formData.mileage, 10);
@@ -164,7 +166,7 @@ const AddVehiclePage = ({ onNavigate }) => {
         fuelType: '100% Electric',
         seatingCapacity: '5 Passengers',
         dailyRate: '85',
-        hubLocation: 'Metro Hub - Terminal A',
+        hubLocation: 'Colombo Fort Hub',
         mileage: '0',
       });
       setErrors({});
@@ -333,14 +335,14 @@ const AddVehiclePage = ({ onNavigate }) => {
               </div>
 
               <InputField
-                label="Daily Rental Rate ($ USD)"
+                label="Daily Rental Rate (LKR / day)"
                 type="number"
                 id="dailyRate"
                 name="dailyRate"
                 value={formData.dailyRate}
                 onChange={handleInputChange}
                 error={errors.dailyRate}
-                placeholder="e.g. 85"
+                placeholder="e.g. 15000"
                 required
                 disabled={isSubmitting}
                 step="0.01"
