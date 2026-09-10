@@ -12,7 +12,7 @@ export const registerUser = async (dataOrUsername, email, password) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(payload),
-      signal: AbortSignal.timeout(10000),
+      signal: AbortSignal.timeout(30000),
     });
 
     const contentType = response.headers.get("content-type");
@@ -40,7 +40,7 @@ export const registerUser = async (dataOrUsername, email, password) => {
       return {
         success: false,
         status: 0,
-        message: "The authentication server took too long to respond (timeout after 10s). Please check that the backend is running."
+        message: "The authentication server took too long to respond (timeout after 30s). Please check that the backend is running."
       };
     }
     return {
@@ -59,7 +59,7 @@ export const loginUser = async (usernameOrEmail, password, loginChannel = 'custo
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ usernameOrEmail, password, loginChannel }),
-      signal: AbortSignal.timeout(10000),
+      signal: AbortSignal.timeout(30000),
     });
 
     const contentType = response.headers.get("content-type");
@@ -101,7 +101,7 @@ export const loginUser = async (usernameOrEmail, password, loginChannel = 'custo
       return {
         success: false,
         status: 0,
-        message: "The authentication server took too long to respond (timeout after 10s). Please check that the backend is running."
+        message: "The authentication server took too long to respond (timeout after 30s). Please check that the backend is running."
       };
     }
     return {

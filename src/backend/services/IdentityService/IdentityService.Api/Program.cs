@@ -61,104 +61,108 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-try
+// Non-blocking background database initialization and seeding
+_ = Task.Run(async () =>
 {
-    using (var scope = app.Services.CreateScope())
+    try
     {
-        var dbContext = scope.ServiceProvider.GetRequiredService<IdentityDbContext>();
-        await dbContext.Database.EnsureCreatedAsync();
-
-        // Idempotent Role Seeding
-        var defaultRoles = new[] { "CUSTOMER", "FLEET_MANAGER", "MAINTENANCE_STAFF", "ADMIN" };
-        bool hasChanges = false;
-        foreach (var roleName in defaultRoles)
+        using (var scope = app.Services.CreateScope())
         {
-            var roleExists = await dbContext.Roles.AnyAsync(r => r.Name.ToUpper() == roleName.ToUpper());
-            if (!roleExists)
+            var dbContext = scope.ServiceProvider.GetRequiredService<IdentityDbContext>();
+            await dbContext.Database.EnsureCreatedAsync();
+
+            // Idempotent Role Seeding
+            var defaultRoles = new[] { "CUSTOMER", "FLEET_MANAGER", "MAINTENANCE_STAFF", "ADMIN" };
+            bool hasChanges = false;
+            foreach (var roleName in defaultRoles)
             {
-                dbContext.Roles.Add(new Role
+                var roleExists = await dbContext.Roles.AnyAsync(r => r.Name.ToUpper() == roleName.ToUpper());
+                if (!roleExists)
                 {
-                    Id = Guid.NewGuid(),
-                    Name = roleName
-                });
-                hasChanges = true;
-            }
-        }
-        if (hasChanges)
-        {
-            await dbContext.SaveChangesAsync();
-        }
-
-        // Ensure new User columns exist on pre-existing database
-        try
-        {
-            await dbContext.Database.ExecuteSqlRawAsync(@"
-                ALTER TABLE ""Users"" ADD COLUMN IF NOT EXISTS ""FullName"" character varying(100) NOT NULL DEFAULT '';
-                ALTER TABLE ""Users"" ADD COLUMN IF NOT EXISTS ""PhoneNumber"" character varying(20) NOT NULL DEFAULT '';
-                ALTER TABLE ""Users"" ADD COLUMN IF NOT EXISTS ""Address"" character varying(250) NOT NULL DEFAULT '';
-                ALTER TABLE ""Users"" ADD COLUMN IF NOT EXISTS ""DrivingLicenseNumber"" character varying(50) NOT NULL DEFAULT '';
-                ALTER TABLE ""Users"" ADD COLUMN IF NOT EXISTS ""ProfileImageUrl"" character varying(500) NULL;
-            ");
-
-            // Idempotent QA User Seeding for Development & Cloud
-            var passwordHasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher<User>>();
-            var seedPassword = builder.Configuration["QA_SEED_PASSWORD"] ?? "Password@123";
-
-            var qaAccounts = new (string Username, string Email, string Role)[]
-            {
-                ("admin", "admin@fleetflow.io", "ADMIN"),
-                ("manager", "manager@fleetflow.io", "FLEET_MANAGER"),
-                ("worker", "worker@fleetflow.io", "MAINTENANCE_STAFF"),
-                ("customer", "customer@fleetflow.io", "CUSTOMER")
-            };
-
-            bool usersAdded = false;
-            foreach (var (username, email, roleName) in qaAccounts)
-            {
-                var existingUser = await dbContext.Users
-                    .Include(u => u.Roles)
-                    .FirstOrDefaultAsync(u => u.Username.ToLower() == username.ToLower() || u.Email.ToLower() == email.ToLower());
-
-                if (existingUser == null)
-                {
-                    var role = await dbContext.Roles.FirstOrDefaultAsync(r => r.Name.ToUpper() == roleName.ToUpper());
-                    if (role != null)
+                    dbContext.Roles.Add(new Role
                     {
-                        var isCustomer = roleName == "CUSTOMER";
-                        var newUser = new User
-                        {
-                            Id = Guid.NewGuid(),
-                            FullName = isCustomer ? "Customer User" : $"{roleName.Replace("_", " ")} User",
-                            Username = username,
-                            Email = email,
-                            PhoneNumber = isCustomer ? "+1-555-0100" : "+1-555-0199",
-                            Address = isCustomer ? "100 FleetFlow Operations Center" : "FleetFlow HQ",
-                            DrivingLicenseNumber = isCustomer ? "DL-QA-10001" : "DL-STAFF-001",
-                            CreatedAt = DateTime.UtcNow
-                        };
-                        newUser.PasswordHash = passwordHasher.HashPassword(newUser, seedPassword);
-                        newUser.Roles.Add(role);
-                        dbContext.Users.Add(newUser);
-                        usersAdded = true;
-                    }
+                        Id = Guid.NewGuid(),
+                        Name = roleName
+                    });
+                    hasChanges = true;
                 }
             }
-
-            if (usersAdded)
+            if (hasChanges)
             {
                 await dbContext.SaveChangesAsync();
             }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"[Startup Warning] Column check/seeding: {ex.Message}");
+
+            // Ensure new User columns exist on pre-existing database
+            try
+            {
+                await dbContext.Database.ExecuteSqlRawAsync(@"
+                    ALTER TABLE ""Users"" ADD COLUMN IF NOT EXISTS ""FullName"" character varying(100) NOT NULL DEFAULT '';
+                    ALTER TABLE ""Users"" ADD COLUMN IF NOT EXISTS ""PhoneNumber"" character varying(20) NOT NULL DEFAULT '';
+                    ALTER TABLE ""Users"" ADD COLUMN IF NOT EXISTS ""Address"" character varying(250) NOT NULL DEFAULT '';
+                    ALTER TABLE ""Users"" ADD COLUMN IF NOT EXISTS ""DrivingLicenseNumber"" character varying(50) NOT NULL DEFAULT '';
+                    ALTER TABLE ""Users"" ADD COLUMN IF NOT EXISTS ""ProfileImageUrl"" character varying(500) NULL;
+                ");
+
+                // Idempotent QA User Seeding for Development & Cloud
+                var passwordHasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher<User>>();
+                var seedPassword = builder.Configuration["QA_SEED_PASSWORD"] ?? "Password@123";
+
+                var qaAccounts = new (string Username, string Email, string Role)[]
+                {
+                    ("admin", "admin@fleetflow.io", "ADMIN"),
+                    ("manager", "manager@fleetflow.io", "FLEET_MANAGER"),
+                    ("worker", "worker@fleetflow.io", "MAINTENANCE_STAFF"),
+                    ("customer", "customer@fleetflow.io", "CUSTOMER")
+                };
+
+                bool usersAdded = false;
+                foreach (var (username, email, roleName) in qaAccounts)
+                {
+                    var existingUser = await dbContext.Users
+                        .Include(u => u.Roles)
+                        .FirstOrDefaultAsync(u => u.Username.ToLower() == username.ToLower() || u.Email.ToLower() == email.ToLower());
+
+                    if (existingUser == null)
+                    {
+                        var role = await dbContext.Roles.FirstOrDefaultAsync(r => r.Name.ToUpper() == roleName.ToUpper());
+                        if (role != null)
+                        {
+                            var isCustomer = roleName == "CUSTOMER";
+                            var newUser = new User
+                            {
+                                Id = Guid.NewGuid(),
+                                FullName = isCustomer ? "Customer User" : $"{roleName.Replace("_", " ")} User",
+                                Username = username,
+                                Email = email,
+                                PhoneNumber = isCustomer ? "+1-555-0100" : "+1-555-0199",
+                                Address = isCustomer ? "100 FleetFlow Operations Center" : "FleetFlow HQ",
+                                DrivingLicenseNumber = isCustomer ? "DL-QA-10001" : "DL-STAFF-001",
+                                CreatedAt = DateTime.UtcNow
+                            };
+                            newUser.PasswordHash = passwordHasher.HashPassword(newUser, seedPassword);
+                            newUser.Roles.Add(role);
+                            dbContext.Users.Add(newUser);
+                            usersAdded = true;
+                        }
+                    }
+                }
+
+                if (usersAdded)
+                {
+                    await dbContext.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[Startup Warning] Column check/seeding: {ex.Message}");
+            }
         }
     }
-}
-catch (Exception ex)
-{
-    Console.WriteLine($"[Startup Warning] Database initialization deferred: {ex.Message}");
-}
+    catch (Exception ex)
+    {
+        Console.WriteLine($"[Startup Warning] Database initialization deferred: {ex.Message}");
+    }
+});
 
 
 // Configure the HTTP request pipeline.

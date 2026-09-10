@@ -65,74 +65,77 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Startup Database Creation and Category Seeding
-try
+// Non-blocking background database initialization
+_ = Task.Run(async () =>
 {
-    using (var scope = app.Services.CreateScope())
+    try
     {
-        var dbContext = scope.ServiceProvider.GetRequiredService<FleetDbContext>();
-        await dbContext.Database.EnsureCreatedAsync();
-
-        // Idempotent Default Category Seeding
-        var defaultCategories = new (string Name, string Description)[]
+        using (var scope = app.Services.CreateScope())
         {
-            ("Executive Sedan", "Luxury and executive passenger sedans for corporate and premium mobility."),
-            ("Full-Size SUV", "Spacious premium sport utility vehicles with high capacity and all-weather capability."),
-            ("Commercial Cargo", "Heavy-duty cargo vans and commercial transport vehicles for logistics."),
-            ("Compact EV", "High-efficiency 100% electric urban compact vehicles."),
-            ("Premium Coupe", "High-performance premium sport and luxury coupes.")
-        };
+            var dbContext = scope.ServiceProvider.GetRequiredService<FleetDbContext>();
+            await dbContext.Database.EnsureCreatedAsync();
 
-        bool hasChanges = false;
-        foreach (var (name, description) in defaultCategories)
-        {
-            var exists = await dbContext.VehicleCategories.AnyAsync(c => c.Name.ToUpper() == name.ToUpper());
-            if (!exists)
+            // Idempotent Default Category Seeding
+            var defaultCategories = new (string Name, string Description)[]
             {
-                dbContext.VehicleCategories.Add(new VehicleCategory
+                ("Executive Sedan", "Luxury and executive passenger sedans for corporate and premium mobility."),
+                ("Full-Size SUV", "Spacious premium sport utility vehicles with high capacity and all-weather capability."),
+                ("Commercial Cargo", "Heavy-duty cargo vans and commercial transport vehicles for logistics."),
+                ("Compact EV", "High-efficiency 100% electric urban compact vehicles."),
+                ("Premium Coupe", "High-performance premium sport and luxury coupes.")
+            };
+
+            bool hasChanges = false;
+            foreach (var (name, description) in defaultCategories)
+            {
+                var exists = await dbContext.VehicleCategories.AnyAsync(c => c.Name.ToUpper() == name.ToUpper());
+                if (!exists)
                 {
-                    Id = Guid.NewGuid(),
-                    Name = name,
-                    Description = description
-                });
-                hasChanges = true;
+                    dbContext.VehicleCategories.Add(new VehicleCategory
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = name,
+                        Description = description
+                    });
+                    hasChanges = true;
+                }
+            }
+
+            if (hasChanges)
+            {
+                await dbContext.SaveChangesAsync();
+            }
+
+            // Ensure VehicleImages table exists on pre-existing database
+            try
+            {
+                await dbContext.Database.ExecuteSqlRawAsync(@"
+                    CREATE TABLE IF NOT EXISTS ""VehicleImages"" (
+                        ""Id"" uuid NOT NULL PRIMARY KEY,
+                        ""VehicleId"" uuid NOT NULL,
+                        ""FileName"" character varying(255) NOT NULL,
+                        ""OriginalFileName"" character varying(255) NOT NULL,
+                        ""ContentType"" character varying(100) NOT NULL,
+                        ""FileSize"" bigint NOT NULL,
+                        ""RelativeUrl"" character varying(500) NOT NULL,
+                        ""Caption"" character varying(255) NULL,
+                        ""CreatedAt"" timestamp with time zone NOT NULL,
+                        CONSTRAINT ""FK_VehicleImages_Vehicles_VehicleId"" FOREIGN KEY (""VehicleId"") REFERENCES ""Vehicles"" (""Id"") ON DELETE CASCADE
+                    );
+                    CREATE INDEX IF NOT EXISTS ""IX_VehicleImages_VehicleId"" ON ""VehicleImages"" (""VehicleId"");
+                ");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[Startup Warning] Table check: {ex.Message}");
             }
         }
-
-        if (hasChanges)
-        {
-            await dbContext.SaveChangesAsync();
-        }
-
-        // Ensure VehicleImages table exists on pre-existing database
-        try
-        {
-            await dbContext.Database.ExecuteSqlRawAsync(@"
-                CREATE TABLE IF NOT EXISTS ""VehicleImages"" (
-                    ""Id"" uuid NOT NULL PRIMARY KEY,
-                    ""VehicleId"" uuid NOT NULL,
-                    ""FileName"" character varying(255) NOT NULL,
-                    ""OriginalFileName"" character varying(255) NOT NULL,
-                    ""ContentType"" character varying(100) NOT NULL,
-                    ""FileSize"" bigint NOT NULL,
-                    ""RelativeUrl"" character varying(500) NOT NULL,
-                    ""Caption"" character varying(255) NULL,
-                    ""CreatedAt"" timestamp with time zone NOT NULL,
-                    CONSTRAINT ""FK_VehicleImages_Vehicles_VehicleId"" FOREIGN KEY (""VehicleId"") REFERENCES ""Vehicles"" (""Id"") ON DELETE CASCADE
-                );
-                CREATE INDEX IF NOT EXISTS ""IX_VehicleImages_VehicleId"" ON ""VehicleImages"" (""VehicleId"");
-            ");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"[Startup Warning] Table check: {ex.Message}");
-        }
     }
-}
-catch (Exception ex)
-{
-    Console.WriteLine($"[Startup Warning] Database initialization deferred: {ex.Message}");
-}
+    catch (Exception ex)
+    {
+        Console.WriteLine($"[Startup Warning] Database initialization deferred: {ex.Message}");
+    }
+});
 
 // Configure the HTTP request pipeline.
 app.MapOpenApi();
