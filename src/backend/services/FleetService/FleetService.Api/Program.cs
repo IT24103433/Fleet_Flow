@@ -169,6 +169,8 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.MapGet("/", () => Results.Redirect("/swagger"));
+
 app.MapGet("/health", async (FleetDbContext dbContext) =>
 {
     try
