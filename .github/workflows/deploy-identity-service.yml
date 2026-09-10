@@ -20,13 +20,16 @@ jobs:
           dotnet-version: '10.0.x'
 
       - name: Restore dependencies
-        run: dotnet restore src/backend/services/IdentityService/IdentityService.Api/IdentityService.Api.csproj
+        run: dotnet restore src/backend/services/IdentityService/IdentityService.Api/IdentityService.Api.csproj -r linux-x64
 
       - name: Build
-        run: dotnet build src/backend/services/IdentityService/IdentityService.Api/IdentityService.Api.csproj --configuration Release --no-restore
+        run: dotnet build src/backend/services/IdentityService/IdentityService.Api/IdentityService.Api.csproj --configuration Release -r linux-x64 --no-restore
 
       - name: Publish
-        run: dotnet publish src/backend/services/IdentityService/IdentityService.Api/IdentityService.Api.csproj --configuration Release --output ${{ runner.temp }}/identity-app
+        run: dotnet publish src/backend/services/IdentityService/IdentityService.Api/IdentityService.Api.csproj --configuration Release -r linux-x64 --self-contained true --output ${{ runner.temp }}/identity-app
+
+      - name: Ensure Linux execution permissions
+        run: chmod +x ${{ runner.temp }}/identity-app/IdentityService.Api
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
@@ -34,3 +37,4 @@ jobs:
           app-name: ${{ secrets.AZURE_IDENTITY_SERVICE_APP_NAME }}
           publish-profile: ${{ secrets.AZURE_IDENTITY_SERVICE_PUBLISH_PROFILE }}
           package: ${{ runner.temp }}/identity-app
+          startup-command: './IdentityService.Api'
