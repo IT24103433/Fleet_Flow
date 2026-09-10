@@ -50,7 +50,7 @@ builder.Services.AddControllers()
 builder.Services.AddOpenApi();
 
 var allowedOrigins = builder.Configuration["ALLOWED_ORIGINS"]?.Split(',') 
-                     ?? new[] { "https://fleetflow-frontend.azurewebsites.net", "http://localhost:5173", "http://localhost:3000" };
+                     ?? new[] { "https://fleetflow-frontend.azurewebsites.net", "http://localhost:5173", "http://localhost:5174", "http://127.0.0.1:5173", "http://127.0.0.1:5174", "http://localhost:3000" };
 
 builder.Services.AddCors(options =>
 {
@@ -142,7 +142,10 @@ app.UseSwaggerUI(options =>
     options.RoutePrefix = "swagger";
 });
 
-app.UseHttpsRedirection();
+if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBSITE_INSTANCE_ID")))
+{
+    app.UseHttpsRedirection();
+}
 
 // Static file serving for uploads (/uploads/vehicles/...)
 var uploadRoot = builder.Configuration["FLEET_UPLOAD_ROOT"];
@@ -199,5 +202,5 @@ static string GetDatabaseConnectionString(IConfiguration configuration)
     var dbName = configuration["FLEET_DB_NAME"] ?? "fleetflow_fleet";
 
     var sslMode = host.Contains("azure.com") ? ";Ssl Mode=Require" : "";
-    return $"Host={host};Port={port};Database={dbName};Username={user};Password={password}{sslMode};";
+    return $"Host={host};Port={port};Database={dbName};Username={user};Password={password}{sslMode};Timeout=5;Command Timeout=10;";
 }
