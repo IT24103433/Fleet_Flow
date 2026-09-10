@@ -55,6 +55,10 @@ public class AuthController : ControllerBase
         {
             return StatusCode(403, new { message = ex.Message });
         }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "Authentication service error: " + (ex.InnerException?.Message ?? ex.Message) });
+        }
     }
 
     [Authorize]

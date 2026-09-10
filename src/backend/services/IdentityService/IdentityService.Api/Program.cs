@@ -221,6 +221,14 @@ static string GetDatabaseConnectionString(IConfiguration configuration)
                   ?? configuration["ConnectionStrings__DefaultConnection"];
     if (!string.IsNullOrEmpty(connStr))
     {
+        if (!connStr.Contains("Trust Server Certificate", StringComparison.OrdinalIgnoreCase))
+        {
+            connStr = connStr.TrimEnd(';') + ";Trust Server Certificate=true;";
+        }
+        if (!connStr.Contains("Timeout", StringComparison.OrdinalIgnoreCase))
+        {
+            connStr = connStr.TrimEnd(';') + ";Timeout=10;Command Timeout=30;";
+        }
         return connStr;
     }
 
@@ -230,6 +238,6 @@ static string GetDatabaseConnectionString(IConfiguration configuration)
     var password = configuration["DB_PASSWORD"] ?? "your_password_here";
     var dbName = configuration["AUTH_DB_NAME"] ?? "fleetflow_auth";
 
-    var sslMode = host.Contains("azure.com") ? ";Ssl Mode=Require" : "";
-    return $"Host={host};Port={port};Database={dbName};Username={user};Password={password}{sslMode};Timeout=5;Command Timeout=10;";
+    var sslMode = host.Contains("azure.com") ? ";Ssl Mode=Require;Trust Server Certificate=true" : "";
+    return $"Host={host};Port={port};Database={dbName};Username={user};Password={password}{sslMode};Timeout=10;Command Timeout=30;";
 }
