@@ -79,4 +79,38 @@ public class VehiclesController : ControllerBase
             return Conflict(new { message = ex.Message });
         }
     }
+
+    [HttpPut("{id:guid}")]
+    [Authorize(Roles = "FLEET_MANAGER,ADMIN")]
+    [ProducesResponseType(typeof(VehicleResponse), 200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(403)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(409)]
+    public async Task<ActionResult<VehicleResponse>> UpdateVehicle(Guid id, [FromBody] UpdateVehicleRequest request)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        try
+        {
+            var updated = await _vehicleService.UpdateVehicleAsync(id, request);
+            return Ok(updated);
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        catch (ValidationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (DuplicateException ex)
+        {
+            return Conflict(new { message = ex.Message });
+        }
+    }
 }

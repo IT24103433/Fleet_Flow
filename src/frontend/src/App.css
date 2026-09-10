@@ -3208,6 +3208,14 @@
   background-color: rgba(245, 158, 11, 0.1);
 }
 
+.btn-table-action.danger {
+  color: #DC2626;
+  border-color: rgba(220, 38, 38, 0.4);
+}
+.btn-table-action.danger:hover {
+  background-color: rgba(220, 38, 38, 0.1);
+}
+
 /* Create User Card & Form */
 .create-user-card {
   background-color: var(--color-surface);
@@ -3227,6 +3235,12 @@
 .form-two-col {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+.form-three-col {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: var(--space-4);
 }
 
@@ -3982,10 +3996,12 @@
   margin-bottom: 4px;
 }
 
+.currency-mark,
 .dollar-mark {
   font-size: 18px;
   font-weight: 700;
   color: var(--color-text-primary);
+  margin-right: 4px;
 }
 
 .rate-num {
@@ -4285,6 +4301,11 @@
     grid-template-columns: repeat(2, 1fr);
   }
 
+  .vehicle-main-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
   .footer-container {
     grid-template-columns: 1fr 1fr;
     gap: var(--space-6);
@@ -4377,5 +4398,33 @@
 
   .profile-grid {
     grid-template-columns: 1fr;
+  }
+
+  .vehicle-main-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  .summary-card {
+    position: static;
+  }
+
+  .search-and-dropdowns-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .users-filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .form-two-col,
+  .form-three-col {
+    grid-template-columns: 1fr;
+  }
+
+  .thumbnail-gallery-strip {
+    grid-template-columns: repeat(2, 1fr);
   }
 }

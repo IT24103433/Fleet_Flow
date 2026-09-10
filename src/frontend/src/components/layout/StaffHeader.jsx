@@ -35,7 +35,7 @@ const StaffHeader = ({ title = 'Operations Dashboard', onToggleSidebar }) => {
       <div className="staff-header-right">
         <div className="system-health-badge" title="Identity & Fleet Services Connected">
           <span className="pulse-dot" aria-hidden="true" />
-          <span>RBAC Active</span>
+          <span>System Online</span>
         </div>
 
         <div className="staff-header-profile">

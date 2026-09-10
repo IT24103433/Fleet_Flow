@@ -1,51 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import RoleBadge from '../../components/common/RoleBadge';
 import Button from '../../components/common/Button';
-import InputField from '../../components/InputField';
 import Modal from '../../components/common/Modal';
 import Alert from '../../components/Alert';
-
-const INITIAL_USERS = [
-  {
-    id: 'u-1',
-    username: 'admin_sarah',
-    email: 'sarah.admin@fleetflow.io',
-    role: 'ADMIN',
-    status: 'ACTIVE',
-    createdAt: '2026-08-15',
-    lastLogin: '2026-09-01',
-  },
-  {
-    id: 'u-2',
-    username: 'manager_dan',
-    email: 'dan.ops@fleetflow.io',
-    role: 'FLEET_MANAGER',
-    status: 'ACTIVE',
-    createdAt: '2026-08-18',
-    lastLogin: '2026-09-01',
-  },
-  {
-    id: 'u-3',
-    username: 'tech_mike',
-    email: 'mike.service@fleetflow.io',
-    role: 'MAINTENANCE_STAFF',
-    status: 'ACTIVE',
-    createdAt: '2026-08-20',
-    lastLogin: '2026-08-31',
-  },
-  {
-    id: 'u-4',
-    username: 'customer_alex',
-    email: 'alex.mobility@example.com',
-    role: 'CUSTOMER',
-    status: 'ACTIVE',
-    createdAt: '2026-08-25',
-    lastLogin: '2026-09-01',
-  },
-];
+import { useAuth } from '../../context/AuthContext';
+import { getAdminUsers, deleteAdminUser } from '../../services/adminUserService';
 
 const AdminUserListPage = ({ onNavigate, onSelectUser }) => {
-  const [users] = useState(INITIAL_USERS);
+  const { token } = useAuth();
+  const [users, setUsers] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [fetchError, setFetchError] = useState(null);
+
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedRoleFilter, setSelectedRoleFilter] = useState('ALL');
 
@@ -55,11 +21,42 @@ const AdminUserListPage = ({ onNavigate, onSelectUser }) => {
   const [forceChangeToggle, setForceChangeToggle] = useState(true);
   const [resetNotice, setResetNotice] = useState(null);
 
+  // Delete User Modal state
+  const [deleteModalUser, setDeleteModalUser] = useState(null);
+  const [deleteConfirmText, setDeleteConfirmText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState(null);
+  const [actionSuccessNotice, setActionSuccessNotice] = useState(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    const fetchUsers = async () => {
+      const res = await getAdminUsers(token);
+      if (isMounted) {
+        setIsLoading(false);
+        if (res.success) {
+          setUsers(res.data);
+        } else {
+          setFetchError(res.message);
+        }
+      }
+    };
+
+    fetchUsers();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [token]);
+
   const filteredUsers = users.filter((u) => {
+    const term = searchTerm.toLowerCase();
     const matchesSearch =
-      u.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      u.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesRole = selectedRoleFilter === 'ALL' || u.role === selectedRoleFilter;
+      (u.username && u.username.toLowerCase().includes(term)) ||
+      (u.email && u.email.toLowerCase().includes(term)) ||
+      (u.fullName && u.fullName.toLowerCase().includes(term));
+    const userRole = u.role || (u.roles && u.roles[0]) || '';
+    const matchesRole = selectedRoleFilter === 'ALL' || userRole.toUpperCase() === selectedRoleFilter.toUpperCase();
     return matchesSearch && matchesRole;
   });
 
@@ -72,10 +69,45 @@ const AdminUserListPage = ({ onNavigate, onSelectUser }) => {
   const handleExecuteReset = (e) => {
     e.preventDefault();
     setResetNotice({
-      type: 'success',
-      title: 'Password Reset Generated',
-      message: `Temporary password generated for ${resetModalUser.username}. Force password change on next login: ${forceChangeToggle ? 'Enabled' : 'Disabled'}. (Backend integration ready for Sprint 2).`,
+      type: 'info',
+      title: 'Password Reset (Sprint 2 Roadmap)',
+      message: `Simulated temporary password generated for ${resetModalUser.username}. Live administrative password reset API will connect in Sprint 2.`,
     });
+  };
+
+  const handleOpenDelete = (user, e) => {
+    e.stopPropagation();
+    setDeleteModalUser(user);
+    setDeleteConfirmText('');
+    setDeleteError(null);
+  };
+
+  const handleCloseDelete = () => {
+    if (isDeleting) return;
+    setDeleteModalUser(null);
+    setDeleteConfirmText('');
+    setDeleteError(null);
+  };
+
+  const handleExecuteDelete = async (e) => {
+    e.preventDefault();
+    if (deleteConfirmText !== 'DELETE') return;
+    if (!deleteModalUser) return;
+
+    setIsDeleting(true);
+    setDeleteError(null);
+
+    const res = await deleteAdminUser(deleteModalUser.id, token);
+    setIsDeleting(false);
+
+    if (res.success) {
+      setUsers((prev) => prev.filter((u) => u.id !== deleteModalUser.id));
+      setActionSuccessNotice(`User account "${deleteModalUser.username}" was permanently deleted.`);
+      setDeleteModalUser(null);
+      setDeleteConfirmText('');
+    } else {
+      setDeleteError(res.message || 'Failed to delete user account.');
+    }
   };
 
   return (
@@ -93,6 +125,22 @@ const AdminUserListPage = ({ onNavigate, onSelectUser }) => {
         </Button>
       </div>
 
+      {actionSuccessNotice && (
+        <Alert
+          type="success"
+          title="Account Deleted"
+          message={actionSuccessNotice}
+        />
+      )}
+
+      {fetchError && (
+        <Alert
+          type="error"
+          title="Directory Retrieval Error"
+          message={fetchError}
+        />
+      )}
+
       {/* Filter and Search Bar */}
       <div className="users-filter-bar">
         <div className="search-box-wrapper">
@@ -102,7 +150,7 @@ const AdminUserListPage = ({ onNavigate, onSelectUser }) => {
           </svg>
           <input
             type="text"
-            placeholder="Search by username or email..."
+            placeholder="Search by username, email, or name..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="filter-search-input"
@@ -141,56 +189,100 @@ const AdminUserListPage = ({ onNavigate, onSelectUser }) => {
               </tr>
             </thead>
             <tbody>
-              {filteredUsers.map((u) => (
-                <tr key={u.id}>
-                  <td>
-                    <div className="user-cell-meta">
-                      <div className="user-table-avatar">
-                        {u.username.charAt(0).toUpperCase()}
-                      </div>
-                      <div>
-                        <strong className="user-name-text">{u.username}</strong>
-                        <p className="user-email-sub">{u.email}</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <RoleBadge role={u.role} />
-                  </td>
-                  <td>
-                    <span className="status-pill-active">{u.status}</span>
-                  </td>
-                  <td>
-                    <span className="table-date">{u.createdAt}</span>
-                  </td>
-                  <td>
-                    <span className="table-date">{u.lastLogin}</span>
-                  </td>
-                  <td style={{ textAlign: 'right' }}>
-                    <div className="table-action-btns">
-                      <button
-                        type="button"
-                        className="btn-table-action"
-                        onClick={() => {
-                          if (onSelectUser) onSelectUser(u);
-                          onNavigate('admin-user-details');
-                        }}
-                        title="View User Details"
-                      >
-                        Inspect
-                      </button>
-                      <button
-                        type="button"
-                        className="btn-table-action warning"
-                        onClick={() => handleOpenReset(u)}
-                        title="Reset User Password"
-                      >
-                        Reset Password
-                      </button>
-                    </div>
+              {isLoading ? (
+                <tr>
+                  <td colSpan={6} style={{ textAlign: 'center', padding: '2.5rem' }}>
+                    <p style={{ color: 'var(--text-secondary, #94a3b8)' }}>Loading user directory from IdentityService...</p>
                   </td>
                 </tr>
-              ))}
+              ) : filteredUsers.length === 0 ? (
+                <tr>
+                  <td colSpan={6} style={{ textAlign: 'center', padding: '2.5rem' }}>
+                    <p style={{ color: 'var(--text-secondary, #94a3b8)' }}>
+                      {users.length === 0
+                        ? 'No user accounts found in the database.'
+                        : 'No accounts match the current search or role filter.'}
+                    </p>
+                  </td>
+                </tr>
+              ) : (
+                filteredUsers.map((u) => {
+                  const role = u.role || (u.roles && u.roles[0]) || 'CUSTOMER';
+                  const createdStr = u.createdAt
+                    ? new Date(u.createdAt).toISOString().split('T')[0]
+                    : '—';
+
+                  return (
+                    <tr key={u.id}>
+                      <td>
+                        <div className="user-cell-meta">
+                          <div className="user-table-avatar">
+                            {(u.fullName || u.username || 'U').charAt(0).toUpperCase()}
+                          </div>
+                          <div>
+                            <strong className="user-name-text">{u.fullName || u.username}</strong>
+                            <p className="user-email-sub">{u.username !== u.fullName ? `@${u.username} • ` : ''}{u.email}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <RoleBadge role={role} />
+                      </td>
+                      <td>
+                        <span className="status-pill-active">{u.status || 'ACTIVE'}</span>
+                      </td>
+                      <td>
+                        <span className="table-date">{createdStr}</span>
+                      </td>
+                      <td>
+                        <span className="table-date">—</span>
+                      </td>
+                      <td style={{ textAlign: 'right' }}>
+                          <div className="table-action-btns">
+                            <button
+                              type="button"
+                              className="btn-table-action"
+                              onClick={() => {
+                                if (onSelectUser) onSelectUser(u);
+                                onNavigate('admin-user-details');
+                              }}
+                              title="View User Details"
+                            >
+                              Inspect
+                            </button>
+                            <button
+                              type="button"
+                              className="btn-table-action"
+                              onClick={() => {
+                                if (onSelectUser) onSelectUser(u);
+                                onNavigate('admin-edit-user');
+                              }}
+                              title="Edit User Details & Role"
+                            >
+                              Edit
+                            </button>
+                            <button
+                              type="button"
+                              className="btn-table-action warning"
+                              onClick={() => handleOpenReset(u)}
+                              title="Reset User Password"
+                            >
+                              Reset Password
+                            </button>
+                            <button
+                              type="button"
+                              className="btn-table-action danger"
+                              onClick={(e) => handleOpenDelete(u, e)}
+                              title="Permanently Delete User Account"
+                            >
+                              Delete
+                            </button>
+                          </div>
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
             </tbody>
           </table>
         </div>
@@ -235,8 +327,74 @@ const AdminUserListPage = ({ onNavigate, onSelectUser }) => {
           </div>
         </form>
       </Modal>
+
+      {/* Permanent Delete User Confirmation Modal */}
+      <Modal
+        isOpen={!!deleteModalUser}
+        onClose={handleCloseDelete}
+        title="Delete User Account"
+        subtitle={`Permanent account deletion for @${deleteModalUser?.username}`}
+      >
+        {deleteError && (
+          <Alert
+            type="error"
+            title="Deletion Failed"
+            message={deleteError}
+          />
+        )}
+
+        <form onSubmit={handleExecuteDelete}>
+          <div style={{ marginBottom: '1.25rem' }}>
+            <p style={{ color: 'var(--color-danger, #DC2626)', fontWeight: 600, fontSize: '0.95rem', marginBottom: '0.5rem' }}>
+              Warning: This action is permanent and cannot be undone.
+            </p>
+            <p style={{ color: 'var(--color-text-secondary, #64748b)', fontSize: '0.875rem', lineHeight: 1.5, marginBottom: '1rem' }}>
+              User account <strong>{deleteModalUser?.username}</strong> ({deleteModalUser?.email}) will be permanently deleted from the database.
+            </p>
+            <label
+              htmlFor="listDeleteConfirmInput"
+              style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: '0.375rem' }}
+            >
+              Type <strong>DELETE</strong> to confirm.
+            </label>
+            <input
+              type="text"
+              id="listDeleteConfirmInput"
+              value={deleteConfirmText}
+              onChange={(e) => setDeleteConfirmText(e.target.value)}
+              placeholder="Type DELETE"
+              required
+              disabled={isDeleting}
+              autoComplete="off"
+              style={{
+                width: '100%',
+                padding: '0.5rem 0.75rem',
+                border: '1px solid var(--color-border, #cbd5e1)',
+                borderRadius: 'var(--radius-sm, 4px)',
+                fontFamily: 'monospace',
+                fontSize: '0.95rem'
+              }}
+            />
+          </div>
+
+          <div className="modal-actions-row">
+            <Button variant="outline" onClick={handleCloseDelete} disabled={isDeleting}>
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              variant="danger"
+              disabled={deleteConfirmText !== 'DELETE' || isDeleting}
+              isLoading={isDeleting}
+            >
+              Permanently Delete User
+            </Button>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 };
+
 
 export default AdminUserListPage;

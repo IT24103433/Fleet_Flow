@@ -72,11 +72,16 @@ public static class Program
 
                 if (existingUser == null)
                 {
+                    var isCustomer = roleName == "CUSTOMER";
                     var newUser = new User
                     {
                         Id = Guid.NewGuid(),
+                        FullName = isCustomer ? "Customer User" : string.Empty,
                         Username = username,
                         Email = email,
+                        PhoneNumber = isCustomer ? "+1-555-0100" : string.Empty,
+                        Address = isCustomer ? "100 FleetFlow Operations Center" : string.Empty,
+                        DrivingLicenseNumber = isCustomer ? "DL-QA-10001" : string.Empty,
                         CreatedAt = DateTime.UtcNow
                     };
                     newUser.PasswordHash = passwordHasher.HashPassword(newUser, seedPassword);

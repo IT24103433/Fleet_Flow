@@ -41,4 +41,8 @@ Thumbs.db
 ehthumbs.db
 Desktop.ini
 .DS_Store
-*.zip
+*.zip
+
+# Uploaded Assets
+[Uu]ploads/
+wwwroot/uploads/

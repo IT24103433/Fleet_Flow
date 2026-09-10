@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import StatusBadge from '../../components/common/StatusBadge';
 import Button from '../../components/common/Button';
 import Alert from '../../components/Alert';
+import { useAuth } from '../../context/AuthContext';
 import { getVehicles, getCategories } from '../../services/vehicleService';
 
 const STATUS_OPTIONS = [
@@ -13,6 +14,8 @@ const STATUS_OPTIONS = [
 ];
 
 const ManageFleetPage = ({ onNavigate, onSelectVehicle }) => {
+  const { roles } = useAuth();
+  const canAddVehicle = (roles || []).some((r) => ['FLEET_MANAGER', 'ADMIN'].includes(String(r).toUpperCase()));
   const [vehicles, setVehicles] = useState([]);
   const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -75,7 +78,14 @@ const ManageFleetPage = ({ onNavigate, onSelectVehicle }) => {
     if (onSelectVehicle) {
       onSelectVehicle(vehicle);
     }
-    onNavigate('vehicle-details');
+    onNavigate('staff-vehicle-details');
+  };
+
+  const handleEditVehicle = (vehicle) => {
+    if (onSelectVehicle) {
+      onSelectVehicle(vehicle);
+    }
+    onNavigate('edit-vehicle');
   };
 
   const handleManagePhotos = (vehicle) => {
@@ -102,9 +112,11 @@ const ManageFleetPage = ({ onNavigate, onSelectVehicle }) => {
           </p>
         </div>
 
-        <Button variant="primary" onClick={() => onNavigate('add-vehicle')}>
-          + Ingest New Vehicle
-        </Button>
+        {canAddVehicle && (
+          <Button variant="primary" onClick={() => onNavigate('add-vehicle')}>
+            + Ingest New Vehicle
+          </Button>
+        )}
       </div>
 
       {/* Filter and Search Bar */}
@@ -221,12 +233,12 @@ const ManageFleetPage = ({ onNavigate, onSelectVehicle }) => {
                   </tr>
                 ) : (
                   vehicles.map((v) => {
-                    const categoryName = v.categoryName || v.category || 'Standard';
-                    const fuelType = v.fuelType || v.fuel || 'Hybrid';
-                    const transmission = v.transmission || 'Automatic';
-                    const licensePlate = v.licensePlate || v.plate || 'N/A';
-                    const hubLocation = v.hubLocation || v.hub || 'Metro Hub';
-                    const mileage = typeof v.mileage === 'number' ? `${v.mileage.toLocaleString()} mi` : (v.mileage || '0 mi');
+                    const categoryName = v.categoryName || v.category || '—';
+                    const fuelType = v.fuelType || v.fuel || '—';
+                    const transmission = v.transmission || '—';
+                    const licensePlate = v.licensePlate || v.plate || '—';
+                    const hubLocation = v.hubLocation || v.hub || '—';
+                    const mileage = typeof v.mileage === 'number' ? `${v.mileage.toLocaleString()} mi` : (v.mileage ? `${v.mileage} mi` : '—');
 
                     return (
                       <tr key={v.id}>
@@ -267,14 +279,26 @@ const ManageFleetPage = ({ onNavigate, onSelectVehicle }) => {
                             >
                               Details
                             </button>
-                            <button
-                              type="button"
-                              className="btn-table-action"
-                              onClick={() => handleManagePhotos(v)}
-                              title="Manage Vehicle Images"
-                            >
-                              Photos
-                            </button>
+                            {canAddVehicle && (
+                              <>
+                                <button
+                                  type="button"
+                                  className="btn-table-action"
+                                  onClick={() => handleEditVehicle(v)}
+                                  title="Edit Vehicle Details"
+                                >
+                                  Edit
+                                </button>
+                                <button
+                                  type="button"
+                                  className="btn-table-action"
+                                  onClick={() => handleManagePhotos(v)}
+                                  title="Manage Vehicle Images"
+                                >
+                                  Photos
+                                </button>
+                              </>
+                            )}
                           </div>
                         </td>
                       </tr>

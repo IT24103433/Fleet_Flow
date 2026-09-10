@@ -3,9 +3,13 @@ import StatusBadge from '../../components/common/StatusBadge';
 import Button from '../../components/common/Button';
 import Alert from '../../components/Alert';
 import { getVehicleById } from '../../services/vehicleService';
+import { getVehicleImages } from '../../services/vehicleImageService';
+import { getVehicleImageUrl } from '../../utils/imageUrlUtils';
+import { formatPriceNumber } from '../../utils/currencyUtils';
 
 const VehicleDetailsPage = ({ selectedVehicle, onNavigate }) => {
   const [vehicle, setVehicle] = useState(selectedVehicle);
+  const [images, setImages] = useState([]);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [reservationNotice, setReservationNotice] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -13,18 +17,31 @@ const VehicleDetailsPage = ({ selectedVehicle, onNavigate }) => {
 
   useEffect(() => {
     let isMounted = true;
-    if (selectedVehicle?.id) {
-      getVehicleById(selectedVehicle.id).then((result) => {
+    const vehicleId = selectedVehicle?.id;
+    if (vehicleId) {
+      Promise.all([
+        getVehicleById(vehicleId),
+        getVehicleImages(vehicleId),
+      ]).then(([vehicleRes, imagesRes]) => {
         if (!isMounted) return;
-        if (result.success && result.data) {
-          setVehicle(result.data);
-        } else if (result.status === 404) {
+        if (vehicleRes.success && vehicleRes.data) {
+          setVehicle(vehicleRes.data);
+        } else if (vehicleRes.status === 404) {
           setErrorMessage('Vehicle record was not found in the fleet catalog.');
+        } else if (!selectedVehicle) {
+          setErrorMessage(vehicleRes.message || 'Failed to retrieve vehicle details.');
+        }
+
+        if (imagesRes.success && Array.isArray(imagesRes.data)) {
+          const mapped = imagesRes.data.map((img) => ({
+            id: img.id,
+            url: getVehicleImageUrl(img.relativeUrl),
+            title: img.caption || img.originalFileName || 'Vehicle Photo',
+          }));
+          setImages(mapped);
+          setSelectedImageIndex(0);
         } else {
-          // If network error occurred, retain selectedVehicle if available
-          if (!selectedVehicle) {
-            setErrorMessage(result.message || 'Failed to retrieve vehicle details.');
-          }
+          setImages([]);
         }
         setIsLoading(false);
       });
@@ -89,21 +106,16 @@ const VehicleDetailsPage = ({ selectedVehicle, onNavigate }) => {
     );
   }
 
-  const categoryName = vehicle.categoryName || vehicle.category || 'Executive';
-  const fuelType = vehicle.fuelType || vehicle.fuel || 'Hybrid';
-  const transmission = vehicle.transmission || 'Automatic';
-  const seating = vehicle.seatingCapacity || vehicle.seating || '5 Passengers';
-  const hubLocation = vehicle.hubLocation || vehicle.hub || 'Metro Hub - Terminal A';
-  const licensePlate = vehicle.licensePlate || vehicle.plate || 'N/A';
-  const mileage = typeof vehicle.mileage === 'number' ? `${vehicle.mileage.toLocaleString()} mi` : (vehicle.mileage || '0 mi');
+  const categoryName = vehicle.categoryName || vehicle.category || '—';
+  const fuelType = vehicle.fuelType || vehicle.fuel || '—';
+  const transmission = vehicle.transmission || '—';
+  const seating = vehicle.seatingCapacity || vehicle.seating || '—';
+  const hubLocation = vehicle.hubLocation || vehicle.hub || '—';
+  const licensePlate = vehicle.licensePlate || vehicle.plate || '—';
+  const mileage = typeof vehicle.mileage === 'number' ? `${vehicle.mileage.toLocaleString()} mi` : (vehicle.mileage ? `${vehicle.mileage} mi` : '—');
   const isAvailable = vehicle.status === 'Available' || vehicle.status === 'AVAILABLE';
 
-  const images = [
-    { id: 'img-1', title: 'Exterior Angle View' },
-    { id: 'img-2', title: 'Cockpit & Digital Console' },
-    { id: 'img-3', title: 'Cabin & Seating' },
-    { id: 'img-4', title: 'Rear Fascia' },
-  ];
+  const currentImage = images[selectedImageIndex] || null;
 
   const standardFeatures = [
     'Advanced Driver Assistance & Lane Assist',
@@ -145,29 +157,45 @@ const VehicleDetailsPage = ({ selectedVehicle, onNavigate }) => {
         {/* Gallery & Showcase Column */}
         <div className="vehicle-gallery-col">
           <div className="hero-image-frame">
-            <span className="hero-img-badge">{images[selectedImageIndex]?.title}</span>
-            <div className="hero-model-watermark">
-              <h2>{vehicle.make} {vehicle.model}</h2>
-              <p>{categoryName} • {fuelType}</p>
-            </div>
+            {currentImage?.title && (
+              <span className="hero-img-badge">{currentImage.title}</span>
+            )}
+            {currentImage?.url ? (
+              <img src={currentImage.url} alt={currentImage.title || `${vehicle.make} ${vehicle.model}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            ) : (
+              <div className="hero-model-watermark">
+                <h2>{vehicle.make} {vehicle.model}</h2>
+                <p>{categoryName} • {fuelType}</p>
+              </div>
+            )}
           </div>
 
           {/* Thumbnail Strip */}
-          <div className="thumbnail-gallery-strip">
-            {images.map((img, idx) => (
-              <button
-                key={img.id}
-                type="button"
-                className={`thumb-btn ${selectedImageIndex === idx ? 'active' : ''}`}
-                onClick={() => setSelectedImageIndex(idx)}
-              >
-                <div className="thumb-preview">
-                  <span>View {idx + 1}</span>
-                </div>
-                <span className="thumb-label">{img.title}</span>
-              </button>
-            ))}
-          </div>
+          {images.length > 1 ? (
+            <div className="thumbnail-gallery-strip">
+              {images.map((img, idx) => (
+                <button
+                  key={img.id || idx}
+                  type="button"
+                  className={`thumb-btn ${selectedImageIndex === idx ? 'active' : ''}`}
+                  onClick={() => setSelectedImageIndex(idx)}
+                >
+                  <div className="thumb-preview">
+                    {img.url ? (
+                      <img src={img.url} alt={img.title || `View ${idx + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    ) : (
+                      <span>View {idx + 1}</span>
+                    )}
+                  </div>
+                  <span className="thumb-label">{img.title || `Photo ${idx + 1}`}</span>
+                </button>
+              ))}
+            </div>
+          ) : (
+            <p className="no-photos-subtle" style={{ fontSize: '13px', color: 'var(--color-text-muted)', textAlign: 'center', margin: 'var(--space-2) 0' }}>
+              {images.length === 0 ? 'No photos added yet.' : 'No additional photos available.'}
+            </p>
+          )}
 
           {/* Key Features & Equipment */}
           <div className="features-checklist-card">
@@ -201,11 +229,17 @@ const VehicleDetailsPage = ({ selectedVehicle, onNavigate }) => {
             </div>
 
             <div className="daily-pricing-box">
-              <div className="price-tag-big">
-                <span className="dollar-mark">$</span>
-                <span className="rate-num">{Number(vehicle.dailyRate).toFixed(0)}</span>
-                <span className="rate-unit">/ day</span>
-              </div>
+              {vehicle?.dailyRate != null && !isNaN(Number(vehicle.dailyRate)) ? (
+                <div className="price-tag-big">
+                  <span className="currency-mark">LKR</span>
+                  <span className="rate-num">{formatPriceNumber(vehicle.dailyRate)}</span>
+                  <span className="rate-unit">/day</span>
+                </div>
+              ) : (
+                <div className="price-tag-big">
+                  <span className="rate-num">—</span>
+                </div>
+              )}
               <span className="tax-notice">Includes standard liability & unlimited local mileage</span>
             </div>
 

@@ -62,11 +62,39 @@ public class AuthenticationService : IAuthenticationService
             throw new InvalidCredentialsException();
         }
 
+        // Enforce login channel restrictions
+        var channel = request.LoginChannel?.Trim().ToLowerInvariant() ?? "customer";
+        var userRoleNames = user.Roles.Select(r => r.Name.ToUpperInvariant()).ToList();
+        var staffRoles = new HashSet<string> { "FLEET_MANAGER", "MAINTENANCE_STAFF", "ADMIN" };
+
+        if (channel == "customer")
+        {
+            // Only CUSTOMER role is allowed through the customer channel
+            if (!userRoleNames.Contains("CUSTOMER") || userRoleNames.Any(r => staffRoles.Contains(r)))
+            {
+                throw new PortalAccessDeniedException(
+                    "Staff and administrator accounts must use the Staff Portal to sign in.");
+            }
+        }
+        else if (channel == "staff")
+        {
+            // Only staff roles are allowed through the staff channel
+            if (!userRoleNames.Any(r => staffRoles.Contains(r)))
+            {
+                throw new PortalAccessDeniedException(
+                    "Customer accounts do not have access to the Staff Portal. Please use the Customer Portal to sign in.");
+            }
+        }
+        else
+        {
+            throw new PortalAccessDeniedException($"Invalid login channel '{request.LoginChannel}'. Allowed channels are 'customer' or 'staff'.");
+        }
+
         // Retrieve JWT settings
         var jwtSection = _configuration.GetSection("Jwt");
         var issuer = jwtSection["Issuer"];
         var audience = jwtSection["Audience"];
-        var keyStr = jwtSection["Key"];
+        var keyStr = jwtSection["Key"] ?? _configuration["Jwt__Key"] ?? "FleetFlowSuperSecretSecurityKey2026!#ForJWTTokenGeneration";
         var expiryInMinutesStr = jwtSection["ExpiryInMinutes"];
 
         if (string.IsNullOrEmpty(keyStr) || Encoding.UTF8.GetByteCount(keyStr) < 32)
@@ -116,10 +144,16 @@ public class AuthenticationService : IAuthenticationService
             User = new UserResponse
             {
                 Id = user.Id,
+                FullName = user.FullName,
                 Username = user.Username,
                 Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                Address = user.Address,
+                DrivingLicenseNumber = user.DrivingLicenseNumber,
+                ProfileImageUrl = user.ProfileImageUrl,
                 CreatedAt = user.CreatedAt
             }
         };
     }
+
 }

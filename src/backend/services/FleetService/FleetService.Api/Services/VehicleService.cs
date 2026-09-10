@@ -221,6 +221,126 @@ public class VehicleService : IVehicleService
         return MapToResponse(vehicle);
     }
 
+    public async Task<VehicleResponse> UpdateVehicleAsync(Guid id, UpdateVehicleRequest request)
+    {
+        if (request == null)
+        {
+            throw new ValidationException("Vehicle request payload cannot be null.");
+        }
+
+        var vehicle = await _dbContext.Vehicles
+            .Include(v => v.Category)
+            .FirstOrDefaultAsync(v => v.Id == id);
+
+        if (vehicle == null)
+        {
+            throw new NotFoundException($"Vehicle with ID '{id}' was not found.");
+        }
+
+        var vin = request.Vin?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(vin) || vin.Length != 17)
+        {
+            throw new ValidationException("VIN must be exactly 17 characters.");
+        }
+
+        var plate = request.LicensePlate?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(plate))
+        {
+            throw new ValidationException("License plate is required.");
+        }
+
+        var make = request.Make?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(make))
+        {
+            throw new ValidationException("Make is required.");
+        }
+
+        var model = request.Model?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(model))
+        {
+            throw new ValidationException("Model is required.");
+        }
+
+        var maxYear = DateTime.UtcNow.Year + 2;
+        if (request.Year < 1900 || request.Year > maxYear)
+        {
+            throw new ValidationException($"Year must be between 1900 and {maxYear}.");
+        }
+
+        if (request.DailyRate <= 0)
+        {
+            throw new ValidationException("Daily rate must be greater than 0.");
+        }
+
+        if (request.Mileage < 0)
+        {
+            throw new ValidationException("Mileage must be non-negative.");
+        }
+
+        if (string.IsNullOrWhiteSpace(request.Transmission))
+        {
+            throw new ValidationException("Transmission is required.");
+        }
+
+        if (string.IsNullOrWhiteSpace(request.FuelType))
+        {
+            throw new ValidationException("Fuel type is required.");
+        }
+
+        if (string.IsNullOrWhiteSpace(request.SeatingCapacity))
+        {
+            throw new ValidationException("Seating capacity is required.");
+        }
+
+        if (string.IsNullOrWhiteSpace(request.HubLocation))
+        {
+            throw new ValidationException("Hub location is required.");
+        }
+
+        var category = await _dbContext.VehicleCategories
+            .FirstOrDefaultAsync(c => c.Id == request.VehicleCategoryId);
+
+        if (category == null)
+        {
+            throw new ValidationException($"Vehicle category with ID '{request.VehicleCategoryId}' does not exist.");
+        }
+
+        var vinExists = await _dbContext.Vehicles
+            .AnyAsync(v => v.Vin.ToLower() == vin.ToLower() && v.Id != id);
+
+        if (vinExists)
+        {
+            throw new DuplicateException($"A vehicle with VIN '{vin}' already exists.");
+        }
+
+        var plateExists = await _dbContext.Vehicles
+            .AnyAsync(v => v.LicensePlate.ToLower() == plate.ToLower() && v.Id != id);
+
+        if (plateExists)
+        {
+            throw new DuplicateException($"A vehicle with license plate '{plate}' already exists.");
+        }
+
+        vehicle.Vin = vin.ToUpperInvariant();
+        vehicle.LicensePlate = plate.ToUpperInvariant();
+        vehicle.Make = make;
+        vehicle.Model = model;
+        vehicle.Year = request.Year;
+        vehicle.VehicleCategoryId = category.Id;
+        vehicle.Category = category;
+        vehicle.DailyRate = request.DailyRate;
+        vehicle.Transmission = request.Transmission.Trim();
+        vehicle.FuelType = request.FuelType.Trim();
+        vehicle.SeatingCapacity = request.SeatingCapacity.Trim();
+        vehicle.HubLocation = request.HubLocation.Trim();
+        vehicle.Mileage = request.Mileage;
+        vehicle.UpdatedAt = DateTime.UtcNow;
+
+        await _dbContext.SaveChangesAsync();
+
+        return MapToResponse(vehicle);
+    }
+
     private static VehicleResponse MapToResponse(Vehicle vehicle)
     {
         return new VehicleResponse

@@ -14,6 +14,7 @@ builder.Services.AddDbContext<FleetDbContext>(options =>
     options.UseNpgsql(GetDatabaseConnectionString(builder.Configuration)));
 
 builder.Services.AddScoped<IVehicleService, VehicleService>();
+builder.Services.AddScoped<IVehicleImageService, VehicleImageService>();
 
 // Configure JWT Authentication
 var jwtSection = builder.Configuration.GetSection("Jwt");
@@ -102,6 +103,30 @@ try
         {
             await dbContext.SaveChangesAsync();
         }
+
+        // Ensure VehicleImages table exists on pre-existing database
+        try
+        {
+            await dbContext.Database.ExecuteSqlRawAsync(@"
+                CREATE TABLE IF NOT EXISTS ""VehicleImages"" (
+                    ""Id"" uuid NOT NULL PRIMARY KEY,
+                    ""VehicleId"" uuid NOT NULL,
+                    ""FileName"" character varying(255) NOT NULL,
+                    ""OriginalFileName"" character varying(255) NOT NULL,
+                    ""ContentType"" character varying(100) NOT NULL,
+                    ""FileSize"" bigint NOT NULL,
+                    ""RelativeUrl"" character varying(500) NOT NULL,
+                    ""Caption"" character varying(255) NULL,
+                    ""CreatedAt"" timestamp with time zone NOT NULL,
+                    CONSTRAINT ""FK_VehicleImages_Vehicles_VehicleId"" FOREIGN KEY (""VehicleId"") REFERENCES ""Vehicles"" (""Id"") ON DELETE CASCADE
+                );
+                CREATE INDEX IF NOT EXISTS ""IX_VehicleImages_VehicleId"" ON ""VehicleImages"" (""VehicleId"");
+            ");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[Startup Warning] Table check: {ex.Message}");
+        }
     }
 }
 catch (Exception ex)
@@ -119,7 +144,22 @@ app.UseSwaggerUI(options =>
 
 app.UseHttpsRedirection();
 
+// Static file serving for uploads (/uploads/vehicles/...)
+var uploadRoot = builder.Configuration["FLEET_UPLOAD_ROOT"];
+if (string.IsNullOrWhiteSpace(uploadRoot))
+{
+    uploadRoot = Path.Combine(builder.Environment.ContentRootPath, "wwwroot", "uploads");
+}
+Directory.CreateDirectory(Path.Combine(uploadRoot, "vehicles"));
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(uploadRoot),
+    RequestPath = "/uploads"
+});
+
 app.UseCors();
+
 
 app.UseAuthentication();
 app.UseAuthorization();

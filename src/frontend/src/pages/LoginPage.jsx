@@ -6,7 +6,7 @@ import { validateLogin } from '../validation/loginValidation';
 import { loginUser } from '../services/authService';
 import { useAuth } from '../context/AuthContext';
 
-const LoginPage = ({ onNavigateToRegister, onNavigateToStaffLogin }) => {
+const LoginPage = ({ onNavigateToRegister, onNavigateToStaffLogin, onLoginSuccess }) => {
   const { login } = useAuth();
   const [formData, setFormData] = useState({
     usernameOrEmail: '',
@@ -51,14 +51,19 @@ const LoginPage = ({ onNavigateToRegister, onNavigateToStaffLogin }) => {
 
     setIsLoading(true);
 
-    const result = await loginUser(formData.usernameOrEmail, formData.password);
+    const result = await loginUser(formData.usernameOrEmail, formData.password, 'customer');
 
     setIsLoading(false);
 
     if (result.success) {
       login(result.data.token, result.data.user);
+      if (onLoginSuccess) {
+        onLoginSuccess(result.data.token);
+      }
     } else {
-      if (result.status === 400 && result.errors) {
+      if (result.status === 403) {
+        setGlobalError(result.message || 'Your account does not have access to the Customer Portal.');
+      } else if (result.status === 400 && result.errors) {
         const fieldErrors = {};
         Object.keys(result.errors).forEach((key) => {
           const normalizedKey = key.charAt(0).toLowerCase() + key.slice(1);

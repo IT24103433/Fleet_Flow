@@ -6,29 +6,40 @@ import InputField from '../../components/InputField';
 import Modal from '../../components/common/Modal';
 import Alert from '../../components/Alert';
 import ChangePasswordModal from '../../components/security/ChangePasswordModal';
+import { uploadProfilePicture, deleteProfilePicture } from '../../services/authService';
+import { getProfileImageUrl } from '../../utils/imageUrlUtils';
 
 const CustomerProfilePage = () => {
-  const { user, roles } = useAuth();
+  const { user, roles, token, updateUser } = useAuth();
   const primaryRole = roles?.[0] || 'CUSTOMER';
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
 
-  // Editable customer profile state (local state for Phase 1 until CustomerProfile API is integrated)
-  const [profileData, setProfileData] = useState({
-    fullName: user?.username || 'Customer User',
-    phone: '+1 (555) 234-5678',
-    address: '100 Mobility Way, Metro City',
-    licenseNumber: 'DL-8492048-A',
-  });
+  // Real customer profile state loaded from authenticated user entity
+  const initialProfile = {
+    fullName: user?.fullName || user?.username || '—',
+    phone: user?.phoneNumber || '—',
+    address: user?.address || '—',
+    licenseNumber: user?.drivingLicenseNumber || '—',
+  };
 
-  const [editFormData, setEditFormData] = useState({ ...profileData });
+  const [localProfileOverrides, setLocalProfileOverrides] = useState({});
+  const profileData = {
+    ...initialProfile,
+    ...localProfileOverrides,
+  };
+
+  const [editFormData, setEditFormData] = useState({ ...initialProfile });
   const [profileNotice, setProfileNotice] = useState(null);
 
-  // Photo upload preview state
-  const [selectedPhoto, setSelectedPhoto] = useState(null);
-  const [photoUploadState, setPhotoUploadState] = useState('idle'); // 'idle' | 'uploading' | 'ready'
+  // Persistent photo upload state
+  const [photoFile, setPhotoFile] = useState(null);
+  const [photoPreview, setPhotoPreview] = useState(null);
+  const [isSavingPhoto, setIsSavingPhoto] = useState(false);
+  const [isDeletingPhoto, setIsDeletingPhoto] = useState(false);
+  const [photoError, setPhotoError] = useState(null);
 
   const handleEditOpen = () => {
     setEditFormData({ ...profileData });
@@ -37,7 +48,7 @@ const CustomerProfilePage = () => {
 
   const handleEditSave = (e) => {
     e.preventDefault();
-    setProfileData({ ...editFormData });
+    setLocalProfileOverrides({ ...editFormData });
     setIsEditModalOpen(false);
     setProfileNotice({
       type: 'success',
@@ -46,15 +57,70 @@ const CustomerProfilePage = () => {
     });
   };
 
+  const handleOpenPhotoModal = () => {
+    setPhotoFile(null);
+    setPhotoPreview(user?.profileImageUrl ? getProfileImageUrl(user.profileImageUrl) : null);
+    setPhotoError(null);
+    setIsPhotoModalOpen(true);
+  };
+
   const handlePhotoSelect = (e) => {
     const file = e.target.files?.[0];
     if (file) {
-      const previewUrl = URL.createObjectURL(file);
-      setSelectedPhoto(previewUrl);
-      setPhotoUploadState('uploading');
-      setTimeout(() => {
-        setPhotoUploadState('ready');
-      }, 700);
+      if (file.size > 5 * 1024 * 1024) {
+        setPhotoError('Selected image exceeds the 5 MB limit.');
+        return;
+      }
+      setPhotoFile(file);
+      setPhotoPreview(URL.createObjectURL(file));
+      setPhotoError(null);
+    }
+  };
+
+  const handleSavePhoto = async () => {
+    if (!photoFile) {
+      setPhotoError('Please select an image file first.');
+      return;
+    }
+
+    setIsSavingPhoto(true);
+    setPhotoError(null);
+
+    const result = await uploadProfilePicture(photoFile, token);
+    setIsSavingPhoto(false);
+
+    if (result.success && result.data?.profileImageUrl) {
+      updateUser({ profileImageUrl: result.data.profileImageUrl });
+      setIsPhotoModalOpen(false);
+      setProfileNotice({
+        type: 'success',
+        title: 'Profile Photo Updated',
+        message: 'Your profile picture was saved and updated successfully.',
+      });
+    } else {
+      setPhotoError(result.message || 'Failed to upload profile picture.');
+    }
+  };
+
+  const handleDeletePhoto = async () => {
+    setIsDeletingPhoto(true);
+    setPhotoError(null);
+
+    const result = await deleteProfilePicture(token);
+    setIsDeletingPhoto(false);
+
+    if (result.success) {
+      updateUser({ profileImageUrl: null });
+      setPhotoPreview(null);
+      setPhotoFile(null);
+      setIsPhotoModalOpen(false);
+      setProfileNotice({
+        type: 'success',
+        title: 'Profile Photo Removed',
+        message: 'Your profile picture has been removed.',
+      });
+    } else {
+      setPhotoError(result.message || 'Failed to remove profile picture.');
     }
   };
 
@@ -72,8 +138,8 @@ const CustomerProfilePage = () => {
       <div className="profile-hero-card">
         <div className="profile-avatar-section">
           <div className="profile-avatar-circle">
-            {selectedPhoto ? (
-              <img src={selectedPhoto} alt="Profile Avatar" className="avatar-img" />
+            {user?.profileImageUrl ? (
+              <img src={getProfileImageUrl(user.profileImageUrl)} alt="Profile Avatar" className="avatar-img" />
             ) : (
               <span className="avatar-initials">{user?.username?.charAt(0)?.toUpperCase() || 'C'}</span>
             )}
@@ -81,7 +147,7 @@ const CustomerProfilePage = () => {
           <button
             type="button"
             className="change-photo-btn"
-            onClick={() => setIsPhotoModalOpen(true)}
+            onClick={handleOpenPhotoModal}
             title="Change Profile Photo"
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="14" height="14">
@@ -97,7 +163,7 @@ const CustomerProfilePage = () => {
             <h1 className="profile-user-title">{profileData.fullName}</h1>
             <RoleBadge role={primaryRole} />
           </div>
-          <p className="profile-email-line">{user?.email || 'customer@fleetflow.io'}</p>
+          <p className="profile-email-line">{user?.email || '—'}</p>
           <div className="profile-meta-tags">
             <span className="meta-tag">Customer Account</span>
             <span className="meta-tag verified">Email Verified</span>
@@ -133,11 +199,11 @@ const CustomerProfilePage = () => {
             </div>
             <div className="info-row">
               <span className="info-label">Account Username</span>
-              <span className="info-value">{user?.username}</span>
+              <span className="info-value">{user?.username || '—'}</span>
             </div>
             <div className="info-row">
               <span className="info-label">Email Address</span>
-              <span className="info-value">{user?.email || 'N/A'}</span>
+              <span className="info-value">{user?.email || '—'}</span>
             </div>
             <div className="info-row">
               <span className="info-label">Phone Number</span>
@@ -183,10 +249,10 @@ const CustomerProfilePage = () => {
                 </svg>
               </div>
               <div className="sec-text-col">
-                <strong className="sec-title">Role-Based Authorization</strong>
-                <p className="sec-desc">Enforced via verified JWT ClaimTypes.Role</p>
+                <strong className="sec-title">Account Security</strong>
+                <p className="sec-desc">Verified customer access credentials</p>
               </div>
-              <span className="sec-badge-active">Active</span>
+              <span className="sec-badge-active">Protected</span>
             </div>
 
             <div className="security-item">
@@ -197,8 +263,8 @@ const CustomerProfilePage = () => {
                 </svg>
               </div>
               <div className="sec-text-col">
-                <strong className="sec-title">Session State</strong>
-                <p className="sec-desc">Stored in authenticated browser storage</p>
+                <strong className="sec-title">Active Session</strong>
+                <p className="sec-desc">Secure authenticated session</p>
               </div>
               <span className="sec-badge-active">Online</span>
             </div>
@@ -270,12 +336,18 @@ const CustomerProfilePage = () => {
         isOpen={isPhotoModalOpen}
         onClose={() => setIsPhotoModalOpen(false)}
         title="Update Profile Photo"
-        subtitle="Select an avatar image (PNG, JPG, WebP)."
+        subtitle="Select a profile avatar image (PNG, JPG, WebP up to 5 MB)."
       >
         <div className="photo-modal-body">
+          {photoError && (
+            <div style={{ marginBottom: '16px' }}>
+              <Alert type="error" title="Photo Error" message={photoError} />
+            </div>
+          )}
+
           <div className="photo-preview-box">
-            {selectedPhoto ? (
-              <img src={selectedPhoto} alt="Selected preview" className="modal-avatar-preview" />
+            {photoPreview ? (
+              <img src={photoPreview} alt="Selected preview" className="modal-avatar-preview" />
             ) : (
               <div className="avatar-placeholder-large">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" width="48" height="48">
@@ -290,9 +362,10 @@ const CustomerProfilePage = () => {
             <input
               type="file"
               id="avatarFile"
-              accept="image/*"
+              accept="image/jpeg,image/png,image/webp"
               onChange={handlePhotoSelect}
               className="file-input-native"
+              disabled={isSavingPhoto || isDeletingPhoto}
             />
             <label htmlFor="avatarFile" className="file-input-label">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="18" height="18">
@@ -300,27 +373,33 @@ const CustomerProfilePage = () => {
                 <polyline points="17 8 12 3 7 8" />
                 <line x1="12" y1="3" x2="12" y2="15" />
               </svg>
-              <span>Choose Image File</span>
+              <span>{photoFile ? photoFile.name : 'Choose Image File'}</span>
             </label>
           </div>
 
-          {photoUploadState === 'uploading' && (
-            <div className="upload-progress-bar">
-              <div className="progress-fill" />
-              <span className="progress-text">Processing image preview...</span>
-            </div>
-          )}
-
-          <div className="photo-integration-notice">
-            <span className="info-icon-dot" aria-hidden="true" />
-            <span>
-              Image storage API is scheduled for Sprint 2. Local client preview verified.
-            </span>
-          </div>
-
-          <div className="modal-actions-row">
-            <Button variant="primary" fullWidth onClick={() => setIsPhotoModalOpen(false)}>
-              Done
+          <div className="modal-actions-row" style={{ display: 'flex', gap: '8px', marginTop: '16px' }}>
+            <Button
+              variant="outline"
+              onClick={() => setIsPhotoModalOpen(false)}
+              disabled={isSavingPhoto || isDeletingPhoto}
+            >
+              Cancel
+            </Button>
+            {user?.profileImageUrl && (
+              <Button
+                variant="danger"
+                onClick={handleDeletePhoto}
+                disabled={isSavingPhoto || isDeletingPhoto}
+              >
+                {isDeletingPhoto ? 'Removing...' : 'Remove Photo'}
+              </Button>
+            )}
+            <Button
+              variant="primary"
+              onClick={handleSavePhoto}
+              disabled={!photoFile || isSavingPhoto || isDeletingPhoto}
+            >
+              {isSavingPhoto ? 'Uploading...' : 'Save Photo'}
             </Button>
           </div>
         </div>
