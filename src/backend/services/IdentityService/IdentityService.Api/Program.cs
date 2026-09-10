@@ -89,10 +89,14 @@ try
             await dbContext.SaveChangesAsync();
         }
 
-        // Ensure ProfileImageUrl column exists on pre-existing database
+        // Ensure new User columns exist on pre-existing database
         try
         {
             await dbContext.Database.ExecuteSqlRawAsync(@"
+                ALTER TABLE ""Users"" ADD COLUMN IF NOT EXISTS ""FullName"" character varying(100) NOT NULL DEFAULT '';
+                ALTER TABLE ""Users"" ADD COLUMN IF NOT EXISTS ""PhoneNumber"" character varying(20) NOT NULL DEFAULT '';
+                ALTER TABLE ""Users"" ADD COLUMN IF NOT EXISTS ""Address"" character varying(250) NOT NULL DEFAULT '';
+                ALTER TABLE ""Users"" ADD COLUMN IF NOT EXISTS ""DrivingLicenseNumber"" character varying(50) NOT NULL DEFAULT '';
                 ALTER TABLE ""Users"" ADD COLUMN IF NOT EXISTS ""ProfileImageUrl"" character varying(500) NULL;
             ");
         }
