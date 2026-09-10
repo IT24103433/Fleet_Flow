@@ -37,4 +37,3 @@ jobs:
           app-name: ${{ secrets.AZURE_IDENTITY_SERVICE_APP_NAME }}
           publish-profile: ${{ secrets.AZURE_IDENTITY_SERVICE_PUBLISH_PROFILE }}
           package: ${{ runner.temp }}/identity-app
-          startup-command: './IdentityService.Api'

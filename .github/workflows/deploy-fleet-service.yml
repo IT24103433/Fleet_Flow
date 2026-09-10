@@ -37,4 +37,3 @@ jobs:
           app-name: ${{ secrets.AZURE_FLEET_SERVICE_APP_NAME }}
           publish-profile: ${{ secrets.AZURE_FLEET_SERVICE_PUBLISH_PROFILE }}
           package: ${{ runner.temp }}/fleet-app
-          startup-command: './FleetService.Api'
