@@ -21,10 +21,10 @@ jobs:
           dotnet-version: '10.x'
 
       - name: Build with dotnet
-        run: dotnet build src/backend/services/FleetService/FleetService.Api/FleetService.Api.csproj --configuration Release
+        run: dotnet build src/backend/services/IdentityService/IdentityService.Api/IdentityService.Api.csproj --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish src/backend/services/FleetService/FleetService.Api/FleetService.Api.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish src/backend/services/IdentityService/IdentityService.Api/IdentityService.Api.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
