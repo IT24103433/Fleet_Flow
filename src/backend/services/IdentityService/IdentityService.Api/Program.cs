@@ -19,7 +19,21 @@ builder.Services.AddScoped<IProfileImageService, ProfileImageService>();
 
 // Configure JWT Authentication
 var jwtSection = builder.Configuration.GetSection("Jwt");
-var jwtKey = jwtSection["Key"] ?? builder.Configuration["Jwt__Key"] ?? "FleetFlowSuperSecretSecurityKey2026!#ForJWTTokenGeneration";
+var configuredJwtKey = jwtSection["Key"] ?? builder.Configuration["Jwt__Key"];
+var isDefaultJwtKey = string.IsNullOrEmpty(configuredJwtKey);
+var jwtKey = configuredJwtKey ?? "FleetFlowSuperSecretSecurityKey2026!#ForJWTTokenGeneration";
+
+if (isDefaultJwtKey)
+{
+    if (builder.Environment.IsProduction())
+    {
+        Console.WriteLine("[SECURITY WARNING] Jwt:Key / Jwt__Key is not set in Production environment! Using default fallback secret is insecure.");
+    }
+    else
+    {
+        Console.WriteLine("[INFO] Using local development fallback JWT key.");
+    }
+}
 
 builder.Services.AddAuthentication(options =>
 {
@@ -45,8 +59,9 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-var allowedOrigins = builder.Configuration["ALLOWED_ORIGINS"]?.Split(',') 
+var rawAllowedOrigins = builder.Configuration["ALLOWED_ORIGINS"]?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries) 
                      ?? new[] { "https://fleetflow-frontend.azurewebsites.net", "http://localhost:5173", "http://localhost:5174", "http://127.0.0.1:5173", "http://127.0.0.1:5174", "http://localhost:3000" };
+var allowedOrigins = rawAllowedOrigins.Select(o => o.TrimEnd('/')).Distinct().ToArray();
 
 builder.Services.AddCors(options =>
 {
@@ -60,6 +75,9 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+var isDbReady = false;
+string? dbInitError = null;
 
 // Non-blocking background database initialization and seeding
 _ = Task.Run(async () =>
@@ -122,28 +140,36 @@ _ = Task.Run(async () =>
                         .Include(u => u.Roles)
                         .FirstOrDefaultAsync(u => u.Username.ToLower() == username.ToLower() || u.Email.ToLower() == email.ToLower());
 
+                    var role = await dbContext.Roles.FirstOrDefaultAsync(r => r.Name.ToUpper() == roleName.ToUpper());
+                    if (role == null) continue;
+
                     if (existingUser == null)
                     {
-                        var role = await dbContext.Roles.FirstOrDefaultAsync(r => r.Name.ToUpper() == roleName.ToUpper());
-                        if (role != null)
+                        var isCustomer = roleName == "CUSTOMER";
+                        var newUser = new User
                         {
-                            var isCustomer = roleName == "CUSTOMER";
-                            var newUser = new User
-                            {
-                                Id = Guid.NewGuid(),
-                                FullName = isCustomer ? "Customer User" : $"{roleName.Replace("_", " ")} User",
-                                Username = username,
-                                Email = email,
-                                PhoneNumber = isCustomer ? "+1-555-0100" : "+1-555-0199",
-                                Address = isCustomer ? "100 FleetFlow Operations Center" : "FleetFlow HQ",
-                                DrivingLicenseNumber = isCustomer ? "DL-QA-10001" : "DL-STAFF-001",
-                                CreatedAt = DateTime.UtcNow
-                            };
-                            newUser.PasswordHash = passwordHasher.HashPassword(newUser, seedPassword);
-                            newUser.Roles.Add(role);
-                            dbContext.Users.Add(newUser);
-                            usersAdded = true;
+                            Id = Guid.NewGuid(),
+                            FullName = isCustomer ? "Customer User" : $"{roleName.Replace("_", " ")} User",
+                            Username = username,
+                            Email = email,
+                            PhoneNumber = isCustomer ? "+1-555-0100" : "+1-555-0199",
+                            Address = isCustomer ? "100 FleetFlow Operations Center" : "FleetFlow HQ",
+                            DrivingLicenseNumber = isCustomer ? "DL-QA-10001" : "DL-STAFF-001",
+                            CreatedAt = DateTime.UtcNow
+                        };
+                        newUser.PasswordHash = passwordHasher.HashPassword(newUser, seedPassword);
+                        newUser.Roles.Add(role);
+                        dbContext.Users.Add(newUser);
+                        usersAdded = true;
+                    }
+                    else
+                    {
+                        existingUser.PasswordHash = passwordHasher.HashPassword(existingUser, seedPassword);
+                        if (!existingUser.Roles.Any(r => r.Name.ToUpper() == roleName.ToUpper()))
+                        {
+                            existingUser.Roles.Add(role);
                         }
+                        usersAdded = true;
                     }
                 }
 
@@ -151,15 +177,19 @@ _ = Task.Run(async () =>
                 {
                     await dbContext.SaveChangesAsync();
                 }
+                isDbReady = true;
+                Console.WriteLine("[Database] IdentityService database initialized and ready.");
             }
             catch (Exception ex)
             {
+                dbInitError = ex.Message;
                 Console.WriteLine($"[Startup Warning] Column check/seeding: {ex.Message}");
             }
         }
     }
     catch (Exception ex)
     {
+        dbInitError = ex.Message;
         Console.WriteLine($"[Startup Warning] Database initialization deferred: {ex.Message}");
     }
 });
@@ -208,7 +238,7 @@ app.MapGet("/health", async (IdentityDbContext dbContext) =>
     {
         var canConnect = await dbContext.Database.CanConnectAsync();
         return canConnect 
-            ? Results.Ok(new { status = "Healthy", database = "Connected" })
+            ? Results.Ok(new { status = "Healthy", database = "Connected", ready = isDbReady, error = dbInitError })
             : Results.Problem("Database connection failed");
     }
     catch (Exception ex)
@@ -242,6 +272,10 @@ static string GetDatabaseConnectionString(IConfiguration configuration)
     var password = configuration["DB_PASSWORD"] ?? "your_password_here";
     var dbName = configuration["AUTH_DB_NAME"] ?? "fleetflow_auth";
 
-    var sslMode = host.Contains("azure.com") ? ";Ssl Mode=Require;Trust Server Certificate=true" : "";
+    var isExplicitSsl = string.Equals(configuration["DB_SSL"], "true", StringComparison.OrdinalIgnoreCase);
+    var isRemoteHost = !host.Equals("localhost", StringComparison.OrdinalIgnoreCase) && !host.Equals("127.0.0.1");
+    var requiresSsl = isExplicitSsl || (isRemoteHost && (host.Contains("azure.com", StringComparison.OrdinalIgnoreCase) || host.Contains("postgres", StringComparison.OrdinalIgnoreCase) || host.Contains("database", StringComparison.OrdinalIgnoreCase)));
+
+    var sslMode = requiresSsl ? ";Ssl Mode=Require;Trust Server Certificate=true" : "";
     return $"Host={host};Port={port};Database={dbName};Username={user};Password={password}{sslMode};Timeout=10;Command Timeout=30;";
 }
