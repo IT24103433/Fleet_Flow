@@ -57,7 +57,10 @@ public class AuthController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(500, new { message = "Authentication service error: " + (ex.InnerException?.Message ?? ex.Message) });
+            return StatusCode(500, new { 
+                message = "Authentication service error: " + (ex.InnerException?.Message ?? ex.Message),
+                detail = ex.ToString()
+            });
         }
     }
 
