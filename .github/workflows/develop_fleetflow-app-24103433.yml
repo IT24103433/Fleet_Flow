@@ -41,6 +41,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: .net-app
+          path: myapp
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -48,5 +49,5 @@ jobs:
         with:
           app-name: 'fleetflow-app-24103433'
           slot-name: 'Production'
-          package: .
+          package: myapp
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_2CE1B6B5B5A84EEDA31D3A67747DFB4B }}
