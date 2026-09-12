@@ -56,6 +56,7 @@ docs/aqqil/
 | BM-105 | 2026-09-07 | FleetService | 100 VUs | /api/vehicles/search | N/A | < 75 ms | PREPARED | Expanded payloads with Fleet search & filter matrices |
 | BM-106 | 2026-09-09 | Identity & Fleet | 50 VUs | /auth/login, /vehicles | 22.8 ms | < 65 ms | OPTIMIZED | Pruned cold-start warm-up rows from latency logs |
 | BM-107 | 2026-09-10 | IdentityService | 100 VUs | /api/auth/login, /api/auth/verify | 34.8 ms | < 65 ms | PASSED | Documented RBAC token validation overhead |
+| BM-108 | 2026-09-12 | Rental & Notification | 50-100 VUs | /api/bookings, /notifications | 72.5 ms | < 130 ms | PASSED | Added initial rental-notification throughput CSV |
 
 ---
 
