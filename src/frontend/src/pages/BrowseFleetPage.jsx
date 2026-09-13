@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import StatusBadge from '../components/common/StatusBadge';
 import Button from '../components/common/Button';
 import Alert from '../components/Alert';
@@ -14,12 +14,40 @@ const POWERTRAIN_OPTIONS = [
   'Diesel',
 ];
 
+const TRANSMISSION_OPTIONS = [
+  'All Transmissions',
+  'Automatic',
+  'Manual',
+];
+
+const SORT_OPTIONS = [
+  { value: 'createdAt:desc', label: 'Newest Arrivals' },
+  { value: 'dailyRate:asc', label: 'Daily Rate (Low to High)' },
+  { value: 'dailyRate:desc', label: 'Daily Rate (High to Low)' },
+  { value: 'make:asc', label: 'Make & Model (A–Z)' },
+  { value: 'year:desc', label: 'Model Year (Newest)' },
+];
+
+const PAGE_SIZE = 9;
+
 const BrowseFleetPage = ({ onNavigate, onSelectVehicle }) => {
   const [vehicles, setVehicles] = useState([]);
   const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
   const [selectedFuel, setSelectedFuel] = useState('All Powertrains');
+  const [selectedTransmission, setSelectedTransmission] = useState('All Transmissions');
+  const [selectedSort, setSelectedSort] = useState('createdAt:desc');
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pagination, setPagination] = useState({
+    totalCount: 0,
+    page: 1,
+    pageSize: PAGE_SIZE,
+    totalPages: 1,
+    hasNextPage: false,
+    hasPreviousPage: false,
+  });
 
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -44,12 +72,23 @@ const BrowseFleetPage = ({ onNavigate, onSelectVehicle }) => {
     setIsLoading(true);
     setErrorMessage(null);
 
-    const params = {};
+    const [sortBy, sortOrder] = selectedSort.split(':');
+
+    const params = {
+      page: currentPage,
+      pageSize: PAGE_SIZE,
+      sortBy: sortBy || 'createdAt',
+      sortOrder: sortOrder || 'desc',
+    };
+
     if (selectedCategory && selectedCategory !== 'All Categories') {
       params.category = selectedCategory;
     }
     if (selectedFuel && selectedFuel !== 'All Powertrains') {
       params.fuel = selectedFuel;
+    }
+    if (selectedTransmission && selectedTransmission !== 'All Transmissions') {
+      params.transmission = selectedTransmission;
     }
     if (searchTerm.trim()) {
       params.searchTerm = searchTerm.trim();
@@ -59,12 +98,25 @@ const BrowseFleetPage = ({ onNavigate, onSelectVehicle }) => {
 
     if (result.success) {
       setVehicles(result.data);
+      if (result.pagination) {
+        setPagination(result.pagination);
+      } else {
+        setPagination({
+          totalCount: result.data.length,
+          page: currentPage,
+          pageSize: PAGE_SIZE,
+          totalPages: Math.ceil(result.data.length / PAGE_SIZE) || 1,
+          hasNextPage: false,
+          hasPreviousPage: currentPage > 1,
+        });
+      }
     } else {
       setErrorMessage(result.message || 'Failed to load vehicle catalog.');
       setVehicles([]);
+      setPagination((prev) => ({ ...prev, totalCount: 0, totalPages: 1 }));
     }
     setIsLoading(false);
-  }, [selectedCategory, selectedFuel, searchTerm]);
+  }, [selectedCategory, selectedFuel, selectedTransmission, selectedSort, searchTerm, currentPage]);
 
   // Trigger fetch when filters change (with debounce on search)
   useEffect(() => {
@@ -86,9 +138,29 @@ const BrowseFleetPage = ({ onNavigate, onSelectVehicle }) => {
     setSearchTerm('');
     setSelectedCategory('All Categories');
     setSelectedFuel('All Powertrains');
+    setSelectedTransmission('All Transmissions');
+    setSelectedSort('createdAt:desc');
+    setCurrentPage(1);
   };
 
   const categoryList = ['All Categories', ...categories.map((c) => c.name || c)];
+
+  const totalCount = pagination.totalCount || 0;
+  const totalPages = pagination.totalPages || 1;
+
+  const pageNumbers = useMemo(() => {
+    const pages = [];
+    const maxVisible = 5;
+    let start = Math.max(1, currentPage - 2);
+    let end = Math.min(totalPages, start + maxVisible - 1);
+    if (end - start < maxVisible - 1) {
+      start = Math.max(1, end - maxVisible + 1);
+    }
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+    return pages;
+  }, [currentPage, totalPages]);
 
   return (
     <div className="browse-fleet-container">
@@ -113,12 +185,32 @@ const BrowseFleetPage = ({ onNavigate, onSelectVehicle }) => {
             </svg>
             <input
               type="text"
-              placeholder="Search by make, model, category, or keywords..."
+              placeholder="Search by make, model, VIN, plate, or keywords..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
               className="browse-search-input"
               aria-label="Search vehicles"
             />
+            {searchTerm && (
+              <button
+                type="button"
+                onClick={() => { setSearchTerm(''); setCurrentPage(1); }}
+                style={{
+                  position: 'absolute',
+                  right: '10px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  background: 'none',
+                  border: 'none',
+                  color: 'var(--color-text-muted)',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                }}
+                aria-label="Clear search"
+              >
+                ✕
+              </button>
+            )}
           </div>
 
           <div className="filter-dropdown-wrap">
@@ -126,12 +218,44 @@ const BrowseFleetPage = ({ onNavigate, onSelectVehicle }) => {
             <select
               id="fuelFilter"
               value={selectedFuel}
-              onChange={(e) => setSelectedFuel(e.target.value)}
+              onChange={(e) => { setSelectedFuel(e.target.value); setCurrentPage(1); }}
               className="browse-select"
             >
               {POWERTRAIN_OPTIONS.map((fuel) => (
                 <option key={fuel} value={fuel}>
                   {fuel}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="filter-dropdown-wrap">
+            <label htmlFor="transmissionFilter" className="dropdown-label">Trans:</label>
+            <select
+              id="transmissionFilter"
+              value={selectedTransmission}
+              onChange={(e) => { setSelectedTransmission(e.target.value); setCurrentPage(1); }}
+              className="browse-select"
+            >
+              {TRANSMISSION_OPTIONS.map((trans) => (
+                <option key={trans} value={trans}>
+                  {trans}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="filter-dropdown-wrap">
+            <label htmlFor="sortFilter" className="dropdown-label">Sort:</label>
+            <select
+              id="sortFilter"
+              value={selectedSort}
+              onChange={(e) => { setSelectedSort(e.target.value); setCurrentPage(1); }}
+              className="browse-select"
+            >
+              {SORT_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
                 </option>
               ))}
             </select>
@@ -145,7 +269,7 @@ const BrowseFleetPage = ({ onNavigate, onSelectVehicle }) => {
               key={cat}
               type="button"
               className={`category-pill-btn ${selectedCategory === cat ? 'active' : ''}`}
-              onClick={() => setSelectedCategory(cat)}
+              onClick={() => { setSelectedCategory(cat); setCurrentPage(1); }}
             >
               {cat}
             </button>
@@ -181,7 +305,7 @@ const BrowseFleetPage = ({ onNavigate, onSelectVehicle }) => {
       {!isLoading && !errorMessage && (
         <div className="catalog-status-bar">
           <span className="catalog-count-text">
-            Showing <strong>{vehicles.length}</strong> {vehicles.length === 1 ? 'vehicle' : 'vehicles'} available in catalog
+            Showing <strong>{vehicles.length}</strong> {vehicles.length === 1 ? 'vehicle' : 'vehicles'} (Page {currentPage} of {totalPages}, Total: {totalCount})
           </span>
           <span className="data-source-badge">Live FleetService API</span>
         </div>
@@ -207,71 +331,107 @@ const BrowseFleetPage = ({ onNavigate, onSelectVehicle }) => {
       )}
 
       {!isLoading && !errorMessage && vehicles.length > 0 && (
-        <div className="catalog-grid">
-          {vehicles.map((vehicle) => {
-            const categoryName = vehicle.categoryName || vehicle.category || '—';
-            const fuelType = vehicle.fuelType || vehicle.fuel || '—';
-            const transmission = vehicle.transmission || '—';
-            const seating = vehicle.seatingCapacity || vehicle.seating || '—';
+        <>
+          <div className="catalog-grid">
+            {vehicles.map((vehicle) => {
+              const categoryName = vehicle.categoryName || vehicle.category || '—';
+              const fuelType = vehicle.fuelType || vehicle.fuel || '—';
+              const transmission = vehicle.transmission || '—';
+              const seating = vehicle.seatingCapacity || vehicle.seating || '—';
 
-            return (
-              <article key={vehicle.id} className="vehicle-catalog-card">
-                <div className="vehicle-image-banner">
-                  <span className="vehicle-category-chip">{categoryName}</span>
-                  <div className="vehicle-card-status-slot">
-                    <StatusBadge status={vehicle.status} />
-                  </div>
-                  <div className="vehicle-visual-model">
-                    <span>{vehicle.make} {vehicle.model}</span>
-                  </div>
-                </div>
-
-                <div className="vehicle-catalog-body">
-                  <div className="vehicle-title-strip">
-                    <h3 className="vehicle-name-h3">{vehicle.year} {vehicle.make} {vehicle.model}</h3>
-                  </div>
-
-                  <div className="vehicle-spec-pills-row">
-                    <span className="spec-pill" title="Seating Capacity">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="13" height="13" aria-hidden="true">
-                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                        <circle cx="9" cy="7" r="4" />
-                      </svg>
-                      {seating}
-                    </span>
-                    <span className="spec-pill" title="Powertrain">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="13" height="13" aria-hidden="true">
-                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-                      </svg>
-                      {fuelType}
-                    </span>
-                    <span className="spec-pill" title="Transmission">{transmission}</span>
-                  </div>
-
-                  <div className="vehicle-rate-and-cta">
-                    <div className="rate-block">
-                      {vehicle.dailyRate != null && !isNaN(Number(vehicle.dailyRate)) ? (
-                        <>
-                          <span className="price-number">LKR {formatPriceNumber(vehicle.dailyRate)}</span>
-                          <span className="price-period">/day</span>
-                        </>
-                      ) : (
-                        <span className="price-number">—</span>
-                      )}
+              return (
+                <article key={vehicle.id} className="vehicle-catalog-card">
+                  <div className="vehicle-image-banner">
+                    <span className="vehicle-category-chip">{categoryName}</span>
+                    <div className="vehicle-card-status-slot">
+                      <StatusBadge status={vehicle.status} />
                     </div>
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      onClick={() => handleInspectVehicle(vehicle)}
-                    >
-                      View Details
-                    </Button>
+                    <div className="vehicle-visual-model">
+                      <span>{vehicle.make} {vehicle.model}</span>
+                    </div>
                   </div>
-                </div>
-              </article>
-            );
-          })}
-        </div>
+
+                  <div className="vehicle-catalog-body">
+                    <div className="vehicle-title-strip">
+                      <h3 className="vehicle-name-h3">{vehicle.year} {vehicle.make} {vehicle.model}</h3>
+                    </div>
+
+                    <div className="vehicle-spec-pills-row">
+                      <span className="spec-pill" title="Seating Capacity">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="13" height="13" aria-hidden="true">
+                          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                          <circle cx="9" cy="7" r="4" />
+                        </svg>
+                        {seating}
+                      </span>
+                      <span className="spec-pill" title="Powertrain">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="13" height="13" aria-hidden="true">
+                          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                        </svg>
+                        {fuelType}
+                      </span>
+                      <span className="spec-pill" title="Transmission">{transmission}</span>
+                    </div>
+
+                    <div className="vehicle-rate-and-cta">
+                      <div className="rate-block">
+                        {vehicle.dailyRate != null && !isNaN(Number(vehicle.dailyRate)) ? (
+                          <>
+                            <span className="price-number">LKR {formatPriceNumber(vehicle.dailyRate)}</span>
+                            <span className="price-period">/day</span>
+                          </>
+                        ) : (
+                          <span className="price-number">—</span>
+                        )}
+                      </div>
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        onClick={() => handleInspectVehicle(vehicle)}
+                      >
+                        View Details
+                      </Button>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+
+          {/* Customer Catalog Pagination */}
+          {totalPages > 1 && (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '6px', margin: '2rem 0 1rem' }}>
+              <button
+                type="button"
+                className="pagination-page-btn"
+                disabled={currentPage <= 1}
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                aria-label="Previous page"
+              >
+                ‹ Prev
+              </button>
+              {pageNumbers.map((p) => (
+                <button
+                  key={p}
+                  type="button"
+                  className={`pagination-page-btn ${p === currentPage ? 'active' : ''}`}
+                  onClick={() => setCurrentPage(p)}
+                >
+                  {p}
+                </button>
+              ))}
+              <button
+                type="button"
+                className="pagination-page-btn"
+                disabled={currentPage >= totalPages}
+                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                aria-label="Next page"
+              >
+                Next ›
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
