@@ -20,6 +20,7 @@ const CustomerNav = ({ currentView, onNavigate }) => {
   const authenticatedProfile = isStaff ? 'staff-profile' : 'customer-profile';
 
   const primaryRole = roles?.[0] || (isAuthenticated ? 'CUSTOMER' : null);
+  const isForcePasswordChange = currentView === 'force-password-change' || user?.mustChangePassword;
 
   return (
     <header className="customer-nav-header">
@@ -27,10 +28,10 @@ const CustomerNav = ({ currentView, onNavigate }) => {
         {/* Brand Identity */}
         <div
           className="customer-nav-brand"
-          onClick={() => handleNavClick(isAuthenticated ? authenticatedHome : 'landing')}
+          onClick={() => { if (!isForcePasswordChange) handleNavClick(isAuthenticated ? authenticatedHome : 'landing'); }}
           role="button"
           tabIndex={0}
-          onKeyDown={(e) => e.key === 'Enter' && handleNavClick(isAuthenticated ? authenticatedHome : 'landing')}
+          onKeyDown={(e) => e.key === 'Enter' && !isForcePasswordChange && handleNavClick(isAuthenticated ? authenticatedHome : 'landing')}
         >
           <div className="brand-logo-mark">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -44,101 +45,118 @@ const CustomerNav = ({ currentView, onNavigate }) => {
         </div>
 
         {/* Desktop Navigation Links */}
-        <nav className="customer-nav-links" aria-label="Main Navigation">
-          <button
-            type="button"
-            className={`nav-link ${currentView === 'landing' || currentView === authenticatedHome ? 'active' : ''}`}
-            onClick={() => handleNavClick(isAuthenticated ? authenticatedHome : 'landing')}
-          >
-            {!isAuthenticated ? 'Home' : (isStaff ? (isAdmin ? 'Admin Console' : 'Staff Console') : 'My Dashboard')}
-          </button>
-          <button
-            type="button"
-            className={`nav-link ${currentView === 'browse' || currentView === 'vehicle-details' ? 'active' : ''}`}
-            onClick={() => handleNavClick('browse')}
-          >
-            Explore Fleet
-          </button>
-          {isAuthenticated && (
+        {!isForcePasswordChange && (
+          <nav className="customer-nav-links" aria-label="Main Navigation">
             <button
               type="button"
-              className={`nav-link ${currentView === authenticatedProfile ? 'active' : ''}`}
-              onClick={() => handleNavClick(authenticatedProfile)}
+              className={`nav-link ${currentView === 'landing' || currentView === authenticatedHome ? 'active' : ''}`}
+              onClick={() => handleNavClick(isAuthenticated ? authenticatedHome : 'landing')}
             >
-              Profile & Security
+              {!isAuthenticated ? 'Home' : (isStaff ? (isAdmin ? 'Admin Console' : 'Staff Console') : 'My Dashboard')}
             </button>
-          )}
-        </nav>
+            <button
+              type="button"
+              className={`nav-link ${currentView === 'browse' || currentView === 'vehicle-details' ? 'active' : ''}`}
+              onClick={() => handleNavClick('browse')}
+            >
+              Explore Fleet
+            </button>
+            {isAuthenticated && (
+              <button
+                type="button"
+                className={`nav-link ${currentView === authenticatedProfile ? 'active' : ''}`}
+                onClick={() => handleNavClick(authenticatedProfile)}
+              >
+                Profile & Security
+              </button>
+            )}
+          </nav>
+        )}
 
         {/* Desktop Auth & Switcher Actions */}
         <div className="customer-nav-actions">
-          <button
-            type="button"
-            className="staff-portal-pill-btn"
-            onClick={() => handleNavClick(isStaff ? staffHome : 'staff-login')}
-            title={isStaff ? "Go to your Operations Console" : "Access internal staff and management operations"}
-          >
-            <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
-              <path fillRule="evenodd" d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z" clipRule="evenodd" />
-            </svg>
-            <span>{isStaff ? (isAdmin ? 'Admin Console' : 'Staff Console') : 'Staff Portal'}</span>
-          </button>
-
-          {isAuthenticated ? (
+          {isForcePasswordChange ? (
             <div className="user-profile-menu">
-              <div
-                className="user-info-chip clickable"
-                onClick={() => handleNavClick(authenticatedProfile)}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => e.key === 'Enter' && handleNavClick(authenticatedProfile)}
-                title="View Profile Details"
-              >
-                <span className="user-greeting">Hi, <strong>{user?.username}</strong></span>
-                {primaryRole && <RoleBadge role={primaryRole} />}
-              </div>
+              <span style={{ fontSize: '12px', color: '#B45309', fontWeight: 600, padding: '4px 8px', background: '#FEF3C7', borderRadius: '4px', border: '1px solid #FCD34D' }}>
+                Password Update Required
+              </span>
               <Button variant="outline" size="sm" onClick={logout}>
                 Log Out
               </Button>
             </div>
           ) : (
-            <div className="auth-btn-group">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => handleNavClick('login')}
+            <>
+              <button
+                type="button"
+                className="staff-portal-pill-btn"
+                onClick={() => handleNavClick(isStaff ? staffHome : 'staff-login')}
+                title={isStaff ? "Go to your Operations Console" : "Access internal staff and management operations"}
               >
-                Sign In
-              </Button>
-              <Button
-                variant="primary"
-                size="sm"
-                onClick={() => handleNavClick('register')}
-              >
-                Register
-              </Button>
-            </div>
+                <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
+                  <path fillRule="evenodd" d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z" clipRule="evenodd" />
+                </svg>
+                <span>{isStaff ? (isAdmin ? 'Admin Console' : 'Staff Console') : 'Staff Portal'}</span>
+              </button>
+
+              {isAuthenticated ? (
+                <div className="user-profile-menu">
+                  <div
+                    className="user-info-chip clickable"
+                    onClick={() => handleNavClick(authenticatedProfile)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => e.key === 'Enter' && handleNavClick(authenticatedProfile)}
+                    title="View Profile Details"
+                  >
+                    <span className="user-greeting">Hi, <strong>{user?.username}</strong></span>
+                    {primaryRole && <RoleBadge role={primaryRole} />}
+                  </div>
+                  <Button variant="outline" size="sm" onClick={logout}>
+                    Log Out
+                  </Button>
+                </div>
+              ) : (
+                <div className="auth-btn-group">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleNavClick('login')}
+                  >
+                    Sign In
+                  </Button>
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={() => handleNavClick('register')}
+                  >
+                    Register
+                  </Button>
+                </div>
+              )}
+            </>
           )}
         </div>
 
         {/* Mobile Menu Toggle Button */}
-        <button
-          type="button"
-          className="mobile-menu-toggle"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          aria-expanded={mobileMenuOpen}
-          aria-label="Toggle navigation menu"
-        >
-          {mobileMenuOpen ? (
-            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none">
-              <path d="M18 6L6 18M6 6l12 12" />
-            </svg>
-          ) : (
-            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none">
-              <path d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          )}
-        </button>
+        {!isForcePasswordChange && (
+          <button
+            type="button"
+            className="mobile-menu-toggle"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-expanded={mobileMenuOpen}
+            aria-label="Toggle navigation menu"
+          >
+            {mobileMenuOpen ? (
+              <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none">
+                <path d="M18 6L6 18M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none">
+                <path d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            )}
+          </button>
+        )}
       </div>
 
       {/* Mobile Menu Drawer */}

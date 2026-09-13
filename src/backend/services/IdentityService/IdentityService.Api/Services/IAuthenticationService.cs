@@ -6,4 +6,5 @@ namespace IdentityService.Api.Services;
 public interface IAuthenticationService
 {
     Task<LoginResponse> LoginAsync(LoginRequest request);
+    Task ChangePasswordAsync(Guid userId, ChangePasswordRequest request);
 }

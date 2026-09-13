@@ -58,7 +58,7 @@ const LoginPage = ({ onNavigateToRegister, onNavigateToStaffLogin, onLoginSucces
     if (result.success) {
       login(result.data.token, result.data.user);
       if (onLoginSuccess) {
-        onLoginSuccess(result.data.token);
+        onLoginSuccess(result.data.token, result.data.user);
       }
     } else {
       if (result.status === 403) {

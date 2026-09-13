@@ -96,7 +96,7 @@ const StaffLoginPage = ({ onNavigateToCustomerLogin, onLoginSuccess }) => {
       if (hasStaffPrivilege) {
         login(result.data.token, result.data.user);
         if (onLoginSuccess) {
-          onLoginSuccess(result.data.token);
+          onLoginSuccess(result.data.token, result.data.user);
         }
       } else {
         // Secondary frontend guard (server should have already blocked this)
