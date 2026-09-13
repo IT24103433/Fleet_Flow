@@ -107,5 +107,35 @@ public class AdminUsersController : ControllerBase
             return BadRequest(new { message = ex.Message });
         }
     }
+
+    [HttpPatch("{id:guid}/status")]
+    public async Task<ActionResult<AdminUserResponse>> UpdateUserStatus(Guid id, [FromBody] UpdateUserStatusRequest request)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        try
+        {
+            var userIdClaim = User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            _ = Guid.TryParse(userIdClaim, out var currentUserId);
+
+            var response = await _adminUserService.SetUserStatusAsync(id, request.IsActive, currentUserId);
+            return Ok(response);
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
 }
 

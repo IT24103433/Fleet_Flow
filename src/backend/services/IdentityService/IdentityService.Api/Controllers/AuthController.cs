@@ -51,6 +51,10 @@ public class AuthController : ControllerBase
         {
             return Unauthorized(new { message = ex.Message });
         }
+        catch (AccountDisabledException ex)
+        {
+            return StatusCode(403, new { message = ex.Message });
+        }
         catch (PortalAccessDeniedException ex)
         {
             return StatusCode(403, new { message = ex.Message });
