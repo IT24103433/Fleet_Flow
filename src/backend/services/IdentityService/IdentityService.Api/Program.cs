@@ -16,6 +16,10 @@ builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IAdminUserService, AdminUserService>();
 builder.Services.AddScoped<IProfileImageService, ProfileImageService>();
 
+// Configure Apache Kafka Messaging
+builder.Services.Configure<IdentityService.Api.Messaging.KafkaSettings>(builder.Configuration.GetSection(IdentityService.Api.Messaging.KafkaSettings.SectionName));
+builder.Services.AddSingleton<IdentityService.Api.Messaging.IKafkaProducerService, IdentityService.Api.Messaging.KafkaProducerService>();
+builder.Services.AddHostedService<IdentityService.Api.Messaging.UserEventConsumerService>();
 
 // Configure JWT Authentication
 var jwtSection = builder.Configuration.GetSection("Jwt");

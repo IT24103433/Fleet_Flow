@@ -1,9 +1,12 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using IdentityService.Api.Data;
 using IdentityService.Api.Dtos;
 using IdentityService.Api.Entities;
 using IdentityService.Api.Exceptions;
+using IdentityService.Api.Messaging;
+using IdentityService.Api.Messaging.Events;
 
 namespace IdentityService.Api.Services;
 
@@ -11,6 +14,8 @@ public class AdminUserService : IAdminUserService
 {
     private readonly IdentityDbContext _dbContext;
     private readonly IPasswordHasher<User> _passwordHasher;
+    private readonly IKafkaProducerService? _kafkaProducer;
+    private readonly KafkaSettings _kafkaSettings;
 
     private static readonly HashSet<string> AllowedRoles = new(StringComparer.OrdinalIgnoreCase)
     {
@@ -20,10 +25,16 @@ public class AdminUserService : IAdminUserService
         "ADMIN"
     };
 
-    public AdminUserService(IdentityDbContext dbContext, IPasswordHasher<User> passwordHasher)
+    public AdminUserService(
+        IdentityDbContext dbContext,
+        IPasswordHasher<User> passwordHasher,
+        IKafkaProducerService? kafkaProducer = null,
+        IOptions<KafkaSettings>? kafkaSettings = null)
     {
         _dbContext = dbContext;
         _passwordHasher = passwordHasher;
+        _kafkaProducer = kafkaProducer;
+        _kafkaSettings = kafkaSettings?.Value ?? new KafkaSettings();
     }
 
     public async Task<AdminUserResponse> CreateUserAsync(CreateAdminUserRequest request)
@@ -166,6 +177,22 @@ public class AdminUserService : IAdminUserService
 
         _dbContext.Users.Add(user);
         await _dbContext.SaveChangesAsync();
+
+        if (_kafkaProducer != null)
+        {
+            var createdEvent = new UserCreatedEvent
+            {
+                UserId = user.Id,
+                FullName = user.FullName,
+                Username = user.Username,
+                Email = user.Email,
+                Role = role.Name,
+                Roles = new List<string> { role.Name },
+                IsActive = user.IsActive,
+                CreatedAt = user.CreatedAt
+            };
+            _ = _kafkaProducer.PublishAsync(_kafkaSettings.UserEventsTopic, user.Id.ToString(), createdEvent);
+        }
 
         return new AdminUserResponse
         {
@@ -340,6 +367,22 @@ public class AdminUserService : IAdminUserService
 
         await _dbContext.SaveChangesAsync();
 
+        if (_kafkaProducer != null)
+        {
+            var updatedEvent = new UserUpdatedEvent
+            {
+                UserId = user.Id,
+                FullName = user.FullName,
+                Username = user.Username,
+                Email = user.Email,
+                Role = role.Name,
+                Roles = new List<string> { role.Name },
+                IsActive = user.IsActive,
+                UpdatedAt = DateTime.UtcNow
+            };
+            _ = _kafkaProducer.PublishAsync(_kafkaSettings.UserEventsTopic, user.Id.ToString(), updatedEvent);
+        }
+
         return new AdminUserResponse
         {
             Id = user.Id,
@@ -430,6 +473,20 @@ public class AdminUserService : IAdminUserService
 
         user.IsActive = isActive;
         await _dbContext.SaveChangesAsync();
+
+        if (_kafkaProducer != null)
+        {
+            var statusChangedEvent = new UserStatusChangedEvent
+            {
+                UserId = user.Id,
+                Username = user.Username,
+                Email = user.Email,
+                IsActive = user.IsActive,
+                Status = user.IsActive ? "ACTIVE" : "DISABLED",
+                ChangedByAdminId = currentUserId
+            };
+            _ = _kafkaProducer.PublishAsync(_kafkaSettings.UserEventsTopic, user.Id.ToString(), statusChangedEvent);
+        }
 
         var primaryRole = user.Roles.FirstOrDefault()?.Name ?? "CUSTOMER";
         return new AdminUserResponse
