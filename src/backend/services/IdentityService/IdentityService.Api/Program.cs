@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using IdentityService.Api.Data;
 using Microsoft.AspNetCore.Identity;
 using IdentityService.Api.Entities;
+using IdentityService.Api.Middleware;
 using IdentityService.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -233,6 +234,9 @@ app.UseCors();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Intercept and block access to protected application resources when user is flagged to change password
+app.UseMiddleware<ForcedPasswordChangeMiddleware>();
 
 app.MapControllers();
 

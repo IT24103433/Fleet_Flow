@@ -208,6 +208,7 @@ public class AdminUserService : IAdminUserService
             CreatedAt = user.CreatedAt,
             Status = user.IsActive ? "ACTIVE" : "DISABLED",
             IsActive = user.IsActive,
+            MustChangePassword = user.MustChangePassword,
             ProfileImageUrl = user.ProfileImageUrl
         };
     }
@@ -397,6 +398,7 @@ public class AdminUserService : IAdminUserService
             CreatedAt = user.CreatedAt,
             Status = user.IsActive ? "ACTIVE" : "DISABLED",
             IsActive = user.IsActive,
+            MustChangePassword = user.MustChangePassword,
             ProfileImageUrl = user.ProfileImageUrl
         };
     }
@@ -503,6 +505,7 @@ public class AdminUserService : IAdminUserService
             CreatedAt = user.CreatedAt,
             Status = user.IsActive ? "ACTIVE" : "DISABLED",
             IsActive = user.IsActive,
+            MustChangePassword = user.MustChangePassword,
             ProfileImageUrl = user.ProfileImageUrl
         };
     }
@@ -531,6 +534,7 @@ public class AdminUserService : IAdminUserService
                 CreatedAt = u.CreatedAt,
                 Status = u.IsActive ? "ACTIVE" : "DISABLED",
                 IsActive = u.IsActive,
+                MustChangePassword = u.MustChangePassword,
                 ProfileImageUrl = u.ProfileImageUrl
             };
         }).ToList();
@@ -596,12 +600,62 @@ public class AdminUserService : IAdminUserService
         };
     }
 
+    public async Task<AdminUserResponse> SetForcePasswordChangeAsync(Guid id, bool mustChangePassword, Guid currentUserId = default)
+    {
+        var user = await _dbContext.Users
+            .Include(u => u.Roles)
+            .FirstOrDefaultAsync(u => u.Id == id);
+
+        if (user == null)
+        {
+            throw new NotFoundException($"User with ID '{id}' was not found.");
+        }
+
+        user.MustChangePassword = mustChangePassword;
+        await _dbContext.SaveChangesAsync();
+
+        if (_kafkaSettings.Enabled && _kafkaProducer != null)
+        {
+            var updatedEvent = new UserUpdatedEvent
+            {
+                UserId = user.Id,
+                FullName = user.FullName,
+                Username = user.Username,
+                Email = user.Email,
+                Role = user.Roles.FirstOrDefault()?.Name ?? "CUSTOMER",
+                Roles = user.Roles.Select(r => r.Name).ToList(),
+                IsActive = user.IsActive,
+                UpdatedAt = DateTime.UtcNow
+            };
+            _ = _kafkaProducer.PublishAsync(_kafkaSettings.UserEventsTopic, user.Id.ToString(), updatedEvent);
+        }
+
+        var primaryRole = user.Roles.FirstOrDefault()?.Name ?? "CUSTOMER";
+        return new AdminUserResponse
+        {
+            Id = user.Id,
+            FullName = user.FullName,
+            Username = user.Username,
+            Email = user.Email,
+            PhoneNumber = user.PhoneNumber,
+            Address = user.Address,
+            DrivingLicenseNumber = user.DrivingLicenseNumber,
+            Role = primaryRole,
+            Roles = user.Roles.Select(r => r.Name).ToList(),
+            CreatedAt = user.CreatedAt,
+            Status = user.IsActive ? "ACTIVE" : "DISABLED",
+            IsActive = user.IsActive,
+            MustChangePassword = user.MustChangePassword,
+            ProfileImageUrl = user.ProfileImageUrl
+        };
+    }
+
     private static string GenerateSecureTemporaryPassword()
     {
         const string upper = "ABCDEFGHJKLMNPQRSTUVWXYZ";
         const string lower = "abcdefghjkmnpqrstuvwxyz";
         const string digits = "23456789";
-        const string special = "!@#$%^&*";
+        const string special = "!@$?*_-";
 
         var bytes = new byte[8];
         using (var rng = System.Security.Cryptography.RandomNumberGenerator.Create())
@@ -621,7 +675,7 @@ public class AdminUserService : IAdminUserService
             special[bytes[7] % special.Length]
         };
 
-        return $"Temp#{new string(chars)}";
+        return $"Temp!{new string(chars)}";
     }
 }
 

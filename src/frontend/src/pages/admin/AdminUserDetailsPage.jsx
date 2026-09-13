@@ -4,7 +4,7 @@ import Button from '../../components/common/Button';
 import Modal from '../../components/common/Modal';
 import Alert from '../../components/Alert';
 import { useAuth } from '../../context/AuthContext';
-import { deleteAdminUser, updateUserStatus, resetUserPassword } from '../../services/adminUserService';
+import { deleteAdminUser, updateUserStatus, resetUserPassword, forceUserPasswordChange } from '../../services/adminUserService';
 
 const AdminUserDetailsPage = ({ selectedUser, onNavigate }) => {
   const { token, user: currentAuthUser } = useAuth();
@@ -28,6 +28,11 @@ const AdminUserDetailsPage = ({ selectedUser, onNavigate }) => {
   const [resetSuccessData, setResetSuccessData] = useState(null);
   const [copiedNotice, setCopiedNotice] = useState(false);
   const [notice, setNotice] = useState(null);
+
+  // Force Password Change Modal state
+  const [isForceModalOpen, setIsForceModalOpen] = useState(false);
+  const [isSubmittingForce, setIsSubmittingForce] = useState(false);
+  const [forceError, setForceError] = useState(null);
 
   // Delete User Modal state
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -111,6 +116,40 @@ const AdminUserDetailsPage = ({ selectedUser, onNavigate }) => {
         title: 'Password Reset Failed',
         message: res.message || 'An error occurred while resetting the user password.',
       });
+    }
+  };
+
+  const handleOpenForceModal = () => {
+    setIsForceModalOpen(true);
+    setForceError(null);
+  };
+
+  const handleCloseForceModal = () => {
+    if (isSubmittingForce) return;
+    setIsForceModalOpen(false);
+    setForceError(null);
+  };
+
+  const handleExecuteForceChange = async (targetValue) => {
+    if (!user?.id) return;
+    setIsSubmittingForce(true);
+    setForceError(null);
+
+    const res = await forceUserPasswordChange(user.id, targetValue, token);
+    setIsSubmittingForce(false);
+
+    if (res.success) {
+      setUser((prev) => ({ ...prev, mustChangePassword: targetValue }));
+      setNotice({
+        type: 'success',
+        title: targetValue ? 'Password Change Enforced' : 'Requirement Cleared',
+        message: targetValue
+          ? `User @${user.username} will be required to change their password on next login.`
+          : `Password change requirement cleared for @${user.username}.`,
+      });
+      setIsForceModalOpen(false);
+    } else {
+      setForceError(res.message || 'Failed to update password change requirement.');
     }
   };
 
@@ -282,6 +321,31 @@ const AdminUserDetailsPage = ({ selectedUser, onNavigate }) => {
               <span className="claim-key">Email Address</span>
               <span className="claim-value">{user.email}</span>
             </div>
+            <div className="claim-item">
+              <span className="claim-key">Password Change Status</span>
+              <span className="claim-value">
+                {user.mustChangePassword ? (
+                  <span
+                    style={{
+                      backgroundColor: '#FEF3C7',
+                      color: '#92400E',
+                      border: '1px solid #FCD34D',
+                      padding: '2px 8px',
+                      borderRadius: '4px',
+                      fontSize: '11px',
+                      fontWeight: 700,
+                      textTransform: 'uppercase'
+                    }}
+                  >
+                    Required on Next Login
+                  </span>
+                ) : (
+                  <span style={{ color: 'var(--color-text-secondary)', fontSize: '13px' }}>
+                    Normal (Not Required)
+                  </span>
+                )}
+              </span>
+            </div>
           </div>
 
           <div className="admin-actions-box">
@@ -289,6 +353,13 @@ const AdminUserDetailsPage = ({ selectedUser, onNavigate }) => {
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '8px' }}>
               <Button variant="primary" size="sm" onClick={() => onNavigate('admin-edit-user')}>
                 Edit User Account
+              </Button>
+              <Button
+                variant={user.mustChangePassword ? "outline" : "warning"}
+                size="sm"
+                onClick={handleOpenForceModal}
+              >
+                {user.mustChangePassword ? "Clear Change Req" : "Force Password Change"}
               </Button>
               <Button variant="danger" size="sm" onClick={handleOpenDelete}>
                 Delete User Account
@@ -492,6 +563,54 @@ const AdminUserDetailsPage = ({ selectedUser, onNavigate }) => {
               : isUserActive
               ? 'Confirm Disable'
               : 'Confirm Enable'}
+          </Button>
+        </div>
+      </Modal>
+
+      {/* Force Password Change Modal */}
+      <Modal
+        isOpen={isForceModalOpen}
+        onClose={handleCloseForceModal}
+        title={user.mustChangePassword ? "Clear Password Change Requirement" : "Require Password Change on Next Login"}
+        subtitle={`Administrative credential policy enforcement for @${user.username}`}
+      >
+        {forceError && (
+          <Alert type="error" title="Configuration Error" message={forceError} />
+        )}
+
+        <div style={{ marginBottom: '1.25rem', fontSize: '13px', color: 'var(--color-text-secondary, #64748b)', lineHeight: '1.5' }}>
+          {user.mustChangePassword ? (
+            <div>
+              <p style={{ marginBottom: '0.75rem' }}>
+                User <strong>@{user.username}</strong> ({user.email}) is currently <strong>flagged to change their password</strong> upon authentication.
+              </p>
+              <p>
+                Would you like to <strong>clear this requirement</strong>? The user will be able to log in normally with their current credentials without being redirected to the password change flow.
+              </p>
+            </div>
+          ) : (
+            <div>
+              <p style={{ marginBottom: '0.75rem' }}>
+                Flagging <strong>@{user.username}</strong> ({user.email}) will <strong>force them to configure a new password</strong> immediately upon their next login.
+              </p>
+              <p style={{ marginBottom: '0.75rem' }}>
+                Their current password remains valid for initial sign-in, but access to all protected application features (fleet reservations, workspace consoles, user profiles) will remain strictly blocked until the new password is saved.
+              </p>
+            </div>
+          )}
+        </div>
+
+        <div className="modal-actions-row">
+          <Button variant="outline" onClick={handleCloseForceModal} disabled={isSubmittingForce}>
+            Cancel
+          </Button>
+          <Button
+            variant={user.mustChangePassword ? "outline" : "primary"}
+            onClick={() => handleExecuteForceChange(!user.mustChangePassword)}
+            disabled={isSubmittingForce}
+            isLoading={isSubmittingForce}
+          >
+            {user.mustChangePassword ? "Confirm Clear Requirement" : "Enforce Password Change"}
           </Button>
         </div>
       </Modal>
