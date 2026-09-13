@@ -284,3 +284,65 @@ export const updateUserStatus = async (id, isActive, token) => {
   }
 };
 
+export const resetUserPassword = async (id, payload, token) => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    };
+
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const response = await fetch(`${IDENTITY_API_URL}/api/admin/users/${id}/reset-password`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(payload || {}),
+    });
+
+    const contentType = response.headers.get('content-type');
+    let data = null;
+    if (contentType && contentType.includes('application/json')) {
+      data = await response.json();
+    }
+
+    if (!response.ok) {
+      let message = data?.message || data?.title;
+      if (!message) {
+        if (response.status === 401) {
+          message = 'Authentication required. Please log in as Administrator.';
+        } else if (response.status === 403) {
+          message = 'Access denied. Administrator privileges are required to reset passwords.';
+        } else if (response.status === 404) {
+          message = 'User account was not found.';
+        } else if (response.status === 400) {
+          message = 'Invalid password reset request.';
+        } else {
+          message = 'An unexpected error occurred while resetting the password.';
+        }
+      }
+
+      return {
+        success: false,
+        status: response.status,
+        message,
+        errors: data?.errors || null,
+      };
+    }
+
+    return {
+      success: true,
+      status: response.status,
+      data,
+    };
+  } catch {
+    return {
+      success: false,
+      status: 0,
+      message: 'The identity service is currently unreachable. Please check your network and try again.',
+    };
+  }
+};
+
+

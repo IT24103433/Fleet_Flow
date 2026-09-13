@@ -535,5 +535,93 @@ public class AdminUserService : IAdminUserService
             };
         }).ToList();
     }
+
+    public async Task<AdminResetPasswordResponse> ResetPasswordAsync(Guid id, AdminResetPasswordRequest? request, Guid currentUserId = default)
+    {
+        var user = await _dbContext.Users
+            .Include(u => u.Roles)
+            .FirstOrDefaultAsync(u => u.Id == id);
+
+        if (user == null)
+        {
+            throw new NotFoundException($"User with ID '{id}' was not found.");
+        }
+
+        string tempPassword;
+        if (!string.IsNullOrWhiteSpace(request?.CustomTemporaryPassword))
+        {
+            tempPassword = request.CustomTemporaryPassword.Trim();
+            if (tempPassword.Length < 8)
+            {
+                throw new ArgumentException("Temporary password must be at least 8 characters long.", nameof(request.CustomTemporaryPassword));
+            }
+        }
+        else
+        {
+            tempPassword = GenerateSecureTemporaryPassword();
+        }
+
+        // Securely hash the temporary password - existing password hash is overwritten and never disclosed
+        user.PasswordHash = _passwordHasher.HashPassword(user, tempPassword);
+        user.MustChangePassword = request?.ForcePasswordChange ?? true;
+
+        await _dbContext.SaveChangesAsync();
+
+        // Emit UserUpdatedEvent over Kafka if enabled
+        if (_kafkaSettings.Enabled && _kafkaProducer != null)
+        {
+            var updatedEvent = new UserUpdatedEvent
+            {
+                UserId = user.Id,
+                FullName = user.FullName,
+                Username = user.Username,
+                Email = user.Email,
+                Role = user.Roles.FirstOrDefault()?.Name ?? "CUSTOMER",
+                Roles = user.Roles.Select(r => r.Name).ToList(),
+                IsActive = user.IsActive,
+                UpdatedAt = DateTime.UtcNow
+            };
+            _ = _kafkaProducer.PublishAsync(_kafkaSettings.UserEventsTopic, user.Id.ToString(), updatedEvent);
+        }
+
+        return new AdminResetPasswordResponse
+        {
+            UserId = user.Id,
+            Username = user.Username,
+            Email = user.Email,
+            TemporaryPassword = tempPassword,
+            MustChangePassword = user.MustChangePassword,
+            ResetAt = DateTime.UtcNow,
+            Message = $"Password successfully reset for @{user.Username}. Provide this temporary credential securely to the user."
+        };
+    }
+
+    private static string GenerateSecureTemporaryPassword()
+    {
+        const string upper = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+        const string lower = "abcdefghjkmnpqrstuvwxyz";
+        const string digits = "23456789";
+        const string special = "!@#$%^&*";
+
+        var bytes = new byte[8];
+        using (var rng = System.Security.Cryptography.RandomNumberGenerator.Create())
+        {
+            rng.GetBytes(bytes);
+        }
+
+        var chars = new char[]
+        {
+            upper[bytes[0] % upper.Length],
+            lower[bytes[1] % lower.Length],
+            digits[bytes[2] % digits.Length],
+            special[bytes[3] % special.Length],
+            upper[bytes[4] % upper.Length],
+            lower[bytes[5] % lower.Length],
+            digits[bytes[6] % digits.Length],
+            special[bytes[7] % special.Length]
+        };
+
+        return $"Temp#{new string(chars)}";
+    }
 }
 

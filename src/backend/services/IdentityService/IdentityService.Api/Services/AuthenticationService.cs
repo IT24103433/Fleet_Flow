@@ -156,9 +156,40 @@ public class AuthenticationService : IAuthenticationService
                 Address = user.Address,
                 DrivingLicenseNumber = user.DrivingLicenseNumber,
                 ProfileImageUrl = user.ProfileImageUrl,
-                CreatedAt = user.CreatedAt
-            }
+                CreatedAt = user.CreatedAt,
+                MustChangePassword = user.MustChangePassword
+            },
+            MustChangePassword = user.MustChangePassword
         };
     }
 
+    public async Task ChangePasswordAsync(Guid userId, ChangePasswordRequest request)
+    {
+        if (request == null)
+        {
+            throw new ArgumentNullException(nameof(request));
+        }
+
+        if (string.IsNullOrWhiteSpace(request.NewPassword) || request.NewPassword.Length < 8)
+        {
+            throw new ArgumentException("Password must be at least 8 characters long.", nameof(request.NewPassword));
+        }
+
+        var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        if (user == null)
+        {
+            throw new NotFoundException($"User with ID '{userId}' was not found.");
+        }
+
+        if (!user.IsActive)
+        {
+            throw new AccountDisabledException("This account has been disabled by an administrator. Please contact support.");
+        }
+
+        // Hash new password securely
+        user.PasswordHash = _passwordHasher.HashPassword(user, request.NewPassword);
+        user.MustChangePassword = false;
+
+        await _dbContext.SaveChangesAsync();
+    }
 }

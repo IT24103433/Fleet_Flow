@@ -2,8 +2,13 @@ import React, { useState } from 'react';
 import InputField from '../../components/InputField';
 import Alert from '../../components/Alert';
 import Button from '../../components/common/Button';
+import { useAuth } from '../../context/AuthContext';
+import { changePassword } from '../../services/authService';
 
-const ForcePasswordChangePage = ({ username = 'User', onComplete }) => {
+const ForcePasswordChangePage = ({ onComplete }) => {
+  const { token, user, updateUser } = useAuth();
+  const username = user?.fullName || user?.username || 'User';
+
   const [formData, setFormData] = useState({
     newPassword: '',
     confirmPassword: '',
@@ -21,7 +26,7 @@ const ForcePasswordChangePage = ({ username = 'User', onComplete }) => {
     }
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
 
@@ -40,18 +45,31 @@ const ForcePasswordChangePage = ({ username = 'User', onComplete }) => {
     }
 
     setIsLoading(true);
+    setNotice(null);
 
-    setTimeout(() => {
-      setIsLoading(false);
+    const result = await changePassword(token, formData.newPassword);
+
+    setIsLoading(false);
+
+    if (result.success) {
+      updateUser({ mustChangePassword: false });
       setNotice({
         type: 'success',
         title: 'Permanent Password Configured',
-        message: 'Security credentials updated. Redirecting to your workspace...',
+        message: 'Security credentials updated successfully. Redirecting to your workspace...',
       });
       setTimeout(() => {
-        if (onComplete) onComplete();
-      }, 1000);
-    }, 600);
+        if (onComplete) {
+          onComplete();
+        }
+      }, 1200);
+    } else {
+      setNotice({
+        type: 'error',
+        title: 'Password Update Failed',
+        message: result.message || 'Failed to update password. Please try again.',
+      });
+    }
   };
 
   return (

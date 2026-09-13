@@ -11,4 +11,5 @@ public class UserResponse
     public string DrivingLicenseNumber { get; set; } = string.Empty;
     public string? ProfileImageUrl { get; set; }
     public DateTime CreatedAt { get; set; }
+    public bool MustChangePassword { get; set; }
 }
