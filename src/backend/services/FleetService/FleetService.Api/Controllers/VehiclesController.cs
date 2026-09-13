@@ -24,16 +24,84 @@ public class VehiclesController : ControllerBase
     [HttpGet]
     [AllowAnonymous]
     [ProducesResponseType(typeof(IEnumerable<VehicleResponse>), 200)]
-    public async Task<ActionResult<IEnumerable<VehicleResponse>>> GetVehicles(
+    [ProducesResponseType(typeof(PagedVehicleResult), 200)]
+    public async Task<IActionResult> GetVehicles(
         [FromQuery] string? category = null,
         [FromQuery] VehicleStatus? status = null,
         [FromQuery] string? fuel = null,
+        [FromQuery] string? transmission = null,
+        [FromQuery] string? hub = null,
         [FromQuery] string? searchTerm = null,
+        [FromQuery] string? sortBy = null,
+        [FromQuery] string? sortOrder = null,
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 20,
+        [FromQuery] bool paged = false)
+    {
+        var pagedResult = await _vehicleService.GetPagedVehiclesAsync(new VehicleQueryParameters
+        {
+            Category = category,
+            Status = status,
+            Fuel = fuel,
+            Transmission = transmission,
+            Hub = hub,
+            SearchTerm = searchTerm,
+            SortBy = sortBy,
+            SortOrder = sortOrder,
+            Page = page,
+            PageSize = pageSize,
+            Paged = paged
+        });
+
+        Response.Headers["X-Total-Count"] = pagedResult.TotalCount.ToString();
+        Response.Headers["X-Page"] = pagedResult.Page.ToString();
+        Response.Headers["X-Page-Size"] = pagedResult.PageSize.ToString();
+        Response.Headers["X-Total-Pages"] = pagedResult.TotalPages.ToString();
+
+        if (paged)
+        {
+            return Ok(pagedResult);
+        }
+
+        return Ok(pagedResult.Items);
+    }
+
+    [HttpGet("paged")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(PagedVehicleResult), 200)]
+    public async Task<ActionResult<PagedVehicleResult>> GetPagedVehicles(
+        [FromQuery] string? category = null,
+        [FromQuery] VehicleStatus? status = null,
+        [FromQuery] string? fuel = null,
+        [FromQuery] string? transmission = null,
+        [FromQuery] string? hub = null,
+        [FromQuery] string? searchTerm = null,
+        [FromQuery] string? sortBy = null,
+        [FromQuery] string? sortOrder = null,
         [FromQuery] int page = 1,
         [FromQuery] int pageSize = 20)
     {
-        var vehicles = await _vehicleService.GetVehiclesAsync(category, status, fuel, searchTerm, page, pageSize);
-        return Ok(vehicles);
+        var result = await _vehicleService.GetPagedVehiclesAsync(new VehicleQueryParameters
+        {
+            Category = category,
+            Status = status,
+            Fuel = fuel,
+            Transmission = transmission,
+            Hub = hub,
+            SearchTerm = searchTerm,
+            SortBy = sortBy,
+            SortOrder = sortOrder,
+            Page = page,
+            PageSize = pageSize,
+            Paged = true
+        });
+
+        Response.Headers["X-Total-Count"] = result.TotalCount.ToString();
+        Response.Headers["X-Page"] = result.Page.ToString();
+        Response.Headers["X-Page-Size"] = result.PageSize.ToString();
+        Response.Headers["X-Total-Pages"] = result.TotalPages.ToString();
+
+        return Ok(result);
     }
 
     [HttpGet("{id:guid}", Name = "GetVehicleById")]
