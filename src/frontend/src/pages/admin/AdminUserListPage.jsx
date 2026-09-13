@@ -4,10 +4,10 @@ import Button from '../../components/common/Button';
 import Modal from '../../components/common/Modal';
 import Alert from '../../components/Alert';
 import { useAuth } from '../../context/AuthContext';
-import { getAdminUsers, deleteAdminUser } from '../../services/adminUserService';
+import { getAdminUsers, deleteAdminUser, updateUserStatus } from '../../services/adminUserService';
 
 const AdminUserListPage = ({ onNavigate, onSelectUser }) => {
-  const { token } = useAuth();
+  const { token, user: currentAuthUser } = useAuth();
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [fetchError, setFetchError] = useState(null);
@@ -27,6 +27,12 @@ const AdminUserListPage = ({ onNavigate, onSelectUser }) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState(null);
   const [actionSuccessNotice, setActionSuccessNotice] = useState(null);
+
+  // Account Status (Enable/Disable) Modal state
+  const [statusModalUser, setStatusModalUser] = useState(null);
+  const [statusModalTargetActive, setStatusModalTargetActive] = useState(false);
+  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
+  const [statusError, setStatusError] = useState(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -107,6 +113,48 @@ const AdminUserListPage = ({ onNavigate, onSelectUser }) => {
       setDeleteConfirmText('');
     } else {
       setDeleteError(res.message || 'Failed to delete user account.');
+    }
+  };
+
+  const handleOpenStatusModal = (user, targetActive, e) => {
+    if (e) e.stopPropagation();
+    setStatusModalUser(user);
+    setStatusModalTargetActive(targetActive);
+    setStatusError(null);
+  };
+
+  const handleCloseStatusModal = () => {
+    if (isUpdatingStatus) return;
+    setStatusModalUser(null);
+    setStatusError(null);
+  };
+
+  const handleExecuteStatusToggle = async (e) => {
+    e.preventDefault();
+    if (!statusModalUser) return;
+
+    setIsUpdatingStatus(true);
+    setStatusError(null);
+
+    const res = await updateUserStatus(statusModalUser.id, statusModalTargetActive, token);
+    setIsUpdatingStatus(false);
+
+    if (res.success) {
+      setUsers((prev) =>
+        prev.map((u) =>
+          u.id === statusModalUser.id
+            ? { ...u, isActive: statusModalTargetActive, status: statusModalTargetActive ? 'ACTIVE' : 'DISABLED' }
+            : u
+        )
+      );
+      setActionSuccessNotice(
+        `User account "${statusModalUser.username}" was successfully ${
+          statusModalTargetActive ? 're-enabled' : 'disabled'
+        }.`
+      );
+      setStatusModalUser(null);
+    } else {
+      setStatusError(res.message || `Failed to ${statusModalTargetActive ? 'enable' : 'disable'} user account.`);
     }
   };
 
@@ -229,7 +277,9 @@ const AdminUserListPage = ({ onNavigate, onSelectUser }) => {
                         <RoleBadge role={role} />
                       </td>
                       <td>
-                        <span className="status-pill-active">{u.status || 'ACTIVE'}</span>
+                        <span className={(u.isActive ?? (u.status === 'ACTIVE')) ? 'status-pill-active' : 'status-pill-disabled'}>
+                          {(u.isActive ?? (u.status === 'ACTIVE')) ? 'ACTIVE' : 'DISABLED'}
+                        </span>
                       </td>
                       <td>
                         <span className="table-date">{createdStr}</span>
@@ -261,6 +311,26 @@ const AdminUserListPage = ({ onNavigate, onSelectUser }) => {
                             >
                               Edit
                             </button>
+                            {(u.isActive ?? (u.status === 'ACTIVE')) ? (
+                              <button
+                                type="button"
+                                className="btn-table-action warning"
+                                onClick={(e) => handleOpenStatusModal(u, false, e)}
+                                disabled={currentAuthUser && (currentAuthUser.id === u.id || currentAuthUser.userId === u.id || currentAuthUser.username === u.username)}
+                                title={currentAuthUser && (currentAuthUser.id === u.id || currentAuthUser.userId === u.id || currentAuthUser.username === u.username) ? "You cannot disable your own account" : "Disable User Account"}
+                              >
+                                Disable
+                              </button>
+                            ) : (
+                              <button
+                                type="button"
+                                className="btn-table-action success"
+                                onClick={(e) => handleOpenStatusModal(u, true, e)}
+                                title="Re-enable User Account"
+                              >
+                                Enable
+                              </button>
+                            )}
                             <button
                               type="button"
                               className="btn-table-action warning"
@@ -391,6 +461,46 @@ const AdminUserListPage = ({ onNavigate, onSelectUser }) => {
             </Button>
           </div>
         </form>
+      </Modal>
+
+      {/* Account Status (Enable/Disable) Confirmation Modal */}
+      <Modal
+        isOpen={!!statusModalUser}
+        onClose={handleCloseStatusModal}
+        title={statusModalTargetActive ? "Re-enable User Account" : "Disable User Account"}
+        subtitle={`Control system access for ${statusModalUser?.username} without deleting history.`}
+      >
+        {statusError && (
+          <Alert type="error" title="Status Change Error" message={statusError} />
+        )}
+
+        <div style={{ marginBottom: '1.25rem', fontSize: '13px', color: 'var(--color-text-secondary, #64748b)', lineHeight: '1.5' }}>
+          {statusModalTargetActive ? (
+            <p>
+              Are you sure you want to <strong>re-enable</strong> the account for <strong>{statusModalUser?.username}</strong>?
+              They will regain the ability to log in and access protected FleetFlow services.
+            </p>
+          ) : (
+            <p>
+              Are you sure you want to <strong>disable</strong> the account for <strong>{statusModalUser?.username}</strong>?
+              They will be <strong>blocked from authenticating</strong> or accessing protected services. All records, roles, and historical data remain preserved.
+            </p>
+          )}
+        </div>
+
+        <div className="modal-actions-row">
+          <Button variant="outline" onClick={handleCloseStatusModal} disabled={isUpdatingStatus}>
+            Cancel
+          </Button>
+          <Button
+            variant={statusModalTargetActive ? "primary" : "danger"}
+            onClick={handleExecuteStatusToggle}
+            disabled={isUpdatingStatus}
+            isLoading={isUpdatingStatus}
+          >
+            {statusModalTargetActive ? 'Confirm Enable' : 'Confirm Disable'}
+          </Button>
+        </div>
       </Modal>
     </div>
   );

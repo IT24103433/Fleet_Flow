@@ -55,6 +55,11 @@ public class AuthenticationService : IAuthenticationService
             throw new InvalidCredentialsException();
         }
 
+        if (!user.IsActive)
+        {
+            throw new AccountDisabledException("This account has been disabled by an administrator. Please contact support.");
+        }
+
         // Verify password
         var verificationResult = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
         if (verificationResult == PasswordVerificationResult.Failed)

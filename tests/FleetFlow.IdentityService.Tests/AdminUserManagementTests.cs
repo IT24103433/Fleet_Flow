@@ -1269,6 +1269,435 @@ public class AdminUserManagementTests
         userBInDb.FullName.Should().Be("User Beta");
         userBInDb.Roles.Should().ContainSingle(r => r.Name == "CUSTOMER");
     }
+
+    // ==========================================
+    // 13. ADMIN USER STATUS CONTROLS (ENABLE / DISABLE)
+    // ==========================================
+
+    [Fact]
+    public async Task AdminCanDisableActiveUserAccount_Returns200WithDisabledStatus()
+    {
+        var (dbContext, _, controller, _) = await CreateFixtureAsync();
+
+        var adminId = Guid.NewGuid();
+        controller.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext
+            {
+                User = new ClaimsPrincipal(new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, adminId.ToString()),
+                    new Claim(ClaimTypes.Role, "ADMIN")
+                }, "TestAuth"))
+            }
+        };
+
+        var role = await dbContext.Roles.FirstAsync(r => r.Name == "CUSTOMER");
+        var user = new User
+        {
+            Id = Guid.NewGuid(),
+            Username = "active_cust",
+            Email = "active_cust@example.com",
+            FullName = "Active Customer",
+            IsActive = true
+        };
+        user.Roles.Add(role);
+        dbContext.Users.Add(user);
+        await dbContext.SaveChangesAsync();
+
+        var result = await controller.UpdateUserStatus(user.Id, new UpdateUserStatusRequest { IsActive = false });
+
+        var okResult = result.Result as OkObjectResult;
+        okResult.Should().NotBeNull();
+        okResult!.StatusCode.Should().Be(StatusCodes.Status200OK);
+
+        var response = okResult.Value as AdminUserResponse;
+        response.Should().NotBeNull();
+        response!.IsActive.Should().BeFalse();
+        response.Status.Should().Be("DISABLED");
+
+        var userInDb = await dbContext.Users.FindAsync(user.Id);
+        userInDb!.IsActive.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task DisabledUserCannotAuthenticate_ThrowsAccountDisabledException_AndAuthControllerReturns403()
+    {
+        var (dbContext, _, controller, authService) = await CreateFixtureAsync();
+
+        var customerRole = await dbContext.Roles.FirstAsync(r => r.Name == "CUSTOMER");
+        var user = new User
+        {
+            Id = Guid.NewGuid(),
+            Username = "blocked_user",
+            Email = "blocked@example.com",
+            FullName = "Blocked Customer",
+            IsActive = true
+        };
+        user.PasswordHash = _passwordHasher.HashPassword(user, "ValidPass123!");
+        user.Roles.Add(customerRole);
+        dbContext.Users.Add(user);
+        await dbContext.SaveChangesAsync();
+
+        // 1. First verify login succeeds when active
+        var activeLogin = await authService.LoginAsync(new LoginRequest
+        {
+            UsernameOrEmail = "blocked_user",
+            Password = "ValidPass123!",
+            LoginChannel = "customer"
+        });
+        activeLogin.Should().NotBeNull();
+        activeLogin.Token.Should().NotBeNullOrEmpty();
+
+        // 2. Admin disables the account
+        var adminId = Guid.NewGuid();
+        controller.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext
+            {
+                User = new ClaimsPrincipal(new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, adminId.ToString()),
+                    new Claim(ClaimTypes.Role, "ADMIN")
+                }, "TestAuth"))
+            }
+        };
+        await controller.UpdateUserStatus(user.Id, new UpdateUserStatusRequest { IsActive = false });
+
+        // 3. Directly authenticate via AuthenticationService -> AccountDisabledException
+        Func<Task> act = async () => await authService.LoginAsync(new LoginRequest
+        {
+            UsernameOrEmail = "blocked_user",
+            Password = "ValidPass123!",
+            LoginChannel = "customer"
+        });
+        await act.Should().ThrowAsync<AccountDisabledException>()
+            .WithMessage("*disabled by an administrator*");
+
+        // 4. Authenticate via AuthController -> 403 Forbidden
+        var authController = new AuthController(null!, authService);
+        var authResult = await authController.Login(new LoginRequest
+        {
+            UsernameOrEmail = "blocked_user",
+            Password = "ValidPass123!",
+            LoginChannel = "customer"
+        });
+
+        var statusResult = authResult.Result as ObjectResult;
+        statusResult.Should().NotBeNull();
+        statusResult!.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
+    }
+
+    [Fact]
+    public async Task AdminCanReEnableDisabledUserAccount_LoginSucceedsAfterReEnablement()
+    {
+        var (dbContext, _, controller, authService) = await CreateFixtureAsync();
+
+        var adminId = Guid.NewGuid();
+        controller.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext
+            {
+                User = new ClaimsPrincipal(new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, adminId.ToString()),
+                    new Claim(ClaimTypes.Role, "ADMIN")
+                }, "TestAuth"))
+            }
+        };
+
+        var customerRole = await dbContext.Roles.FirstAsync(r => r.Name == "CUSTOMER");
+        var user = new User
+        {
+            Id = Guid.NewGuid(),
+            Username = "re_enabled_user",
+            Email = "re_enable@example.com",
+            FullName = "ReEnabled Customer",
+            IsActive = false // initially disabled
+        };
+        user.PasswordHash = _passwordHasher.HashPassword(user, "ValidPass123!");
+        user.Roles.Add(customerRole);
+        dbContext.Users.Add(user);
+        await dbContext.SaveChangesAsync();
+
+        // Re-enable
+        var result = await controller.UpdateUserStatus(user.Id, new UpdateUserStatusRequest { IsActive = true });
+        var okResult = result.Result as OkObjectResult;
+        okResult.Should().NotBeNull();
+        okResult!.StatusCode.Should().Be(StatusCodes.Status200OK);
+
+        var response = okResult.Value as AdminUserResponse;
+        response!.IsActive.Should().BeTrue();
+        response.Status.Should().Be("ACTIVE");
+
+        // Now login should succeed
+        var loginResponse = await authService.LoginAsync(new LoginRequest
+        {
+            UsernameOrEmail = "re_enabled_user",
+            Password = "ValidPass123!",
+            LoginChannel = "customer"
+        });
+        loginResponse.Should().NotBeNull();
+        loginResponse.Token.Should().NotBeNullOrEmpty();
+    }
+
+    [Fact]
+    public async Task UserRecordsAndHistoricalDataStrictlyPreserved_WhenDisabledAndReEnabled()
+    {
+        var (dbContext, _, controller, _) = await CreateFixtureAsync();
+
+        var adminId = Guid.NewGuid();
+        controller.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext
+            {
+                User = new ClaimsPrincipal(new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, adminId.ToString()),
+                    new Claim(ClaimTypes.Role, "ADMIN")
+                }, "TestAuth"))
+            }
+        };
+
+        var role = await dbContext.Roles.FirstAsync(r => r.Name == "FLEET_MANAGER");
+        var originalCreatedAt = new DateTime(2025, 1, 15, 10, 30, 0, DateTimeKind.Utc);
+        var user = new User
+        {
+            Id = Guid.NewGuid(),
+            Username = "history_user",
+            Email = "history@fleetflow.io",
+            FullName = "Historical Preservation",
+            PhoneNumber = "+1-555-9999",
+            Address = "777 Archive Way",
+            DrivingLicenseNumber = "DL-HIST-777",
+            ProfileImageUrl = "https://example.com/images/history.jpg",
+            CreatedAt = originalCreatedAt,
+            IsActive = true
+        };
+        user.PasswordHash = _passwordHasher.HashPassword(user, "Historical123!");
+        user.Roles.Add(role);
+        dbContext.Users.Add(user);
+        await dbContext.SaveChangesAsync();
+
+        // 1. Disable user
+        await controller.UpdateUserStatus(user.Id, new UpdateUserStatusRequest { IsActive = false });
+
+        var disabledUser = await dbContext.Users.Include(u => u.Roles).FirstAsync(u => u.Id == user.Id);
+        disabledUser.FullName.Should().Be("Historical Preservation");
+        disabledUser.Email.Should().Be("history@fleetflow.io");
+        disabledUser.PhoneNumber.Should().Be("+1-555-9999");
+        disabledUser.Address.Should().Be("777 Archive Way");
+        disabledUser.DrivingLicenseNumber.Should().Be("DL-HIST-777");
+        disabledUser.ProfileImageUrl.Should().Be("https://example.com/images/history.jpg");
+        disabledUser.CreatedAt.Should().Be(originalCreatedAt);
+        disabledUser.Roles.Should().ContainSingle(r => r.Name == "FLEET_MANAGER");
+        _passwordHasher.VerifyHashedPassword(disabledUser, disabledUser.PasswordHash, "Historical123!")
+            .Should().Be(PasswordVerificationResult.Success);
+
+        // 2. Re-enable user
+        await controller.UpdateUserStatus(user.Id, new UpdateUserStatusRequest { IsActive = true });
+
+        var reEnabledUser = await dbContext.Users.Include(u => u.Roles).FirstAsync(u => u.Id == user.Id);
+        reEnabledUser.FullName.Should().Be("Historical Preservation");
+        reEnabledUser.Email.Should().Be("history@fleetflow.io");
+        reEnabledUser.PhoneNumber.Should().Be("+1-555-9999");
+        reEnabledUser.Address.Should().Be("777 Archive Way");
+        reEnabledUser.DrivingLicenseNumber.Should().Be("DL-HIST-777");
+        reEnabledUser.ProfileImageUrl.Should().Be("https://example.com/images/history.jpg");
+        reEnabledUser.CreatedAt.Should().Be(originalCreatedAt);
+        reEnabledUser.Roles.Should().ContainSingle(r => r.Name == "FLEET_MANAGER");
+    }
+
+    [Fact]
+    public async Task SelfDisableProtection_AdminCannotDisableTheirOwnAccount_Returns400BadRequest()
+    {
+        var (dbContext, _, controller, _) = await CreateFixtureAsync();
+
+        var adminId = Guid.NewGuid();
+        controller.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext
+            {
+                User = new ClaimsPrincipal(new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, adminId.ToString()),
+                    new Claim(ClaimTypes.Role, "ADMIN")
+                }, "TestAuth"))
+            }
+        };
+
+        var adminRole = await dbContext.Roles.FirstAsync(r => r.Name == "ADMIN");
+        var adminUser = new User
+        {
+            Id = adminId,
+            Username = "current_admin",
+            Email = "current_admin@fleetflow.io",
+            FullName = "Current Admin",
+            IsActive = true
+        };
+        adminUser.Roles.Add(adminRole);
+        dbContext.Users.Add(adminUser);
+        await dbContext.SaveChangesAsync();
+
+        var result = await controller.UpdateUserStatus(adminId, new UpdateUserStatusRequest { IsActive = false });
+
+        var badRequestResult = result.Result as BadRequestObjectResult;
+        badRequestResult.Should().NotBeNull();
+        badRequestResult!.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+        badRequestResult.Value.ToString().Should().Contain("cannot disable their own account");
+
+        var userInDb = await dbContext.Users.FindAsync(adminId);
+        userInDb!.IsActive.Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task LastAdminProtection_CannotDisableLastRemainingActiveAdmin_Returns400BadRequest()
+    {
+        var (dbContext, _, controller, _) = await CreateFixtureAsync();
+
+        var callingAdminId = Guid.NewGuid();
+        controller.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext
+            {
+                User = new ClaimsPrincipal(new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, callingAdminId.ToString()),
+                    new Claim(ClaimTypes.Role, "ADMIN")
+                }, "TestAuth"))
+            }
+        };
+
+        var adminRole = await dbContext.Roles.FirstAsync(r => r.Name == "ADMIN");
+        // Target admin is the ONLY admin in the system
+        var loneAdmin = new User
+        {
+            Id = Guid.NewGuid(),
+            Username = "lone_admin",
+            Email = "lone_admin@fleetflow.io",
+            FullName = "Lone Administrator",
+            IsActive = true
+        };
+        loneAdmin.Roles.Add(adminRole);
+        dbContext.Users.Add(loneAdmin);
+        await dbContext.SaveChangesAsync();
+
+        var result = await controller.UpdateUserStatus(loneAdmin.Id, new UpdateUserStatusRequest { IsActive = false });
+
+        var badRequestResult = result.Result as BadRequestObjectResult;
+        badRequestResult.Should().NotBeNull();
+        badRequestResult!.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+        badRequestResult.Value.ToString().Should().Contain("last remaining active ADMIN");
+
+        var adminInDb = await dbContext.Users.FindAsync(loneAdmin.Id);
+        adminInDb!.IsActive.Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task LastAdminProtection_CanDisableAdminWhenAnotherActiveAdminExists()
+    {
+        var (dbContext, _, controller, _) = await CreateFixtureAsync();
+
+        var callingAdminId = Guid.NewGuid();
+        controller.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext
+            {
+                User = new ClaimsPrincipal(new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, callingAdminId.ToString()),
+                    new Claim(ClaimTypes.Role, "ADMIN")
+                }, "TestAuth"))
+            }
+        };
+
+        var adminRole = await dbContext.Roles.FirstAsync(r => r.Name == "ADMIN");
+        var admin1 = new User
+        {
+            Id = callingAdminId,
+            Username = "admin_one",
+            Email = "admin1@fleetflow.io",
+            FullName = "Admin One",
+            IsActive = true
+        };
+        admin1.Roles.Add(adminRole);
+
+        var admin2 = new User
+        {
+            Id = Guid.NewGuid(),
+            Username = "admin_two",
+            Email = "admin2@fleetflow.io",
+            FullName = "Admin Two",
+            IsActive = true
+        };
+        admin2.Roles.Add(adminRole);
+
+        dbContext.Users.AddRange(admin1, admin2);
+        await dbContext.SaveChangesAsync();
+
+        // Disabling admin2 should succeed because admin1 is still active
+        var result = await controller.UpdateUserStatus(admin2.Id, new UpdateUserStatusRequest { IsActive = false });
+
+        var okResult = result.Result as OkObjectResult;
+        okResult.Should().NotBeNull();
+        okResult!.StatusCode.Should().Be(StatusCodes.Status200OK);
+
+        var admin2InDb = await dbContext.Users.FindAsync(admin2.Id);
+        admin2InDb!.IsActive.Should().BeFalse();
+    }
+
+    [Fact]
+    public void AdminUsersController_ClassHasAuthorizeAdminAttribute()
+    {
+        var authorizeAttribute = typeof(AdminUsersController).GetCustomAttribute<AuthorizeAttribute>();
+        authorizeAttribute.Should().NotBeNull();
+        authorizeAttribute!.Roles.Should().Be("ADMIN");
+    }
+
+    [Fact]
+    public async Task GetUsers_ReflectsActiveAndDisabledStatusCorrectly()
+    {
+        var (dbContext, _, controller, _) = await CreateFixtureAsync();
+
+        var customerRole = await dbContext.Roles.FirstAsync(r => r.Name == "CUSTOMER");
+        var activeUser = new User
+        {
+            Id = Guid.NewGuid(),
+            Username = "user_act",
+            Email = "act@example.com",
+            FullName = "Active User",
+            IsActive = true
+        };
+        activeUser.Roles.Add(customerRole);
+
+        var disabledUser = new User
+        {
+            Id = Guid.NewGuid(),
+            Username = "user_dis",
+            Email = "dis@example.com",
+            FullName = "Disabled User",
+            IsActive = false
+        };
+        disabledUser.Roles.Add(customerRole);
+
+        dbContext.Users.AddRange(activeUser, disabledUser);
+        await dbContext.SaveChangesAsync();
+
+        var result = await controller.GetUsers();
+        var okResult = result.Result as OkObjectResult;
+        okResult.Should().NotBeNull();
+
+        var list = okResult!.Value as List<AdminUserResponse>;
+        list.Should().NotBeNull();
+
+        var actResp = list!.First(u => u.Id == activeUser.Id);
+        actResp.IsActive.Should().BeTrue();
+        actResp.Status.Should().Be("ACTIVE");
+
+        var disResp = list.First(u => u.Id == disabledUser.Id);
+        disResp.IsActive.Should().BeFalse();
+        disResp.Status.Should().Be("DISABLED");
+    }
 }
 
 

@@ -179,7 +179,8 @@ public class AdminUserService : IAdminUserService
             Role = role.Name,
             Roles = new List<string> { role.Name },
             CreatedAt = user.CreatedAt,
-            Status = "ACTIVE",
+            Status = user.IsActive ? "ACTIVE" : "DISABLED",
+            IsActive = user.IsActive,
             ProfileImageUrl = user.ProfileImageUrl
         };
     }
@@ -351,7 +352,8 @@ public class AdminUserService : IAdminUserService
             Role = role.Name,
             Roles = new List<string> { role.Name },
             CreatedAt = user.CreatedAt,
-            Status = "ACTIVE",
+            Status = user.IsActive ? "ACTIVE" : "DISABLED",
+            IsActive = user.IsActive,
             ProfileImageUrl = user.ProfileImageUrl
         };
     }
@@ -393,6 +395,61 @@ public class AdminUserService : IAdminUserService
         await _dbContext.SaveChangesAsync();
     }
 
+    public async Task<AdminUserResponse> SetUserStatusAsync(Guid id, bool isActive, Guid currentUserId)
+    {
+        var user = await _dbContext.Users
+            .Include(u => u.Roles)
+            .FirstOrDefaultAsync(u => u.Id == id);
+
+        if (user == null)
+        {
+            throw new NotFoundException($"User with ID '{id}' was not found.");
+        }
+
+        // Self-disable protection: Admin cannot disable their own account
+        if (!isActive && currentUserId != Guid.Empty && currentUserId == id)
+        {
+            throw new InvalidOperationException("An admin cannot disable their own account.");
+        }
+
+        // Last-admin protection: Cannot disable the last remaining active ADMIN account
+        if (!isActive)
+        {
+            var isCurrentlyAdmin = user.Roles.Any(r => r.Name.Equals("ADMIN", StringComparison.OrdinalIgnoreCase));
+            if (isCurrentlyAdmin)
+            {
+                var totalActiveAdminCount = await _dbContext.Users
+                    .CountAsync(u => u.IsActive && u.Roles.Any(r => r.Name.ToUpper() == "ADMIN"));
+
+                if (totalActiveAdminCount <= 1)
+                {
+                    throw new InvalidOperationException("Cannot disable the last remaining active ADMIN account.");
+                }
+            }
+        }
+
+        user.IsActive = isActive;
+        await _dbContext.SaveChangesAsync();
+
+        var primaryRole = user.Roles.FirstOrDefault()?.Name ?? "CUSTOMER";
+        return new AdminUserResponse
+        {
+            Id = user.Id,
+            FullName = user.FullName,
+            Username = user.Username,
+            Email = user.Email,
+            PhoneNumber = user.PhoneNumber,
+            Address = user.Address,
+            DrivingLicenseNumber = user.DrivingLicenseNumber,
+            Role = primaryRole,
+            Roles = user.Roles.Select(r => r.Name).ToList(),
+            CreatedAt = user.CreatedAt,
+            Status = user.IsActive ? "ACTIVE" : "DISABLED",
+            IsActive = user.IsActive,
+            ProfileImageUrl = user.ProfileImageUrl
+        };
+    }
+
     public async Task<List<AdminUserResponse>> GetUsersAsync()
     {
         var users = await _dbContext.Users
@@ -415,7 +472,8 @@ public class AdminUserService : IAdminUserService
                 Role = primaryRole,
                 Roles = u.Roles.Select(r => r.Name).ToList(),
                 CreatedAt = u.CreatedAt,
-                Status = "ACTIVE",
+                Status = u.IsActive ? "ACTIVE" : "DISABLED",
+                IsActive = u.IsActive,
                 ProfileImageUrl = u.ProfileImageUrl
             };
         }).ToList();
