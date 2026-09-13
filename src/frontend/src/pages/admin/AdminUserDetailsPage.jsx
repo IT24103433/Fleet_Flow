@@ -4,19 +4,22 @@ import Button from '../../components/common/Button';
 import Modal from '../../components/common/Modal';
 import Alert from '../../components/Alert';
 import { useAuth } from '../../context/AuthContext';
-import { deleteAdminUser } from '../../services/adminUserService';
+import { deleteAdminUser, updateUserStatus } from '../../services/adminUserService';
 
 const AdminUserDetailsPage = ({ selectedUser, onNavigate }) => {
-  const { token } = useAuth();
-  const user = selectedUser || {
-    id: 'u-1',
-    username: 'admin_sarah',
-    email: 'sarah.admin@fleetflow.io',
-    role: 'ADMIN',
-    status: 'ACTIVE',
-    createdAt: '2026-08-15',
-    lastLogin: '2026-09-01',
-  };
+  const { token, user: currentAuthUser } = useAuth();
+  const [user, setUser] = useState(
+    selectedUser || {
+      id: 'u-1',
+      username: 'admin_sarah',
+      email: 'sarah.admin@fleetflow.io',
+      role: 'ADMIN',
+      status: 'ACTIVE',
+      isActive: true,
+      createdAt: '2026-08-15',
+      lastLogin: '2026-09-01',
+    }
+  );
 
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
   const [tempPassword, setTempPassword] = useState('');
@@ -28,6 +31,40 @@ const AdminUserDetailsPage = ({ selectedUser, onNavigate }) => {
   const [deleteConfirmText, setDeleteConfirmText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState(null);
+
+  // Account Status (Enable/Disable) Modal state
+  const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
+  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
+  const [statusError, setStatusError] = useState(null);
+
+  const isUserActive = user.isActive ?? (user.status === 'ACTIVE');
+
+  const handleExecuteStatusToggle = async () => {
+    if (!user?.id) return;
+
+    setIsUpdatingStatus(true);
+    setStatusError(null);
+
+    const targetActive = !isUserActive;
+    const res = await updateUserStatus(user.id, targetActive, token);
+    setIsUpdatingStatus(false);
+
+    if (res.success) {
+      setUser((prev) => ({
+        ...prev,
+        isActive: targetActive,
+        status: targetActive ? 'ACTIVE' : 'DISABLED',
+      }));
+      setNotice({
+        type: 'success',
+        title: targetActive ? 'Account Re-enabled' : 'Account Disabled',
+        message: `Account for ${user.username} has been successfully ${targetActive ? 're-enabled' : 'disabled'}.`,
+      });
+      setIsStatusModalOpen(false);
+    } else {
+      setStatusError(res.message || `Failed to ${targetActive ? 'enable' : 'disable'} user account.`);
+    }
+  };
 
   const handleOpenReset = () => {
     setTempPassword('Temp#' + Math.random().toString(36).substring(2, 8).toUpperCase() + '!');
@@ -95,6 +132,25 @@ const AdminUserDetailsPage = ({ selectedUser, onNavigate }) => {
           <Button variant="primary" onClick={() => onNavigate('admin-edit-user')}>
             Edit User
           </Button>
+          {isUserActive ? (
+            <Button
+              variant="outline"
+              style={{ borderColor: 'rgba(245, 158, 11, 0.6)', color: '#B45309' }}
+              onClick={() => { setIsStatusModalOpen(true); setStatusError(null); }}
+              disabled={currentAuthUser && (currentAuthUser.id === user.id || currentAuthUser.userId === user.id || currentAuthUser.username === user.username)}
+              title={currentAuthUser && (currentAuthUser.id === user.id || currentAuthUser.userId === user.id || currentAuthUser.username === user.username) ? "You cannot disable your own account" : "Disable User Account"}
+            >
+              Disable Account
+            </Button>
+          ) : (
+            <Button
+              variant="outline"
+              style={{ borderColor: 'rgba(34, 197, 94, 0.6)', color: '#15803D' }}
+              onClick={() => { setIsStatusModalOpen(true); setStatusError(null); }}
+            >
+              Enable Account
+            </Button>
+          )}
           <Button variant="danger" onClick={handleOpenDelete}>
             Delete User
           </Button>
@@ -115,7 +171,9 @@ const AdminUserDetailsPage = ({ selectedUser, onNavigate }) => {
         <div className="details-panel-card">
           <div className="panel-header-strip">
             <h3 className="panel-heading">Account Overview</h3>
-            <span className="status-pill-active">{user.status}</span>
+            <span className={isUserActive ? 'status-pill-active' : 'status-pill-disabled'}>
+              {isUserActive ? 'ACTIVE' : 'DISABLED'}
+            </span>
           </div>
 
           <div className="details-avatar-row">
@@ -311,6 +369,54 @@ const AdminUserDetailsPage = ({ selectedUser, onNavigate }) => {
             </Button>
           </div>
         </form>
+      </Modal>
+
+      {/* Account Status (Enable/Disable) Confirmation Modal */}
+      <Modal
+        isOpen={isStatusModalOpen}
+        onClose={() => { if (!isUpdatingStatus) setIsStatusModalOpen(false); }}
+        title={isUserActive ? "Disable User Account" : "Re-enable User Account"}
+        subtitle={`Control system access for ${user.username} without deleting history.`}
+      >
+        {statusError && (
+          <Alert type="error" title="Status Change Error" message={statusError} />
+        )}
+
+        <div style={{ marginBottom: '1.25rem', fontSize: '13px', color: 'var(--color-text-secondary, #64748b)', lineHeight: '1.5' }}>
+          {isUserActive ? (
+            <p>
+              Are you sure you want to <strong>disable</strong> the account for <strong>{user.username}</strong>?
+              They will be <strong>blocked from authenticating</strong> or accessing protected services. All records, roles, and historical data remain preserved.
+            </p>
+          ) : (
+            <p>
+              Are you sure you want to <strong>re-enable</strong> the account for <strong>{user.username}</strong>?
+              They will regain the ability to log in and access protected FleetFlow services.
+            </p>
+          )}
+        </div>
+
+        <div className="modal-actions-row">
+          <Button
+            variant="outline"
+            onClick={() => setIsStatusModalOpen(false)}
+            disabled={isUpdatingStatus}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant={isUserActive ? "danger" : "primary"}
+            onClick={handleExecuteStatusToggle}
+            disabled={isUpdatingStatus}
+            isLoading={isUpdatingStatus}
+          >
+            {isUpdatingStatus
+              ? 'Updating...'
+              : isUserActive
+              ? 'Confirm Disable'
+              : 'Confirm Enable'}
+          </Button>
+        </div>
       </Modal>
     </div>
   );

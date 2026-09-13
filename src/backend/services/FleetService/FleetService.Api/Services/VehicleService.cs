@@ -7,16 +7,26 @@ using FleetService.Api.Data;
 using FleetService.Api.Dtos;
 using FleetService.Api.Entities;
 using FleetService.Api.Exceptions;
+using FleetService.Api.Messaging;
+using FleetService.Api.Messaging.Events;
+using Microsoft.Extensions.Options;
 
 namespace FleetService.Api.Services;
 
 public class VehicleService : IVehicleService
 {
     private readonly FleetDbContext _dbContext;
+    private readonly IKafkaProducerService? _kafkaProducer;
+    private readonly KafkaSettings _kafkaSettings;
 
-    public VehicleService(FleetDbContext dbContext)
+    public VehicleService(
+        FleetDbContext dbContext,
+        IKafkaProducerService? kafkaProducer = null,
+        IOptions<KafkaSettings>? kafkaSettings = null)
     {
         _dbContext = dbContext;
+        _kafkaProducer = kafkaProducer;
+        _kafkaSettings = kafkaSettings?.Value ?? new KafkaSettings();
     }
 
     public async Task<IEnumerable<VehicleCategoryResponse>> GetCategoriesAsync()
@@ -218,6 +228,31 @@ public class VehicleService : IVehicleService
         _dbContext.Vehicles.Add(vehicle);
         await _dbContext.SaveChangesAsync();
 
+        if (_kafkaProducer != null)
+        {
+            var createdEvent = new VehicleCreatedEvent
+            {
+                VehicleId = vehicle.Id,
+                Vin = vehicle.Vin,
+                LicensePlate = vehicle.LicensePlate,
+                Make = vehicle.Make,
+                Model = vehicle.Model,
+                Year = vehicle.Year,
+                VehicleCategoryId = vehicle.VehicleCategoryId,
+                CategoryName = category.Name,
+                DailyRate = vehicle.DailyRate,
+                Transmission = vehicle.Transmission,
+                FuelType = vehicle.FuelType,
+                SeatingCapacity = vehicle.SeatingCapacity,
+                HubLocation = vehicle.HubLocation,
+                Mileage = vehicle.Mileage,
+                Status = vehicle.Status,
+                CreatedAt = vehicle.CreatedAt
+            };
+
+            _ = _kafkaProducer.PublishAsync(_kafkaSettings.VehicleEventsTopic, vehicle.Id.ToString(), createdEvent);
+        }
+
         return MapToResponse(vehicle);
     }
 
@@ -337,6 +372,31 @@ public class VehicleService : IVehicleService
         vehicle.UpdatedAt = DateTime.UtcNow;
 
         await _dbContext.SaveChangesAsync();
+
+        if (_kafkaProducer != null)
+        {
+            var updatedEvent = new VehicleUpdatedEvent
+            {
+                VehicleId = vehicle.Id,
+                Vin = vehicle.Vin,
+                LicensePlate = vehicle.LicensePlate,
+                Make = vehicle.Make,
+                Model = vehicle.Model,
+                Year = vehicle.Year,
+                VehicleCategoryId = vehicle.VehicleCategoryId,
+                CategoryName = category.Name,
+                DailyRate = vehicle.DailyRate,
+                Transmission = vehicle.Transmission,
+                FuelType = vehicle.FuelType,
+                SeatingCapacity = vehicle.SeatingCapacity,
+                HubLocation = vehicle.HubLocation,
+                Mileage = vehicle.Mileage,
+                Status = vehicle.Status,
+                UpdatedAt = vehicle.UpdatedAt
+            };
+
+            _ = _kafkaProducer.PublishAsync(_kafkaSettings.VehicleEventsTopic, vehicle.Id.ToString(), updatedEvent);
+        }
 
         return MapToResponse(vehicle);
     }

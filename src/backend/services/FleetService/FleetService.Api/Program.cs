@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using FleetService.Api.Data;
 using FleetService.Api.Entities;
+using FleetService.Api.Messaging;
 using FleetService.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +16,11 @@ builder.Services.AddDbContext<FleetDbContext>(options =>
 
 builder.Services.AddScoped<IVehicleService, VehicleService>();
 builder.Services.AddScoped<IVehicleImageService, VehicleImageService>();
+
+// Configure Apache Kafka Messaging
+builder.Services.Configure<KafkaSettings>(builder.Configuration.GetSection(KafkaSettings.SectionName));
+builder.Services.AddSingleton<IKafkaProducerService, KafkaProducerService>();
+builder.Services.AddHostedService<VehicleEventConsumerService>();
 
 // Configure JWT Authentication
 var jwtSection = builder.Configuration.GetSection("Jwt");

@@ -119,6 +119,7 @@ _ = Task.Run(async () =>
                     ALTER TABLE ""Users"" ADD COLUMN IF NOT EXISTS ""Address"" character varying(250) NOT NULL DEFAULT '';
                     ALTER TABLE ""Users"" ADD COLUMN IF NOT EXISTS ""DrivingLicenseNumber"" character varying(50) NOT NULL DEFAULT '';
                     ALTER TABLE ""Users"" ADD COLUMN IF NOT EXISTS ""ProfileImageUrl"" character varying(500) NULL;
+                    ALTER TABLE ""Users"" ADD COLUMN IF NOT EXISTS ""IsActive"" boolean NOT NULL DEFAULT TRUE;
                 ");
 
                 // Idempotent QA User Seeding for Development & Cloud
