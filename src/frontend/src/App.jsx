@@ -194,7 +194,13 @@ function AppContent() {
         case 'add-vehicle':
           return <AddVehiclePage onNavigate={navigateTo} />;
         case 'edit-vehicle':
-          return <EditVehiclePage selectedVehicle={selectedVehicle} onNavigate={navigateTo} />;
+          return (
+            <EditVehiclePage
+              selectedVehicle={selectedVehicle}
+              onNavigate={navigateTo}
+              onVehicleUpdated={(updated) => setSelectedVehicle(updated)}
+            />
+          );
         case 'staff-vehicle-details':
           return <StaffVehicleDetailsPage selectedVehicle={selectedVehicle} onNavigate={navigateTo} onSelectVehicle={setSelectedVehicle} />;
         case 'vehicle-images':
