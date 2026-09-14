@@ -1,20 +1,89 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import StatusBadge from '../../components/common/StatusBadge';
 import Button from '../../components/common/Button';
+import Modal from '../../components/common/Modal';
 import Alert from '../../components/Alert';
 import { useAuth } from '../../context/AuthContext';
-import { getVehicleById } from '../../services/vehicleService';
+import { getVehicleById, updateVehicleStatus } from '../../services/vehicleService';
 import { formatPriceNumber } from '../../utils/currencyUtils';
+import {
+  getAvailableStatusTransitionsForRoles,
+  canUserChangeStatus,
+  validateStatusChange,
+} from '../../validation/vehicleStatusValidation';
 
 const StaffVehicleDetailsPage = ({ selectedVehicle, onNavigate, onSelectVehicle }) => {
-  const { roles } = useAuth();
+  const { roles, token } = useAuth();
   const canEditVehicle = (roles || []).some((r) =>
     ['FLEET_MANAGER', 'ADMIN'].includes(String(r).toUpperCase())
   );
+  const canManageStatus = canUserChangeStatus(roles);
 
   const [vehicle, setVehicle] = useState(selectedVehicle);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
+
+  // Status Change Modal States
+  const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
+  const [targetStatus, setTargetStatus] = useState('');
+  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
+  const [statusModalError, setStatusModalError] = useState(null);
+  const [statusSuccessMessage, setStatusSuccessMessage] = useState(null);
+
+  const allowedStatusOptions = useMemo(() => {
+    return getAvailableStatusTransitionsForRoles(roles);
+  }, [roles]);
+
+  const selectedStatusDesc = useMemo(() => {
+    return allowedStatusOptions.find((o) => o.value === targetStatus)?.description || '';
+  }, [allowedStatusOptions, targetStatus]);
+
+  const handleOpenStatusModal = () => {
+    if (!vehicle) return;
+    const nextDefault = allowedStatusOptions.find((s) => s.value !== vehicle.status)?.value || allowedStatusOptions[0]?.value || '';
+    setTargetStatus(nextDefault);
+    setStatusModalError(null);
+    setIsStatusModalOpen(true);
+  };
+
+  const handleCloseStatusModal = () => {
+    if (isUpdatingStatus) return;
+    setIsStatusModalOpen(false);
+    setTargetStatus('');
+    setStatusModalError(null);
+  };
+
+  const handleConfirmStatusChange = async () => {
+    if (!vehicle) return;
+
+    const validation = validateStatusChange(targetStatus, vehicle.status, roles);
+    if (!validation.isValid) {
+      setStatusModalError(validation.error);
+      return;
+    }
+
+    setIsUpdatingStatus(true);
+    setStatusModalError(null);
+
+    const result = await updateVehicleStatus(vehicle.id, targetStatus, token);
+
+    setIsUpdatingStatus(false);
+
+    if (result.success) {
+      const updated = result.data;
+      setVehicle(updated);
+      if (onSelectVehicle) {
+        onSelectVehicle(updated);
+      }
+      setStatusSuccessMessage(`Vehicle operational status successfully updated to "${targetStatus}".`);
+      setIsStatusModalOpen(false);
+      setTimeout(() => {
+        setStatusSuccessMessage(null);
+      }, 6000);
+    } else {
+      setStatusModalError(result.message || 'Failed to update vehicle status.');
+    }
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -133,6 +202,11 @@ const StaffVehicleDetailsPage = ({ selectedVehicle, onNavigate, onSelectVehicle 
         </div>
 
         <div className="admin-header-actions">
+          {canManageStatus && (
+            <Button variant="secondary" onClick={handleOpenStatusModal}>
+              Change Status
+            </Button>
+          )}
           {canEditVehicle && (
             <>
               <Button variant="primary" onClick={handleGoToEdit}>
@@ -148,6 +222,12 @@ const StaffVehicleDetailsPage = ({ selectedVehicle, onNavigate, onSelectVehicle 
           </Button>
         </div>
       </div>
+
+      {statusSuccessMessage && (
+        <div style={{ marginBottom: '16px' }}>
+          <Alert type="success" title="Status Updated" message={statusSuccessMessage} />
+        </div>
+      )}
 
       <div className="user-details-grid">
         {/* Vehicle Identity & Specification Card */}
@@ -248,21 +328,153 @@ const StaffVehicleDetailsPage = ({ selectedVehicle, onNavigate, onSelectVehicle 
             </div>
           </div>
 
-          {canEditVehicle && (
+          {canManageStatus && (
             <div className="admin-actions-box" style={{ marginTop: 'var(--space-6)' }}>
-              <h4>Fleet Operations</h4>
+              <h4>Fleet Operations & Status Controls</h4>
               <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '8px' }}>
-                <Button variant="primary" size="sm" onClick={handleGoToEdit}>
-                  Modify Vehicle Specifications
+                <Button variant="secondary" size="sm" onClick={handleOpenStatusModal}>
+                  Update Operational Status
                 </Button>
-                <Button variant="outline" size="sm" onClick={handleGoToPhotos}>
-                  Photo Management
-                </Button>
+                {canEditVehicle && (
+                  <>
+                    <Button variant="primary" size="sm" onClick={handleGoToEdit}>
+                      Modify Vehicle Specifications
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={handleGoToPhotos}>
+                      Photo Management
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           )}
         </div>
       </div>
+
+      {/* Vehicle Operational Status Confirmation Modal */}
+      <Modal
+        isOpen={isStatusModalOpen}
+        onClose={handleCloseStatusModal}
+        title="Update Operational Status"
+        subtitle={`Modify operational availability for ${vehicle?.year} ${vehicle?.make} ${vehicle?.model}`}
+      >
+        {statusModalError && (
+          <div style={{ marginBottom: '16px' }}>
+            <Alert type="error" title="Status Update Error" message={statusModalError} />
+          </div>
+        )}
+
+        <div style={{ marginBottom: '1.25rem', fontSize: '13px', color: 'var(--color-text-secondary, #64748b)', lineHeight: '1.5' }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '12px 14px',
+              backgroundColor: 'var(--color-surface, #f8fafc)',
+              borderRadius: '8px',
+              border: '1px solid var(--color-border, #e2e8f0)',
+              marginBottom: '16px',
+            }}
+          >
+            <div>
+              <strong style={{ display: 'block', color: 'var(--color-text-primary, #0f172a)', fontSize: '14px' }}>
+                {vehicle?.year} {vehicle?.make} {vehicle?.model}
+              </strong>
+              <span style={{ fontSize: '11px', color: 'var(--color-text-muted, #94a3b8)' }}>
+                Plate: {vehicle?.licensePlate} • VIN: {vehicle?.vin}
+              </span>
+            </div>
+            <div>
+              <StatusBadge status={vehicle?.status} />
+            </div>
+          </div>
+
+          <div style={{ marginBottom: '16px' }}>
+            <label
+              htmlFor="detailTargetStatusSelect"
+              style={{
+                display: 'block',
+                fontWeight: 600,
+                color: 'var(--color-text-primary, #0f172a)',
+                marginBottom: '6px',
+              }}
+            >
+              Select New Operational Status:
+            </label>
+            <select
+              id="detailTargetStatusSelect"
+              value={targetStatus}
+              onChange={(e) => {
+                setTargetStatus(e.target.value);
+                setStatusModalError(null);
+              }}
+              disabled={isUpdatingStatus}
+              className="filter-select-input"
+              style={{ width: '100%', padding: '10px 12px', fontSize: '14px', borderRadius: '6px' }}
+            >
+              {allowedStatusOptions.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label} {opt.value === vehicle?.status ? '(Current)' : ''}
+                </option>
+              ))}
+            </select>
+            {selectedStatusDesc && (
+              <p style={{ marginTop: '6px', fontSize: '12px', color: 'var(--color-text-muted, #94a3b8)' }}>
+                {selectedStatusDesc}
+              </p>
+            )}
+          </div>
+
+          {targetStatus === 'Retired' && (
+            <div
+              style={{
+                padding: '10px 12px',
+                backgroundColor: '#FEF2F2',
+                border: '1px solid #FECACA',
+                borderRadius: '6px',
+                color: '#991B1B',
+                fontSize: '12px',
+                marginBottom: '16px',
+                lineHeight: '1.4',
+              }}
+            >
+              <strong>Warning:</strong> Retiring a vehicle will permanently decommission this unit and remove it from commercial rental availability.
+            </div>
+          )}
+
+          {targetStatus === 'Maintenance' && vehicle?.status !== 'Maintenance' && (
+            <div
+              style={{
+                padding: '10px 12px',
+                backgroundColor: '#FFFBEB',
+                border: '1px solid #FDE68A',
+                borderRadius: '6px',
+                color: '#92400E',
+                fontSize: '12px',
+                marginBottom: '16px',
+                lineHeight: '1.4',
+              }}
+            >
+              <strong>Maintenance Notice:</strong> This unit will be marked out of service for inspection and repair. Customer bookings cannot be dispatched for this vehicle until restored to Available.
+            </div>
+          )}
+        </div>
+
+        <div className="modal-actions-row">
+          <Button variant="outline" onClick={handleCloseStatusModal} disabled={isUpdatingStatus}>
+            Cancel
+          </Button>
+          <Button
+            variant={targetStatus === 'Retired' ? 'danger' : 'primary'}
+            onClick={handleConfirmStatusChange}
+            disabled={isUpdatingStatus || targetStatus === vehicle?.status}
+            isLoading={isUpdatingStatus}
+          >
+            Confirm Status Change
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 };

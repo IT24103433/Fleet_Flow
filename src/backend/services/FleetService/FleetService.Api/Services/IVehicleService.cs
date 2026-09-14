@@ -28,5 +28,7 @@ public interface IVehicleService
 
     Task<VehicleResponse> UpdateVehicleAsync(Guid id, UpdateVehicleRequest request);
 
+    Task<VehicleResponse> UpdateVehicleStatusAsync(Guid id, UpdateVehicleStatusRequest request);
+
     Task<IEnumerable<VehicleCategoryResponse>> GetCategoriesAsync();
 }

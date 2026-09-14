@@ -181,4 +181,54 @@ public class VehiclesController : ControllerBase
             return Conflict(new { message = ex.Message });
         }
     }
+
+    [HttpPatch("{id:guid}/status")]
+    [HttpPut("{id:guid}/status")]
+    [Authorize(Roles = "FLEET_MANAGER,ADMIN,MAINTENANCE_STAFF")]
+    [ProducesResponseType(typeof(VehicleResponse), 200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(403)]
+    [ProducesResponseType(404)]
+    public async Task<ActionResult<VehicleResponse>> UpdateVehicleStatus(Guid id, [FromBody] UpdateVehicleStatusRequest request)
+    {
+        if (request == null)
+        {
+            return BadRequest(new { message = "Status update payload cannot be null." });
+        }
+
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        // Role-aware authorization rules:
+        // Maintenance staff can only update operational health statuses (Available, Maintenance).
+        var isManagerOrAdmin = User.IsInRole("FLEET_MANAGER") || User.IsInRole("ADMIN");
+        if (!isManagerOrAdmin && User.IsInRole("MAINTENANCE_STAFF"))
+        {
+            if (request.Status != VehicleStatus.Available && request.Status != VehicleStatus.Maintenance)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, new
+                {
+                    message = "Maintenance staff are only authorized to update operational health statuses (Available, Maintenance)."
+                });
+            }
+        }
+
+        try
+        {
+            var updated = await _vehicleService.UpdateVehicleStatusAsync(id, request);
+            return Ok(updated);
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        catch (ValidationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
 }
+

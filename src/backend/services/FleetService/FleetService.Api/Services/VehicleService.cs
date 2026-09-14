@@ -500,6 +500,60 @@ public class VehicleService : IVehicleService
         return MapToResponse(vehicle);
     }
 
+    public async Task<VehicleResponse> UpdateVehicleStatusAsync(Guid id, UpdateVehicleStatusRequest request)
+    {
+        if (request == null)
+        {
+            throw new ValidationException("Status request payload cannot be null.");
+        }
+
+        if (!Enum.IsDefined(typeof(VehicleStatus), request.Status))
+        {
+            throw new ValidationException($"Invalid vehicle status '{request.Status}'. Supported statuses are: {string.Join(", ", Enum.GetNames<VehicleStatus>())}.");
+        }
+
+        var vehicle = await _dbContext.Vehicles
+            .Include(v => v.Category)
+            .FirstOrDefaultAsync(v => v.Id == id);
+
+        if (vehicle == null)
+        {
+            throw new NotFoundException($"Vehicle with ID '{id}' was not found.");
+        }
+
+        vehicle.Status = request.Status;
+        vehicle.UpdatedAt = DateTime.UtcNow;
+
+        await _dbContext.SaveChangesAsync();
+
+        if (_kafkaProducer != null)
+        {
+            var updatedEvent = new VehicleUpdatedEvent
+            {
+                VehicleId = vehicle.Id,
+                Vin = vehicle.Vin,
+                LicensePlate = vehicle.LicensePlate,
+                Make = vehicle.Make,
+                Model = vehicle.Model,
+                Year = vehicle.Year,
+                VehicleCategoryId = vehicle.VehicleCategoryId,
+                CategoryName = vehicle.Category?.Name ?? string.Empty,
+                DailyRate = vehicle.DailyRate,
+                Transmission = vehicle.Transmission,
+                FuelType = vehicle.FuelType,
+                SeatingCapacity = vehicle.SeatingCapacity,
+                HubLocation = vehicle.HubLocation,
+                Mileage = vehicle.Mileage,
+                Status = vehicle.Status,
+                UpdatedAt = vehicle.UpdatedAt
+            };
+
+            _ = _kafkaProducer.PublishAsync(_kafkaSettings.VehicleEventsTopic, vehicle.Id.ToString(), updatedEvent);
+        }
+
+        return MapToResponse(vehicle);
+    }
+
     private static VehicleResponse MapToResponse(Vehicle vehicle)
     {
         return new VehicleResponse
