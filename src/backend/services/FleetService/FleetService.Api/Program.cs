@@ -16,6 +16,7 @@ builder.Services.AddDbContext<FleetDbContext>(options =>
 
 builder.Services.AddScoped<IVehicleService, VehicleService>();
 builder.Services.AddScoped<IVehicleImageService, VehicleImageService>();
+builder.Services.AddScoped<IMaintenanceService, MaintenanceService>();
 
 // Configure Apache Kafka Messaging
 builder.Services.Configure<KafkaSettings>(builder.Configuration.GetSection(KafkaSettings.SectionName));
