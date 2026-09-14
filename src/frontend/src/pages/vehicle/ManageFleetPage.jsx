@@ -1,9 +1,15 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import StatusBadge from '../../components/common/StatusBadge';
 import Button from '../../components/common/Button';
+import Modal from '../../components/common/Modal';
 import Alert from '../../components/Alert';
 import { useAuth } from '../../context/AuthContext';
-import { getVehicles, getCategories } from '../../services/vehicleService';
+import { getVehicles, getCategories, updateVehicleStatus } from '../../services/vehicleService';
+import {
+  getAvailableStatusTransitionsForRoles,
+  canUserChangeStatus,
+  validateStatusChange,
+} from '../../validation/vehicleStatusValidation';
 
 const STATUS_OPTIONS = [
   { value: 'ALL', label: 'All Statuses' },
@@ -50,8 +56,16 @@ const SORT_OPTIONS = [
 const PAGE_SIZE_OPTIONS = [5, 10, 20, 50];
 
 const ManageFleetPage = ({ onNavigate, onSelectVehicle }) => {
-  const { roles } = useAuth();
+  const { roles, token } = useAuth();
   const canAddVehicle = (roles || []).some((r) => ['FLEET_MANAGER', 'ADMIN'].includes(String(r).toUpperCase()));
+  const canManageStatus = canUserChangeStatus(roles);
+
+  // Status Change Modal States
+  const [statusModalVehicle, setStatusModalVehicle] = useState(null);
+  const [targetStatus, setTargetStatus] = useState('');
+  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
+  const [statusModalError, setStatusModalError] = useState(null);
+  const [statusSuccessMessage, setStatusSuccessMessage] = useState(null);
 
   const [vehicles, setVehicles] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -234,6 +248,59 @@ const ManageFleetPage = ({ onNavigate, onSelectVehicle }) => {
     onNavigate('vehicle-images');
   };
 
+  const allowedStatusOptions = useMemo(() => {
+    return getAvailableStatusTransitionsForRoles(roles);
+  }, [roles]);
+
+  const selectedStatusDesc = useMemo(() => {
+    return allowedStatusOptions.find((o) => o.value === targetStatus)?.description || '';
+  }, [allowedStatusOptions, targetStatus]);
+
+  const handleOpenStatusModal = (vehicle) => {
+    setStatusModalVehicle(vehicle);
+    const nextDefault = allowedStatusOptions.find((s) => s.value !== vehicle.status)?.value || allowedStatusOptions[0]?.value || '';
+    setTargetStatus(nextDefault);
+    setStatusModalError(null);
+  };
+
+  const handleCloseStatusModal = () => {
+    if (isUpdatingStatus) return;
+    setStatusModalVehicle(null);
+    setTargetStatus('');
+    setStatusModalError(null);
+  };
+
+  const handleConfirmStatusChange = async () => {
+    if (!statusModalVehicle) return;
+
+    const validation = validateStatusChange(targetStatus, statusModalVehicle.status, roles);
+    if (!validation.isValid) {
+      setStatusModalError(validation.error);
+      return;
+    }
+
+    setIsUpdatingStatus(true);
+    setStatusModalError(null);
+
+    const result = await updateVehicleStatus(statusModalVehicle.id, targetStatus, token);
+
+    setIsUpdatingStatus(false);
+
+    if (result.success) {
+      const updated = result.data;
+      setVehicles((prev) =>
+        prev.map((v) => (v.id === updated.id ? { ...v, status: updated.status, updatedAt: updated.updatedAt } : v))
+      );
+      setStatusSuccessMessage(`Vehicle ${statusModalVehicle.licensePlate || statusModalVehicle.vin} operational status successfully updated to "${targetStatus}".`);
+      setStatusModalVehicle(null);
+      setTimeout(() => {
+        setStatusSuccessMessage(null);
+      }, 6000);
+    } else {
+      setStatusModalError(result.message || 'Failed to update vehicle status.');
+    }
+  };
+
   const handleResetFilters = () => {
     setSearchTerm('');
     setSelectedStatusFilter('ALL');
@@ -310,6 +377,12 @@ const ManageFleetPage = ({ onNavigate, onSelectVehicle }) => {
           </Button>
         )}
       </div>
+
+      {statusSuccessMessage && (
+        <div style={{ marginBottom: '16px' }}>
+          <Alert type="success" title="Status Updated" message={statusSuccessMessage} />
+        </div>
+      )}
 
       {/* Filter and Search Bar */}
       <div className="users-filter-bar" style={{ gap: '10px' }}>
@@ -595,6 +668,16 @@ const ManageFleetPage = ({ onNavigate, onSelectVehicle }) => {
                             >
                               Details
                             </button>
+                            {canManageStatus && (
+                              <button
+                                type="button"
+                                className="btn-table-action"
+                                onClick={() => handleOpenStatusModal(v)}
+                                title="Change Operational Status"
+                              >
+                                Status
+                              </button>
+                            )}
                             {canAddVehicle && (
                               <>
                                 <button
@@ -709,6 +792,131 @@ const ManageFleetPage = ({ onNavigate, onSelectVehicle }) => {
           )}
         </div>
       )}
+
+      {/* Vehicle Operational Status Confirmation Modal */}
+      <Modal
+        isOpen={!!statusModalVehicle}
+        onClose={handleCloseStatusModal}
+        title="Update Operational Status"
+        subtitle={`Modify operational availability for ${statusModalVehicle?.year} ${statusModalVehicle?.make} ${statusModalVehicle?.model}`}
+      >
+        {statusModalError && (
+          <div style={{ marginBottom: '16px' }}>
+            <Alert type="error" title="Status Update Error" message={statusModalError} />
+          </div>
+        )}
+
+        <div style={{ marginBottom: '1.25rem', fontSize: '13px', color: 'var(--color-text-secondary, #64748b)', lineHeight: '1.5' }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '12px 14px',
+              backgroundColor: 'var(--color-surface, #f8fafc)',
+              borderRadius: '8px',
+              border: '1px solid var(--color-border, #e2e8f0)',
+              marginBottom: '16px',
+            }}
+          >
+            <div>
+              <strong style={{ display: 'block', color: 'var(--color-text-primary, #0f172a)', fontSize: '14px' }}>
+                {statusModalVehicle?.year} {statusModalVehicle?.make} {statusModalVehicle?.model}
+              </strong>
+              <span style={{ fontSize: '11px', color: 'var(--color-text-muted, #94a3b8)' }}>
+                Plate: {statusModalVehicle?.licensePlate} • VIN: {statusModalVehicle?.vin}
+              </span>
+            </div>
+            <div>
+              <StatusBadge status={statusModalVehicle?.status} />
+            </div>
+          </div>
+
+          <div style={{ marginBottom: '16px' }}>
+            <label
+              htmlFor="targetStatusSelect"
+              style={{
+                display: 'block',
+                fontWeight: 600,
+                color: 'var(--color-text-primary, #0f172a)',
+                marginBottom: '6px',
+              }}
+            >
+              Select New Operational Status:
+            </label>
+            <select
+              id="targetStatusSelect"
+              value={targetStatus}
+              onChange={(e) => {
+                setTargetStatus(e.target.value);
+                setStatusModalError(null);
+              }}
+              disabled={isUpdatingStatus}
+              className="filter-select-input"
+              style={{ width: '100%', padding: '10px 12px', fontSize: '14px', borderRadius: '6px' }}
+            >
+              {allowedStatusOptions.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label} {opt.value === statusModalVehicle?.status ? '(Current)' : ''}
+                </option>
+              ))}
+            </select>
+            {selectedStatusDesc && (
+              <p style={{ marginTop: '6px', fontSize: '12px', color: 'var(--color-text-muted, #94a3b8)' }}>
+                {selectedStatusDesc}
+              </p>
+            )}
+          </div>
+
+          {targetStatus === 'Retired' && (
+            <div
+              style={{
+                padding: '10px 12px',
+                backgroundColor: '#FEF2F2',
+                border: '1px solid #FECACA',
+                borderRadius: '6px',
+                color: '#991B1B',
+                fontSize: '12px',
+                marginBottom: '16px',
+                lineHeight: '1.4',
+              }}
+            >
+              <strong>Warning:</strong> Retiring a vehicle will permanently decommission this unit and remove it from commercial rental availability.
+            </div>
+          )}
+
+          {targetStatus === 'Maintenance' && statusModalVehicle?.status !== 'Maintenance' && (
+            <div
+              style={{
+                padding: '10px 12px',
+                backgroundColor: '#FFFBEB',
+                border: '1px solid #FDE68A',
+                borderRadius: '6px',
+                color: '#92400E',
+                fontSize: '12px',
+                marginBottom: '16px',
+                lineHeight: '1.4',
+              }}
+            >
+              <strong>Maintenance Notice:</strong> This unit will be marked out of service for inspection and repair. Customer bookings cannot be dispatched for this vehicle until restored to Available.
+            </div>
+          )}
+        </div>
+
+        <div className="modal-actions-row">
+          <Button variant="outline" onClick={handleCloseStatusModal} disabled={isUpdatingStatus}>
+            Cancel
+          </Button>
+          <Button
+            variant={targetStatus === 'Retired' ? 'danger' : 'primary'}
+            onClick={handleConfirmStatusChange}
+            disabled={isUpdatingStatus || targetStatus === statusModalVehicle?.status}
+            isLoading={isUpdatingStatus}
+          >
+            Confirm Status Change
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 };
