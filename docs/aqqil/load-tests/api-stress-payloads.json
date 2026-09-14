@@ -3111,5 +3111,1461 @@
         "expected_status": 201
       }
     ]
+  },
+  "rental_service": {
+    "booking_creation_matrix": [
+      {
+        "booking_stress_id": "BKG-COLLISION-0001",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000001",
+        "customer_id": "customer-guid-200001",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-002",
+        "dropoff_branch_id": "branch-002",
+        "insurance_package": "BASIC_LIABILITY",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 250.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_1"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0002",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000002",
+        "customer_id": "customer-guid-200002",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-003",
+        "dropoff_branch_id": "branch-003",
+        "insurance_package": "FULL_COMPREHENSIVE",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 255.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_2"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0003",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000003",
+        "customer_id": "customer-guid-200003",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-004",
+        "dropoff_branch_id": "branch-004",
+        "insurance_package": "BASIC_LIABILITY",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 260.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_3"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0004",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000004",
+        "customer_id": "customer-guid-200004",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-005",
+        "dropoff_branch_id": "branch-005",
+        "insurance_package": "FULL_COMPREHENSIVE",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 265.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_4"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0005",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000005",
+        "customer_id": "customer-guid-200005",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-001",
+        "dropoff_branch_id": "branch-001",
+        "insurance_package": "BASIC_LIABILITY",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 270.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_5"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0006",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000006",
+        "customer_id": "customer-guid-200006",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-002",
+        "dropoff_branch_id": "branch-002",
+        "insurance_package": "FULL_COMPREHENSIVE",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 275.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_6"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0007",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000007",
+        "customer_id": "customer-guid-200007",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-003",
+        "dropoff_branch_id": "branch-003",
+        "insurance_package": "BASIC_LIABILITY",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 280.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_7"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0008",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000000",
+        "customer_id": "customer-guid-200008",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-004",
+        "dropoff_branch_id": "branch-004",
+        "insurance_package": "FULL_COMPREHENSIVE",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 285.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_8"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0009",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000001",
+        "customer_id": "customer-guid-200009",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-005",
+        "dropoff_branch_id": "branch-005",
+        "insurance_package": "BASIC_LIABILITY",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 290.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_9"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0010",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000002",
+        "customer_id": "customer-guid-200010",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-001",
+        "dropoff_branch_id": "branch-001",
+        "insurance_package": "FULL_COMPREHENSIVE",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 295.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_0"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0011",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000003",
+        "customer_id": "customer-guid-200011",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-002",
+        "dropoff_branch_id": "branch-002",
+        "insurance_package": "BASIC_LIABILITY",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 300.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_1"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0012",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000004",
+        "customer_id": "customer-guid-200012",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-003",
+        "dropoff_branch_id": "branch-003",
+        "insurance_package": "FULL_COMPREHENSIVE",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 305.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_2"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0013",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000005",
+        "customer_id": "customer-guid-200013",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-004",
+        "dropoff_branch_id": "branch-004",
+        "insurance_package": "BASIC_LIABILITY",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 310.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_3"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0014",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000006",
+        "customer_id": "customer-guid-200014",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-005",
+        "dropoff_branch_id": "branch-005",
+        "insurance_package": "FULL_COMPREHENSIVE",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 315.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_4"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0015",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000007",
+        "customer_id": "customer-guid-200015",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-001",
+        "dropoff_branch_id": "branch-001",
+        "insurance_package": "BASIC_LIABILITY",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 320.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_5"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0016",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000000",
+        "customer_id": "customer-guid-200016",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-002",
+        "dropoff_branch_id": "branch-002",
+        "insurance_package": "FULL_COMPREHENSIVE",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 325.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_6"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0017",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000001",
+        "customer_id": "customer-guid-200017",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-003",
+        "dropoff_branch_id": "branch-003",
+        "insurance_package": "BASIC_LIABILITY",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 330.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_7"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0018",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000002",
+        "customer_id": "customer-guid-200018",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-004",
+        "dropoff_branch_id": "branch-004",
+        "insurance_package": "FULL_COMPREHENSIVE",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 335.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_8"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0019",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000003",
+        "customer_id": "customer-guid-200019",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-005",
+        "dropoff_branch_id": "branch-005",
+        "insurance_package": "BASIC_LIABILITY",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 340.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_9"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0020",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000004",
+        "customer_id": "customer-guid-200020",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-001",
+        "dropoff_branch_id": "branch-001",
+        "insurance_package": "FULL_COMPREHENSIVE",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 345.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_0"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0021",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000005",
+        "customer_id": "customer-guid-200021",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-002",
+        "dropoff_branch_id": "branch-002",
+        "insurance_package": "BASIC_LIABILITY",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 350.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_1"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0022",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000006",
+        "customer_id": "customer-guid-200022",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-003",
+        "dropoff_branch_id": "branch-003",
+        "insurance_package": "FULL_COMPREHENSIVE",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 355.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_2"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0023",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000007",
+        "customer_id": "customer-guid-200023",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-004",
+        "dropoff_branch_id": "branch-004",
+        "insurance_package": "BASIC_LIABILITY",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 360.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_3"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0024",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000000",
+        "customer_id": "customer-guid-200024",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-005",
+        "dropoff_branch_id": "branch-005",
+        "insurance_package": "FULL_COMPREHENSIVE",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 365.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_4"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0025",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000001",
+        "customer_id": "customer-guid-200025",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-001",
+        "dropoff_branch_id": "branch-001",
+        "insurance_package": "BASIC_LIABILITY",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 370.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_5"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0026",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000002",
+        "customer_id": "customer-guid-200026",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-002",
+        "dropoff_branch_id": "branch-002",
+        "insurance_package": "FULL_COMPREHENSIVE",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 375.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_6"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0027",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000003",
+        "customer_id": "customer-guid-200027",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-003",
+        "dropoff_branch_id": "branch-003",
+        "insurance_package": "BASIC_LIABILITY",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 380.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_7"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0028",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000004",
+        "customer_id": "customer-guid-200028",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-004",
+        "dropoff_branch_id": "branch-004",
+        "insurance_package": "FULL_COMPREHENSIVE",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 385.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_8"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0029",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000005",
+        "customer_id": "customer-guid-200029",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-005",
+        "dropoff_branch_id": "branch-005",
+        "insurance_package": "BASIC_LIABILITY",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 390.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_9"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0030",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000006",
+        "customer_id": "customer-guid-200030",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-001",
+        "dropoff_branch_id": "branch-001",
+        "insurance_package": "FULL_COMPREHENSIVE",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 395.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_0"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0031",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000007",
+        "customer_id": "customer-guid-200031",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-002",
+        "dropoff_branch_id": "branch-002",
+        "insurance_package": "BASIC_LIABILITY",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 400.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_1"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0032",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000000",
+        "customer_id": "customer-guid-200032",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-003",
+        "dropoff_branch_id": "branch-003",
+        "insurance_package": "FULL_COMPREHENSIVE",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 405.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_2"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0033",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000001",
+        "customer_id": "customer-guid-200033",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-004",
+        "dropoff_branch_id": "branch-004",
+        "insurance_package": "BASIC_LIABILITY",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 410.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_3"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0034",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000002",
+        "customer_id": "customer-guid-200034",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-005",
+        "dropoff_branch_id": "branch-005",
+        "insurance_package": "FULL_COMPREHENSIVE",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 415.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_4"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0035",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000003",
+        "customer_id": "customer-guid-200035",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-001",
+        "dropoff_branch_id": "branch-001",
+        "insurance_package": "BASIC_LIABILITY",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 420.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_5"
+      }
+    ],
+    "duplicate_sprint1_fixtures": [
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0001",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_1@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_1",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-1",
+          "vin": "VIN-LEGACY-1",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-1",
+          "timestamp_sec": 1788700001,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0002",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_2@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_2",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-2",
+          "vin": "VIN-LEGACY-2",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-2",
+          "timestamp_sec": 1788700002,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0003",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_3@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_3",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-3",
+          "vin": "VIN-LEGACY-3",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-3",
+          "timestamp_sec": 1788700003,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0004",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_4@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_4",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-4",
+          "vin": "VIN-LEGACY-4",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-4",
+          "timestamp_sec": 1788700004,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0005",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_5@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_5",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-5",
+          "vin": "VIN-LEGACY-5",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-5",
+          "timestamp_sec": 1788700005,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0006",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_6@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_6",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-6",
+          "vin": "VIN-LEGACY-6",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-6",
+          "timestamp_sec": 1788700006,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0007",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_7@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_7",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-7",
+          "vin": "VIN-LEGACY-7",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-7",
+          "timestamp_sec": 1788700007,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0008",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_8@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_8",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-8",
+          "vin": "VIN-LEGACY-8",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-8",
+          "timestamp_sec": 1788700008,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0009",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_9@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_9",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-9",
+          "vin": "VIN-LEGACY-9",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-9",
+          "timestamp_sec": 1788700009,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0010",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_10@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_10",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-10",
+          "vin": "VIN-LEGACY-10",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-10",
+          "timestamp_sec": 1788700010,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0011",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_11@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_11",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-11",
+          "vin": "VIN-LEGACY-11",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-11",
+          "timestamp_sec": 1788700011,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0012",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_12@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_12",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-12",
+          "vin": "VIN-LEGACY-12",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-12",
+          "timestamp_sec": 1788700012,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0013",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_13@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_13",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-13",
+          "vin": "VIN-LEGACY-13",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-13",
+          "timestamp_sec": 1788700013,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0014",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_14@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_14",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-14",
+          "vin": "VIN-LEGACY-14",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-14",
+          "timestamp_sec": 1788700014,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0015",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_15@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_15",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-15",
+          "vin": "VIN-LEGACY-15",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-15",
+          "timestamp_sec": 1788700015,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0016",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_16@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_16",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-16",
+          "vin": "VIN-LEGACY-16",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-16",
+          "timestamp_sec": 1788700016,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0017",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_17@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_17",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-17",
+          "vin": "VIN-LEGACY-17",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-17",
+          "timestamp_sec": 1788700017,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0018",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_18@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_18",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-18",
+          "vin": "VIN-LEGACY-18",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-18",
+          "timestamp_sec": 1788700018,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0019",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_19@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_19",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-19",
+          "vin": "VIN-LEGACY-19",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-19",
+          "timestamp_sec": 1788700019,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0020",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_20@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_20",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-20",
+          "vin": "VIN-LEGACY-20",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-20",
+          "timestamp_sec": 1788700020,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0021",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_21@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_21",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-21",
+          "vin": "VIN-LEGACY-21",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-21",
+          "timestamp_sec": 1788700021,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0022",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_22@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_22",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-22",
+          "vin": "VIN-LEGACY-22",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-22",
+          "timestamp_sec": 1788700022,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0023",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_23@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_23",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-23",
+          "vin": "VIN-LEGACY-23",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-23",
+          "timestamp_sec": 1788700023,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0024",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_24@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_24",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-24",
+          "vin": "VIN-LEGACY-24",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-24",
+          "timestamp_sec": 1788700024,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0025",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_25@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_25",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-25",
+          "vin": "VIN-LEGACY-25",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-25",
+          "timestamp_sec": 1788700025,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0026",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_26@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_26",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-26",
+          "vin": "VIN-LEGACY-26",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-26",
+          "timestamp_sec": 1788700026,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0027",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_27@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_27",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-27",
+          "vin": "VIN-LEGACY-27",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-27",
+          "timestamp_sec": 1788700027,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0028",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_28@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_28",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-28",
+          "vin": "VIN-LEGACY-28",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-28",
+          "timestamp_sec": 1788700028,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0029",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_29@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_29",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-29",
+          "vin": "VIN-LEGACY-29",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-29",
+          "timestamp_sec": 1788700029,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0030",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_30@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_30",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-30",
+          "vin": "VIN-LEGACY-30",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-30",
+          "timestamp_sec": 1788700030,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0031",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_31@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_31",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-31",
+          "vin": "VIN-LEGACY-31",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-31",
+          "timestamp_sec": 1788700031,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0032",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_32@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_32",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-32",
+          "vin": "VIN-LEGACY-32",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-32",
+          "timestamp_sec": 1788700032,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0033",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_33@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_33",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-33",
+          "vin": "VIN-LEGACY-33",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-33",
+          "timestamp_sec": 1788700033,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0034",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_34@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_34",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-34",
+          "vin": "VIN-LEGACY-34",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-34",
+          "timestamp_sec": 1788700034,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0035",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_35@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_35",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-35",
+          "vin": "VIN-LEGACY-35",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-35",
+          "timestamp_sec": 1788700035,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0036",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_36@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_36",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-36",
+          "vin": "VIN-LEGACY-36",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-36",
+          "timestamp_sec": 1788700036,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0037",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_37@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_37",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-37",
+          "vin": "VIN-LEGACY-37",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-37",
+          "timestamp_sec": 1788700037,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0038",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_38@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_38",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-38",
+          "vin": "VIN-LEGACY-38",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-38",
+          "timestamp_sec": 1788700038,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0039",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_39@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_39",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-39",
+          "vin": "VIN-LEGACY-39",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-39",
+          "timestamp_sec": 1788700039,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0040",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_40@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_40",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-40",
+          "vin": "VIN-LEGACY-40",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-40",
+          "timestamp_sec": 1788700040,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0041",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_41@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_41",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-41",
+          "vin": "VIN-LEGACY-41",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-41",
+          "timestamp_sec": 1788700041,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0042",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_42@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_42",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-42",
+          "vin": "VIN-LEGACY-42",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-42",
+          "timestamp_sec": 1788700042,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0043",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_43@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_43",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-43",
+          "vin": "VIN-LEGACY-43",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-43",
+          "timestamp_sec": 1788700043,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0044",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_44@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_44",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-44",
+          "vin": "VIN-LEGACY-44",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-44",
+          "timestamp_sec": 1788700044,
+          "environment": "staging-legacy"
+        }
+      },
+      {
+        "legacy_fixture_id": "LEGACY-DUP-S1-0045",
+        "deprecated_note": "UNNORMALIZED_DUPLICATE_FIXTURE_TO_BE_PRUNED_IN_COMMIT_10",
+        "auth_data": {
+          "mock_user": "legacy_user_45@fleetflow.test",
+          "mock_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.legacyPayloadMockString_45",
+          "mock_role": "CUSTOMER"
+        },
+        "vehicle_snapshot": {
+          "vehicle_id": "veh-45",
+          "vin": "VIN-LEGACY-45",
+          "status": "Available"
+        },
+        "raw_debug_trace": {
+          "trace_id": "trace-uuid-45",
+          "timestamp_sec": 1788700045,
+          "environment": "staging-legacy"
+        }
+      }
+    ]
   }
 }
