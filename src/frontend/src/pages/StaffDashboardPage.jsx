@@ -176,15 +176,23 @@ const StaffDashboardPage = ({ onNavigate }) => {
               <span className="module-badge ready">Active</span>
             </div>
 
-            <div className="module-status-item pending">
+            <div
+              className="module-status-item ready"
+              style={{ cursor: 'pointer' }}
+              onClick={() => onNavigate('maintenance-dashboard')}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => e.key === 'Enter' && onNavigate('maintenance-dashboard')}
+              title="Open Maintenance Dashboard"
+            >
               <div className="module-item-left">
-                <span className="status-indicator-dot pending" aria-hidden="true" />
+                <span className="status-indicator-dot ready" aria-hidden="true" />
                 <div>
                   <strong className="module-name">Maintenance & Telematics</strong>
-                  <p className="module-desc">Vehicle maintenance scheduling and status tracking</p>
+                  <p className="module-desc">Real-time status tracking, attention queue, and service logs</p>
                 </div>
               </div>
-              <span className="module-badge pending">Planned</span>
+              <span className="module-badge ready">Active</span>
             </div>
           </div>
         </div>
@@ -196,6 +204,22 @@ const StaffDashboardPage = ({ onNavigate }) => {
           </div>
 
           <div className="shortcut-actions-list">
+            <button
+              type="button"
+              className="shortcut-action-btn"
+              onClick={() => onNavigate('maintenance-dashboard')}
+            >
+              <div className="shortcut-icon-box" style={{ backgroundColor: 'rgba(245, 158, 11, 0.15)', color: '#d97706' }}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+                </svg>
+              </div>
+              <div className="shortcut-text">
+                <span className="shortcut-title">Maintenance & Health Queue</span>
+                <span className="shortcut-subtitle">Inspect flagged attention units, vehicle status counts, and service queue</span>
+              </div>
+            </button>
+
             <button
               type="button"
               className="shortcut-action-btn"

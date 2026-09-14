@@ -31,6 +31,7 @@ import AddVehiclePage from './pages/vehicle/AddVehiclePage';
 import EditVehiclePage from './pages/vehicle/EditVehiclePage';
 import StaffVehicleDetailsPage from './pages/vehicle/StaffVehicleDetailsPage';
 import VehicleImageManagementPage from './pages/vehicle/VehicleImageManagementPage';
+import MaintenanceDashboardPage from './pages/maintenance/MaintenanceDashboardPage';
 
 // Security Pages
 import ForcePasswordChangePage from './pages/security/ForcePasswordChangePage';
@@ -47,6 +48,7 @@ const STAFF_VIEWS = [
   'admin-user-details',
   'staff-profile',
   'manage-fleet',
+  'maintenance-dashboard',
   'add-vehicle',
   'edit-vehicle',
   'staff-vehicle-details',
@@ -215,6 +217,8 @@ function AppContent() {
           return <StaffProfilePage onNavigate={navigateTo} />;
         case 'manage-fleet':
           return <ManageFleetPage onNavigate={navigateTo} onSelectVehicle={setSelectedVehicle} />;
+        case 'maintenance-dashboard':
+          return <MaintenanceDashboardPage onNavigate={navigateTo} onSelectVehicle={setSelectedVehicle} />;
         case 'add-vehicle':
           return <AddVehiclePage onNavigate={navigateTo} />;
         case 'edit-vehicle':
@@ -251,6 +255,8 @@ function AppContent() {
           return 'Staff Identity & Credentials';
         case 'manage-fleet':
           return 'Fleet Inventory & Operations';
+        case 'maintenance-dashboard':
+          return 'Fleet Maintenance & Health Queue';
         case 'add-vehicle':
           return 'Ingest New Fleet Unit';
         case 'edit-vehicle':
