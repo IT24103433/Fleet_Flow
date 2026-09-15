@@ -341,4 +341,219 @@ public class VehicleStatusTests
         inDb.CreatedAt.Should().Be(originalCreatedAt);
         inDb.UpdatedAt.Should().NotBeNull();
     }
+
+    // =========================================================================
+    // 5. RETIREMENT / DEACTIVATION & ACTIVE-FLEET EXCLUSION TESTS
+    // =========================================================================
+
+    [Fact]
+    public async Task GetPagedVehicles_ExcludesRetiredVehiclesByDefault()
+    {
+        var (dbContext, _, vehicleService, _, category, activeVehicle) = await CreateFixtureAsync();
+
+        var retiredVehicle = new Vehicle
+        {
+            Id = Guid.NewGuid(),
+            Vin = "1HGCR2F83HA000099",
+            LicensePlate = "WP-CAB-9999",
+            Make = "Toyota",
+            Model = "Prius",
+            Year = 2022,
+            VehicleCategoryId = category.Id,
+            Category = category,
+            DailyRate = 12000m,
+            Transmission = "Automatic",
+            FuelType = "Hybrid",
+            SeatingCapacity = "5 Passengers",
+            HubLocation = "Colombo Fort Hub",
+            Mileage = 85000,
+            Status = VehicleStatus.Retired,
+            CreatedAt = DateTime.UtcNow.AddDays(-20)
+        };
+        dbContext.Vehicles.Add(retiredVehicle);
+        await dbContext.SaveChangesAsync();
+
+        // Normal query without status filter
+        var result = await vehicleService.GetPagedVehiclesAsync(new VehicleQueryParameters());
+
+        result.Items.Should().ContainSingle(v => v.Id == activeVehicle.Id);
+        result.Items.Should().NotContain(v => v.Id == retiredVehicle.Id);
+        result.TotalCount.Should().Be(1);
+    }
+
+    [Fact]
+    public async Task GetPagedVehicles_IncludeRetiredTrue_ReturnsBothActiveAndRetired()
+    {
+        var (dbContext, _, vehicleService, _, category, activeVehicle) = await CreateFixtureAsync();
+
+        var retiredVehicle = new Vehicle
+        {
+            Id = Guid.NewGuid(),
+            Vin = "1HGCR2F83HA000099",
+            LicensePlate = "WP-CAB-9999",
+            Make = "Toyota",
+            Model = "Prius",
+            Year = 2022,
+            VehicleCategoryId = category.Id,
+            Category = category,
+            DailyRate = 12000m,
+            Transmission = "Automatic",
+            FuelType = "Hybrid",
+            SeatingCapacity = "5 Passengers",
+            HubLocation = "Colombo Fort Hub",
+            Mileage = 85000,
+            Status = VehicleStatus.Retired,
+            CreatedAt = DateTime.UtcNow.AddDays(-20)
+        };
+        dbContext.Vehicles.Add(retiredVehicle);
+        await dbContext.SaveChangesAsync();
+
+        var result = await vehicleService.GetPagedVehiclesAsync(new VehicleQueryParameters { IncludeRetired = true });
+
+        result.Items.Should().HaveCount(2);
+        result.Items.Should().Contain(v => v.Id == activeVehicle.Id);
+        result.Items.Should().Contain(v => v.Id == retiredVehicle.Id);
+    }
+
+    [Fact]
+    public async Task GetPagedVehicles_StatusRetired_ReturnsOnlyRetiredVehicles()
+    {
+        var (dbContext, _, vehicleService, _, category, activeVehicle) = await CreateFixtureAsync();
+
+        var retiredVehicle = new Vehicle
+        {
+            Id = Guid.NewGuid(),
+            Vin = "1HGCR2F83HA000099",
+            LicensePlate = "WP-CAB-9999",
+            Make = "Toyota",
+            Model = "Prius",
+            Year = 2022,
+            VehicleCategoryId = category.Id,
+            Category = category,
+            DailyRate = 12000m,
+            Transmission = "Automatic",
+            FuelType = "Hybrid",
+            SeatingCapacity = "5 Passengers",
+            HubLocation = "Colombo Fort Hub",
+            Mileage = 85000,
+            Status = VehicleStatus.Retired,
+            CreatedAt = DateTime.UtcNow.AddDays(-20)
+        };
+        dbContext.Vehicles.Add(retiredVehicle);
+        await dbContext.SaveChangesAsync();
+
+        var result = await vehicleService.GetPagedVehiclesAsync(new VehicleQueryParameters { Status = VehicleStatus.Retired });
+
+        result.Items.Should().ContainSingle(v => v.Id == retiredVehicle.Id);
+        result.Items.Should().NotContain(v => v.Id == activeVehicle.Id);
+    }
+
+    [Fact]
+    public async Task RetireVehicle_AsFleetManager_RetiresVehicleAndPreservesHistory()
+    {
+        var (dbContext, kafkaMock, _, controller, category, vehicle) = await CreateFixtureAsync();
+        SetUserContext(controller, "FLEET_MANAGER");
+
+        var originalVin = vehicle.Vin;
+        var originalPlate = vehicle.LicensePlate;
+        var originalMake = vehicle.Make;
+        var originalModel = vehicle.Model;
+        var originalYear = vehicle.Year;
+        var originalCategoryId = vehicle.VehicleCategoryId;
+        var originalRate = vehicle.DailyRate;
+        var originalTransmission = vehicle.Transmission;
+        var originalFuel = vehicle.FuelType;
+        var originalCapacity = vehicle.SeatingCapacity;
+        var originalHub = vehicle.HubLocation;
+        var originalMileage = vehicle.Mileage;
+        var originalCreatedAt = vehicle.CreatedAt;
+
+        var result = await controller.RetireVehicle(vehicle.Id, "End of lease service term");
+
+        var okResult = result.Result as OkObjectResult;
+        okResult.Should().NotBeNull();
+        okResult!.StatusCode.Should().Be(StatusCodes.Status200OK);
+
+        var response = okResult.Value as VehicleResponse;
+        response.Should().NotBeNull();
+        response!.Status.Should().Be(VehicleStatus.Retired);
+        response.UpdatedAt.Should().NotBeNull();
+
+        // Verify in DB
+        var inDb = await dbContext.Vehicles.FindAsync(vehicle.Id);
+        inDb.Should().NotBeNull();
+        inDb!.Status.Should().Be(VehicleStatus.Retired);
+        inDb.Vin.Should().Be(originalVin);
+        inDb.LicensePlate.Should().Be(originalPlate);
+        inDb.Make.Should().Be(originalMake);
+        inDb.Model.Should().Be(originalModel);
+        inDb.Year.Should().Be(originalYear);
+        inDb.VehicleCategoryId.Should().Be(originalCategoryId);
+        inDb.DailyRate.Should().Be(originalRate);
+        inDb.Transmission.Should().Be(originalTransmission);
+        inDb.FuelType.Should().Be(originalFuel);
+        inDb.SeatingCapacity.Should().Be(originalCapacity);
+        inDb.HubLocation.Should().Be(originalHub);
+        inDb.Mileage.Should().Be(originalMileage);
+        inDb.CreatedAt.Should().Be(originalCreatedAt);
+        inDb.UpdatedAt.Should().NotBeNull();
+
+        // Verify Kafka event published
+        kafkaMock.Verify(k => k.PublishAsync(
+            "vehicle-events",
+            vehicle.Id.ToString(),
+            It.Is<VehicleUpdatedEvent>(e => e.VehicleId == vehicle.Id && e.Status == VehicleStatus.Retired)),
+            Times.Once);
+    }
+
+    [Fact]
+    public async Task RetireVehicle_VehicleInUse_Returns400BadRequest()
+    {
+        var (dbContext, _, _, controller, _, vehicle) = await CreateFixtureAsync();
+        SetUserContext(controller, "ADMIN");
+
+        vehicle.Status = VehicleStatus.InUse;
+        await dbContext.SaveChangesAsync();
+
+        var result = await controller.RetireVehicle(vehicle.Id, "Decommission attempt");
+
+        var badRequestResult = result.Result as BadRequestObjectResult;
+        badRequestResult.Should().NotBeNull();
+        badRequestResult!.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+
+        // Verify status unchanged
+        var inDb = await dbContext.Vehicles.FindAsync(vehicle.Id);
+        inDb!.Status.Should().Be(VehicleStatus.InUse);
+    }
+
+    [Fact]
+    public async Task ReactivateVehicle_AsAdmin_RestoresStatusToAvailable()
+    {
+        var (dbContext, _, _, controller, _, vehicle) = await CreateFixtureAsync();
+        SetUserContext(controller, "ADMIN");
+
+        vehicle.Status = VehicleStatus.Retired;
+        await dbContext.SaveChangesAsync();
+
+        var result = await controller.ReactivateVehicle(vehicle.Id);
+
+        var okResult = result.Result as OkObjectResult;
+        okResult.Should().NotBeNull();
+        var response = okResult!.Value as VehicleResponse;
+        response!.Status.Should().Be(VehicleStatus.Available);
+
+        var inDb = await dbContext.Vehicles.FindAsync(vehicle.Id);
+        inDb!.Status.Should().Be(VehicleStatus.Available);
+    }
+
+    [Fact]
+    public void RetireVehicleEndpoint_HasAuthorizeRolesAttribute()
+    {
+        var method = typeof(VehiclesController).GetMethod(nameof(VehiclesController.RetireVehicle));
+        method.Should().NotBeNull();
+
+        var authAttr = method!.GetCustomAttribute<AuthorizeAttribute>();
+        authAttr.Should().NotBeNull();
+        authAttr!.Roles.Should().Be("FLEET_MANAGER,ADMIN");
+    }
 }

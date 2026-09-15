@@ -36,7 +36,8 @@ public class VehiclesController : ControllerBase
         [FromQuery] string? sortOrder = null,
         [FromQuery] int page = 1,
         [FromQuery] int pageSize = 20,
-        [FromQuery] bool paged = false)
+        [FromQuery] bool paged = false,
+        [FromQuery] bool? includeRetired = false)
     {
         var pagedResult = await _vehicleService.GetPagedVehiclesAsync(new VehicleQueryParameters
         {
@@ -50,7 +51,8 @@ public class VehiclesController : ControllerBase
             SortOrder = sortOrder,
             Page = page,
             PageSize = pageSize,
-            Paged = paged
+            Paged = paged,
+            IncludeRetired = includeRetired
         });
 
         Response.Headers["X-Total-Count"] = pagedResult.TotalCount.ToString();
@@ -79,7 +81,8 @@ public class VehiclesController : ControllerBase
         [FromQuery] string? sortBy = null,
         [FromQuery] string? sortOrder = null,
         [FromQuery] int page = 1,
-        [FromQuery] int pageSize = 20)
+        [FromQuery] int pageSize = 20,
+        [FromQuery] bool? includeRetired = false)
     {
         var result = await _vehicleService.GetPagedVehiclesAsync(new VehicleQueryParameters
         {
@@ -93,7 +96,8 @@ public class VehiclesController : ControllerBase
             SortOrder = sortOrder,
             Page = page,
             PageSize = pageSize,
-            Paged = true
+            Paged = true,
+            IncludeRetired = includeRetired
         });
 
         Response.Headers["X-Total-Count"] = result.TotalCount.ToString();
@@ -220,6 +224,56 @@ public class VehiclesController : ControllerBase
         {
             var updated = await _vehicleService.UpdateVehicleStatusAsync(id, request);
             return Ok(updated);
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        catch (ValidationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    [HttpPost("{id:guid}/retire")]
+    [HttpPatch("{id:guid}/retire")]
+    [Authorize(Roles = "FLEET_MANAGER,ADMIN")]
+    [ProducesResponseType(typeof(VehicleResponse), 200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(403)]
+    [ProducesResponseType(404)]
+    public async Task<ActionResult<VehicleResponse>> RetireVehicle(Guid id, [FromQuery] string? reason = null)
+    {
+        try
+        {
+            var retired = await _vehicleService.RetireVehicleAsync(id, reason);
+            return Ok(retired);
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        catch (ValidationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    [HttpPost("{id:guid}/reactivate")]
+    [HttpPatch("{id:guid}/reactivate")]
+    [Authorize(Roles = "FLEET_MANAGER,ADMIN")]
+    [ProducesResponseType(typeof(VehicleResponse), 200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(403)]
+    [ProducesResponseType(404)]
+    public async Task<ActionResult<VehicleResponse>> ReactivateVehicle(Guid id)
+    {
+        try
+        {
+            var reactivated = await _vehicleService.ReactivateVehicleAsync(id);
+            return Ok(reactivated);
         }
         catch (NotFoundException ex)
         {

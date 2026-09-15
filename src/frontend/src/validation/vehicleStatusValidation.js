@@ -82,3 +82,37 @@ export const validateStatusChange = (newStatus, currentStatus, roles = []) => {
 
   return { isValid: true, error: null };
 };
+
+export const canUserRetireVehicle = (roles = []) => {
+  const normalized = (roles || []).map((r) => String(r).toUpperCase().trim());
+  return normalized.includes('FLEET_MANAGER') || normalized.includes('ADMIN');
+};
+
+export const validateRetirement = (vehicle, roles = []) => {
+  if (!vehicle) {
+    return { isValid: false, error: 'Vehicle record is required.' };
+  }
+
+  if (!canUserRetireVehicle(roles)) {
+    return {
+      isValid: false,
+      error: 'Access denied. Only Fleet Managers and Administrators have permission to retire or deactivate vehicles.',
+    };
+  }
+
+  if (vehicle.status === 'Retired') {
+    return {
+      isValid: false,
+      error: 'This vehicle is already retired and decommissioned from active service.',
+    };
+  }
+
+  if (vehicle.status === 'InUse') {
+    return {
+      isValid: false,
+      error: 'Cannot retire a vehicle that is currently In Use with an active customer trip or dispatch.',
+    };
+  }
+
+  return { isValid: true, error: null };
+};

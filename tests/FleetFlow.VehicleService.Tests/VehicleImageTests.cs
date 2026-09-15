@@ -326,9 +326,123 @@ public class VehicleImageTests : IDisposable
         deleteAuth.Should().NotBeNull();
         deleteAuth!.Roles.Should().Be("ADMIN,FLEET_MANAGER");
 
+        var replaceMethod = controllerType.GetMethod(nameof(VehicleImagesController.ReplaceImage));
+        replaceMethod.Should().NotBeNull();
+        var replaceAuth = replaceMethod!.GetCustomAttribute<AuthorizeAttribute>();
+        replaceAuth.Should().NotBeNull();
+        replaceAuth!.Roles.Should().Be("ADMIN,FLEET_MANAGER");
+        var putAttr = replaceMethod.GetCustomAttribute<HttpPutAttribute>();
+        putAttr.Should().NotBeNull();
+        putAttr!.Template.Should().Be("{imageId:guid}");
+
         var getMethod = controllerType.GetMethod(nameof(VehicleImagesController.GetImages));
         getMethod.Should().NotBeNull();
         var allowAnonymous = getMethod!.GetCustomAttribute<AllowAnonymousAttribute>();
         allowAnonymous.Should().NotBeNull();
+    }
+
+    [Fact]
+    public async Task ReplaceImageAsync_ValidPng_ReplacesImageRemovesOldFileAndUpdatesDb()
+    {
+        var (dbContext, service, vehicle) = CreateFixture();
+        var originalFile = CreateMockImageFile("original.jpg", "image/jpeg", JpegHeader, 2048);
+
+        var uploaded = await service.UploadImageAsync(vehicle.Id, originalFile, "Initial Photo");
+        var oldPhysicalPath = Path.Combine(_tempUploadDir, "vehicles", uploaded.FileName);
+        File.Exists(oldPhysicalPath).Should().BeTrue();
+
+        var replacementFile = CreateMockImageFile("replacement.png", "image/png", PngHeader, 3072);
+        var response = await service.ReplaceImageAsync(vehicle.Id, uploaded.Id, replacementFile, "Updated Angle");
+
+        response.Should().NotBeNull();
+        response.Id.Should().Be(uploaded.Id);
+        response.VehicleId.Should().Be(vehicle.Id);
+        response.OriginalFileName.Should().Be("replacement.png");
+        response.ContentType.Should().Be("image/png");
+        response.FileSize.Should().Be(3072);
+        response.Caption.Should().Be("Updated Angle");
+        response.FileName.Should().EndWith(".png");
+        response.RelativeUrl.Should().Be($"/uploads/vehicles/{response.FileName}");
+
+        // Old file must be removed
+        File.Exists(oldPhysicalPath).Should().BeFalse();
+
+        // New physical file must exist
+        var newPhysicalPath = Path.Combine(_tempUploadDir, "vehicles", response.FileName);
+        File.Exists(newPhysicalPath).Should().BeTrue();
+
+        // DB entity must be updated
+        var inDb = await dbContext.VehicleImages.FindAsync(uploaded.Id);
+        inDb.Should().NotBeNull();
+        inDb!.FileName.Should().Be(response.FileName);
+        inDb.ContentType.Should().Be("image/png");
+        inDb.Caption.Should().Be("Updated Angle");
+    }
+
+    [Fact]
+    public async Task ReplaceImageAsync_Exceeding5Mb_ThrowsArgumentExceptionAndPreservesOldFile()
+    {
+        var (_, service, vehicle) = CreateFixture();
+        var originalFile = CreateMockImageFile("original.jpg", "image/jpeg", JpegHeader, 1024);
+        var uploaded = await service.UploadImageAsync(vehicle.Id, originalFile, "Initial Photo");
+        var oldPhysicalPath = Path.Combine(_tempUploadDir, "vehicles", uploaded.FileName);
+
+        const int oversized = (5 * 1024 * 1024) + 1;
+        var hugeFile = CreateMockImageFile("huge.png", "image/png", PngHeader, oversized);
+
+        var act = () => service.ReplaceImageAsync(vehicle.Id, uploaded.Id, hugeFile, "Should Fail");
+
+        await act.Should().ThrowAsync<ArgumentException>()
+            .WithMessage("*5 MB*");
+
+        // Old file must still exist
+        File.Exists(oldPhysicalPath).Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task ReplaceImageAsync_CorruptedHeader_ThrowsArgumentException()
+    {
+        var (_, service, vehicle) = CreateFixture();
+        var originalFile = CreateMockImageFile("original.jpg", "image/jpeg", JpegHeader, 1024);
+        var uploaded = await service.UploadImageAsync(vehicle.Id, originalFile, "Initial Photo");
+
+        var corruptedHeader = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B };
+        var badFile = CreateMockImageFile("corrupted.jpg", "image/jpeg", corruptedHeader, 1024);
+
+        var act = () => service.ReplaceImageAsync(vehicle.Id, uploaded.Id, badFile, "Should Fail");
+
+        await act.Should().ThrowAsync<ArgumentException>()
+            .WithMessage("*corrupted or not a recognized image*");
+    }
+
+    [Fact]
+    public async Task ReplaceImageAsync_NonExistentImage_ThrowsNotFoundException()
+    {
+        var (_, service, vehicle) = CreateFixture();
+        var file = CreateMockImageFile("new.jpg", "image/jpeg", JpegHeader, 1024);
+
+        var act = () => service.ReplaceImageAsync(vehicle.Id, Guid.NewGuid(), file, "New");
+
+        await act.Should().ThrowAsync<NotFoundException>();
+    }
+
+    [Fact]
+    public async Task GetVehicleByIdAsync_RetrievesImagesForVehicle()
+    {
+        var (dbContext, imageService, vehicle) = CreateFixture();
+        var vehicleService = new FleetService.Api.Services.VehicleService(dbContext);
+
+        var file1 = CreateMockImageFile("front.jpg", "image/jpeg", JpegHeader, 1024);
+        var file2 = CreateMockImageFile("rear.jpg", "image/jpeg", JpegHeader, 1024);
+
+        await imageService.UploadImageAsync(vehicle.Id, file1, "Front View");
+        await imageService.UploadImageAsync(vehicle.Id, file2, "Rear View");
+
+        var details = await vehicleService.GetVehicleByIdAsync(vehicle.Id);
+
+        details.Should().NotBeNull();
+        details!.Images.Should().HaveCount(2);
+        details.Images.Should().Contain(i => i.Caption == "Front View");
+        details.Images.Should().Contain(i => i.Caption == "Rear View");
     }
 }

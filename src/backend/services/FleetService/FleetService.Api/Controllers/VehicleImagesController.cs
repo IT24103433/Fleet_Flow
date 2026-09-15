@@ -57,6 +57,31 @@ public class VehicleImagesController : ControllerBase
         }
     }
 
+    [HttpPut("{imageId:guid}")]
+    [Authorize(Roles = "ADMIN,FLEET_MANAGER")]
+    [Consumes("multipart/form-data")]
+    public async Task<ActionResult<VehicleImageResponse>> ReplaceImage(Guid vehicleId, Guid imageId, [FromForm] UploadVehicleImageRequest request)
+    {
+        if (request?.File == null)
+        {
+            return BadRequest(new { message = "An image file must be provided." });
+        }
+
+        try
+        {
+            var response = await _vehicleImageService.ReplaceImageAsync(vehicleId, imageId, request.File, request.Caption);
+            return Ok(response);
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
     [HttpDelete("{imageId:guid}")]
     [Authorize(Roles = "ADMIN,FLEET_MANAGER")]
     public async Task<IActionResult> DeleteImage(Guid vehicleId, Guid imageId)

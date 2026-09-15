@@ -20,7 +20,8 @@ public interface IVehicleService
         string? transmission = null,
         string? hub = null,
         string? sortBy = null,
-        string? sortOrder = null);
+        string? sortOrder = null,
+        bool? includeRetired = null);
 
     Task<VehicleResponse?> GetVehicleByIdAsync(Guid id);
 
@@ -29,6 +30,10 @@ public interface IVehicleService
     Task<VehicleResponse> UpdateVehicleAsync(Guid id, UpdateVehicleRequest request);
 
     Task<VehicleResponse> UpdateVehicleStatusAsync(Guid id, UpdateVehicleStatusRequest request);
+
+    Task<VehicleResponse> RetireVehicleAsync(Guid id, string? reason = null);
+
+    Task<VehicleResponse> ReactivateVehicleAsync(Guid id);
 
     Task<IEnumerable<VehicleCategoryResponse>> GetCategoriesAsync();
 }

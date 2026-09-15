@@ -83,6 +83,11 @@ public class VehicleService : IVehicleService
         {
             query = query.Where(v => v.Status == parameters.Status.Value);
         }
+        else if (parameters.IncludeRetired != true)
+        {
+            // By default, exclude retired vehicles from normal active-fleet queries
+            query = query.Where(v => v.Status != VehicleStatus.Retired);
+        }
 
         // Fuel Type
         if (!string.IsNullOrWhiteSpace(parameters.Fuel) &&
@@ -179,7 +184,8 @@ public class VehicleService : IVehicleService
         string? transmission = null,
         string? hub = null,
         string? sortBy = null,
-        string? sortOrder = null)
+        string? sortOrder = null,
+        bool? includeRetired = null)
     {
         var result = await GetPagedVehiclesAsync(new VehicleQueryParameters
         {
@@ -192,7 +198,8 @@ public class VehicleService : IVehicleService
             Transmission = transmission,
             Hub = hub,
             SortBy = sortBy,
-            SortOrder = sortOrder
+            SortOrder = sortOrder,
+            IncludeRetired = includeRetired
         });
 
         return result.Items;
@@ -203,6 +210,7 @@ public class VehicleService : IVehicleService
         var vehicle = await _dbContext.Vehicles
             .AsNoTracking()
             .Include(v => v.Category)
+            .Include(v => v.Images)
             .FirstOrDefaultAsync(v => v.Id == id);
 
         if (vehicle == null)
@@ -521,7 +529,107 @@ public class VehicleService : IVehicleService
             throw new NotFoundException($"Vehicle with ID '{id}' was not found.");
         }
 
+        if (request.Status == VehicleStatus.Retired && vehicle.Status == VehicleStatus.InUse)
+        {
+            throw new ValidationException("Cannot retire a vehicle that is currently InUse. Active trip or dispatch must be completed first.");
+        }
+
         vehicle.Status = request.Status;
+        vehicle.UpdatedAt = DateTime.UtcNow;
+
+        await _dbContext.SaveChangesAsync();
+
+        if (_kafkaProducer != null)
+        {
+            var updatedEvent = new VehicleUpdatedEvent
+            {
+                VehicleId = vehicle.Id,
+                Vin = vehicle.Vin,
+                LicensePlate = vehicle.LicensePlate,
+                Make = vehicle.Make,
+                Model = vehicle.Model,
+                Year = vehicle.Year,
+                VehicleCategoryId = vehicle.VehicleCategoryId,
+                CategoryName = vehicle.Category?.Name ?? string.Empty,
+                DailyRate = vehicle.DailyRate,
+                Transmission = vehicle.Transmission,
+                FuelType = vehicle.FuelType,
+                SeatingCapacity = vehicle.SeatingCapacity,
+                HubLocation = vehicle.HubLocation,
+                Mileage = vehicle.Mileage,
+                Status = vehicle.Status,
+                UpdatedAt = vehicle.UpdatedAt
+            };
+
+            _ = _kafkaProducer.PublishAsync(_kafkaSettings.VehicleEventsTopic, vehicle.Id.ToString(), updatedEvent);
+        }
+
+        return MapToResponse(vehicle);
+    }
+
+    public async Task<VehicleResponse> RetireVehicleAsync(Guid id, string? reason = null)
+    {
+        var vehicle = await _dbContext.Vehicles
+            .Include(v => v.Category)
+            .Include(v => v.Images)
+            .FirstOrDefaultAsync(v => v.Id == id);
+
+        if (vehicle == null)
+        {
+            throw new NotFoundException($"Vehicle with ID '{id}' was not found.");
+        }
+
+        if (vehicle.Status == VehicleStatus.InUse)
+        {
+            throw new ValidationException("Cannot retire a vehicle that is currently InUse. Active trip or dispatch must be completed first.");
+        }
+
+        vehicle.Status = VehicleStatus.Retired;
+        vehicle.UpdatedAt = DateTime.UtcNow;
+
+        await _dbContext.SaveChangesAsync();
+
+        if (_kafkaProducer != null)
+        {
+            var updatedEvent = new VehicleUpdatedEvent
+            {
+                VehicleId = vehicle.Id,
+                Vin = vehicle.Vin,
+                LicensePlate = vehicle.LicensePlate,
+                Make = vehicle.Make,
+                Model = vehicle.Model,
+                Year = vehicle.Year,
+                VehicleCategoryId = vehicle.VehicleCategoryId,
+                CategoryName = vehicle.Category?.Name ?? string.Empty,
+                DailyRate = vehicle.DailyRate,
+                Transmission = vehicle.Transmission,
+                FuelType = vehicle.FuelType,
+                SeatingCapacity = vehicle.SeatingCapacity,
+                HubLocation = vehicle.HubLocation,
+                Mileage = vehicle.Mileage,
+                Status = vehicle.Status,
+                UpdatedAt = vehicle.UpdatedAt
+            };
+
+            _ = _kafkaProducer.PublishAsync(_kafkaSettings.VehicleEventsTopic, vehicle.Id.ToString(), updatedEvent);
+        }
+
+        return MapToResponse(vehicle);
+    }
+
+    public async Task<VehicleResponse> ReactivateVehicleAsync(Guid id)
+    {
+        var vehicle = await _dbContext.Vehicles
+            .Include(v => v.Category)
+            .Include(v => v.Images)
+            .FirstOrDefaultAsync(v => v.Id == id);
+
+        if (vehicle == null)
+        {
+            throw new NotFoundException($"Vehicle with ID '{id}' was not found.");
+        }
+
+        vehicle.Status = VehicleStatus.Available;
         vehicle.UpdatedAt = DateTime.UtcNow;
 
         await _dbContext.SaveChangesAsync();
@@ -574,7 +682,19 @@ public class VehicleService : IVehicleService
             Mileage = vehicle.Mileage,
             Status = vehicle.Status,
             CreatedAt = vehicle.CreatedAt,
-            UpdatedAt = vehicle.UpdatedAt
+            UpdatedAt = vehicle.UpdatedAt,
+            Images = vehicle.Images?.Select(i => new VehicleImageResponse
+            {
+                Id = i.Id,
+                VehicleId = i.VehicleId,
+                FileName = i.FileName,
+                OriginalFileName = i.OriginalFileName,
+                ContentType = i.ContentType,
+                FileSize = i.FileSize,
+                RelativeUrl = i.RelativeUrl,
+                Caption = i.Caption,
+                CreatedAt = i.CreatedAt
+            }).ToList() ?? new List<VehicleImageResponse>()
         };
     }
 }

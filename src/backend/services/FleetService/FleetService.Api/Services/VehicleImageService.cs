@@ -169,6 +169,117 @@ public class VehicleImageService : IVehicleImageService
         }
     }
 
+    public async Task<VehicleImageResponse> ReplaceImageAsync(Guid vehicleId, Guid imageId, IFormFile? file, string? caption)
+    {
+        if (file == null || file.Length == 0)
+        {
+            throw new ArgumentException("An image file must be provided.");
+        }
+
+        if (file.Length > MaxFileSizeBytes)
+        {
+            throw new ArgumentException("File size exceeds the 5 MB limit.");
+        }
+
+        // Validate MIME type
+        if (!AllowedMimeTypes.Contains(file.ContentType))
+        {
+            throw new ArgumentException($"Unsupported image type '{file.ContentType}'. Allowed types: JPEG, PNG, WebP.");
+        }
+
+        // Validate file extension
+        var ext = Path.GetExtension(file.FileName);
+        if (string.IsNullOrEmpty(ext) || !AllowedExtensions.Contains(ext))
+        {
+            ext = file.ContentType.ToLowerInvariant() switch
+            {
+                "image/png" => ".png",
+                "image/webp" => ".webp",
+                _ => ".jpg"
+            };
+        }
+
+        // Validate magic byte signatures
+        using (var memoryStream = new MemoryStream())
+        {
+            await file.CopyToAsync(memoryStream);
+            var bytes = memoryStream.ToArray();
+
+            if (!IsValidImageHeader(bytes))
+            {
+                throw new ArgumentException("The file content is corrupted or not a recognized image.");
+            }
+
+            // Check that target vehicle exists
+            var vehicleExists = await _dbContext.Vehicles.AnyAsync(v => v.Id == vehicleId);
+            if (!vehicleExists)
+            {
+                throw new NotFoundException($"Vehicle with ID '{vehicleId}' was not found.");
+            }
+
+            // Check that target image exists
+            var image = await _dbContext.VehicleImages
+                .FirstOrDefaultAsync(i => i.Id == imageId && i.VehicleId == vehicleId);
+
+            if (image == null)
+            {
+                throw new NotFoundException($"Image with ID '{imageId}' for vehicle '{vehicleId}' was not found.");
+            }
+
+            var vehiclesDir = GetVehiclesDirectory();
+
+            // Safely delete previous physical file
+            var oldPhysicalPath = Path.Combine(vehiclesDir, image.FileName);
+            if (File.Exists(oldPhysicalPath))
+            {
+                try
+                {
+                    File.Delete(oldPhysicalPath);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"[Storage Warning] Could not remove previous physical file '{oldPhysicalPath}': {ex.Message}");
+                }
+            }
+
+            // Generate unique filename for new image
+            var uniqueFileName = $"{Guid.NewGuid():N}{ext.ToLowerInvariant()}";
+            var targetFilePath = Path.Combine(vehiclesDir, uniqueFileName);
+
+            // Save to physical file
+            await File.WriteAllBytesAsync(targetFilePath, bytes);
+
+            // Relative URL
+            var relativeUrl = $"/uploads/vehicles/{uniqueFileName}";
+
+            // Update metadata
+            image.FileName = uniqueFileName;
+            image.OriginalFileName = Path.GetFileName(file.FileName);
+            image.ContentType = file.ContentType;
+            image.FileSize = file.Length;
+            image.RelativeUrl = relativeUrl;
+            if (caption != null)
+            {
+                image.Caption = string.IsNullOrWhiteSpace(caption) ? null : caption.Trim();
+            }
+
+            await _dbContext.SaveChangesAsync();
+
+            return new VehicleImageResponse
+            {
+                Id = image.Id,
+                VehicleId = image.VehicleId,
+                FileName = image.FileName,
+                OriginalFileName = image.OriginalFileName,
+                ContentType = image.ContentType,
+                FileSize = image.FileSize,
+                RelativeUrl = image.RelativeUrl,
+                Caption = image.Caption,
+                CreatedAt = image.CreatedAt
+            };
+        }
+    }
+
     public async Task DeleteImageAsync(Guid vehicleId, Guid imageId)
     {
         var image = await _dbContext.VehicleImages

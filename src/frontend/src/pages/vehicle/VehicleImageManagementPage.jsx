@@ -4,11 +4,13 @@ import Alert from '../../components/Alert';
 import Modal from '../../components/common/Modal';
 import InputField from '../../components/InputField';
 import { useAuth } from '../../context/AuthContext';
-import { getVehicleImages, uploadVehicleImage, deleteVehicleImage } from '../../services/vehicleImageService';
+import { getVehicleImages, uploadVehicleImage, replaceVehicleImage, deleteVehicleImage } from '../../services/vehicleImageService';
 import { getVehicleImageUrl } from '../../utils/imageUrlUtils';
 
 const VehicleImageManagementPage = ({ selectedVehicle, onNavigate }) => {
-  const { token } = useAuth();
+  const { roles, token } = useAuth();
+  const canManagePhotos = (roles || []).some((r) => ['FLEET_MANAGER', 'ADMIN'].includes(String(r).toUpperCase()));
+
   const [images, setImages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isUploading, setIsUploading] = useState(false);
@@ -20,6 +22,14 @@ const VehicleImageManagementPage = ({ selectedVehicle, onNavigate }) => {
   const [pendingPreviewUrl, setPendingPreviewUrl] = useState(null);
   const [caption, setCaption] = useState('');
   const [isCaptionModalOpen, setIsCaptionModalOpen] = useState(false);
+
+  // Replace modal state
+  const [replacingImage, setReplacingImage] = useState(null);
+  const [replaceFile, setReplaceFile] = useState(null);
+  const [replacePreviewUrl, setReplacePreviewUrl] = useState(null);
+  const [replaceCaption, setReplaceCaption] = useState('');
+  const [isReplaceModalOpen, setIsReplaceModalOpen] = useState(false);
+  const [isReplacing, setIsReplacing] = useState(false);
 
   const vehicle = selectedVehicle;
   const vehicleId = vehicle?.id;
@@ -75,8 +85,38 @@ const VehicleImageManagementPage = ({ selectedVehicle, onNavigate }) => {
   const galleryImages = images.slice(1);
 
   const handleFileSelect = (e) => {
+    if (!canManagePhotos) {
+      setNotice({
+        type: 'error',
+        title: 'Unauthorized Action',
+        message: 'Only Fleet Managers and Administrators have permission to upload photos.',
+      });
+      e.target.value = '';
+      return;
+    }
+
     const file = e.target.files?.[0];
     if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        setNotice({
+          type: 'error',
+          title: 'File Too Large',
+          message: 'Selected photo exceeds the 5 MB limit. Please select a smaller image file.',
+        });
+        e.target.value = '';
+        return;
+      }
+
+      if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+        setNotice({
+          type: 'error',
+          title: 'Unsupported Image Type',
+          message: 'Only JPEG, PNG, and WebP image formats are accepted.',
+        });
+        e.target.value = '';
+        return;
+      }
+
       setSelectedFile(file);
       const previewUrl = URL.createObjectURL(file);
       setPendingPreviewUrl(previewUrl);
@@ -102,7 +142,7 @@ const VehicleImageManagementPage = ({ selectedVehicle, onNavigate }) => {
       setNotice({
         type: 'success',
         title: 'Photo Uploaded',
-        message: 'Vehicle photo uploaded successfully and saved to storage.',
+        message: 'Vehicle photo uploaded successfully and saved to persistent file storage.',
       });
       handleCloseModal();
     } else {
@@ -114,7 +154,112 @@ const VehicleImageManagementPage = ({ selectedVehicle, onNavigate }) => {
     }
   };
 
+  const handleOpenReplaceModal = (img) => {
+    if (!canManagePhotos) {
+      setNotice({
+        type: 'error',
+        title: 'Unauthorized Action',
+        message: 'Only Fleet Managers and Administrators have permission to replace photos.',
+      });
+      return;
+    }
+
+    setReplacingImage(img);
+    setReplaceFile(null);
+    setReplacePreviewUrl(null);
+    setReplaceCaption(img.caption || img.originalFileName || '');
+    setIsReplaceModalOpen(true);
+  };
+
+  const handleCloseReplaceModal = () => {
+    if (isReplacing) return;
+    if (replacePreviewUrl) {
+      URL.revokeObjectURL(replacePreviewUrl);
+    }
+    setIsReplaceModalOpen(false);
+    setReplacingImage(null);
+    setReplaceFile(null);
+    setReplacePreviewUrl(null);
+    setReplaceCaption('');
+  };
+
+  const handleReplaceFileSelect = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        setNotice({
+          type: 'error',
+          title: 'File Too Large',
+          message: 'Replacement photo exceeds the 5 MB limit. Please select a smaller image file.',
+        });
+        e.target.value = '';
+        return;
+      }
+
+      if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+        setNotice({
+          type: 'error',
+          title: 'Unsupported Image Type',
+          message: 'Only JPEG, PNG, and WebP image formats are accepted.',
+        });
+        e.target.value = '';
+        return;
+      }
+
+      setReplaceFile(file);
+      if (replacePreviewUrl) {
+        URL.revokeObjectURL(replacePreviewUrl);
+      }
+      setReplacePreviewUrl(URL.createObjectURL(file));
+    }
+    e.target.value = '';
+  };
+
+  const handleConfirmReplace = async (e) => {
+    e.preventDefault();
+    if (!replaceFile || !vehicle?.id || !replacingImage?.id) {
+      setNotice({
+        type: 'error',
+        title: 'Replacement File Required',
+        message: 'Please select a replacement image file before confirming.',
+      });
+      return;
+    }
+
+    setIsReplacing(true);
+    setNotice(null);
+
+    const result = await replaceVehicleImage(vehicle.id, replacingImage.id, replaceFile, replaceCaption, token);
+    setIsReplacing(false);
+
+    if (result.success && result.data) {
+      const updated = result.data;
+      setImages((prev) => prev.map((img) => (img.id === updated.id ? updated : img)));
+      setNotice({
+        type: 'success',
+        title: 'Photo Replaced',
+        message: 'Vehicle photo was successfully replaced and updated in storage.',
+      });
+      handleCloseReplaceModal();
+    } else {
+      setNotice({
+        type: 'error',
+        title: 'Replacement Failed',
+        message: result.message || 'Could not replace vehicle photo.',
+      });
+    }
+  };
+
   const handleDeleteImage = async (imageId) => {
+    if (!canManagePhotos) {
+      setNotice({
+        type: 'error',
+        title: 'Unauthorized Action',
+        message: 'Only Fleet Managers and Administrators have permission to delete photos.',
+      });
+      return;
+    }
+
     if (!vehicle?.id || !imageId) return;
     setDeletingId(imageId);
     setNotice(null);
@@ -253,15 +398,25 @@ const VehicleImageManagementPage = ({ selectedVehicle, onNavigate }) => {
                 <strong className="primary-title">{primaryImage?.caption || primaryImage?.originalFileName || 'Primary Showcase'}</strong>
                 <p className="primary-sub">Displayed on browse fleet cards and top hero view.</p>
               </div>
-              <Button
-                variant="danger"
-                size="sm"
-                onClick={() => handleDeleteImage(primaryImage.id)}
-                disabled={deletingId === primaryImage.id}
-                isLoading={deletingId === primaryImage.id}
-              >
-                Delete
-              </Button>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleOpenReplaceModal(primaryImage)}
+                  disabled={!canManagePhotos}
+                >
+                  Replace
+                </Button>
+                <Button
+                  variant="danger"
+                  size="sm"
+                  onClick={() => handleDeleteImage(primaryImage.id)}
+                  disabled={!canManagePhotos || deletingId === primaryImage.id}
+                  isLoading={deletingId === primaryImage.id}
+                >
+                  Delete
+                </Button>
+              </div>
             </div>
           </div>
 
@@ -292,9 +447,17 @@ const VehicleImageManagementPage = ({ selectedVehicle, onNavigate }) => {
                       <div className="gallery-item-actions">
                         <button
                           type="button"
+                          className="btn-gallery-action replace"
+                          onClick={() => handleOpenReplaceModal(img)}
+                          disabled={!canManagePhotos}
+                        >
+                          Replace
+                        </button>
+                        <button
+                          type="button"
                           className="btn-gallery-action remove"
                           onClick={() => handleDeleteImage(img.id)}
-                          disabled={deletingId === img.id}
+                          disabled={!canManagePhotos || deletingId === img.id}
                         >
                           {deletingId === img.id ? 'Deleting...' : 'Delete'}
                         </button>
@@ -349,6 +512,80 @@ const VehicleImageManagementPage = ({ selectedVehicle, onNavigate }) => {
             </Button>
             <Button type="submit" variant="primary" disabled={isUploading} isLoading={isUploading}>
               Upload Photo
+            </Button>
+          </div>
+        </form>
+      </Modal>
+
+      {/* Replace Photo Modal */}
+      <Modal
+        isOpen={isReplaceModalOpen}
+        onClose={handleCloseReplaceModal}
+        title="Replace Vehicle Photo"
+        subtitle="Select a new image file to replace this asset in storage."
+      >
+        <form onSubmit={handleConfirmReplace}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+            <div style={{ textAlign: 'center' }}>
+              <span style={{ display: 'block', fontSize: '12px', fontWeight: 600, marginBottom: '6px', color: 'var(--color-text-secondary)' }}>
+                Current Photo
+              </span>
+              {replacingImage?.relativeUrl && (
+                <img
+                  src={getVehicleImageUrl(replacingImage.relativeUrl)}
+                  alt="Current"
+                  style={{ width: '100%', height: '140px', objectFit: 'cover', borderRadius: '6px', border: '1px solid var(--color-border)' }}
+                />
+              )}
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <span style={{ display: 'block', fontSize: '12px', fontWeight: 600, marginBottom: '6px', color: 'var(--color-text-secondary)' }}>
+                Replacement Photo
+              </span>
+              {replacePreviewUrl ? (
+                <img
+                  src={replacePreviewUrl}
+                  alt="New preview"
+                  style={{ width: '100%', height: '140px', objectFit: 'cover', borderRadius: '6px', border: '2px solid var(--color-primary)' }}
+                />
+              ) : (
+                <div style={{ width: '100%', height: '140px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#f1f5f9', borderRadius: '6px', border: '1px dashed var(--color-border)' }}>
+                  <span style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>Select file below</span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div style={{ marginBottom: '16px' }}>
+            <label htmlFor="replaceFileInput" style={{ display: 'block', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>
+              Choose Replacement Image (JPEG, PNG, WebP up to 5 MB):
+            </label>
+            <input
+              type="file"
+              id="replaceFileInput"
+              accept="image/jpeg,image/png,image/webp"
+              onChange={handleReplaceFileSelect}
+              style={{ width: '100%', fontSize: '13px' }}
+            />
+          </div>
+
+          <div style={{ marginBottom: '16px' }}>
+            <InputField
+              label="Photo Description / Caption"
+              id="replaceCaption"
+              name="replaceCaption"
+              value={replaceCaption}
+              onChange={(e) => setReplaceCaption(e.target.value)}
+              placeholder="e.g. Front 3/4 Exterior View"
+            />
+          </div>
+
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 'var(--space-3)' }}>
+            <Button type="button" variant="outline" onClick={handleCloseReplaceModal} disabled={isReplacing}>
+              Cancel
+            </Button>
+            <Button type="submit" variant="primary" disabled={isReplacing || !replaceFile} isLoading={isReplacing}>
+              Confirm Replacement
             </Button>
           </div>
         </form>

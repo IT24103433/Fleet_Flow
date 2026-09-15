@@ -4,19 +4,22 @@ import Button from '../../components/common/Button';
 import Modal from '../../components/common/Modal';
 import Alert from '../../components/Alert';
 import { useAuth } from '../../context/AuthContext';
-import { getVehicles, getCategories, updateVehicleStatus } from '../../services/vehicleService';
+import { getVehicles, getCategories, updateVehicleStatus, retireVehicle, reactivateVehicle } from '../../services/vehicleService';
 import {
   getAvailableStatusTransitionsForRoles,
   canUserChangeStatus,
   validateStatusChange,
+  canUserRetireVehicle,
+  validateRetirement,
 } from '../../validation/vehicleStatusValidation';
 
 const STATUS_OPTIONS = [
-  { value: 'ALL', label: 'All Statuses' },
+  { value: 'ALL', label: 'All Active Inventory' },
   { value: 'Available', label: 'Available' },
   { value: 'InUse', label: 'In Use' },
   { value: 'Maintenance', label: 'Maintenance' },
-  { value: 'Retired', label: 'Retired' },
+  { value: 'Retired', label: 'Retired (Decommissioned)' },
+  { value: 'ALL_INC_RETIRED', label: 'All Inventory (Inc. Retired)' },
 ];
 
 const FUEL_OPTIONS = [
@@ -59,6 +62,7 @@ const ManageFleetPage = ({ onNavigate, onSelectVehicle }) => {
   const { roles, token } = useAuth();
   const canAddVehicle = (roles || []).some((r) => ['FLEET_MANAGER', 'ADMIN'].includes(String(r).toUpperCase()));
   const canManageStatus = canUserChangeStatus(roles);
+  const canRetireVehicle = canUserRetireVehicle(roles);
 
   // Status Change Modal States
   const [statusModalVehicle, setStatusModalVehicle] = useState(null);
@@ -66,6 +70,12 @@ const ManageFleetPage = ({ onNavigate, onSelectVehicle }) => {
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
   const [statusModalError, setStatusModalError] = useState(null);
   const [statusSuccessMessage, setStatusSuccessMessage] = useState(null);
+
+  // Retirement Deactivation Modal States
+  const [retireModalVehicle, setRetireModalVehicle] = useState(null);
+  const [retireReason, setRetireReason] = useState('');
+  const [isRetiring, setIsRetiring] = useState(false);
+  const [retireModalError, setRetireModalError] = useState(null);
 
   const [vehicles, setVehicles] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -123,7 +133,9 @@ const ManageFleetPage = ({ onNavigate, onSelectVehicle }) => {
       sortOrder: sortOrder || 'desc',
     };
 
-    if (selectedStatusFilter && selectedStatusFilter !== 'ALL') {
+    if (selectedStatusFilter === 'ALL_INC_RETIRED') {
+      params.includeRetired = true;
+    } else if (selectedStatusFilter && selectedStatusFilter !== 'ALL') {
       params.status = selectedStatusFilter;
     }
     if (selectedCategoryFilter && selectedCategoryFilter !== 'ALL') {
@@ -298,6 +310,78 @@ const ManageFleetPage = ({ onNavigate, onSelectVehicle }) => {
       }, 6000);
     } else {
       setStatusModalError(result.message || 'Failed to update vehicle status.');
+    }
+  };
+
+  const handleOpenRetireModal = (vehicle) => {
+    setRetireModalVehicle(vehicle);
+    setRetireReason('');
+    setRetireModalError(null);
+  };
+
+  const handleCloseRetireModal = () => {
+    if (isRetiring) return;
+    setRetireModalVehicle(null);
+    setRetireReason('');
+    setRetireModalError(null);
+  };
+
+  const handleConfirmRetire = async () => {
+    if (!retireModalVehicle) return;
+
+    const validation = validateRetirement(retireModalVehicle, roles);
+    if (!validation.isValid) {
+      setRetireModalError(validation.error);
+      return;
+    }
+
+    setIsRetiring(true);
+    setRetireModalError(null);
+
+    const result = await retireVehicle(retireModalVehicle.id, retireReason, token);
+    setIsRetiring(false);
+
+    if (result.success) {
+      const updated = result.data;
+      setVehicles((prev) =>
+        prev.map((v) => (v.id === updated.id ? { ...v, status: 'Retired', updatedAt: updated.updatedAt } : v))
+      );
+      setStatusSuccessMessage(
+        `Vehicle ${retireModalVehicle.licensePlate || retireModalVehicle.vin} (${retireModalVehicle.year} ${retireModalVehicle.make} ${retireModalVehicle.model}) successfully retired. Unit is decommissioned from active fleet views while vehicle specifications and maintenance history remain preserved.`
+      );
+      setRetireModalVehicle(null);
+      if (selectedStatusFilter === 'ALL') {
+        fetchVehicles();
+      }
+      setTimeout(() => {
+        setStatusSuccessMessage(null);
+      }, 6000);
+    } else {
+      setRetireModalError(result.message || 'Failed to retire vehicle.');
+    }
+  };
+
+  const handleReactivateVehicle = async (vehicle) => {
+    if (!vehicle || !canRetireVehicle) return;
+    const confirmed = window.confirm(
+      `Reactivate vehicle ${vehicle.licensePlate || vehicle.vin} (${vehicle.year} ${vehicle.make} ${vehicle.model}) back to Available status in active fleet inventory?`
+    );
+    if (!confirmed) return;
+
+    const result = await reactivateVehicle(vehicle.id, token);
+    if (result.success) {
+      const updated = result.data;
+      setVehicles((prev) =>
+        prev.map((v) => (v.id === updated.id ? { ...v, status: 'Available', updatedAt: updated.updatedAt } : v))
+      );
+      setStatusSuccessMessage(
+        `Vehicle ${vehicle.licensePlate || vehicle.vin} has been reactivated and returned to active fleet inventory.`
+      );
+      setTimeout(() => {
+        setStatusSuccessMessage(null);
+      }, 6000);
+    } else {
+      setErrorMessage(result.message || 'Failed to reactivate vehicle.');
     }
   };
 
@@ -628,16 +712,20 @@ const ManageFleetPage = ({ onNavigate, onSelectVehicle }) => {
                     const hubLocation = v.hubLocation || v.hub || '—';
                     const mileage = typeof v.mileage === 'number' ? `${v.mileage.toLocaleString()} mi` : (v.mileage ? `${v.mileage} mi` : '—');
                     const dailyRate = typeof v.dailyRate === 'number' ? `$${v.dailyRate.toFixed(2)}/day` : (v.dailyRate ? `$${v.dailyRate}/day` : '—');
+                    const isRetired = v.status === 'Retired';
 
                     return (
-                      <tr key={v.id}>
+                      <tr key={v.id} className={isRetired ? 'vehicle-row-retired' : ''}>
                         <td>
                           <div className="user-cell-meta">
-                            <div className="user-table-avatar" style={{ backgroundColor: '#0F172A' }}>
-                              🚗
+                            <div className="user-table-avatar" style={{ backgroundColor: isRetired ? '#475569' : '#0F172A' }}>
+                              {isRetired ? '🚫' : '🚗'}
                             </div>
                             <div>
-                              <strong className="user-name-text">{v.year} {v.make} {v.model}</strong>
+                              <strong className="user-name-text">
+                                {v.year} {v.make} {v.model}
+                                {isRetired && <span className="decommissioned-inline-pill">Decommissioned</span>}
+                              </strong>
                               <p className="user-email-sub">{fuelType} • {transmission} • {dailyRate}</p>
                             </div>
                           </div>
@@ -650,7 +738,12 @@ const ManageFleetPage = ({ onNavigate, onSelectVehicle }) => {
                           <span className="table-date">{categoryName}</span>
                         </td>
                         <td>
-                          <StatusBadge status={v.status} />
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', alignItems: 'flex-start' }}>
+                            <StatusBadge status={v.status} />
+                            {isRetired && (
+                              <span className="retired-preserved-note">History Preserved</span>
+                            )}
+                          </div>
                         </td>
                         <td>
                           <span className="table-date">{hubLocation}</span>
@@ -677,6 +770,28 @@ const ManageFleetPage = ({ onNavigate, onSelectVehicle }) => {
                               >
                                 Status
                               </button>
+                            )}
+                            {canRetireVehicle && (
+                              isRetired ? (
+                                <button
+                                  type="button"
+                                  className="btn-table-action btn-table-action-reactivate"
+                                  onClick={() => handleReactivateVehicle(v)}
+                                  title="Reactivate Vehicle back to Active Fleet"
+                                >
+                                  Reactivate
+                                </button>
+                              ) : (
+                                <button
+                                  type="button"
+                                  className="btn-table-action btn-table-action-retire"
+                                  onClick={() => handleOpenRetireModal(v)}
+                                  title={v.status === 'InUse' ? 'Cannot retire a vehicle in active customer use' : 'Retire or Decommission Vehicle'}
+                                  disabled={v.status === 'InUse'}
+                                >
+                                  Retire
+                                </button>
+                              )
                             )}
                             {canAddVehicle && (
                               <>
@@ -914,6 +1029,109 @@ const ManageFleetPage = ({ onNavigate, onSelectVehicle }) => {
             isLoading={isUpdatingStatus}
           >
             Confirm Status Change
+          </Button>
+        </div>
+      </Modal>
+
+      {/* Vehicle Decommission / Retirement Confirmation Modal */}
+      <Modal
+        isOpen={Boolean(retireModalVehicle)}
+        onClose={handleCloseRetireModal}
+        title="Retire & Decommission Vehicle"
+        subtitle={`Decommission ${retireModalVehicle?.year} ${retireModalVehicle?.make} ${retireModalVehicle?.model} from active commercial service`}
+      >
+        {retireModalError && (
+          <div style={{ marginBottom: '16px' }}>
+            <Alert type="error" title="Decommission Error" message={retireModalError} />
+          </div>
+        )}
+
+        <div style={{ marginBottom: '1.25rem', fontSize: '13px', color: 'var(--color-text-secondary, #64748b)', lineHeight: '1.5' }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '12px 14px',
+              backgroundColor: 'var(--color-surface, #f8fafc)',
+              borderRadius: '8px',
+              border: '1px solid var(--color-border, #e2e8f0)',
+              marginBottom: '16px',
+            }}
+          >
+            <div>
+              <strong style={{ display: 'block', color: 'var(--color-text-primary, #0f172a)', fontSize: '14px' }}>
+                {retireModalVehicle?.year} {retireModalVehicle?.make} {retireModalVehicle?.model}
+              </strong>
+              <span style={{ fontSize: '11px', color: 'var(--color-text-muted, #94a3b8)' }}>
+                Plate: {retireModalVehicle?.licensePlate} • VIN: {retireModalVehicle?.vin}
+              </span>
+            </div>
+            <div>
+              <StatusBadge status={retireModalVehicle?.status} />
+            </div>
+          </div>
+
+          <div
+            style={{
+              padding: '12px 14px',
+              backgroundColor: '#FEF2F2',
+              border: '1px solid #FECACA',
+              borderRadius: '8px',
+              color: '#991B1B',
+              fontSize: '13px',
+              marginBottom: '16px',
+              lineHeight: '1.45',
+            }}
+          >
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <span style={{ fontSize: '16px' }}>⚠️</span>
+              <div>
+                <strong style={{ display: 'block', marginBottom: '4px' }}>Active Fleet Exclusion & History Preservation</strong>
+                <p style={{ margin: 0 }}>
+                  Retiring this vehicle marks it as decommissioned and safely excludes it from normal active-fleet views and customer rental availability.
+                  <strong> All existing vehicle history, specifications, photos, and maintenance records will remain fully preserved in the database.</strong>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div style={{ marginBottom: '16px' }}>
+            <label
+              htmlFor="retireReasonInput"
+              style={{
+                display: 'block',
+                fontWeight: 600,
+                color: 'var(--color-text-primary, #0f172a)',
+                marginBottom: '6px',
+              }}
+            >
+              Retirement / Decommission Reason (Optional):
+            </label>
+            <input
+              id="retireReasonInput"
+              type="text"
+              placeholder="e.g., End of lease term, fleet renewal, sold, mechanical salvage"
+              value={retireReason}
+              onChange={(e) => setRetireReason(e.target.value)}
+              disabled={isRetiring}
+              className="filter-search-input"
+              style={{ width: '100%', padding: '10px 12px', fontSize: '14px', borderRadius: '6px' }}
+            />
+          </div>
+        </div>
+
+        <div className="modal-actions-row">
+          <Button variant="outline" onClick={handleCloseRetireModal} disabled={isRetiring}>
+            Cancel
+          </Button>
+          <Button
+            variant="danger"
+            onClick={handleConfirmRetire}
+            disabled={isRetiring}
+            isLoading={isRetiring}
+          >
+            Confirm Decommission & Retire
           </Button>
         </div>
       </Modal>

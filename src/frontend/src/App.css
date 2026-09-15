@@ -4611,3 +4611,205 @@
   border-color: var(--color-border);
   background-color: var(--color-surface);
 }
+
+/* ==========================================================================
+   Vehicle Retirement & Media Management Styles
+   ========================================================================== */
+
+/* Retired Vehicle Row in Table */
+.vehicle-row-retired {
+  background-color: #f8fafc;
+  opacity: 0.88;
+}
+
+.vehicle-row-retired:hover {
+  background-color: #f1f5f9;
+}
+
+.decommissioned-inline-pill {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 7px;
+  background-color: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  vertical-align: middle;
+}
+
+.retired-preserved-note {
+  font-size: 10px;
+  color: #64748b;
+  font-style: italic;
+  display: block;
+}
+
+.btn-table-action-retire {
+  color: #dc2626 !important;
+}
+
+.btn-table-action-retire:hover:not(:disabled) {
+  background-color: #fee2e2 !important;
+  color: #991b1b !important;
+}
+
+.btn-table-action-reactivate {
+  color: #0284c7 !important;
+}
+
+.btn-table-action-reactivate:hover:not(:disabled) {
+  background-color: #e0f2fe !important;
+  color: #0369a1 !important;
+}
+
+/* Decommissioned Alert Banner */
+.decommissioned-alert-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 20px;
+  background-color: #fff1f2;
+  border: 1px solid #fecdd3;
+  border-left: 4px solid #e11d48;
+  border-radius: var(--radius-md, 8px);
+}
+
+.decommissioned-alert-icon {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.decommissioned-alert-title {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  color: #9f1239;
+  margin-bottom: 4px;
+}
+
+.decommissioned-alert-desc {
+  margin: 0;
+  font-size: 13px;
+  color: #881337;
+  line-height: 1.5;
+}
+
+/* Photo Gallery in Vehicle Inspection */
+.photo-count-pill {
+  display: inline-block;
+  padding: 2px 8px;
+  background-color: var(--color-surface-hover, #f1f5f9);
+  color: var(--color-text-secondary, #64748b);
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-pill, 9999px);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.empty-gallery-box {
+  padding: 32px 16px;
+  text-align: center;
+  background-color: var(--color-surface-alt, #f8fafc);
+  border: 1px dashed var(--color-border, #e2e8f0);
+  border-radius: var(--radius-md, 8px);
+}
+
+.vehicle-gallery-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.gallery-primary-container {
+  position: relative;
+  width: 100%;
+  max-height: 380px;
+  background-color: #0f172a;
+  border-radius: var(--radius-md, 8px);
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gallery-primary-img {
+  width: 100%;
+  max-height: 380px;
+  object-fit: cover;
+  transition: transform 0.2s ease;
+}
+
+.gallery-primary-container:hover .gallery-primary-img {
+  transform: scale(1.02);
+}
+
+.gallery-img-caption-strip {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px 16px;
+  background: linear-gradient(to top, rgba(15, 23, 42, 0.85), transparent);
+  color: #f8fafc;
+  font-size: 13px;
+  font-weight: 500;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.gallery-counter-pill {
+  background-color: rgba(15, 23, 42, 0.6);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+}
+
+.gallery-thumbnails-strip {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+}
+
+.gallery-thumb-btn {
+  flex-shrink: 0;
+  width: 72px;
+  height: 52px;
+  padding: 0;
+  border: 2px solid var(--color-border, #e2e8f0);
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  background: none;
+  transition: border-color 0.15s ease;
+}
+
+.gallery-thumb-btn:hover {
+  border-color: var(--color-primary, #0284c7);
+}
+
+.gallery-thumb-btn.active {
+  border-color: var(--color-primary, #0284c7);
+  box-shadow: 0 0 0 1px var(--color-primary, #0284c7);
+}
+
+.gallery-thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.btn-gallery-action.replace {
+  color: var(--color-primary, #0284c7);
+}
+
+.btn-gallery-action.replace:hover:not(:disabled) {
+  background-color: #e0f2fe;
+}
+
