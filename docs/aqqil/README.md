@@ -59,6 +59,7 @@ docs/aqqil/
 | BM-108 | 2026-09-12 | Rental & Notification | 50-100 VUs | /api/bookings, /notifications | 72.5 ms | < 130 ms | PASSED | Added initial rental-notification throughput CSV |
 | BM-109 | 2026-09-14 | RentalService | 150 VUs | /api/bookings (Concurrent) | N/A | < 130 ms | PREPARED | Added concurrent booking collision payloads |
 | BM-110 | 2026-09-14 | RentalService | 150 VUs | /api/bookings (Schema) | N/A | < 130 ms | REFACTORED | Normalized schema & pruned duplicate Sprint 1 fixtures |
+| BM-111 | 2026-09-16 | FleetService | 150 VUs | /api/vehicles, /api/maintenance | 38.4 ms | < 75 ms | PASSED | Documented Postgres connection pool saturation & fix |
 
 ---
 

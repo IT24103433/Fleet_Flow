@@ -75,3 +75,9 @@ All microservices must conform to the following percentile latency targets under
 - **Database Server:** PostgreSQL 16.2 on Dedicated SSD Instance (4 vCPU, 16GB RAM, max_connections = 300)
 - **Kafka Cluster:** 3 Broker Nodes, replication factor = 2, min.insync.replicas = 2
 - **Redis Cache:** Redis 7.2 Standalone (2GB RAM, `allkeys-lru` eviction policy)
+
+### Connection Pool Capacity & Timeout Limits (Updated Sprint 2)
+- **IdentityService:** MaxPoolSize = 150, ConnectionTimeout = 15s
+- **FleetService:** MaxPoolSize = 250, ConnectionTimeout = 15s
+- **RentalService:** MaxPoolSize = 200, ConnectionTimeout = 15s
+- **NotificationService:** MaxPoolSize = 100, ConnectionTimeout = 10s
