@@ -60,6 +60,7 @@ docs/aqqil/
 | BM-109 | 2026-09-14 | RentalService | 150 VUs | /api/bookings (Concurrent) | N/A | < 130 ms | PREPARED | Added concurrent booking collision payloads |
 | BM-110 | 2026-09-14 | RentalService | 150 VUs | /api/bookings (Schema) | N/A | < 130 ms | REFACTORED | Normalized schema & pruned duplicate Sprint 1 fixtures |
 | BM-111 | 2026-09-16 | FleetService | 150 VUs | /api/vehicles, /api/maintenance | 38.4 ms | < 75 ms | PASSED | Documented Postgres connection pool saturation & fix |
+| BM-112 | 2026-09-18 | FleetService | 250 VUs | /api/vehicles (Pagination) | 36.8 ms | < 75 ms | PASSED | Recorded 250 VU ramp-up for catalog pagination |
 
 ---
 
