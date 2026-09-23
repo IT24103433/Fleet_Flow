@@ -63,6 +63,7 @@ docs/aqqil/
 | BM-112 | 2026-09-18 | FleetService | 250 VUs | /api/vehicles (Pagination) | 36.8 ms | < 75 ms | PASSED | Recorded 250 VU ramp-up for catalog pagination |
 | BM-113 | 2026-09-20 | NotificationService | 200 VUs | Kafka Outbox & Event Streaming | 42.0 ms | < 500 ms lag | PASSED | Added Kafka streaming & outbox metrics |
 | BM-114 | 2026-09-21 | FleetService | 250 VUs | /api/vehicles/search | 41.5 ms | < 75 ms | RECALIBRATED | Cleaned up docker bridge timeout spikes |
+| BM-115 | 2026-09-23 | FleetService | 50 VUs | /api/maintenance/dashboard | 32.4 ms | < 95 ms | PASSED | Documented maintenance work-order index findings |
 
 ---
 
