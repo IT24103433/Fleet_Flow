@@ -241,3 +241,63 @@ export const deleteProfilePicture = async (token) => {
   }
 };
 
+export const changePassword = async (token, newPassword, currentPassword = null) => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    };
+
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const payload = { newPassword };
+    if (currentPassword) {
+      payload.currentPassword = currentPassword;
+    }
+
+    const response = await fetch(`${IDENTITY_API_URL}/api/auth/change-password`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(30000),
+    });
+
+    const contentType = response.headers.get("content-type");
+    let data = null;
+    if (contentType && contentType.includes("application/json")) {
+      data = await response.json();
+    }
+
+    if (!response.ok) {
+      return {
+        success: false,
+        status: response.status,
+        message: data?.message || data?.title || "Failed to change password.",
+        errors: data?.errors || null
+      };
+    }
+
+    return {
+      success: true,
+      status: response.status,
+      data
+    };
+  } catch (error) {
+    if (error?.name === 'TimeoutError' || error?.name === 'AbortError') {
+      return {
+        success: false,
+        status: 0,
+        message: "The server took too long to respond (timeout after 30s). Please check your connection."
+      };
+    }
+    return {
+      success: false,
+      status: 0,
+      message: "The authentication server is currently unreachable. Please check your network and try again."
+    };
+  }
+};
+
+

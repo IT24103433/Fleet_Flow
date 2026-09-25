@@ -1,9 +1,12 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using IdentityService.Api.Data;
 using IdentityService.Api.Dtos;
 using IdentityService.Api.Entities;
 using IdentityService.Api.Exceptions;
+using IdentityService.Api.Messaging;
+using IdentityService.Api.Messaging.Events;
 
 namespace IdentityService.Api.Services;
 
@@ -11,6 +14,8 @@ public class AdminUserService : IAdminUserService
 {
     private readonly IdentityDbContext _dbContext;
     private readonly IPasswordHasher<User> _passwordHasher;
+    private readonly IKafkaProducerService? _kafkaProducer;
+    private readonly KafkaSettings _kafkaSettings;
 
     private static readonly HashSet<string> AllowedRoles = new(StringComparer.OrdinalIgnoreCase)
     {
@@ -20,10 +25,16 @@ public class AdminUserService : IAdminUserService
         "ADMIN"
     };
 
-    public AdminUserService(IdentityDbContext dbContext, IPasswordHasher<User> passwordHasher)
+    public AdminUserService(
+        IdentityDbContext dbContext,
+        IPasswordHasher<User> passwordHasher,
+        IKafkaProducerService? kafkaProducer = null,
+        IOptions<KafkaSettings>? kafkaSettings = null)
     {
         _dbContext = dbContext;
         _passwordHasher = passwordHasher;
+        _kafkaProducer = kafkaProducer;
+        _kafkaSettings = kafkaSettings?.Value ?? new KafkaSettings();
     }
 
     public async Task<AdminUserResponse> CreateUserAsync(CreateAdminUserRequest request)
@@ -167,6 +178,22 @@ public class AdminUserService : IAdminUserService
         _dbContext.Users.Add(user);
         await _dbContext.SaveChangesAsync();
 
+        if (_kafkaProducer != null)
+        {
+            var createdEvent = new UserCreatedEvent
+            {
+                UserId = user.Id,
+                FullName = user.FullName,
+                Username = user.Username,
+                Email = user.Email,
+                Role = role.Name,
+                Roles = new List<string> { role.Name },
+                IsActive = user.IsActive,
+                CreatedAt = user.CreatedAt
+            };
+            _ = _kafkaProducer.PublishAsync(_kafkaSettings.UserEventsTopic, user.Id.ToString(), createdEvent);
+        }
+
         return new AdminUserResponse
         {
             Id = user.Id,
@@ -179,7 +206,9 @@ public class AdminUserService : IAdminUserService
             Role = role.Name,
             Roles = new List<string> { role.Name },
             CreatedAt = user.CreatedAt,
-            Status = "ACTIVE",
+            Status = user.IsActive ? "ACTIVE" : "DISABLED",
+            IsActive = user.IsActive,
+            MustChangePassword = user.MustChangePassword,
             ProfileImageUrl = user.ProfileImageUrl
         };
     }
@@ -339,6 +368,22 @@ public class AdminUserService : IAdminUserService
 
         await _dbContext.SaveChangesAsync();
 
+        if (_kafkaProducer != null)
+        {
+            var updatedEvent = new UserUpdatedEvent
+            {
+                UserId = user.Id,
+                FullName = user.FullName,
+                Username = user.Username,
+                Email = user.Email,
+                Role = role.Name,
+                Roles = new List<string> { role.Name },
+                IsActive = user.IsActive,
+                UpdatedAt = DateTime.UtcNow
+            };
+            _ = _kafkaProducer.PublishAsync(_kafkaSettings.UserEventsTopic, user.Id.ToString(), updatedEvent);
+        }
+
         return new AdminUserResponse
         {
             Id = user.Id,
@@ -351,7 +396,9 @@ public class AdminUserService : IAdminUserService
             Role = role.Name,
             Roles = new List<string> { role.Name },
             CreatedAt = user.CreatedAt,
-            Status = "ACTIVE",
+            Status = user.IsActive ? "ACTIVE" : "DISABLED",
+            IsActive = user.IsActive,
+            MustChangePassword = user.MustChangePassword,
             ProfileImageUrl = user.ProfileImageUrl
         };
     }
@@ -393,6 +440,76 @@ public class AdminUserService : IAdminUserService
         await _dbContext.SaveChangesAsync();
     }
 
+    public async Task<AdminUserResponse> SetUserStatusAsync(Guid id, bool isActive, Guid currentUserId)
+    {
+        var user = await _dbContext.Users
+            .Include(u => u.Roles)
+            .FirstOrDefaultAsync(u => u.Id == id);
+
+        if (user == null)
+        {
+            throw new NotFoundException($"User with ID '{id}' was not found.");
+        }
+
+        // Self-disable protection: Admin cannot disable their own account
+        if (!isActive && currentUserId != Guid.Empty && currentUserId == id)
+        {
+            throw new InvalidOperationException("An admin cannot disable their own account.");
+        }
+
+        // Last-admin protection: Cannot disable the last remaining active ADMIN account
+        if (!isActive)
+        {
+            var isCurrentlyAdmin = user.Roles.Any(r => r.Name.Equals("ADMIN", StringComparison.OrdinalIgnoreCase));
+            if (isCurrentlyAdmin)
+            {
+                var totalActiveAdminCount = await _dbContext.Users
+                    .CountAsync(u => u.IsActive && u.Roles.Any(r => r.Name.ToUpper() == "ADMIN"));
+
+                if (totalActiveAdminCount <= 1)
+                {
+                    throw new InvalidOperationException("Cannot disable the last remaining active ADMIN account.");
+                }
+            }
+        }
+
+        user.IsActive = isActive;
+        await _dbContext.SaveChangesAsync();
+
+        if (_kafkaProducer != null)
+        {
+            var statusChangedEvent = new UserStatusChangedEvent
+            {
+                UserId = user.Id,
+                Username = user.Username,
+                Email = user.Email,
+                IsActive = user.IsActive,
+                Status = user.IsActive ? "ACTIVE" : "DISABLED",
+                ChangedByAdminId = currentUserId
+            };
+            _ = _kafkaProducer.PublishAsync(_kafkaSettings.UserEventsTopic, user.Id.ToString(), statusChangedEvent);
+        }
+
+        var primaryRole = user.Roles.FirstOrDefault()?.Name ?? "CUSTOMER";
+        return new AdminUserResponse
+        {
+            Id = user.Id,
+            FullName = user.FullName,
+            Username = user.Username,
+            Email = user.Email,
+            PhoneNumber = user.PhoneNumber,
+            Address = user.Address,
+            DrivingLicenseNumber = user.DrivingLicenseNumber,
+            Role = primaryRole,
+            Roles = user.Roles.Select(r => r.Name).ToList(),
+            CreatedAt = user.CreatedAt,
+            Status = user.IsActive ? "ACTIVE" : "DISABLED",
+            IsActive = user.IsActive,
+            MustChangePassword = user.MustChangePassword,
+            ProfileImageUrl = user.ProfileImageUrl
+        };
+    }
+
     public async Task<List<AdminUserResponse>> GetUsersAsync()
     {
         var users = await _dbContext.Users
@@ -415,10 +532,150 @@ public class AdminUserService : IAdminUserService
                 Role = primaryRole,
                 Roles = u.Roles.Select(r => r.Name).ToList(),
                 CreatedAt = u.CreatedAt,
-                Status = "ACTIVE",
+                Status = u.IsActive ? "ACTIVE" : "DISABLED",
+                IsActive = u.IsActive,
+                MustChangePassword = u.MustChangePassword,
                 ProfileImageUrl = u.ProfileImageUrl
             };
         }).ToList();
+    }
+
+    public async Task<AdminResetPasswordResponse> ResetPasswordAsync(Guid id, AdminResetPasswordRequest? request, Guid currentUserId = default)
+    {
+        var user = await _dbContext.Users
+            .Include(u => u.Roles)
+            .FirstOrDefaultAsync(u => u.Id == id);
+
+        if (user == null)
+        {
+            throw new NotFoundException($"User with ID '{id}' was not found.");
+        }
+
+        string tempPassword;
+        if (!string.IsNullOrWhiteSpace(request?.CustomTemporaryPassword))
+        {
+            tempPassword = request.CustomTemporaryPassword.Trim();
+            if (tempPassword.Length < 8)
+            {
+                throw new ArgumentException("Temporary password must be at least 8 characters long.", nameof(request.CustomTemporaryPassword));
+            }
+        }
+        else
+        {
+            tempPassword = GenerateSecureTemporaryPassword();
+        }
+
+        // Securely hash the temporary password - existing password hash is overwritten and never disclosed
+        user.PasswordHash = _passwordHasher.HashPassword(user, tempPassword);
+        user.MustChangePassword = request?.ForcePasswordChange ?? true;
+
+        await _dbContext.SaveChangesAsync();
+
+        // Emit UserUpdatedEvent over Kafka if enabled
+        if (_kafkaSettings.Enabled && _kafkaProducer != null)
+        {
+            var updatedEvent = new UserUpdatedEvent
+            {
+                UserId = user.Id,
+                FullName = user.FullName,
+                Username = user.Username,
+                Email = user.Email,
+                Role = user.Roles.FirstOrDefault()?.Name ?? "CUSTOMER",
+                Roles = user.Roles.Select(r => r.Name).ToList(),
+                IsActive = user.IsActive,
+                UpdatedAt = DateTime.UtcNow
+            };
+            _ = _kafkaProducer.PublishAsync(_kafkaSettings.UserEventsTopic, user.Id.ToString(), updatedEvent);
+        }
+
+        return new AdminResetPasswordResponse
+        {
+            UserId = user.Id,
+            Username = user.Username,
+            Email = user.Email,
+            TemporaryPassword = tempPassword,
+            MustChangePassword = user.MustChangePassword,
+            ResetAt = DateTime.UtcNow,
+            Message = $"Password successfully reset for @{user.Username}. Provide this temporary credential securely to the user."
+        };
+    }
+
+    public async Task<AdminUserResponse> SetForcePasswordChangeAsync(Guid id, bool mustChangePassword, Guid currentUserId = default)
+    {
+        var user = await _dbContext.Users
+            .Include(u => u.Roles)
+            .FirstOrDefaultAsync(u => u.Id == id);
+
+        if (user == null)
+        {
+            throw new NotFoundException($"User with ID '{id}' was not found.");
+        }
+
+        user.MustChangePassword = mustChangePassword;
+        await _dbContext.SaveChangesAsync();
+
+        if (_kafkaSettings.Enabled && _kafkaProducer != null)
+        {
+            var updatedEvent = new UserUpdatedEvent
+            {
+                UserId = user.Id,
+                FullName = user.FullName,
+                Username = user.Username,
+                Email = user.Email,
+                Role = user.Roles.FirstOrDefault()?.Name ?? "CUSTOMER",
+                Roles = user.Roles.Select(r => r.Name).ToList(),
+                IsActive = user.IsActive,
+                UpdatedAt = DateTime.UtcNow
+            };
+            _ = _kafkaProducer.PublishAsync(_kafkaSettings.UserEventsTopic, user.Id.ToString(), updatedEvent);
+        }
+
+        var primaryRole = user.Roles.FirstOrDefault()?.Name ?? "CUSTOMER";
+        return new AdminUserResponse
+        {
+            Id = user.Id,
+            FullName = user.FullName,
+            Username = user.Username,
+            Email = user.Email,
+            PhoneNumber = user.PhoneNumber,
+            Address = user.Address,
+            DrivingLicenseNumber = user.DrivingLicenseNumber,
+            Role = primaryRole,
+            Roles = user.Roles.Select(r => r.Name).ToList(),
+            CreatedAt = user.CreatedAt,
+            Status = user.IsActive ? "ACTIVE" : "DISABLED",
+            IsActive = user.IsActive,
+            MustChangePassword = user.MustChangePassword,
+            ProfileImageUrl = user.ProfileImageUrl
+        };
+    }
+
+    private static string GenerateSecureTemporaryPassword()
+    {
+        const string upper = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+        const string lower = "abcdefghjkmnpqrstuvwxyz";
+        const string digits = "23456789";
+        const string special = "!@$?*_-";
+
+        var bytes = new byte[8];
+        using (var rng = System.Security.Cryptography.RandomNumberGenerator.Create())
+        {
+            rng.GetBytes(bytes);
+        }
+
+        var chars = new char[]
+        {
+            upper[bytes[0] % upper.Length],
+            lower[bytes[1] % lower.Length],
+            digits[bytes[2] % digits.Length],
+            special[bytes[3] % special.Length],
+            upper[bytes[4] % upper.Length],
+            lower[bytes[5] % lower.Length],
+            digits[bytes[6] % digits.Length],
+            special[bytes[7] % special.Length]
+        };
+
+        return $"Temp!{new string(chars)}";
     }
 }
 

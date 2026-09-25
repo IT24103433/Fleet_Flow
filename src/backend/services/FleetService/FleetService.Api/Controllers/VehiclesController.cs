@@ -24,16 +24,88 @@ public class VehiclesController : ControllerBase
     [HttpGet]
     [AllowAnonymous]
     [ProducesResponseType(typeof(IEnumerable<VehicleResponse>), 200)]
-    public async Task<ActionResult<IEnumerable<VehicleResponse>>> GetVehicles(
+    [ProducesResponseType(typeof(PagedVehicleResult), 200)]
+    public async Task<IActionResult> GetVehicles(
         [FromQuery] string? category = null,
         [FromQuery] VehicleStatus? status = null,
         [FromQuery] string? fuel = null,
+        [FromQuery] string? transmission = null,
+        [FromQuery] string? hub = null,
         [FromQuery] string? searchTerm = null,
+        [FromQuery] string? sortBy = null,
+        [FromQuery] string? sortOrder = null,
         [FromQuery] int page = 1,
-        [FromQuery] int pageSize = 20)
+        [FromQuery] int pageSize = 20,
+        [FromQuery] bool paged = false,
+        [FromQuery] bool? includeRetired = false)
     {
-        var vehicles = await _vehicleService.GetVehiclesAsync(category, status, fuel, searchTerm, page, pageSize);
-        return Ok(vehicles);
+        var pagedResult = await _vehicleService.GetPagedVehiclesAsync(new VehicleQueryParameters
+        {
+            Category = category,
+            Status = status,
+            Fuel = fuel,
+            Transmission = transmission,
+            Hub = hub,
+            SearchTerm = searchTerm,
+            SortBy = sortBy,
+            SortOrder = sortOrder,
+            Page = page,
+            PageSize = pageSize,
+            Paged = paged,
+            IncludeRetired = includeRetired
+        });
+
+        Response.Headers["X-Total-Count"] = pagedResult.TotalCount.ToString();
+        Response.Headers["X-Page"] = pagedResult.Page.ToString();
+        Response.Headers["X-Page-Size"] = pagedResult.PageSize.ToString();
+        Response.Headers["X-Total-Pages"] = pagedResult.TotalPages.ToString();
+
+        if (paged)
+        {
+            return Ok(pagedResult);
+        }
+
+        return Ok(pagedResult.Items);
+    }
+
+    [HttpGet("paged")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(PagedVehicleResult), 200)]
+    public async Task<ActionResult<PagedVehicleResult>> GetPagedVehicles(
+        [FromQuery] string? category = null,
+        [FromQuery] VehicleStatus? status = null,
+        [FromQuery] string? fuel = null,
+        [FromQuery] string? transmission = null,
+        [FromQuery] string? hub = null,
+        [FromQuery] string? searchTerm = null,
+        [FromQuery] string? sortBy = null,
+        [FromQuery] string? sortOrder = null,
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 20,
+        [FromQuery] bool? includeRetired = false)
+    {
+        var result = await _vehicleService.GetPagedVehiclesAsync(new VehicleQueryParameters
+        {
+            Category = category,
+            Status = status,
+            Fuel = fuel,
+            Transmission = transmission,
+            Hub = hub,
+            SearchTerm = searchTerm,
+            SortBy = sortBy,
+            SortOrder = sortOrder,
+            Page = page,
+            PageSize = pageSize,
+            Paged = true,
+            IncludeRetired = includeRetired
+        });
+
+        Response.Headers["X-Total-Count"] = result.TotalCount.ToString();
+        Response.Headers["X-Page"] = result.Page.ToString();
+        Response.Headers["X-Page-Size"] = result.PageSize.ToString();
+        Response.Headers["X-Total-Pages"] = result.TotalPages.ToString();
+
+        return Ok(result);
     }
 
     [HttpGet("{id:guid}", Name = "GetVehicleById")]
@@ -113,4 +185,104 @@ public class VehiclesController : ControllerBase
             return Conflict(new { message = ex.Message });
         }
     }
+
+    [HttpPatch("{id:guid}/status")]
+    [HttpPut("{id:guid}/status")]
+    [Authorize(Roles = "FLEET_MANAGER,ADMIN,MAINTENANCE_STAFF")]
+    [ProducesResponseType(typeof(VehicleResponse), 200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(403)]
+    [ProducesResponseType(404)]
+    public async Task<ActionResult<VehicleResponse>> UpdateVehicleStatus(Guid id, [FromBody] UpdateVehicleStatusRequest request)
+    {
+        if (request == null)
+        {
+            return BadRequest(new { message = "Status update payload cannot be null." });
+        }
+
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        // Role-aware authorization rules:
+        // Maintenance staff can only update operational health statuses (Available, Maintenance).
+        var isManagerOrAdmin = User.IsInRole("FLEET_MANAGER") || User.IsInRole("ADMIN");
+        if (!isManagerOrAdmin && User.IsInRole("MAINTENANCE_STAFF"))
+        {
+            if (request.Status != VehicleStatus.Available && request.Status != VehicleStatus.Maintenance)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, new
+                {
+                    message = "Maintenance staff are only authorized to update operational health statuses (Available, Maintenance)."
+                });
+            }
+        }
+
+        try
+        {
+            var updated = await _vehicleService.UpdateVehicleStatusAsync(id, request);
+            return Ok(updated);
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        catch (ValidationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    [HttpPost("{id:guid}/retire")]
+    [HttpPatch("{id:guid}/retire")]
+    [Authorize(Roles = "FLEET_MANAGER,ADMIN")]
+    [ProducesResponseType(typeof(VehicleResponse), 200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(403)]
+    [ProducesResponseType(404)]
+    public async Task<ActionResult<VehicleResponse>> RetireVehicle(Guid id, [FromQuery] string? reason = null)
+    {
+        try
+        {
+            var retired = await _vehicleService.RetireVehicleAsync(id, reason);
+            return Ok(retired);
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        catch (ValidationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    [HttpPost("{id:guid}/reactivate")]
+    [HttpPatch("{id:guid}/reactivate")]
+    [Authorize(Roles = "FLEET_MANAGER,ADMIN")]
+    [ProducesResponseType(typeof(VehicleResponse), 200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(403)]
+    [ProducesResponseType(404)]
+    public async Task<ActionResult<VehicleResponse>> ReactivateVehicle(Guid id)
+    {
+        try
+        {
+            var reactivated = await _vehicleService.ReactivateVehicleAsync(id);
+            return Ok(reactivated);
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        catch (ValidationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
 }
+

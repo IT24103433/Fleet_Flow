@@ -162,3 +162,67 @@ export const deleteVehicleImage = async (vehicleId, imageId, token) => {
     };
   }
 };
+
+export const replaceVehicleImage = async (vehicleId, imageId, file, caption, token) => {
+  try {
+    const headers = {
+      'Accept': 'application/json',
+    };
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+    if (caption && caption.trim()) {
+      formData.append('caption', caption.trim());
+    }
+
+    const response = await fetch(`${FLEET_API_URL}/api/vehicles/${vehicleId}/images/${imageId}`, {
+      method: 'PUT',
+      headers,
+      body: formData,
+    });
+
+    const contentType = response.headers.get('content-type');
+    let data = null;
+    if (contentType && contentType.includes('application/json')) {
+      data = await response.json();
+    }
+
+    if (!response.ok) {
+      let message = data?.message || data?.title;
+      if (!message) {
+        if (response.status === 401) {
+          message = 'Authentication required. Please log in.';
+        } else if (response.status === 403) {
+          message = 'Access denied. Administrator or Fleet Manager privileges are required to replace vehicle photos.';
+        } else if (response.status === 404) {
+          message = 'Photo or vehicle not found.';
+        } else if (response.status === 400) {
+          message = 'Invalid image file. Please provide a valid JPEG, PNG, or WebP image under 5 MB.';
+        } else {
+          message = 'An unexpected error occurred while replacing the vehicle photo.';
+        }
+      }
+
+      return {
+        success: false,
+        status: response.status,
+        message,
+      };
+    }
+
+    return {
+      success: true,
+      status: response.status,
+      data,
+    };
+  } catch {
+    return {
+      success: false,
+      status: 0,
+      message: 'Fleet service is currently unreachable. Please check network connectivity.',
+    };
+  }
+};

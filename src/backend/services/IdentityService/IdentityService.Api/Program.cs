@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using IdentityService.Api.Data;
 using Microsoft.AspNetCore.Identity;
 using IdentityService.Api.Entities;
+using IdentityService.Api.Middleware;
 using IdentityService.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +17,10 @@ builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IAdminUserService, AdminUserService>();
 builder.Services.AddScoped<IProfileImageService, ProfileImageService>();
 
+// Configure Apache Kafka Messaging
+builder.Services.Configure<IdentityService.Api.Messaging.KafkaSettings>(builder.Configuration.GetSection(IdentityService.Api.Messaging.KafkaSettings.SectionName));
+builder.Services.AddSingleton<IdentityService.Api.Messaging.IKafkaProducerService, IdentityService.Api.Messaging.KafkaProducerService>();
+builder.Services.AddHostedService<IdentityService.Api.Messaging.UserEventConsumerService>();
 
 // Configure JWT Authentication
 var jwtSection = builder.Configuration.GetSection("Jwt");
@@ -119,6 +124,8 @@ _ = Task.Run(async () =>
                     ALTER TABLE ""Users"" ADD COLUMN IF NOT EXISTS ""Address"" character varying(250) NOT NULL DEFAULT '';
                     ALTER TABLE ""Users"" ADD COLUMN IF NOT EXISTS ""DrivingLicenseNumber"" character varying(50) NOT NULL DEFAULT '';
                     ALTER TABLE ""Users"" ADD COLUMN IF NOT EXISTS ""ProfileImageUrl"" character varying(500) NULL;
+                    ALTER TABLE ""Users"" ADD COLUMN IF NOT EXISTS ""IsActive"" boolean NOT NULL DEFAULT TRUE;
+                    ALTER TABLE ""Users"" ADD COLUMN IF NOT EXISTS ""MustChangePassword"" boolean NOT NULL DEFAULT FALSE;
                 ");
 
                 // Idempotent QA User Seeding for Development & Cloud
@@ -227,6 +234,9 @@ app.UseCors();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Intercept and block access to protected application resources when user is flagged to change password
+app.UseMiddleware<ForcedPasswordChangeMiddleware>();
 
 app.MapControllers();
 

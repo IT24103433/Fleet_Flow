@@ -9,11 +9,23 @@ export const getVehicles = async (params = {}) => {
     if (params.status && params.status !== 'All Statuses' && params.status !== 'ALL') {
       query.append('status', params.status);
     }
-    if (params.fuel && params.fuel !== 'All Fuels' && params.fuel !== 'ALL') {
+    if (params.fuel && params.fuel !== 'All Fuels' && params.fuel !== 'All Powertrains' && params.fuel !== 'ALL') {
       query.append('fuel', params.fuel);
     }
-    if (params.searchTerm) {
+    if (params.transmission && params.transmission !== 'All Transmissions' && params.transmission !== 'ALL') {
+      query.append('transmission', params.transmission);
+    }
+    if (params.hub && params.hub !== 'All Hubs' && params.hub !== 'All Locations' && params.hub !== 'ALL') {
+      query.append('hub', params.hub);
+    }
+    if (params.searchTerm && params.searchTerm.trim()) {
       query.append('searchTerm', params.searchTerm.trim());
+    }
+    if (params.sortBy) {
+      query.append('sortBy', params.sortBy);
+    }
+    if (params.sortOrder) {
+      query.append('sortOrder', params.sortOrder);
     }
     if (params.page) {
       query.append('page', params.page);
@@ -21,6 +33,11 @@ export const getVehicles = async (params = {}) => {
     if (params.pageSize) {
       query.append('pageSize', params.pageSize);
     }
+    if (params.includeRetired) {
+      query.append('includeRetired', 'true');
+    }
+    // Request paged result structure
+    query.append('paged', 'true');
 
     const queryString = query.toString();
     const url = `${FLEET_API_URL}/api/vehicles${queryString ? `?${queryString}` : ''}`;
@@ -47,10 +64,49 @@ export const getVehicles = async (params = {}) => {
       };
     }
 
+    // Support both wrapped PagedVehicleResult ({ items, totalCount, page, pageSize, totalPages })
+    // and legacy raw array with HTTP header fallbacks
+    let items = [];
+    let totalCount = 0;
+    let page = Number(params.page) || 1;
+    let pageSize = Number(params.pageSize) || 20;
+    let totalPages = 1;
+    let hasNextPage = false;
+    let hasPreviousPage = false;
+
+    if (data && typeof data === 'object' && Array.isArray(data.items)) {
+      items = data.items;
+      totalCount = Number(data.totalCount) || items.length;
+      page = Number(data.page) || page;
+      pageSize = Number(data.pageSize) || pageSize;
+      totalPages = Number(data.totalPages) || (pageSize > 0 ? Math.ceil(totalCount / pageSize) : 1);
+      hasNextPage = Boolean(data.hasNextPage);
+      hasPreviousPage = Boolean(data.hasPreviousPage);
+    } else if (Array.isArray(data)) {
+      items = data;
+      const headerTotal = response.headers.get('X-Total-Count');
+      totalCount = headerTotal ? Number(headerTotal) : items.length;
+      const headerPage = response.headers.get('X-Page');
+      if (headerPage) page = Number(headerPage);
+      const headerPageSize = response.headers.get('X-Page-Size');
+      if (headerPageSize) pageSize = Number(headerPageSize);
+      totalPages = pageSize > 0 ? Math.ceil(totalCount / pageSize) : 1;
+      hasNextPage = page < totalPages;
+      hasPreviousPage = page > 1;
+    }
+
     return {
       success: true,
       status: response.status,
-      data: Array.isArray(data) ? data : [],
+      data: items,
+      pagination: {
+        totalCount,
+        page,
+        pageSize,
+        totalPages,
+        hasNextPage,
+        hasPreviousPage,
+      },
     };
   } catch {
     return {
@@ -258,3 +314,169 @@ export const updateVehicle = async (id, vehicleData, token) => {
     };
   }
 };
+
+export const updateVehicleStatus = async (id, status, token) => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    };
+
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const response = await fetch(`${FLEET_API_URL}/api/vehicles/${id}/status`, {
+      method: 'PATCH',
+      headers,
+      body: JSON.stringify({ status }),
+    });
+
+    const contentType = response.headers.get('content-type');
+    let data = null;
+    if (contentType && contentType.includes('application/json')) {
+      data = await response.json();
+    }
+
+    if (!response.ok) {
+      let message = data?.message;
+      if (!message) {
+        if (response.status === 401) {
+          message = 'Authentication required. Please log in as an authorized staff member.';
+        } else if (response.status === 403) {
+          message = 'Access denied. You do not have permission to change vehicle operational status.';
+        } else if (response.status === 404) {
+          message = 'The specified vehicle was not found in the fleet catalog.';
+        } else if (response.status === 400) {
+          message = 'Invalid vehicle status change request. Please verify the selected status.';
+        } else {
+          message = 'An unexpected error occurred while updating vehicle operational status.';
+        }
+      }
+
+      return {
+        success: false,
+        status: response.status,
+        message,
+        errors: data?.errors || null,
+      };
+    }
+
+    return {
+      success: true,
+      status: response.status,
+      data,
+    };
+  } catch {
+    return {
+      success: false,
+      status: 0,
+      message: 'The fleet service is currently unreachable. Please check your network and try again.',
+    };
+  }
+};
+
+export const retireVehicle = async (id, reason = '', token = null) => {
+  try {
+    const headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    };
+
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const query = reason && reason.trim() ? `?reason=${encodeURIComponent(reason.trim())}` : '';
+    const response = await fetch(`${FLEET_API_URL}/api/vehicles/${id}/retire${query}`, {
+      method: 'POST',
+      headers,
+    });
+
+    const contentType = response.headers.get('content-type');
+    let data = null;
+    if (contentType && contentType.includes('application/json')) {
+      data = await response.json();
+    }
+
+    if (!response.ok) {
+      let message = data?.message;
+      if (!message) {
+        if (response.status === 401) {
+          message = 'Authentication required. Please log in as an administrator or fleet manager.';
+        } else if (response.status === 403) {
+          message = 'Access denied. Only Fleet Managers or Admins can retire/deactivate vehicles.';
+        } else if (response.status === 404) {
+          message = 'The specified vehicle was not found in the fleet catalog.';
+        } else if (response.status === 400) {
+          message = 'Cannot retire vehicle. Please ensure it is not currently in use with an active trip.';
+        } else {
+          message = 'An unexpected error occurred while retiring the vehicle.';
+        }
+      }
+
+      return {
+        success: false,
+        status: response.status,
+        message,
+      };
+    }
+
+    return {
+      success: true,
+      status: response.status,
+      data,
+    };
+  } catch {
+    return {
+      success: false,
+      status: 0,
+      message: 'The fleet service is currently unreachable. Please check your network and try again.',
+    };
+  }
+};
+
+export const reactivateVehicle = async (id, token = null) => {
+  try {
+    const headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    };
+
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const response = await fetch(`${FLEET_API_URL}/api/vehicles/${id}/reactivate`, {
+      method: 'POST',
+      headers,
+    });
+
+    const contentType = response.headers.get('content-type');
+    let data = null;
+    if (contentType && contentType.includes('application/json')) {
+      data = await response.json();
+    }
+
+    if (!response.ok) {
+      return {
+        success: false,
+        status: response.status,
+        message: data?.message || 'Failed to reactivate vehicle.',
+      };
+    }
+
+    return {
+      success: true,
+      status: response.status,
+      data,
+    };
+  } catch {
+    return {
+      success: false,
+      status: 0,
+      message: 'The fleet service is currently unreachable. Please check your network and try again.',
+    };
+  }
+};
+

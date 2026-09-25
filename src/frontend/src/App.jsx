@@ -31,6 +31,7 @@ import AddVehiclePage from './pages/vehicle/AddVehiclePage';
 import EditVehiclePage from './pages/vehicle/EditVehiclePage';
 import StaffVehicleDetailsPage from './pages/vehicle/StaffVehicleDetailsPage';
 import VehicleImageManagementPage from './pages/vehicle/VehicleImageManagementPage';
+import MaintenanceDashboardPage from './pages/maintenance/MaintenanceDashboardPage';
 
 // Security Pages
 import ForcePasswordChangePage from './pages/security/ForcePasswordChangePage';
@@ -47,6 +48,7 @@ const STAFF_VIEWS = [
   'admin-user-details',
   'staff-profile',
   'manage-fleet',
+  'maintenance-dashboard',
   'add-vehicle',
   'edit-vehicle',
   'staff-vehicle-details',
@@ -91,7 +93,11 @@ function AppContent() {
   const userRoles = roles || [];
   const isStaffUser = isAuthenticated && userRoles.some((r) => STAFF_ROLES.includes(String(r).toUpperCase()));
 
-  const handleLoginSuccess = (token) => {
+  const handleLoginSuccess = (token, loginUserObj) => {
+    if (loginUserObj?.mustChangePassword) {
+      navigateTo('force-password-change');
+      return;
+    }
     const rolesFromToken = extractRolesFromToken(token);
     const destination = getRoleDefaultView(rolesFromToken);
     navigateTo(destination);
@@ -103,7 +109,9 @@ function AppContent() {
   // Enforce portal separation and route protection
   let activeView = currentView;
   if (!isLoading) {
-    if (isStaffUser && CUSTOMER_ONLY_VIEWS.includes(currentView)) {
+    if (isAuthenticated && user?.mustChangePassword) {
+      activeView = 'force-password-change';
+    } else if (isStaffUser && CUSTOMER_ONLY_VIEWS.includes(currentView)) {
       activeView = getRoleDefaultView(userRoles);
     } else if (!isAuthenticated && CUSTOMER_ONLY_VIEWS.includes(currentView)) {
       activeView = 'login';
@@ -134,6 +142,24 @@ function AppContent() {
           <div className="spinner" style={{ width: '28px', height: '28px', borderTopColor: 'var(--color-primary)', borderRightColor: 'var(--color-primary)', margin: '0 auto 12px' }} />
           <p>Initializing FleetFlow...</p>
         </div>
+      </div>
+    );
+  }
+
+  // Handle Forced Password Change for any user (Staff or Customer)
+  if (activeView === 'force-password-change') {
+    return (
+      <div className="app-shell">
+        <CustomerNav currentView={activeView} onNavigate={navigateTo} />
+        <main className="customer-main-content">
+          <ForcePasswordChangePage
+            onComplete={() => {
+              const destination = getRoleDefaultView(userRoles);
+              navigateTo(destination);
+            }}
+          />
+        </main>
+        <Footer onNavigate={navigateTo} />
       </div>
     );
   }
@@ -191,10 +217,18 @@ function AppContent() {
           return <StaffProfilePage onNavigate={navigateTo} />;
         case 'manage-fleet':
           return <ManageFleetPage onNavigate={navigateTo} onSelectVehicle={setSelectedVehicle} />;
+        case 'maintenance-dashboard':
+          return <MaintenanceDashboardPage onNavigate={navigateTo} onSelectVehicle={setSelectedVehicle} />;
         case 'add-vehicle':
           return <AddVehiclePage onNavigate={navigateTo} />;
         case 'edit-vehicle':
-          return <EditVehiclePage selectedVehicle={selectedVehicle} onNavigate={navigateTo} />;
+          return (
+            <EditVehiclePage
+              selectedVehicle={selectedVehicle}
+              onNavigate={navigateTo}
+              onVehicleUpdated={(updated) => setSelectedVehicle(updated)}
+            />
+          );
         case 'staff-vehicle-details':
           return <StaffVehicleDetailsPage selectedVehicle={selectedVehicle} onNavigate={navigateTo} onSelectVehicle={setSelectedVehicle} />;
         case 'vehicle-images':
@@ -221,6 +255,8 @@ function AppContent() {
           return 'Staff Identity & Credentials';
         case 'manage-fleet':
           return 'Fleet Inventory & Operations';
+        case 'maintenance-dashboard':
+          return 'Fleet Maintenance & Health Queue';
         case 'add-vehicle':
           return 'Ingest New Fleet Unit';
         case 'edit-vehicle':

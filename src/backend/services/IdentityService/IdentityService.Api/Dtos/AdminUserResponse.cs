@@ -13,6 +13,8 @@ public class AdminUserResponse
     public List<string> Roles { get; set; } = new();
     public DateTime CreatedAt { get; set; }
     public string Status { get; set; } = "ACTIVE";
+    public bool IsActive { get; set; } = true;
+    public bool MustChangePassword { get; set; }
     public string? ProfileImageUrl { get; set; }
 }
 

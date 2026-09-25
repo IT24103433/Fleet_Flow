@@ -4,10 +4,10 @@ import Button from '../../components/common/Button';
 import Modal from '../../components/common/Modal';
 import Alert from '../../components/Alert';
 import { useAuth } from '../../context/AuthContext';
-import { getAdminUsers, deleteAdminUser } from '../../services/adminUserService';
+import { getAdminUsers, deleteAdminUser, updateUserStatus, resetUserPassword, forceUserPasswordChange } from '../../services/adminUserService';
 
 const AdminUserListPage = ({ onNavigate, onSelectUser }) => {
-  const { token } = useAuth();
+  const { token, user: currentAuthUser } = useAuth();
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [fetchError, setFetchError] = useState(null);
@@ -17,9 +17,16 @@ const AdminUserListPage = ({ onNavigate, onSelectUser }) => {
 
   // Reset Password Modal state
   const [resetModalUser, setResetModalUser] = useState(null);
-  const [tempPassword, setTempPassword] = useState('');
   const [forceChangeToggle, setForceChangeToggle] = useState(true);
+  const [isResetting, setIsResetting] = useState(false);
   const [resetNotice, setResetNotice] = useState(null);
+  const [resetSuccessData, setResetSuccessData] = useState(null);
+  const [copiedNotice, setCopiedNotice] = useState(false);
+
+  // Force Password Change Modal state
+  const [forceModalUser, setForceModalUser] = useState(null);
+  const [isSubmittingForce, setIsSubmittingForce] = useState(false);
+  const [forceError, setForceError] = useState(null);
 
   // Delete User Modal state
   const [deleteModalUser, setDeleteModalUser] = useState(null);
@@ -27,6 +34,12 @@ const AdminUserListPage = ({ onNavigate, onSelectUser }) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState(null);
   const [actionSuccessNotice, setActionSuccessNotice] = useState(null);
+
+  // Account Status (Enable/Disable) Modal state
+  const [statusModalUser, setStatusModalUser] = useState(null);
+  const [statusModalTargetActive, setStatusModalTargetActive] = useState(false);
+  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
+  const [statusError, setStatusError] = useState(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -60,19 +73,87 @@ const AdminUserListPage = ({ onNavigate, onSelectUser }) => {
     return matchesSearch && matchesRole;
   });
 
-  const handleOpenReset = (user) => {
+  const handleOpenReset = (user, e) => {
+    if (e) e.stopPropagation();
     setResetModalUser(user);
-    setTempPassword('Temp#' + Math.random().toString(36).substring(2, 8).toUpperCase() + '!');
+    setForceChangeToggle(true);
     setResetNotice(null);
+    setResetSuccessData(null);
+    setCopiedNotice(false);
+    setIsResetting(false);
   };
 
-  const handleExecuteReset = (e) => {
+  const handleCloseReset = () => {
+    if (isResetting) return;
+    setResetModalUser(null);
+    setResetNotice(null);
+    setResetSuccessData(null);
+    setCopiedNotice(false);
+  };
+
+  const handleExecuteReset = async (e) => {
     e.preventDefault();
-    setResetNotice({
-      type: 'info',
-      title: 'Password Reset (Sprint 2 Roadmap)',
-      message: `Simulated temporary password generated for ${resetModalUser.username}. Live administrative password reset API will connect in Sprint 2.`,
-    });
+    if (!resetModalUser) return;
+    setIsResetting(true);
+    setResetNotice(null);
+    setCopiedNotice(false);
+
+    const res = await resetUserPassword(resetModalUser.id, {
+      forcePasswordChange: forceChangeToggle,
+    }, token);
+
+    setIsResetting(false);
+    if (res.success) {
+      setResetSuccessData(res.data);
+      setResetNotice({
+        type: 'success',
+        title: 'Temporary Credential Generated',
+        message: res.data.message || `Password reset successfully for @${resetModalUser.username}.`,
+      });
+    } else {
+      setResetNotice({
+        type: 'error',
+        title: 'Password Reset Failed',
+        message: res.message || 'An error occurred while resetting the user password.',
+      });
+    }
+  };
+
+  const handleOpenForceModal = (user, e) => {
+    if (e) e.stopPropagation();
+    setForceModalUser(user);
+    setForceError(null);
+  };
+
+  const handleCloseForceModal = () => {
+    if (isSubmittingForce) return;
+    setForceModalUser(null);
+    setForceError(null);
+  };
+
+  const handleExecuteForceChange = async (targetValue) => {
+    if (!forceModalUser) return;
+    setIsSubmittingForce(true);
+    setForceError(null);
+
+    const res = await forceUserPasswordChange(forceModalUser.id, targetValue, token);
+    setIsSubmittingForce(false);
+
+    if (res.success) {
+      setUsers((prev) =>
+        prev.map((u) => (u.id === forceModalUser.id ? { ...u, mustChangePassword: targetValue } : u))
+      );
+      setActionSuccessNotice({
+        type: 'success',
+        title: targetValue ? 'Password Change Required' : 'Requirement Cleared',
+        message: targetValue
+          ? `User @${forceModalUser.username} will be required to change their password on next login.`
+          : `Password change requirement cleared for @${forceModalUser.username}.`,
+      });
+      setForceModalUser(null);
+    } else {
+      setForceError(res.message || 'Failed to update password change requirement.');
+    }
   };
 
   const handleOpenDelete = (user, e) => {
@@ -107,6 +188,48 @@ const AdminUserListPage = ({ onNavigate, onSelectUser }) => {
       setDeleteConfirmText('');
     } else {
       setDeleteError(res.message || 'Failed to delete user account.');
+    }
+  };
+
+  const handleOpenStatusModal = (user, targetActive, e) => {
+    if (e) e.stopPropagation();
+    setStatusModalUser(user);
+    setStatusModalTargetActive(targetActive);
+    setStatusError(null);
+  };
+
+  const handleCloseStatusModal = () => {
+    if (isUpdatingStatus) return;
+    setStatusModalUser(null);
+    setStatusError(null);
+  };
+
+  const handleExecuteStatusToggle = async (e) => {
+    e.preventDefault();
+    if (!statusModalUser) return;
+
+    setIsUpdatingStatus(true);
+    setStatusError(null);
+
+    const res = await updateUserStatus(statusModalUser.id, statusModalTargetActive, token);
+    setIsUpdatingStatus(false);
+
+    if (res.success) {
+      setUsers((prev) =>
+        prev.map((u) =>
+          u.id === statusModalUser.id
+            ? { ...u, isActive: statusModalTargetActive, status: statusModalTargetActive ? 'ACTIVE' : 'DISABLED' }
+            : u
+        )
+      );
+      setActionSuccessNotice(
+        `User account "${statusModalUser.username}" was successfully ${
+          statusModalTargetActive ? 're-enabled' : 'disabled'
+        }.`
+      );
+      setStatusModalUser(null);
+    } else {
+      setStatusError(res.message || `Failed to ${statusModalTargetActive ? 'enable' : 'disable'} user account.`);
     }
   };
 
@@ -229,7 +352,31 @@ const AdminUserListPage = ({ onNavigate, onSelectUser }) => {
                         <RoleBadge role={role} />
                       </td>
                       <td>
-                        <span className="status-pill-active">{u.status || 'ACTIVE'}</span>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '4px' }}>
+                          <span className={(u.isActive ?? (u.status === 'ACTIVE')) ? 'status-pill-active' : 'status-pill-disabled'}>
+                            {(u.isActive ?? (u.status === 'ACTIVE')) ? 'ACTIVE' : 'DISABLED'}
+                          </span>
+                          {u.mustChangePassword && (
+                            <span
+                              style={{
+                                display: 'inline-block',
+                                backgroundColor: '#FEF3C7',
+                                color: '#92400E',
+                                border: '1px solid #FCD34D',
+                                padding: '1px 6px',
+                                borderRadius: '4px',
+                                fontSize: '10px',
+                                fontWeight: 700,
+                                textTransform: 'uppercase',
+                                letterSpacing: '0.04em',
+                                whiteSpace: 'nowrap'
+                              }}
+                              title="User is required to configure a new password upon next login"
+                            >
+                              Password Change Required
+                            </span>
+                          )}
+                        </div>
                       </td>
                       <td>
                         <span className="table-date">{createdStr}</span>
@@ -261,10 +408,38 @@ const AdminUserListPage = ({ onNavigate, onSelectUser }) => {
                             >
                               Edit
                             </button>
+                            {(u.isActive ?? (u.status === 'ACTIVE')) ? (
+                              <button
+                                type="button"
+                                className="btn-table-action warning"
+                                onClick={(e) => handleOpenStatusModal(u, false, e)}
+                                disabled={currentAuthUser && (currentAuthUser.id === u.id || currentAuthUser.userId === u.id || currentAuthUser.username === u.username)}
+                                title={currentAuthUser && (currentAuthUser.id === u.id || currentAuthUser.userId === u.id || currentAuthUser.username === u.username) ? "You cannot disable your own account" : "Disable User Account"}
+                              >
+                                Disable
+                              </button>
+                            ) : (
+                              <button
+                                type="button"
+                                className="btn-table-action success"
+                                onClick={(e) => handleOpenStatusModal(u, true, e)}
+                                title="Re-enable User Account"
+                              >
+                                Enable
+                              </button>
+                            )}
+                            <button
+                              type="button"
+                              className={`btn-table-action ${u.mustChangePassword ? 'info' : ''}`}
+                              onClick={(e) => handleOpenForceModal(u, e)}
+                              title={u.mustChangePassword ? "Clear Password Change Requirement" : "Require Password Change on Next Login"}
+                            >
+                              {u.mustChangePassword ? "Change Req'd" : "Require Change"}
+                            </button>
                             <button
                               type="button"
                               className="btn-table-action warning"
-                              onClick={() => handleOpenReset(u)}
+                              onClick={(e) => handleOpenReset(u, e)}
                               title="Reset User Password"
                             >
                               Reset Password
@@ -291,41 +466,83 @@ const AdminUserListPage = ({ onNavigate, onSelectUser }) => {
       {/* Administrative Password Reset Modal */}
       <Modal
         isOpen={!!resetModalUser}
-        onClose={() => setResetModalUser(null)}
+        onClose={handleCloseReset}
         title="Admin Reset Password"
-        subtitle={`Generate a secure temporary password for ${resetModalUser?.username}.`}
+        subtitle={`Generate a secure temporary credential for @${resetModalUser?.username}`}
       >
         {resetNotice && <Alert type={resetNotice.type} title={resetNotice.title} message={resetNotice.message} />}
 
-        <form onSubmit={handleExecuteReset}>
-          <div className="temp-password-box">
-            <span className="temp-label">Generated Temporary Password:</span>
-            <code className="temp-code">{tempPassword}</code>
-            <p className="temp-desc">Provide this temporary password securely to the user.</p>
-          </div>
+        {!resetSuccessData ? (
+          <form onSubmit={handleExecuteReset}>
+            <div style={{ marginBottom: '1.25rem' }}>
+              <p style={{ color: 'var(--color-text-secondary, #64748b)', fontSize: '0.875rem', lineHeight: 1.5, marginBottom: '0.75rem' }}>
+                Resetting password for <strong>{resetModalUser?.fullName || resetModalUser?.username}</strong> (<code>{resetModalUser?.email}</code>).
+              </p>
+              <p style={{ color: 'var(--color-text-secondary, #64748b)', fontSize: '0.875rem', lineHeight: 1.5 }}>
+                A cryptographically secure temporary password will be generated. The existing password will be immediately invalidated and replaced without exposing or disclosing any prior credentials.
+              </p>
+            </div>
 
-          <div className="checkbox-field-row">
-            <input
-              type="checkbox"
-              id="forcePasswordChange"
-              checked={forceChangeToggle}
-              onChange={(e) => setForceChangeToggle(e.target.checked)}
-            />
-            <label htmlFor="forcePasswordChange">
-              <strong>Force password change on next login</strong>
-              <span>User will be prompted to set a new password upon authentication.</span>
-            </label>
-          </div>
+            <div className="checkbox-field-row" style={{ marginBottom: '1.5rem' }}>
+              <input
+                type="checkbox"
+                id="forcePasswordChange"
+                checked={forceChangeToggle}
+                onChange={(e) => setForceChangeToggle(e.target.checked)}
+                disabled={isResetting}
+              />
+              <label htmlFor="forcePasswordChange">
+                <strong>Force password change on next login</strong>
+                <span>User will be required to configure a new personal password immediately upon next authentication.</span>
+              </label>
+            </div>
 
-          <div className="modal-actions-row">
-            <Button variant="outline" onClick={() => setResetModalUser(null)}>
-              Close
-            </Button>
-            <Button type="submit" variant="primary">
-              Confirm Reset
-            </Button>
+            <div className="modal-actions-row">
+              <Button variant="outline" type="button" onClick={handleCloseReset} disabled={isResetting}>
+                Cancel
+              </Button>
+              <Button type="submit" variant="primary" isLoading={isResetting} disabled={isResetting}>
+                Generate & Reset Password
+              </Button>
+            </div>
+          </form>
+        ) : (
+          <div>
+            <div className="temp-password-box" style={{ margin: '1rem 0' }}>
+              <span className="temp-label">Generated Temporary Password:</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.5rem' }}>
+                <code className="temp-code" style={{ flex: 1, wordBreak: 'break-all', fontSize: '1.1rem', letterSpacing: '0.05em' }}>
+                  {resetSuccessData.temporaryPassword}
+                </code>
+                <Button
+                  variant="outline"
+                  type="button"
+                  onClick={() => {
+                    navigator.clipboard.writeText(resetSuccessData.temporaryPassword);
+                    setCopiedNotice(true);
+                    setTimeout(() => setCopiedNotice(false), 2500);
+                  }}
+                >
+                  {copiedNotice ? '✓ Copied' : 'Copy'}
+                </Button>
+              </div>
+              <p className="temp-desc" style={{ marginTop: '0.75rem', fontSize: '0.825rem' }}>
+                Provide this temporary password securely to the user.
+                {resetSuccessData.mustChangePassword ? ' They must configure a new password upon login.' : ''}
+                <br />
+                <strong style={{ color: 'var(--color-danger, #ef4444)' }}>
+                  Warning: This credential will never be displayed again.
+                </strong>
+              </p>
+            </div>
+
+            <div className="modal-actions-row" style={{ justifyContent: 'flex-end' }}>
+              <Button variant="primary" type="button" onClick={handleCloseReset}>
+                Done
+              </Button>
+            </div>
           </div>
-        </form>
+        )}
       </Modal>
 
       {/* Permanent Delete User Confirmation Modal */}
@@ -391,6 +608,94 @@ const AdminUserListPage = ({ onNavigate, onSelectUser }) => {
             </Button>
           </div>
         </form>
+      </Modal>
+
+      {/* Account Status (Enable/Disable) Confirmation Modal */}
+      <Modal
+        isOpen={!!statusModalUser}
+        onClose={handleCloseStatusModal}
+        title={statusModalTargetActive ? "Re-enable User Account" : "Disable User Account"}
+        subtitle={`Control system access for ${statusModalUser?.username} without deleting history.`}
+      >
+        {statusError && (
+          <Alert type="error" title="Status Change Error" message={statusError} />
+        )}
+
+        <div style={{ marginBottom: '1.25rem', fontSize: '13px', color: 'var(--color-text-secondary, #64748b)', lineHeight: '1.5' }}>
+          {statusModalTargetActive ? (
+            <p>
+              Are you sure you want to <strong>re-enable</strong> the account for <strong>{statusModalUser?.username}</strong>?
+              They will regain the ability to log in and access protected FleetFlow services.
+            </p>
+          ) : (
+            <p>
+              Are you sure you want to <strong>disable</strong> the account for <strong>{statusModalUser?.username}</strong>?
+              They will be <strong>blocked from authenticating</strong> or accessing protected services. All records, roles, and historical data remain preserved.
+            </p>
+          )}
+        </div>
+
+        <div className="modal-actions-row">
+          <Button variant="outline" onClick={handleCloseStatusModal} disabled={isUpdatingStatus}>
+            Cancel
+          </Button>
+          <Button
+            variant={statusModalTargetActive ? "primary" : "danger"}
+            onClick={handleExecuteStatusToggle}
+            disabled={isUpdatingStatus}
+            isLoading={isUpdatingStatus}
+          >
+            {statusModalTargetActive ? 'Confirm Enable' : 'Confirm Disable'}
+          </Button>
+        </div>
+      </Modal>
+
+      {/* Force Password Change Modal */}
+      <Modal
+        isOpen={!!forceModalUser}
+        onClose={handleCloseForceModal}
+        title={forceModalUser?.mustChangePassword ? "Clear Password Change Requirement" : "Require Password Change on Next Login"}
+        subtitle={`Administrative credential policy enforcement for @${forceModalUser?.username}`}
+      >
+        {forceError && (
+          <Alert type="error" title="Configuration Error" message={forceError} />
+        )}
+
+        <div style={{ marginBottom: '1.25rem', fontSize: '13px', color: 'var(--color-text-secondary, #64748b)', lineHeight: '1.5' }}>
+          {forceModalUser?.mustChangePassword ? (
+            <div>
+              <p style={{ marginBottom: '0.75rem' }}>
+                User <strong>@{forceModalUser?.username}</strong> ({forceModalUser?.email}) is currently <strong>flagged to change their password</strong>.
+              </p>
+              <p>
+                Would you like to <strong>clear this requirement</strong>? The user will be able to log in normally with their current credentials without being redirected to the password change flow.
+              </p>
+            </div>
+          ) : (
+            <div>
+              <p style={{ marginBottom: '0.75rem' }}>
+                Flagging <strong>@{forceModalUser?.username}</strong> ({forceModalUser?.email}) will <strong>force them to set a new password</strong> immediately upon next login.
+              </p>
+              <p style={{ marginBottom: '0.75rem' }}>
+                Their current password remains valid for initial sign-in, but access to all protected application features (fleet reservations, workspace consoles, user profiles) will remain strictly blocked until the new password is saved.
+              </p>
+            </div>
+          )}
+        </div>
+
+        <div className="modal-actions-row">
+          <Button variant="outline" onClick={handleCloseForceModal} disabled={isSubmittingForce}>
+            Cancel
+          </Button>
+          <Button
+            variant={forceModalUser?.mustChangePassword ? "outline" : "primary"}
+            onClick={() => handleExecuteForceChange(!forceModalUser?.mustChangePassword)}
+            disabled={isSubmittingForce}
+            isLoading={isSubmittingForce}
+          >
+            {forceModalUser?.mustChangePassword ? "Confirm Clear Requirement" : "Enforce Password Change"}
+          </Button>
+        </div>
       </Modal>
     </div>
   );

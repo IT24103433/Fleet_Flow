@@ -22,4 +22,5 @@ public class VehicleResponse
     public VehicleStatus Status { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
+    public List<VehicleImageResponse> Images { get; set; } = new();
 }

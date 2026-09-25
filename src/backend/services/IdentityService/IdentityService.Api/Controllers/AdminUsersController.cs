@@ -107,5 +107,86 @@ public class AdminUsersController : ControllerBase
             return BadRequest(new { message = ex.Message });
         }
     }
+
+    [HttpPatch("{id:guid}/status")]
+    public async Task<ActionResult<AdminUserResponse>> UpdateUserStatus(Guid id, [FromBody] UpdateUserStatusRequest request)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        try
+        {
+            var userIdClaim = User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            _ = Guid.TryParse(userIdClaim, out var currentUserId);
+
+            var response = await _adminUserService.SetUserStatusAsync(id, request.IsActive, currentUserId);
+            return Ok(response);
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    [HttpPost("{id:guid}/reset-password")]
+    public async Task<ActionResult<AdminResetPasswordResponse>> ResetPassword(Guid id, [FromBody] AdminResetPasswordRequest? request)
+    {
+        try
+        {
+            var userIdClaim = User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            _ = Guid.TryParse(userIdClaim, out var currentUserId);
+
+            var response = await _adminUserService.ResetPasswordAsync(id, request, currentUserId);
+            return Ok(response);
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    [HttpPost("{id:guid}/force-password-change")]
+    public async Task<ActionResult<AdminUserResponse>> ForcePasswordChange(Guid id, [FromBody] ForcePasswordChangeRequest? request)
+    {
+        try
+        {
+            var userIdClaim = User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            _ = Guid.TryParse(userIdClaim, out var currentUserId);
+
+            var mustChange = request?.MustChangePassword ?? true;
+            var response = await _adminUserService.SetForcePasswordChangeAsync(id, mustChange, currentUserId);
+            return Ok(response);
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
 }
 

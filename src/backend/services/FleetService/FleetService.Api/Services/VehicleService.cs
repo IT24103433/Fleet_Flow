@@ -7,16 +7,26 @@ using FleetService.Api.Data;
 using FleetService.Api.Dtos;
 using FleetService.Api.Entities;
 using FleetService.Api.Exceptions;
+using FleetService.Api.Messaging;
+using FleetService.Api.Messaging.Events;
+using Microsoft.Extensions.Options;
 
 namespace FleetService.Api.Services;
 
 public class VehicleService : IVehicleService
 {
     private readonly FleetDbContext _dbContext;
+    private readonly IKafkaProducerService? _kafkaProducer;
+    private readonly KafkaSettings _kafkaSettings;
 
-    public VehicleService(FleetDbContext dbContext)
+    public VehicleService(
+        FleetDbContext dbContext,
+        IKafkaProducerService? kafkaProducer = null,
+        IOptions<KafkaSettings>? kafkaSettings = null)
     {
         _dbContext = dbContext;
+        _kafkaProducer = kafkaProducer;
+        _kafkaSettings = kafkaSettings?.Value ?? new KafkaSettings();
     }
 
     public async Task<IEnumerable<VehicleCategoryResponse>> GetCategoriesAsync()
@@ -36,57 +46,163 @@ public class VehicleService : IVehicleService
         });
     }
 
+    public async Task<PagedVehicleResult> GetPagedVehiclesAsync(VehicleQueryParameters parameters)
+    {
+        parameters ??= new VehicleQueryParameters();
+
+        var query = _dbContext.Vehicles
+            .AsNoTracking()
+            .Include(v => v.Category)
+            .AsQueryable();
+
+        // 1. Search (VIN, license plate, make, model)
+        if (!string.IsNullOrWhiteSpace(parameters.SearchTerm))
+        {
+            var term = parameters.SearchTerm.Trim().ToLower();
+            query = query.Where(v =>
+                v.Vin.ToLower().Contains(term) ||
+                v.LicensePlate.ToLower().Contains(term) ||
+                v.Make.ToLower().Contains(term) ||
+                v.Model.ToLower().Contains(term) ||
+                (v.Make + " " + v.Model).ToLower().Contains(term));
+        }
+
+        // 2. Filters
+        // Category
+        if (!string.IsNullOrWhiteSpace(parameters.Category) && 
+            !parameters.Category.Equals("ALL", StringComparison.OrdinalIgnoreCase) &&
+            !parameters.Category.Equals("All Categories", StringComparison.OrdinalIgnoreCase))
+        {
+            var cat = parameters.Category.Trim().ToLower();
+            query = query.Where(v => v.Category != null && 
+                (v.Category.Name.ToLower() == cat || v.Category.Id.ToString().ToLower() == cat));
+        }
+
+        // Status
+        if (parameters.Status.HasValue)
+        {
+            query = query.Where(v => v.Status == parameters.Status.Value);
+        }
+        else if (parameters.IncludeRetired != true)
+        {
+            // By default, exclude retired vehicles from normal active-fleet queries
+            query = query.Where(v => v.Status != VehicleStatus.Retired);
+        }
+
+        // Fuel Type
+        if (!string.IsNullOrWhiteSpace(parameters.Fuel) &&
+            !parameters.Fuel.Equals("ALL", StringComparison.OrdinalIgnoreCase) &&
+            !parameters.Fuel.Equals("All Fuels", StringComparison.OrdinalIgnoreCase) &&
+            !parameters.Fuel.Equals("All Powertrains", StringComparison.OrdinalIgnoreCase))
+        {
+            var fuelTrimmed = parameters.Fuel.Trim().ToLower();
+            query = query.Where(v => v.FuelType.ToLower().Contains(fuelTrimmed));
+        }
+
+        // Transmission
+        if (!string.IsNullOrWhiteSpace(parameters.Transmission) &&
+            !parameters.Transmission.Equals("ALL", StringComparison.OrdinalIgnoreCase) &&
+            !parameters.Transmission.Equals("All Transmissions", StringComparison.OrdinalIgnoreCase))
+        {
+            var transTrimmed = parameters.Transmission.Trim().ToLower();
+            query = query.Where(v => v.Transmission.ToLower().Contains(transTrimmed));
+        }
+
+        // Hub Location
+        if (!string.IsNullOrWhiteSpace(parameters.Hub) &&
+            !parameters.Hub.Equals("ALL", StringComparison.OrdinalIgnoreCase) &&
+            !parameters.Hub.Equals("All Hubs", StringComparison.OrdinalIgnoreCase) &&
+            !parameters.Hub.Equals("All Locations", StringComparison.OrdinalIgnoreCase))
+        {
+            var hubTrimmed = parameters.Hub.Trim().ToLower();
+            query = query.Where(v => v.HubLocation.ToLower().Contains(hubTrimmed));
+        }
+
+        // Total count before paging
+        var totalCount = await query.CountAsync();
+
+        // 3. Sorting
+        var isAscending = string.Equals(parameters.SortOrder, "asc", StringComparison.OrdinalIgnoreCase);
+        var sortBy = parameters.SortBy?.Trim().ToLower() ?? "createdat";
+
+        query = sortBy switch
+        {
+            "make" => isAscending 
+                ? query.OrderBy(v => v.Make).ThenBy(v => v.Model)
+                : query.OrderByDescending(v => v.Make).ThenByDescending(v => v.Model),
+            "model" => isAscending
+                ? query.OrderBy(v => v.Model)
+                : query.OrderByDescending(v => v.Model),
+            "year" => isAscending
+                ? query.OrderBy(v => v.Year)
+                : query.OrderByDescending(v => v.Year),
+            "dailyrate" or "rate" or "price" => isAscending
+                ? query.OrderBy(v => v.DailyRate)
+                : query.OrderByDescending(v => v.DailyRate),
+            "mileage" or "odometer" => isAscending
+                ? query.OrderBy(v => v.Mileage)
+                : query.OrderByDescending(v => v.Mileage),
+            "status" => isAscending
+                ? query.OrderBy(v => v.Status)
+                : query.OrderByDescending(v => v.Status),
+            "vin" => isAscending
+                ? query.OrderBy(v => v.Vin)
+                : query.OrderByDescending(v => v.Vin),
+            "licenseplate" or "plate" => isAscending
+                ? query.OrderBy(v => v.LicensePlate)
+                : query.OrderByDescending(v => v.LicensePlate),
+            _ => isAscending
+                ? query.OrderBy(v => v.CreatedAt)
+                : query.OrderByDescending(v => v.CreatedAt)
+        };
+
+        // 4. Pagination
+        var page = parameters.Page < 1 ? 1 : parameters.Page;
+        var pageSize = parameters.PageSize < 1 ? 20 : (parameters.PageSize > 100 ? 100 : parameters.PageSize);
+
+        var vehicles = await query
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return new PagedVehicleResult
+        {
+            Items = vehicles.Select(MapToResponse).ToList(),
+            TotalCount = totalCount,
+            Page = page,
+            PageSize = pageSize
+        };
+    }
+
     public async Task<IEnumerable<VehicleResponse>> GetVehiclesAsync(
         string? category = null,
         VehicleStatus? status = null,
         string? fuel = null,
         string? searchTerm = null,
         int page = 1,
-        int pageSize = 20)
+        int pageSize = 20,
+        string? transmission = null,
+        string? hub = null,
+        string? sortBy = null,
+        string? sortOrder = null,
+        bool? includeRetired = null)
     {
-        var query = _dbContext.Vehicles
-            .AsNoTracking()
-            .Include(v => v.Category)
-            .AsQueryable();
-
-        if (!string.IsNullOrWhiteSpace(category))
+        var result = await GetPagedVehiclesAsync(new VehicleQueryParameters
         {
-            var cat = category.Trim().ToLower();
-            query = query.Where(v => v.Category != null && 
-                (v.Category.Name.ToLower() == cat || v.Category.Id.ToString().ToLower() == cat));
-        }
+            Category = category,
+            Status = status,
+            Fuel = fuel,
+            SearchTerm = searchTerm,
+            Page = page,
+            PageSize = pageSize,
+            Transmission = transmission,
+            Hub = hub,
+            SortBy = sortBy,
+            SortOrder = sortOrder,
+            IncludeRetired = includeRetired
+        });
 
-        if (status.HasValue)
-        {
-            query = query.Where(v => v.Status == status.Value);
-        }
-
-        if (!string.IsNullOrWhiteSpace(fuel))
-        {
-            var fuelTrimmed = fuel.Trim().ToLower();
-            query = query.Where(v => v.FuelType.ToLower().Contains(fuelTrimmed));
-        }
-
-        if (!string.IsNullOrWhiteSpace(searchTerm))
-        {
-            var term = searchTerm.Trim().ToLower();
-            query = query.Where(v =>
-                v.Make.ToLower().Contains(term) ||
-                v.Model.ToLower().Contains(term) ||
-                v.LicensePlate.ToLower().Contains(term) ||
-                v.Vin.ToLower().Contains(term));
-        }
-
-        page = page < 1 ? 1 : page;
-        pageSize = pageSize < 1 ? 20 : (pageSize > 100 ? 100 : pageSize);
-
-        var vehicles = await query
-            .OrderByDescending(v => v.CreatedAt)
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync();
-
-        return vehicles.Select(MapToResponse);
+        return result.Items;
     }
 
     public async Task<VehicleResponse?> GetVehicleByIdAsync(Guid id)
@@ -94,6 +210,7 @@ public class VehicleService : IVehicleService
         var vehicle = await _dbContext.Vehicles
             .AsNoTracking()
             .Include(v => v.Category)
+            .Include(v => v.Images)
             .FirstOrDefaultAsync(v => v.Id == id);
 
         if (vehicle == null)
@@ -218,6 +335,31 @@ public class VehicleService : IVehicleService
         _dbContext.Vehicles.Add(vehicle);
         await _dbContext.SaveChangesAsync();
 
+        if (_kafkaProducer != null)
+        {
+            var createdEvent = new VehicleCreatedEvent
+            {
+                VehicleId = vehicle.Id,
+                Vin = vehicle.Vin,
+                LicensePlate = vehicle.LicensePlate,
+                Make = vehicle.Make,
+                Model = vehicle.Model,
+                Year = vehicle.Year,
+                VehicleCategoryId = vehicle.VehicleCategoryId,
+                CategoryName = category.Name,
+                DailyRate = vehicle.DailyRate,
+                Transmission = vehicle.Transmission,
+                FuelType = vehicle.FuelType,
+                SeatingCapacity = vehicle.SeatingCapacity,
+                HubLocation = vehicle.HubLocation,
+                Mileage = vehicle.Mileage,
+                Status = vehicle.Status,
+                CreatedAt = vehicle.CreatedAt
+            };
+
+            _ = _kafkaProducer.PublishAsync(_kafkaSettings.VehicleEventsTopic, vehicle.Id.ToString(), createdEvent);
+        }
+
         return MapToResponse(vehicle);
     }
 
@@ -338,6 +480,185 @@ public class VehicleService : IVehicleService
 
         await _dbContext.SaveChangesAsync();
 
+        if (_kafkaProducer != null)
+        {
+            var updatedEvent = new VehicleUpdatedEvent
+            {
+                VehicleId = vehicle.Id,
+                Vin = vehicle.Vin,
+                LicensePlate = vehicle.LicensePlate,
+                Make = vehicle.Make,
+                Model = vehicle.Model,
+                Year = vehicle.Year,
+                VehicleCategoryId = vehicle.VehicleCategoryId,
+                CategoryName = category.Name,
+                DailyRate = vehicle.DailyRate,
+                Transmission = vehicle.Transmission,
+                FuelType = vehicle.FuelType,
+                SeatingCapacity = vehicle.SeatingCapacity,
+                HubLocation = vehicle.HubLocation,
+                Mileage = vehicle.Mileage,
+                Status = vehicle.Status,
+                UpdatedAt = vehicle.UpdatedAt
+            };
+
+            _ = _kafkaProducer.PublishAsync(_kafkaSettings.VehicleEventsTopic, vehicle.Id.ToString(), updatedEvent);
+        }
+
+        return MapToResponse(vehicle);
+    }
+
+    public async Task<VehicleResponse> UpdateVehicleStatusAsync(Guid id, UpdateVehicleStatusRequest request)
+    {
+        if (request == null)
+        {
+            throw new ValidationException("Status request payload cannot be null.");
+        }
+
+        if (!Enum.IsDefined(typeof(VehicleStatus), request.Status))
+        {
+            throw new ValidationException($"Invalid vehicle status '{request.Status}'. Supported statuses are: {string.Join(", ", Enum.GetNames<VehicleStatus>())}.");
+        }
+
+        var vehicle = await _dbContext.Vehicles
+            .Include(v => v.Category)
+            .FirstOrDefaultAsync(v => v.Id == id);
+
+        if (vehicle == null)
+        {
+            throw new NotFoundException($"Vehicle with ID '{id}' was not found.");
+        }
+
+        if (request.Status == VehicleStatus.Retired && vehicle.Status == VehicleStatus.InUse)
+        {
+            throw new ValidationException("Cannot retire a vehicle that is currently InUse. Active trip or dispatch must be completed first.");
+        }
+
+        vehicle.Status = request.Status;
+        vehicle.UpdatedAt = DateTime.UtcNow;
+
+        await _dbContext.SaveChangesAsync();
+
+        if (_kafkaProducer != null)
+        {
+            var updatedEvent = new VehicleUpdatedEvent
+            {
+                VehicleId = vehicle.Id,
+                Vin = vehicle.Vin,
+                LicensePlate = vehicle.LicensePlate,
+                Make = vehicle.Make,
+                Model = vehicle.Model,
+                Year = vehicle.Year,
+                VehicleCategoryId = vehicle.VehicleCategoryId,
+                CategoryName = vehicle.Category?.Name ?? string.Empty,
+                DailyRate = vehicle.DailyRate,
+                Transmission = vehicle.Transmission,
+                FuelType = vehicle.FuelType,
+                SeatingCapacity = vehicle.SeatingCapacity,
+                HubLocation = vehicle.HubLocation,
+                Mileage = vehicle.Mileage,
+                Status = vehicle.Status,
+                UpdatedAt = vehicle.UpdatedAt
+            };
+
+            _ = _kafkaProducer.PublishAsync(_kafkaSettings.VehicleEventsTopic, vehicle.Id.ToString(), updatedEvent);
+        }
+
+        return MapToResponse(vehicle);
+    }
+
+    public async Task<VehicleResponse> RetireVehicleAsync(Guid id, string? reason = null)
+    {
+        var vehicle = await _dbContext.Vehicles
+            .Include(v => v.Category)
+            .Include(v => v.Images)
+            .FirstOrDefaultAsync(v => v.Id == id);
+
+        if (vehicle == null)
+        {
+            throw new NotFoundException($"Vehicle with ID '{id}' was not found.");
+        }
+
+        if (vehicle.Status == VehicleStatus.InUse)
+        {
+            throw new ValidationException("Cannot retire a vehicle that is currently InUse. Active trip or dispatch must be completed first.");
+        }
+
+        vehicle.Status = VehicleStatus.Retired;
+        vehicle.UpdatedAt = DateTime.UtcNow;
+
+        await _dbContext.SaveChangesAsync();
+
+        if (_kafkaProducer != null)
+        {
+            var updatedEvent = new VehicleUpdatedEvent
+            {
+                VehicleId = vehicle.Id,
+                Vin = vehicle.Vin,
+                LicensePlate = vehicle.LicensePlate,
+                Make = vehicle.Make,
+                Model = vehicle.Model,
+                Year = vehicle.Year,
+                VehicleCategoryId = vehicle.VehicleCategoryId,
+                CategoryName = vehicle.Category?.Name ?? string.Empty,
+                DailyRate = vehicle.DailyRate,
+                Transmission = vehicle.Transmission,
+                FuelType = vehicle.FuelType,
+                SeatingCapacity = vehicle.SeatingCapacity,
+                HubLocation = vehicle.HubLocation,
+                Mileage = vehicle.Mileage,
+                Status = vehicle.Status,
+                UpdatedAt = vehicle.UpdatedAt
+            };
+
+            _ = _kafkaProducer.PublishAsync(_kafkaSettings.VehicleEventsTopic, vehicle.Id.ToString(), updatedEvent);
+        }
+
+        return MapToResponse(vehicle);
+    }
+
+    public async Task<VehicleResponse> ReactivateVehicleAsync(Guid id)
+    {
+        var vehicle = await _dbContext.Vehicles
+            .Include(v => v.Category)
+            .Include(v => v.Images)
+            .FirstOrDefaultAsync(v => v.Id == id);
+
+        if (vehicle == null)
+        {
+            throw new NotFoundException($"Vehicle with ID '{id}' was not found.");
+        }
+
+        vehicle.Status = VehicleStatus.Available;
+        vehicle.UpdatedAt = DateTime.UtcNow;
+
+        await _dbContext.SaveChangesAsync();
+
+        if (_kafkaProducer != null)
+        {
+            var updatedEvent = new VehicleUpdatedEvent
+            {
+                VehicleId = vehicle.Id,
+                Vin = vehicle.Vin,
+                LicensePlate = vehicle.LicensePlate,
+                Make = vehicle.Make,
+                Model = vehicle.Model,
+                Year = vehicle.Year,
+                VehicleCategoryId = vehicle.VehicleCategoryId,
+                CategoryName = vehicle.Category?.Name ?? string.Empty,
+                DailyRate = vehicle.DailyRate,
+                Transmission = vehicle.Transmission,
+                FuelType = vehicle.FuelType,
+                SeatingCapacity = vehicle.SeatingCapacity,
+                HubLocation = vehicle.HubLocation,
+                Mileage = vehicle.Mileage,
+                Status = vehicle.Status,
+                UpdatedAt = vehicle.UpdatedAt
+            };
+
+            _ = _kafkaProducer.PublishAsync(_kafkaSettings.VehicleEventsTopic, vehicle.Id.ToString(), updatedEvent);
+        }
+
         return MapToResponse(vehicle);
     }
 
@@ -361,7 +682,19 @@ public class VehicleService : IVehicleService
             Mileage = vehicle.Mileage,
             Status = vehicle.Status,
             CreatedAt = vehicle.CreatedAt,
-            UpdatedAt = vehicle.UpdatedAt
+            UpdatedAt = vehicle.UpdatedAt,
+            Images = vehicle.Images?.Select(i => new VehicleImageResponse
+            {
+                Id = i.Id,
+                VehicleId = i.VehicleId,
+                FileName = i.FileName,
+                OriginalFileName = i.OriginalFileName,
+                ContentType = i.ContentType,
+                FileSize = i.FileSize,
+                RelativeUrl = i.RelativeUrl,
+                Caption = i.Caption,
+                CreatedAt = i.CreatedAt
+            }).ToList() ?? new List<VehicleImageResponse>()
         };
     }
 }

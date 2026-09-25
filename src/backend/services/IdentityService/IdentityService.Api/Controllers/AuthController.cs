@@ -51,6 +51,10 @@ public class AuthController : ControllerBase
         {
             return Unauthorized(new { message = ex.Message });
         }
+        catch (AccountDisabledException ex)
+        {
+            return StatusCode(403, new { message = ex.Message });
+        }
         catch (PortalAccessDeniedException ex)
         {
             return StatusCode(403, new { message = ex.Message });
@@ -134,6 +138,40 @@ public class AuthController : ControllerBase
         catch (NotFoundException ex)
         {
             return NotFound(new { message = ex.Message });
+        }
+    }
+
+    [Authorize]
+    [HttpPost("change-password")]
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        var userIdClaim = User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
+        {
+            return Unauthorized(new { message = "User identity claim could not be established." });
+        }
+
+        try
+        {
+            await _authenticationService.ChangePasswordAsync(userId, request);
+            return Ok(new { message = "Password changed successfully." });
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        catch (AccountDisabledException ex)
+        {
+            return StatusCode(403, new { message = ex.Message });
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { message = ex.Message });
         }
     }
 }

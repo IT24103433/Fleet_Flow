@@ -4,6 +4,7 @@ import InputField from '../../components/InputField';
 import Alert from '../../components/Alert';
 import Button from '../../components/common/Button';
 import { getCategories, getVehicleById, updateVehicle } from '../../services/vehicleService';
+import { validateEditVehicle } from '../../validation/vehicleValidation';
 
 const HUB_OPTIONS = [
   'Colombo Fort Hub',
@@ -19,7 +20,7 @@ const TRANSMISSION_OPTIONS = ['Automatic', 'Manual', 'Single-Speed Fixed Gear'];
 const FUEL_OPTIONS = ['100% Electric', 'Hybrid', 'Plug-in Hybrid', 'Gasoline', 'Diesel'];
 const SEATING_OPTIONS = ['2 Passengers', '4 Passengers', '5 Passengers', '7 Passengers', '8+ Passengers'];
 
-const EditVehiclePage = ({ selectedVehicle, onNavigate }) => {
+const EditVehiclePage = ({ selectedVehicle, onNavigate, onVehicleUpdated }) => {
   const { token, roles } = useAuth();
   const [categories, setCategories] = useState([]);
   const [isCategoriesLoading, setIsCategoriesLoading] = useState(true);
@@ -102,48 +103,11 @@ const EditVehiclePage = ({ selectedVehicle, onNavigate }) => {
     }
   };
 
-  const validateForm = () => {
-    const newErrors = {};
-
-    if (!formData.licensePlate.trim()) {
-      newErrors.licensePlate = 'License plate number is required.';
-    }
-
-    if (!formData.make.trim()) {
-      newErrors.make = 'Manufacturer / Make is required.';
-    }
-
-    if (!formData.model.trim()) {
-      newErrors.model = 'Model name is required.';
-    }
-
-    const yearNum = parseInt(formData.year, 10);
-    if (!formData.year || isNaN(yearNum) || yearNum < 1900 || yearNum > 2100) {
-      newErrors.year = 'Please enter a valid year between 1900 and 2100.';
-    }
-
-    if (!formData.vehicleCategoryId) {
-      newErrors.vehicleCategoryId = 'Please select a vehicle category.';
-    }
-
-    const rateNum = parseFloat(formData.dailyRate);
-    if (!formData.dailyRate || isNaN(rateNum) || rateNum <= 0) {
-      newErrors.dailyRate = 'Valid daily rental rate greater than LKR 0 required.';
-    }
-
-    const mileageNum = parseInt(formData.mileage, 10);
-    if (isNaN(mileageNum) || mileageNum < 0) {
-      newErrors.mileage = 'Odometer mileage must be 0 or greater.';
-    }
-
-    return newErrors;
-  };
-
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setNotice(null);
 
-    const validationErrors = validateForm();
+    const validationErrors = validateEditVehicle(formData);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
@@ -180,6 +144,9 @@ const EditVehiclePage = ({ selectedVehicle, onNavigate }) => {
     setIsSubmitting(false);
 
     if (result.success) {
+      if (onVehicleUpdated) {
+        onVehicleUpdated(result.data);
+      }
       setNotice({
         type: 'success',
         title: 'Vehicle Specifications Updated',
@@ -274,6 +241,16 @@ const EditVehiclePage = ({ selectedVehicle, onNavigate }) => {
         {notice && (
           <div style={{ marginBottom: 'var(--space-6)' }}>
             <Alert type={notice.type} title={notice.title} message={notice.message} />
+            {notice.type === 'success' && (
+              <div style={{ display: 'flex', gap: '12px', marginTop: '12px' }}>
+                <Button variant="outline" size="sm" onClick={() => onNavigate('staff-vehicle-details')}>
+                  View Updated Vehicle Details
+                </Button>
+                <Button variant="ghost" size="sm" onClick={() => onNavigate('manage-fleet')}>
+                  Return to Fleet Inventory
+                </Button>
+              </div>
+            )}
           </div>
         )}
 
@@ -282,21 +259,18 @@ const EditVehiclePage = ({ selectedVehicle, onNavigate }) => {
           <div className="form-section-block">
             <h3 className="section-subtitle-heading">1. Vehicle Identification</h3>
             <div className="form-two-col">
-              <div className="form-group">
-                <label htmlFor="vin" className="form-label">
-                  Vehicle Identification Number (VIN) <span style={{ fontSize: '11px', color: 'var(--color-text-muted)' }}>(Immutable)</span>
-                </label>
-                <input
-                  type="text"
-                  id="vin"
-                  name="vin"
-                  value={formData.vin}
-                  readOnly
-                  disabled
-                  className="filter-search-input font-mono"
-                  style={{ backgroundColor: 'var(--color-surface-hover)', cursor: 'not-allowed', width: '100%' }}
-                />
-              </div>
+              <InputField
+                label="Vehicle Identification Number (VIN)"
+                id="vin"
+                name="vin"
+                value={formData.vin}
+                onChange={handleInputChange}
+                error={errors.vin}
+                placeholder="e.g. 1HGCR2F83HA029101"
+                required
+                disabled={isSubmitting}
+                maxLength={17}
+              />
 
               <InputField
                 label="License Plate Number"
