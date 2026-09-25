@@ -3746,6 +3746,1928 @@
         }
       },
       "normalization_status": "STANDARDIZED_SCHEMA_V1"
-    }
+    },
+    "pickup_return_stress_scenarios": [
+      {
+        "scenario_id": "RENTAL-CYCLE-0001",
+        "booking_id": "bkg-guid-500001",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500001/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-2",
+          "initial_odometer_km": 45320,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100001",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500001/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-2",
+          "final_odometer_km": 45770,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0002",
+        "booking_id": "bkg-guid-500002",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500002/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-3",
+          "initial_odometer_km": 45440,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100002",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500002/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-3",
+          "final_odometer_km": 45890,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0003",
+        "booking_id": "bkg-guid-500003",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500003/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-4",
+          "initial_odometer_km": 45560,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100003",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500003/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-4",
+          "final_odometer_km": 46010,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0004",
+        "booking_id": "bkg-guid-500004",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500004/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-5",
+          "initial_odometer_km": 45680,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100004",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500004/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-5",
+          "final_odometer_km": 46130,
+          "final_fuel_level_pct": 85,
+          "fuel_refill_charge": 25,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0005",
+        "booking_id": "bkg-guid-500005",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500005/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-6",
+          "initial_odometer_km": 45800,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100005",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500005/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-6",
+          "final_odometer_km": 46250,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0006",
+        "booking_id": "bkg-guid-500006",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500006/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-7",
+          "initial_odometer_km": 45920,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100006",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500006/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-7",
+          "final_odometer_km": 46370,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0007",
+        "booking_id": "bkg-guid-500007",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500007/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-8",
+          "initial_odometer_km": 46040,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100007",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500007/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-8",
+          "final_odometer_km": 46490,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0008",
+        "booking_id": "bkg-guid-500008",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500008/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-9",
+          "initial_odometer_km": 46160,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100008",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500008/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-9",
+          "final_odometer_km": 46610,
+          "final_fuel_level_pct": 85,
+          "fuel_refill_charge": 25,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0009",
+        "booking_id": "bkg-guid-500009",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500009/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-10",
+          "initial_odometer_km": 46280,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100009",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500009/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-10",
+          "final_odometer_km": 46730,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0010",
+        "booking_id": "bkg-guid-500010",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500010/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-1",
+          "initial_odometer_km": 46400,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100010",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500010/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-1",
+          "final_odometer_km": 46850,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0011",
+        "booking_id": "bkg-guid-500011",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500011/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-2",
+          "initial_odometer_km": 46520,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100011",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500011/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-2",
+          "final_odometer_km": 46970,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0012",
+        "booking_id": "bkg-guid-500012",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500012/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-3",
+          "initial_odometer_km": 46640,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100012",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500012/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-3",
+          "final_odometer_km": 47090,
+          "final_fuel_level_pct": 85,
+          "fuel_refill_charge": 25,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0013",
+        "booking_id": "bkg-guid-500013",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500013/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-4",
+          "initial_odometer_km": 46760,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100013",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500013/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-4",
+          "final_odometer_km": 47210,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0014",
+        "booking_id": "bkg-guid-500014",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500014/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-5",
+          "initial_odometer_km": 46880,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100014",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500014/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-5",
+          "final_odometer_km": 47330,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0015",
+        "booking_id": "bkg-guid-500015",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500015/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-6",
+          "initial_odometer_km": 47000,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100015",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500015/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-6",
+          "final_odometer_km": 47450,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0016",
+        "booking_id": "bkg-guid-500016",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500016/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-7",
+          "initial_odometer_km": 47120,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100016",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500016/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-7",
+          "final_odometer_km": 47570,
+          "final_fuel_level_pct": 85,
+          "fuel_refill_charge": 25,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0017",
+        "booking_id": "bkg-guid-500017",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500017/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-8",
+          "initial_odometer_km": 47240,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100017",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500017/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-8",
+          "final_odometer_km": 47690,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0018",
+        "booking_id": "bkg-guid-500018",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500018/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-9",
+          "initial_odometer_km": 47360,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100018",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500018/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-9",
+          "final_odometer_km": 47810,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0019",
+        "booking_id": "bkg-guid-500019",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500019/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-10",
+          "initial_odometer_km": 47480,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100019",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500019/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-10",
+          "final_odometer_km": 47930,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0020",
+        "booking_id": "bkg-guid-500020",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500020/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-1",
+          "initial_odometer_km": 47600,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100020",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500020/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-1",
+          "final_odometer_km": 48050,
+          "final_fuel_level_pct": 85,
+          "fuel_refill_charge": 25,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0021",
+        "booking_id": "bkg-guid-500021",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500021/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-2",
+          "initial_odometer_km": 47720,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100021",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500021/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-2",
+          "final_odometer_km": 48170,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0022",
+        "booking_id": "bkg-guid-500022",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500022/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-3",
+          "initial_odometer_km": 47840,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100022",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500022/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-3",
+          "final_odometer_km": 48290,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0023",
+        "booking_id": "bkg-guid-500023",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500023/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-4",
+          "initial_odometer_km": 47960,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100023",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500023/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-4",
+          "final_odometer_km": 48410,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0024",
+        "booking_id": "bkg-guid-500024",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500024/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-5",
+          "initial_odometer_km": 48080,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100024",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500024/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-5",
+          "final_odometer_km": 48530,
+          "final_fuel_level_pct": 85,
+          "fuel_refill_charge": 25,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0025",
+        "booking_id": "bkg-guid-500025",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500025/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-6",
+          "initial_odometer_km": 48200,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100025",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500025/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-6",
+          "final_odometer_km": 48650,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0026",
+        "booking_id": "bkg-guid-500026",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500026/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-7",
+          "initial_odometer_km": 48320,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100026",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500026/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-7",
+          "final_odometer_km": 48770,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0027",
+        "booking_id": "bkg-guid-500027",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500027/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-8",
+          "initial_odometer_km": 48440,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100027",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500027/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-8",
+          "final_odometer_km": 48890,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0028",
+        "booking_id": "bkg-guid-500028",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500028/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-9",
+          "initial_odometer_km": 48560,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100028",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500028/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-9",
+          "final_odometer_km": 49010,
+          "final_fuel_level_pct": 85,
+          "fuel_refill_charge": 25,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0029",
+        "booking_id": "bkg-guid-500029",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500029/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-10",
+          "initial_odometer_km": 48680,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100029",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500029/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-10",
+          "final_odometer_km": 49130,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0030",
+        "booking_id": "bkg-guid-500030",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500030/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-1",
+          "initial_odometer_km": 48800,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100030",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500030/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-1",
+          "final_odometer_km": 49250,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0031",
+        "booking_id": "bkg-guid-500031",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500031/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-2",
+          "initial_odometer_km": 48920,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100031",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500031/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-2",
+          "final_odometer_km": 49370,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0032",
+        "booking_id": "bkg-guid-500032",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500032/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-3",
+          "initial_odometer_km": 49040,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100032",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500032/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-3",
+          "final_odometer_km": 49490,
+          "final_fuel_level_pct": 85,
+          "fuel_refill_charge": 25,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0033",
+        "booking_id": "bkg-guid-500033",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500033/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-4",
+          "initial_odometer_km": 49160,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100033",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500033/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-4",
+          "final_odometer_km": 49610,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0034",
+        "booking_id": "bkg-guid-500034",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500034/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-5",
+          "initial_odometer_km": 49280,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100034",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500034/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-5",
+          "final_odometer_km": 49730,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0035",
+        "booking_id": "bkg-guid-500035",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500035/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-6",
+          "initial_odometer_km": 49400,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100035",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500035/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-6",
+          "final_odometer_km": 49850,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      }
+    ],
+    "legacy_pre_extraction_booking_payloads": [
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0001",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-1",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 1",
+          "corporate_account": false,
+          "billing_address_line1": "1 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0002",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-2",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 2",
+          "corporate_account": false,
+          "billing_address_line1": "2 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0003",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-3",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 3",
+          "corporate_account": false,
+          "billing_address_line1": "3 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0004",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-4",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 4",
+          "corporate_account": false,
+          "billing_address_line1": "4 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0005",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-5",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 5",
+          "corporate_account": false,
+          "billing_address_line1": "5 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0006",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-6",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 6",
+          "corporate_account": false,
+          "billing_address_line1": "6 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0007",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-7",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 7",
+          "corporate_account": false,
+          "billing_address_line1": "7 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0008",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-8",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 8",
+          "corporate_account": false,
+          "billing_address_line1": "8 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0009",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-9",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 9",
+          "corporate_account": false,
+          "billing_address_line1": "9 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0010",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-10",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 10",
+          "corporate_account": false,
+          "billing_address_line1": "10 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0011",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-11",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 11",
+          "corporate_account": false,
+          "billing_address_line1": "11 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0012",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-12",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 12",
+          "corporate_account": false,
+          "billing_address_line1": "12 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0013",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-13",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 13",
+          "corporate_account": false,
+          "billing_address_line1": "13 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0014",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-14",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 14",
+          "corporate_account": false,
+          "billing_address_line1": "14 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0015",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-15",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 15",
+          "corporate_account": false,
+          "billing_address_line1": "15 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0016",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-16",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 16",
+          "corporate_account": false,
+          "billing_address_line1": "16 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0017",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-17",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 17",
+          "corporate_account": false,
+          "billing_address_line1": "17 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0018",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-18",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 18",
+          "corporate_account": false,
+          "billing_address_line1": "18 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0019",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-19",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 19",
+          "corporate_account": false,
+          "billing_address_line1": "19 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0020",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-20",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 20",
+          "corporate_account": false,
+          "billing_address_line1": "20 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0021",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-21",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 21",
+          "corporate_account": false,
+          "billing_address_line1": "21 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0022",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-22",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 22",
+          "corporate_account": false,
+          "billing_address_line1": "22 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0023",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-23",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 23",
+          "corporate_account": false,
+          "billing_address_line1": "23 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0024",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-24",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 24",
+          "corporate_account": false,
+          "billing_address_line1": "24 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0025",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-25",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 25",
+          "corporate_account": false,
+          "billing_address_line1": "25 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0026",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-26",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 26",
+          "corporate_account": false,
+          "billing_address_line1": "26 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0027",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-27",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 27",
+          "corporate_account": false,
+          "billing_address_line1": "27 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0028",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-28",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 28",
+          "corporate_account": false,
+          "billing_address_line1": "28 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0029",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-29",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 29",
+          "corporate_account": false,
+          "billing_address_line1": "29 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0030",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-30",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 30",
+          "corporate_account": false,
+          "billing_address_line1": "30 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0031",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-31",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 31",
+          "corporate_account": false,
+          "billing_address_line1": "31 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0032",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-32",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 32",
+          "corporate_account": false,
+          "billing_address_line1": "32 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0033",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-33",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 33",
+          "corporate_account": false,
+          "billing_address_line1": "33 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0034",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-34",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 34",
+          "corporate_account": false,
+          "billing_address_line1": "34 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0035",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-35",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 35",
+          "corporate_account": false,
+          "billing_address_line1": "35 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0036",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-36",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 36",
+          "corporate_account": false,
+          "billing_address_line1": "36 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0037",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-37",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 37",
+          "corporate_account": false,
+          "billing_address_line1": "37 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0038",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-38",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 38",
+          "corporate_account": false,
+          "billing_address_line1": "38 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0039",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-39",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 39",
+          "corporate_account": false,
+          "billing_address_line1": "39 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0040",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-40",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 40",
+          "corporate_account": false,
+          "billing_address_line1": "40 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0041",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-41",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 41",
+          "corporate_account": false,
+          "billing_address_line1": "41 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0042",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-42",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 42",
+          "corporate_account": false,
+          "billing_address_line1": "42 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0043",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-43",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 43",
+          "corporate_account": false,
+          "billing_address_line1": "43 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0044",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-44",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 44",
+          "corporate_account": false,
+          "billing_address_line1": "44 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0045",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-45",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 45",
+          "corporate_account": false,
+          "billing_address_line1": "45 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0046",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-46",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 46",
+          "corporate_account": false,
+          "billing_address_line1": "46 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0047",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-47",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 47",
+          "corporate_account": false,
+          "billing_address_line1": "47 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      },
+      {
+        "legacy_payload_id": "LEGACY-PRE-EXTRACT-0048",
+        "deprecated_notice": "MONOLITHIC_BOOKING_STRUCTURE_PRE_SPRINT4_EXTRACTION",
+        "embedded_fleet_data": {
+          "vehicle_vin": "VIN-PRE-48",
+          "category_name": "Standard Sedan",
+          "daily_rate": 65,
+          "branch_location": "Airport Hub A"
+        },
+        "embedded_customer_data": {
+          "customer_name": "Customer Test 48",
+          "corporate_account": false,
+          "billing_address_line1": "48 Test Street",
+          "postal_code": "90210"
+        },
+        "internal_debug_flags": {
+          "enable_direct_sql": true,
+          "bypass_kafka": false,
+          "validation_mode": "PERMISSIVE"
+        }
+      }
+    ]
   }
 }
