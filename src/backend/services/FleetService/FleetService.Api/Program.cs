@@ -17,6 +17,7 @@ builder.Services.AddDbContext<FleetDbContext>(options =>
 builder.Services.AddScoped<IVehicleService, VehicleService>();
 builder.Services.AddScoped<IVehicleImageService, VehicleImageService>();
 builder.Services.AddScoped<IMaintenanceService, MaintenanceService>();
+builder.Services.AddScoped<IBookingService, BookingService>();
 
 // Configure Apache Kafka Messaging
 builder.Services.Configure<KafkaSettings>(builder.Configuration.GetSection(KafkaSettings.SectionName));
@@ -132,7 +133,7 @@ _ = Task.Run(async () =>
                 await dbContext.SaveChangesAsync();
             }
 
-            // Ensure VehicleImages table exists on pre-existing database
+            // Ensure VehicleImages and Bookings tables exist on pre-existing database
             try
             {
                 await dbContext.Database.ExecuteSqlRawAsync(@"
@@ -149,6 +150,22 @@ _ = Task.Run(async () =>
                         CONSTRAINT ""FK_VehicleImages_Vehicles_VehicleId"" FOREIGN KEY (""VehicleId"") REFERENCES ""Vehicles"" (""Id"") ON DELETE CASCADE
                     );
                     CREATE INDEX IF NOT EXISTS ""IX_VehicleImages_VehicleId"" ON ""VehicleImages"" (""VehicleId"");
+
+                    CREATE TABLE IF NOT EXISTS ""Bookings"" (
+                        ""Id"" uuid NOT NULL PRIMARY KEY,
+                        ""CustomerId"" uuid NOT NULL,
+                        ""VehicleId"" uuid NOT NULL,
+                        ""StartDateTime"" timestamp with time zone NOT NULL,
+                        ""EndDateTime"" timestamp with time zone NOT NULL,
+                        ""Status"" character varying(50) NOT NULL,
+                        ""TotalCost"" numeric(18, 2) NOT NULL,
+                        ""CreatedAt"" timestamp with time zone NOT NULL,
+                        ""UpdatedAt"" timestamp with time zone NULL,
+                        CONSTRAINT ""FK_Bookings_Vehicles_VehicleId"" FOREIGN KEY (""VehicleId"") REFERENCES ""Vehicles"" (""Id"") ON DELETE RESTRICT
+                    );
+                    CREATE INDEX IF NOT EXISTS ""IX_Bookings_VehicleId"" ON ""Bookings"" (""VehicleId"");
+                    CREATE INDEX IF NOT EXISTS ""IX_Bookings_CustomerId"" ON ""Bookings"" (""CustomerId"");
+                    CREATE INDEX IF NOT EXISTS ""IX_Bookings_Status"" ON ""Bookings"" (""Status"");
                 ");
                 isDbReady = true;
                 Console.WriteLine("[Database] FleetService database initialized and ready.");

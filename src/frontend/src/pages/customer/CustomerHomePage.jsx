@@ -4,7 +4,8 @@ import RoleBadge from '../../components/common/RoleBadge';
 import StatusBadge from '../../components/common/StatusBadge';
 import Button from '../../components/common/Button';
 import { getVehicles } from '../../services/vehicleService';
-import { formatDailyRate } from '../../utils/currencyUtils';
+import { getMyBookings } from '../../services/bookingService';
+import { formatDailyRate, formatPriceNumber } from '../../utils/currencyUtils';
 
 const CustomerHomePage = ({ onNavigate, onSelectVehicle }) => {
   const { user, roles } = useAuth();
@@ -12,18 +13,33 @@ const CustomerHomePage = ({ onNavigate, onSelectVehicle }) => {
 
   const [recommendedVehicles, setRecommendedVehicles] = useState([]);
   const [isLoadingVehicles, setIsLoadingVehicles] = useState(true);
+  const [customerBookings, setCustomerBookings] = useState([]);
+  const [isLoadingBookings, setIsLoadingBookings] = useState(true);
 
   useEffect(() => {
     let isMounted = true;
-    getVehicles({ status: 'Available', pageSize: 4 }).then((result) => {
+
+    Promise.all([
+      getVehicles({ status: 'Available', pageSize: 4 }),
+      getMyBookings(),
+    ]).then(([vehiclesRes, bookingsRes]) => {
       if (!isMounted) return;
-      if (result.success && Array.isArray(result.data)) {
-        setRecommendedVehicles(result.data);
+
+      if (vehiclesRes.success && Array.isArray(vehiclesRes.data)) {
+        setRecommendedVehicles(vehiclesRes.data);
       } else {
         setRecommendedVehicles([]);
       }
       setIsLoadingVehicles(false);
+
+      if (bookingsRes.success && Array.isArray(bookingsRes.data)) {
+        setCustomerBookings(bookingsRes.data);
+      } else {
+        setCustomerBookings([]);
+      }
+      setIsLoadingBookings(false);
     });
+
     return () => {
       isMounted = false;
     };
@@ -89,33 +105,89 @@ const CustomerHomePage = ({ onNavigate, onSelectVehicle }) => {
         </div>
       </div>
 
-      {/* Active Reservations Section (Awaiting Booking API) */}
+      {/* Active Reservations Section */}
       <section className="home-section">
         <div className="section-header-row">
           <div>
             <h2 className="section-heading">Active & Upcoming Reservations</h2>
             <p className="section-subtext">Real-time booking and dispatch status</p>
           </div>
-          <span className="data-source-badge">Awaiting Booking API (Sprint 2)</span>
+          <span className="data-source-badge">
+            {isLoadingBookings ? 'Loading...' : `${customerBookings.length} ${customerBookings.length === 1 ? 'Reservation' : 'Reservations'}`}
+          </span>
         </div>
 
-        <div className="empty-reservations-box">
-          <div className="empty-icon-circle">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-              <line x1="16" y1="2" x2="16" y2="6" />
-              <line x1="8" y1="2" x2="8" y2="6" />
-              <line x1="3" y1="10" x2="21" y2="10" />
-            </svg>
+        {isLoadingBookings && (
+          <div style={{ textAlign: 'center', padding: 'var(--space-6) 0', color: 'var(--color-text-secondary)' }}>
+            <div className="spinner" style={{ width: '24px', height: '24px', borderTopColor: 'var(--color-primary)', borderRightColor: 'var(--color-primary)', margin: '0 auto 8px' }} />
+            <p style={{ fontSize: '13px' }}>Loading your reservations...</p>
           </div>
-          <h3>No Active Bookings Found</h3>
-          <p>
-            You do not currently have any active vehicle reservations. Browse our vehicle fleet catalog to select an executive model.
-          </p>
-          <Button variant="primary" size="md" onClick={() => onNavigate('browse')}>
-            Reserve a Vehicle
-          </Button>
-        </div>
+        )}
+
+        {!isLoadingBookings && customerBookings.length === 0 && (
+          <div className="empty-reservations-box">
+            <div className="empty-icon-circle">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                <line x1="16" y1="2" x2="16" y2="6" />
+                <line x1="8" y1="2" x2="8" y2="6" />
+                <line x1="3" y1="10" x2="21" y2="10" />
+              </svg>
+            </div>
+            <h3>No Active Bookings Found</h3>
+            <p>
+              You do not currently have any active vehicle reservations. Browse our vehicle fleet catalog to select an executive model.
+            </p>
+            <Button variant="primary" size="md" onClick={() => onNavigate('browse')}>
+              Reserve a Vehicle
+            </Button>
+          </div>
+        )}
+
+        {!isLoadingBookings && customerBookings.length > 0 && (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '16px' }}>
+            {customerBookings.map((booking) => {
+              const vehicle = booking.vehicle;
+              const title = vehicle ? `${vehicle.year} ${vehicle.make} ${vehicle.model}` : `Vehicle #${booking.vehicleId.substring(0, 8)}`;
+              const station = vehicle?.hubLocation || 'Central Station';
+
+              return (
+                <div
+                  key={booking.id}
+                  style={{
+                    background: '#ffffff',
+                    border: '1px solid var(--color-border, #e2e8f0)',
+                    borderRadius: '10px',
+                    padding: '16px',
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+                  }}
+                >
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                    <span style={{ fontSize: '12px', fontWeight: 'bold', color: 'var(--color-primary, #2563eb)', fontFamily: 'monospace' }}>
+                      #{booking.id.substring(0, 8)}
+                    </span>
+                    <StatusBadge status={booking.status || 'Confirmed'} />
+                  </div>
+
+                  <h4 style={{ margin: '0 0 4px', fontSize: '16px', fontWeight: '600' }}>{title}</h4>
+                  <p style={{ margin: '0 0 12px', fontSize: '12px', color: 'var(--color-text-secondary, #64748b)' }}>Station: {station}</p>
+
+                  <div style={{ fontSize: '13px', background: 'var(--color-bg-secondary, #f8fafc)', padding: '10px', borderRadius: '6px', marginBottom: '12px' }}>
+                    <div><strong>Pick-up:</strong> {new Date(booking.startDateTime).toLocaleString()}</div>
+                    <div><strong>Return:</strong> {new Date(booking.endDateTime).toLocaleString()}</div>
+                  </div>
+
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '8px', borderTop: '1px dashed #cbd5e1' }}>
+                    <span style={{ fontSize: '12px', color: 'var(--color-text-secondary, #64748b)' }}>Total Reserved</span>
+                    <span style={{ fontSize: '15px', fontWeight: 'bold', color: 'var(--color-text-primary, #0f172a)' }}>
+                      LKR {formatPriceNumber(booking.totalCost)}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </section>
 
       {/* Featured Fleet Recommendations */}
