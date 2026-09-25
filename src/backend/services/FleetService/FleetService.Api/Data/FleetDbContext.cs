@@ -12,6 +12,7 @@ public class FleetDbContext : DbContext
     public DbSet<Vehicle> Vehicles => Set<Vehicle>();
     public DbSet<VehicleCategory> VehicleCategories => Set<VehicleCategory>();
     public DbSet<VehicleImage> VehicleImages => Set<VehicleImage>();
+    public DbSet<Booking> Bookings => Set<Booking>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -73,6 +74,30 @@ public class FleetDbContext : DbContext
                 .WithMany(v => v.Images)
                 .HasForeignKey(vi => vi.VehicleId)
                 .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<Booking>(entity =>
+        {
+            entity.ToTable("Bookings");
+            entity.HasKey(e => e.Id);
+
+            entity.Property(e => e.CustomerId).IsRequired();
+            entity.Property(e => e.VehicleId).IsRequired();
+            entity.Property(e => e.StartDateTime).IsRequired();
+            entity.Property(e => e.EndDateTime).IsRequired();
+            entity.Property(e => e.Status).HasConversion<string>().IsRequired();
+            entity.Property(e => e.TotalCost).HasPrecision(18, 2).IsRequired();
+            entity.Property(e => e.CreatedAt).IsRequired();
+            entity.Property(e => e.UpdatedAt);
+
+            entity.HasOne(b => b.Vehicle)
+                .WithMany()
+                .HasForeignKey(b => b.VehicleId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasIndex(e => e.VehicleId);
+            entity.HasIndex(e => e.CustomerId);
+            entity.HasIndex(e => e.Status);
         });
     }
 }
