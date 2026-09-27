@@ -65,6 +65,7 @@ docs/aqqil/
 | BM-114 | 2026-09-21 | FleetService | 250 VUs | /api/vehicles/search | 41.5 ms | < 75 ms | RECALIBRATED | Cleaned up docker bridge timeout spikes |
 | BM-115 | 2026-09-23 | FleetService | 50 VUs | /api/maintenance/dashboard | 32.4 ms | < 95 ms | PASSED | Documented maintenance work-order index findings |
 | BM-116 | 2026-09-25 | RentalService | 100 VUs | /api/rentals/pickup, /complete | N/A | < 85 ms | PREPARED | Added Sprint 4 pickup & return stress payloads |
+| BM-117 | 2026-09-27 | NotificationService | 150 VUs | Outbox Worker Soak | 24.8 ms | < 500 ms lag | PASSED | Recorded 4-hour soak test metrics for outbox workers |
 
 ---
 
