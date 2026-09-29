@@ -2,11 +2,12 @@ import React from 'react';
 import { useAuth } from '../../context/AuthContext';
 import RoleBadge from '../common/RoleBadge';
 import NotificationNavButton from '../NotificationNavButton';
+import { canViewReport } from '../../utils/reportPermissions';
 
 const StaffSidebar = ({ currentView, onNavigate, sidebarCollapsed, onToggleCollapse }) => {
   const { user, roles, logout } = useAuth();
   const primaryRole = roles?.[0] || 'FLEET_MANAGER';
-  const isAdmin = primaryRole === 'ADMIN';
+  const isAdmin = roles?.some(role => String(role).toUpperCase() === 'ADMIN');
   const userRoles = roles || [];
   const canAddVehicle = userRoles.some((r) => ['FLEET_MANAGER', 'ADMIN'].includes(String(r).toUpperCase()));
 
@@ -142,6 +143,18 @@ const StaffSidebar = ({ currentView, onNavigate, sidebarCollapsed, onToggleColla
             </button>
           </>
         )}
+
+        <div className="nav-section-label">{!sidebarCollapsed && 'REPORTS'}</div>
+        {[
+          { view: 'fleet-performance', label: 'Fleet Performance & Analytics' },
+          { view: 'booking-reports', label: 'Booking Reports' },
+          { view: 'maintenance-reports', label: 'Maintenance Reports' },
+        ].filter(item => canViewReport(item.view, userRoles)).map(item => (
+          <button key={item.view} type="button" className={`staff-nav-item ${currentView === item.view ? 'active' : ''}`} onClick={() => onNavigate(item.view)} title={item.label} aria-label={item.label}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="nav-item-icon" aria-hidden="true"><path d="M4 20h16M7 16V9m5 7V4m5 12v-5" /></svg>
+            {!sidebarCollapsed && <span className="nav-item-label">{item.label}</span>}
+          </button>
+        ))}
 
         <div className="nav-section-label">{!sidebarCollapsed && 'ACCOUNT'}</div>
         <NotificationNavButton className={`staff-nav-item ${currentView === 'staff-notifications' ? 'active' : ''}`} collapsed={sidebarCollapsed} onClick={() => onNavigate('staff-notifications')} />

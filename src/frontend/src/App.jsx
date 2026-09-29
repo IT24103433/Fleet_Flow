@@ -38,9 +38,15 @@ import ForcePasswordChangePage from './pages/security/ForcePasswordChangePage';
 
 import './App.css';
 import NotificationsPage from './pages/NotificationsPage';
+import { REPORT_VIEWS, canViewReport } from './utils/reportPermissions';
+
+const FleetPerformancePage = React.lazy(() => import('./pages/reports/FleetPerformancePage'));
+const BookingReportsPage = React.lazy(() => import('./pages/reports/BookingReportsPage'));
+const MaintenanceReportsPage = React.lazy(() => import('./pages/reports/MaintenanceReportsPage'));
 
 const STAFF_ROLES = ['FLEET_MANAGER', 'MAINTENANCE_STAFF', 'ADMIN'];
 const STAFF_VIEWS = [
+  ...REPORT_VIEWS,
   'staff-dashboard',
   'staff-notifications',
   'admin-dashboard',
@@ -119,6 +125,8 @@ function AppContent() {
       activeView = 'login';
     } else if (isAuthenticated && !isStaffUser && STAFF_VIEWS.includes(currentView)) {
       activeView = 'customer-home';
+    } else if (isStaffUser && REPORT_VIEWS.includes(currentView) && !canViewReport(currentView, userRoles)) {
+      activeView = 'staff-dashboard';
     } else if (isStaffUser && ['admin-dashboard', 'admin-users', 'admin-create-user', 'admin-edit-user', 'admin-user-details'].includes(currentView) && !isAdminUser) {
       activeView = 'staff-dashboard';
     } else if (isStaffUser && currentView === 'add-vehicle' && !canAddVehicle) {
@@ -201,6 +209,12 @@ function AppContent() {
       switch (activeView) {
         case 'staff-notifications':
           return <NotificationsPage key={user?.id} />;
+        case 'fleet-performance':
+          return <React.Suspense fallback={<p role="status">Loading report…</p>}><FleetPerformancePage key={user?.id} /></React.Suspense>;
+        case 'booking-reports':
+          return <React.Suspense fallback={<p role="status">Loading report…</p>}><BookingReportsPage key={user?.id} /></React.Suspense>;
+        case 'maintenance-reports':
+          return <React.Suspense fallback={<p role="status">Loading report…</p>}><MaintenanceReportsPage key={user?.id} /></React.Suspense>;
         case 'admin-dashboard':
           return <AdminDashboardPage onNavigate={navigateTo} />;
         case 'admin-users':
@@ -247,6 +261,12 @@ function AppContent() {
       switch (activeView) {
         case 'staff-notifications':
           return 'Notifications';
+        case 'fleet-performance':
+          return 'Fleet Performance & Analytics';
+        case 'booking-reports':
+          return 'Booking Reports';
+        case 'maintenance-reports':
+          return 'Maintenance Reports';
         case 'admin-dashboard':
           return 'Administrator Workspace';
         case 'admin-users':
