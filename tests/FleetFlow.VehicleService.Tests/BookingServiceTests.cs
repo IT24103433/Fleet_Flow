@@ -203,4 +203,49 @@ public class BookingServiceTests
         var ex = await Assert.ThrowsAsync<DuplicateException>(() => bookingService.CreateBookingAsync(customer2, overlappingRequest));
         Assert.Contains("overlapping", ex.Message, StringComparison.OrdinalIgnoreCase);
     }
+
+    [Fact]
+    public async Task GetBookingByIdAsync_ExistingId_ReturnsCompleteBookingDetails()
+    {
+        // Arrange
+        using var dbContext = GetInMemoryDbContext();
+        var vehicle = await SeedTestVehicleAsync(dbContext);
+        var bookingService = new BookingService(dbContext);
+
+        var customerId = Guid.NewGuid();
+        var created = await bookingService.CreateBookingAsync(customerId, new CreateBookingRequest
+        {
+            VehicleId = vehicle.Id,
+            StartDateTime = DateTime.UtcNow.AddDays(1),
+            EndDateTime = DateTime.UtcNow.AddDays(4)
+        });
+
+        // Act
+        var booking = await bookingService.GetBookingByIdAsync(created.Id);
+
+        // Assert
+        Assert.NotNull(booking);
+        Assert.Equal(created.Id, booking.Id);
+        Assert.Equal(customerId, booking.CustomerId);
+        Assert.Equal(vehicle.Id, booking.VehicleId);
+        Assert.Equal(BookingStatus.Confirmed, booking.Status);
+        Assert.Equal(450.00m, booking.TotalCost);
+        Assert.NotNull(booking.Vehicle);
+        Assert.Equal("BMW", booking.Vehicle.Make);
+        Assert.Equal("5 Series", booking.Vehicle.Model);
+    }
+
+    [Fact]
+    public async Task GetBookingByIdAsync_NonExistingId_ReturnsNull()
+    {
+        // Arrange
+        using var dbContext = GetInMemoryDbContext();
+        var bookingService = new BookingService(dbContext);
+
+        // Act
+        var result = await bookingService.GetBookingByIdAsync(Guid.NewGuid());
+
+        // Assert
+        Assert.Null(result);
+    }
 }

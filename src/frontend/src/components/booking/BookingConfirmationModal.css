@@ -1,0 +1,131 @@
+.booking-confirmation-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4, 16px);
+}
+
+.booking-confirmation-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+  padding: 14px 16px;
+  color: #166534;
+}
+
+.booking-confirmation-icon {
+  width: 24px;
+  height: 24px;
+  color: #16a34a;
+  flex-shrink: 0;
+}
+
+.booking-confirmation-banner-text h4 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #15803d;
+}
+
+.booking-confirmation-banner-text p {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: #166534;
+}
+
+.booking-details-card {
+  background-color: var(--color-bg-secondary, #f8fafc);
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: 8px;
+  padding: 18px;
+}
+
+.booking-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 14px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--color-border, #e2e8f0);
+}
+
+.booking-vehicle-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text-primary, #0f172a);
+  margin: 0 0 4px;
+}
+
+.booking-vehicle-subtext {
+  font-size: 12px;
+  color: var(--color-text-secondary, #64748b);
+  margin: 0;
+}
+
+.booking-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  font-size: 13px;
+}
+
+.booking-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.booking-info-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-text-muted, #94a3b8);
+}
+
+.booking-info-value {
+  font-weight: 500;
+  color: var(--color-text-primary, #0f172a);
+}
+
+.booking-guid-badge {
+  font-family: monospace;
+  font-size: 12px;
+  background-color: #f1f5f9;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid #cbd5e1;
+  word-break: break-all;
+  display: inline-block;
+}
+
+.booking-summary-total {
+  grid-column: span 2;
+  margin-top: 6px;
+  padding-top: 12px;
+  border-top: 1px dashed #cbd5e1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.booking-total-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-primary, #0f172a);
+}
+
+.booking-total-amount {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-primary, #2563eb);
+}
+
+.booking-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}

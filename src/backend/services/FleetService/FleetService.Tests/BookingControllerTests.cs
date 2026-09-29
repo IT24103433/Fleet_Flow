@@ -243,4 +243,65 @@ public class BookingControllerTests : IClassFixture<CustomWebApplicationFactory<
         Assert.NotEmpty(bookings);
         Assert.Contains(bookings, b => b.CustomerId == userId);
     }
+
+    [Fact]
+    public async Task GetById_ExistingId_Returns200OkWithCompleteBookingDetails()
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+        var userId = Guid.NewGuid();
+        var token = GenerateToken(userId, "john_customer", "john@example.com", "CUSTOMER");
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        var vehicle = await SeedVehicleAsync();
+        var createRequest = new CreateBookingRequest
+        {
+            VehicleId = vehicle.Id,
+            StartDateTime = DateTime.UtcNow.AddDays(15),
+            EndDateTime = DateTime.UtcNow.AddDays(18)
+        };
+
+        var createResponse = await client.PostAsJsonAsync("/api/bookings", createRequest);
+        var created = await createResponse.Content.ReadFromJsonAsync<BookingResponse>();
+        Assert.NotNull(created);
+
+        // Act
+        var response = await client.GetAsync($"/api/bookings/{created.Id}");
+
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var booking = await response.Content.ReadFromJsonAsync<BookingResponse>();
+        Assert.NotNull(booking);
+        Assert.Equal(created.Id, booking.Id);
+        Assert.Equal(userId, booking.CustomerId);
+        Assert.Equal(vehicle.Id, booking.VehicleId);
+        Assert.Equal(BookingStatus.Confirmed, booking.Status);
+        Assert.Equal(600.00m, booking.TotalCost);
+        Assert.NotNull(booking.Vehicle);
+        Assert.Equal("Audi", booking.Vehicle.Make);
+        Assert.Equal("Q7", booking.Vehicle.Model);
+    }
+
+    [Fact]
+    public async Task GetById_NonExistingId_Returns404NotFoundWithErrorMessage()
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+        var userId = Guid.NewGuid();
+        var token = GenerateToken(userId, "john_customer", "john@example.com", "CUSTOMER");
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        var nonExistentId = Guid.NewGuid();
+
+        // Act
+        var response = await client.GetAsync($"/api/bookings/{nonExistentId}");
+
+        // Assert
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        var error = await response.Content.ReadFromJsonAsync<Dictionary<string, string>>();
+        Assert.NotNull(error);
+        Assert.True(error.ContainsKey("message"));
+        Assert.Contains(nonExistentId.ToString(), error["message"]);
+    }
 }

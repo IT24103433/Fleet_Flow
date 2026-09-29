@@ -48,3 +48,19 @@ export const calculateRentalCost = (startDateTime, endDateTime, dailyRate) => {
 
   return { totalDays, totalCost };
 };
+
+export const validateBookingResult = (result) => {
+  if (!result || !result.success || !result.data || !result.data.id) {
+    return {
+      isValid: false,
+      booking: null,
+      errorMessage: result?.message || 'Failed to process rental booking.',
+    };
+  }
+
+  return {
+    isValid: true,
+    booking: result.data,
+    errorMessage: null,
+  };
+};

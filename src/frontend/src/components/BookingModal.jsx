@@ -3,6 +3,7 @@ import Modal from './common/Modal';
 import Button from './common/Button';
 import Alert from './Alert';
 import StatusBadge from './common/StatusBadge';
+import BookingConfirmationModal from './booking/BookingConfirmationModal';
 import { createBooking } from '../services/bookingService';
 import { formatPriceNumber } from '../utils/currencyUtils';
 
@@ -15,7 +16,7 @@ const getTomorrowDateStr = (daysAhead = 1, hour = 9) => {
   return localISOTime;
 };
 
-const BookingModal = ({ isOpen, onClose, vehicle, onSuccess }) => {
+const BookingModal = ({ isOpen, onClose, vehicle, onSuccess, onNavigate }) => {
   const [startDateTime, setStartDateTime] = useState('');
   const [endDateTime, setEndDateTime] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -100,12 +101,23 @@ const BookingModal = ({ isOpen, onClose, vehicle, onSuccess }) => {
     onClose();
   };
 
+  if (successBooking) {
+    return (
+      <BookingConfirmationModal
+        isOpen={Boolean(successBooking)}
+        onClose={handleModalClose}
+        booking={successBooking}
+        onNavigate={onNavigate}
+      />
+    );
+  }
+
   return (
     <Modal
       isOpen={isOpen}
       onClose={handleModalClose}
-      title={successBooking ? 'Booking Confirmed' : 'Create Rental Booking'}
-      subtitle={successBooking ? `Reservation #${successBooking.id.substring(0, 8)}` : `Reserve ${vehicleName}`}
+      title="Create Rental Booking"
+      subtitle={`Reserve ${vehicleName}`}
       maxWidth="560px"
     >
       {errorMessage && (
@@ -114,54 +126,7 @@ const BookingModal = ({ isOpen, onClose, vehicle, onSuccess }) => {
         </div>
       )}
 
-      {successBooking ? (
-        <div className="booking-success-card" style={{ padding: '8px 0' }}>
-          <Alert
-            type="success"
-            title="Rental Reservation Successfully Created!"
-            message={`Your booking for ${vehicleName} has been confirmed. Confirmation ID: ${successBooking.id}`}
-          />
-
-          <div style={{ marginTop: '20px', background: 'var(--color-bg-secondary, #f8fafc)', borderRadius: '8px', padding: '16px', border: '1px solid var(--color-border, #e2e8f0)' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-              <h4 style={{ margin: 0, fontSize: '15px' }}>{vehicleName}</h4>
-              <StatusBadge status={successBooking.status || 'Confirmed'} />
-            </div>
-
-            <div style={{ fontSize: '13px', color: 'var(--color-text-secondary, #64748b)', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-              <div>
-                <strong>Booking ID:</strong>
-                <div style={{ fontFamily: 'monospace', fontSize: '12px', wordBreak: 'break-all' }}>{successBooking.id}</div>
-              </div>
-              <div>
-                <strong>Customer ID:</strong>
-                <div style={{ fontFamily: 'monospace', fontSize: '12px', wordBreak: 'break-all' }}>{successBooking.customerId}</div>
-              </div>
-              <div>
-                <strong>Pick-up Date:</strong>
-                <div>{new Date(successBooking.startDateTime).toLocaleString()}</div>
-              </div>
-              <div>
-                <strong>Return Date:</strong>
-                <div>{new Date(successBooking.endDateTime).toLocaleString()}</div>
-              </div>
-              <div style={{ gridColumn: 'span 2', paddingTop: '8px', borderTop: '1px dashed #cbd5e1' }}>
-                <strong style={{ fontSize: '14px', color: 'var(--color-text-primary, #0f172a)' }}>Total Paid / Reserved: </strong>
-                <span style={{ fontSize: '16px', fontWeight: 'bold', color: 'var(--color-primary, #2563eb)' }}>
-                  LKR {formatPriceNumber(successBooking.totalCost)}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end' }}>
-            <Button variant="primary" onClick={handleModalClose}>
-              Done & Close
-            </Button>
-          </div>
-        </div>
-      ) : (
-        <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
           {/* Vehicle Summary Header in Modal */}
           <div style={{ background: 'var(--color-bg-secondary, #f8fafc)', padding: '12px 16px', borderRadius: '8px', marginBottom: '20px', border: '1px solid var(--color-border, #e2e8f0)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -238,7 +203,6 @@ const BookingModal = ({ isOpen, onClose, vehicle, onSuccess }) => {
             </Button>
           </div>
         </form>
-      )}
     </Modal>
   );
 };
