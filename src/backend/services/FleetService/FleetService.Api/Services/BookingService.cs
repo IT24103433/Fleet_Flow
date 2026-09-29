@@ -26,49 +26,22 @@ public class BookingService : IBookingService
             throw new ValidationException("Customer ID is required.");
         }
 
-        var startUtc = request.StartDateTime.Kind == DateTimeKind.Utc
-            ? request.StartDateTime
-            : DateTime.SpecifyKind(request.StartDateTime, DateTimeKind.Utc);
-        var endUtc = request.EndDateTime.Kind == DateTimeKind.Utc
-            ? request.EndDateTime
-            : DateTime.SpecifyKind(request.EndDateTime, DateTimeKind.Utc);
-
-        // 1. Date Validation: StartDateTime must be in future (or current time window)
-        if (startUtc < DateTime.UtcNow.AddMinutes(-5))
+        if (request == null)
         {
-            throw new ValidationException("Start date and time must be in the future.");
+            throw new ValidationException("Booking request is required.");
         }
 
-        // 2. Date Validation: EndDateTime must be strictly after StartDateTime
-        if (endUtc <= startUtc)
-        {
-            throw new ValidationException("End date and time must be after start date and time.");
-        }
+        var startUtc = NormalizeUtc(request.StartDateTime);
+        var endUtc = NormalizeUtc(request.EndDateTime);
+        ValidateRentalPeriod(startUtc, endUtc);
 
-        // 3. Vehicle existence check
-        var vehicle = await _dbContext.Vehicles
-            .Include(v => v.Category)
-            .FirstOrDefaultAsync(v => v.Id == request.VehicleId);
+        var vehicle = await GetBookableVehicleAsync(request.VehicleId);
 
-        if (vehicle == null)
-        {
-            throw new NotFoundException($"Vehicle with ID '{request.VehicleId}' was not found.");
-        }
-
-        // 4. Vehicle Status Check: Vehicle must be active / available
-        if (vehicle.Status != VehicleStatus.Available)
-        {
-            throw new ValidationException($"Vehicle is currently in '{vehicle.Status}' status and is not available for rental booking.");
-        }
-
-        // 5. Vehicle Availability Check: Verify no overlapping active bookings
-        var isAvailable = await CheckVehicleAvailabilityAsync(request.VehicleId, startUtc, endUtc);
-        if (!isAvailable)
+        if (await HasActiveOverlapAsync(request.VehicleId, startUtc, endUtc))
         {
             throw new DuplicateException("The selected vehicle has an overlapping booking for the requested timeframe.");
         }
 
-        // 6. Calculate total cost based on daily rate
         var durationHours = Math.Round((endUtc - startUtc).TotalHours, 4);
         var totalDays = (decimal)Math.Max(1, Math.Ceiling(durationHours / 24.0));
         var totalCost = Math.Round(totalDays * vehicle.DailyRate, 2);
@@ -80,7 +53,7 @@ public class BookingService : IBookingService
             VehicleId = request.VehicleId,
             StartDateTime = startUtc,
             EndDateTime = endUtc,
-            Status = request.Status ?? BookingStatus.Confirmed,
+            Status = BookingStatus.Confirmed,
             TotalCost = totalCost,
             CreatedAt = DateTime.UtcNow
         };
@@ -107,40 +80,125 @@ public class BookingService : IBookingService
             .Include(b => b.Vehicle)
             .ThenInclude(v => v!.Category)
             .Where(b => b.CustomerId == customerId)
-            .OrderByDescending(b => b.CreatedAt)
+            .OrderByDescending(b => b.StartDateTime)
+            .ThenByDescending(b => b.CreatedAt)
             .ToListAsync();
 
         return bookings.Select(b => MapToResponse(b, b.Vehicle));
     }
 
-    public async Task<IEnumerable<BookingResponse>> GetVehicleBookingsAsync(Guid vehicleId)
+    public async Task<BookingResponse?> CancelBookingAsync(Guid id, Guid customerId)
     {
-        var bookings = await _dbContext.Bookings
+        if (id == Guid.Empty || customerId == Guid.Empty)
+        {
+            throw new ValidationException("Booking and customer identifiers are required.");
+        }
+
+        var booking = await _dbContext.Bookings
             .Include(b => b.Vehicle)
             .ThenInclude(v => v!.Category)
-            .Where(b => b.VehicleId == vehicleId)
-            .OrderByDescending(b => b.StartDateTime)
-            .ToListAsync();
+            .FirstOrDefaultAsync(b => b.Id == id && b.CustomerId == customerId);
 
-        return bookings.Select(b => MapToResponse(b, b.Vehicle));
+        if (booking == null)
+        {
+            return null;
+        }
+
+        if (booking.Status == BookingStatus.Cancelled)
+        {
+            throw new DuplicateException("This booking has already been cancelled.");
+        }
+
+        if (booking.Status != BookingStatus.Pending && booking.Status != BookingStatus.Confirmed)
+        {
+            throw new ValidationException($"A booking in '{booking.Status}' status cannot be cancelled.");
+        }
+
+        booking.Status = BookingStatus.Cancelled;
+        booking.UpdatedAt = DateTime.UtcNow;
+        await _dbContext.SaveChangesAsync();
+
+        return MapToResponse(booking, booking.Vehicle);
     }
 
     public async Task<bool> CheckVehicleAvailabilityAsync(Guid vehicleId, DateTime startDateTime, DateTime endDateTime, Guid? excludeBookingId = null)
     {
-        var startUtc = startDateTime.Kind == DateTimeKind.Utc ? startDateTime : DateTime.SpecifyKind(startDateTime, DateTimeKind.Utc);
-        var endUtc = endDateTime.Kind == DateTimeKind.Utc ? endDateTime : DateTime.SpecifyKind(endDateTime, DateTimeKind.Utc);
+        var startUtc = NormalizeUtc(startDateTime);
+        var endUtc = NormalizeUtc(endDateTime);
+        ValidateRentalPeriod(startUtc, endUtc);
+        await GetBookableVehicleAsync(vehicleId);
 
-        var query = _dbContext.Bookings
-            .Where(b => b.VehicleId == vehicleId && b.Status != BookingStatus.Cancelled);
+        return !await HasActiveOverlapAsync(vehicleId, startUtc, endUtc, excludeBookingId);
+    }
+
+    private async Task<Vehicle> GetBookableVehicleAsync(Guid vehicleId)
+    {
+        if (vehicleId == Guid.Empty)
+        {
+            throw new ValidationException("Vehicle ID is required.");
+        }
+
+        var vehicle = await _dbContext.Vehicles
+            .Include(v => v.Category)
+            .FirstOrDefaultAsync(v => v.Id == vehicleId);
+
+        if (vehicle == null)
+        {
+            throw new NotFoundException($"Vehicle with ID '{vehicleId}' was not found.");
+        }
+
+        if (vehicle.Status != VehicleStatus.Available)
+        {
+            throw new ValidationException($"Vehicle is currently in '{vehicle.Status}' status and is not available for rental booking.");
+        }
+
+        return vehicle;
+    }
+
+    private async Task<bool> HasActiveOverlapAsync(
+        Guid vehicleId,
+        DateTime startUtc,
+        DateTime endUtc,
+        Guid? excludeBookingId = null)
+    {
+        var query = _dbContext.Bookings.Where(b =>
+            b.VehicleId == vehicleId &&
+            (b.Status == BookingStatus.Pending || b.Status == BookingStatus.Confirmed));
 
         if (excludeBookingId.HasValue)
         {
             query = query.Where(b => b.Id != excludeBookingId.Value);
         }
 
-        // Overlap condition: existing Start < new End AND existing End > new Start
-        var hasOverlap = await query.AnyAsync(b => b.StartDateTime < endUtc && b.EndDateTime > startUtc);
-        return !hasOverlap;
+        return await query.AnyAsync(b => b.StartDateTime < endUtc && b.EndDateTime > startUtc);
+    }
+
+    private static void ValidateRentalPeriod(DateTime startUtc, DateTime endUtc)
+    {
+        if (startUtc == default || endUtc == default)
+        {
+            throw new ValidationException("Start date and time and end date and time are required.");
+        }
+
+        if (startUtc < DateTime.UtcNow.AddMinutes(-5))
+        {
+            throw new ValidationException("Start date and time must be in the future.");
+        }
+
+        if (endUtc <= startUtc)
+        {
+            throw new ValidationException("End date and time must be after start date and time.");
+        }
+    }
+
+    private static DateTime NormalizeUtc(DateTime value)
+    {
+        return value.Kind switch
+        {
+            DateTimeKind.Utc => value,
+            DateTimeKind.Local => value.ToUniversalTime(),
+            _ => DateTime.SpecifyKind(value, DateTimeKind.Utc)
+        };
     }
 
     private static BookingResponse MapToResponse(Booking booking, Vehicle? vehicle)
