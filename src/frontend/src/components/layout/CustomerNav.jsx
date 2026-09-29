@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import RoleBadge from '../common/RoleBadge';
 import Button from '../common/Button';
+import NotificationNavButton from '../NotificationNavButton';
 
 const CustomerNav = ({ currentView, onNavigate }) => {
   const { isAuthenticated, user, roles, logout } = useAuth();
@@ -75,6 +76,7 @@ const CustomerNav = ({ currentView, onNavigate }) => {
 
         {/* Desktop Auth & Switcher Actions */}
         <div className="customer-nav-actions">
+          {isAuthenticated && !isForcePasswordChange && <NotificationNavButton onClick={() => handleNavClick(isStaff ? 'staff-notifications' : 'notifications')} />}
           {isForcePasswordChange ? (
             <div className="user-profile-menu">
               <span style={{ fontSize: '12px', color: '#B45309', fontWeight: 600, padding: '4px 8px', background: '#FEF3C7', borderRadius: '4px', border: '1px solid #FCD34D' }}>

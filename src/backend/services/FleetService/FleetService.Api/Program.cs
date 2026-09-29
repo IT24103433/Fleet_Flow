@@ -18,11 +18,17 @@ builder.Services.AddScoped<IVehicleService, VehicleService>();
 builder.Services.AddScoped<IVehicleImageService, VehicleImageService>();
 builder.Services.AddScoped<IMaintenanceService, MaintenanceService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
+builder.Services.AddScoped<NotificationService>();
+builder.Services.AddScoped<NotificationEventProcessor>();
 
 // Configure Apache Kafka Messaging
 builder.Services.Configure<KafkaSettings>(builder.Configuration.GetSection(KafkaSettings.SectionName));
 builder.Services.AddSingleton<IKafkaProducerService, KafkaProducerService>();
 builder.Services.AddHostedService<VehicleEventConsumerService>();
+builder.Services.AddSingleton<NotificationEventDispatcher>();
+builder.Services.AddSingleton<INotificationEventDispatcher>(sp => sp.GetRequiredService<NotificationEventDispatcher>());
+builder.Services.AddHostedService(sp => sp.GetRequiredService<NotificationEventDispatcher>());
+builder.Services.AddHostedService<NotificationEventConsumerService>();
 
 // Configure JWT Authentication
 var jwtSection = builder.Configuration.GetSection("Jwt");
@@ -185,6 +191,7 @@ _ = Task.Run(async () =>
                     CREATE INDEX IF NOT EXISTS ""IX_MaintenanceRecords_Status"" ON ""MaintenanceRecords"" (""Status"");
                     CREATE INDEX IF NOT EXISTS ""IX_MaintenanceRecords_ScheduledDateTime"" ON ""MaintenanceRecords"" (""ScheduledDateTime"");
                 ");
+                await NotificationSchema.EnsureAsync(dbContext);
                 isDbReady = true;
                 Console.WriteLine("[Database] FleetService database initialized and ready.");
             }

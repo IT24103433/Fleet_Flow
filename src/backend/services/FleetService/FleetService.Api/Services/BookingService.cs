@@ -7,16 +7,22 @@ using FleetService.Api.Data;
 using FleetService.Api.Dtos;
 using FleetService.Api.Entities;
 using FleetService.Api.Exceptions;
+using FleetService.Api.Messaging;
+using FleetService.Api.Messaging.Events;
 
 namespace FleetService.Api.Services;
 
 public class BookingService : IBookingService
 {
     private readonly FleetDbContext _dbContext;
+    private readonly INotificationEventDispatcher? _notifications;
+    private readonly ILogger<BookingService>? _logger;
 
-    public BookingService(FleetDbContext dbContext)
+    public BookingService(FleetDbContext dbContext, INotificationEventDispatcher? notifications = null, ILogger<BookingService>? logger = null)
     {
         _dbContext = dbContext;
+        _notifications = notifications;
+        _logger = logger;
     }
 
     public async Task<BookingResponse> CreateBookingAsync(Guid customerId, CreateBookingRequest request)
@@ -60,6 +66,19 @@ public class BookingService : IBookingService
 
         _dbContext.Bookings.Add(booking);
         await _dbContext.SaveChangesAsync();
+
+        try
+        {
+            _notifications?.TryEnqueue(new BookingCreatedEvent
+            {
+                EventId = Guid.NewGuid(), OccurredAt = booking.CreatedAt,
+                BookingId = booking.Id, CustomerId = customerId, VehicleId = booking.VehicleId
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger?.LogWarning(ex, "Booking {BookingId} persisted but notification dispatch failed.", booking.Id);
+        }
 
         return MapToResponse(booking, vehicle);
     }

@@ -14,10 +14,22 @@ public class FleetDbContext : DbContext
     public DbSet<VehicleImage> VehicleImages => Set<VehicleImage>();
     public DbSet<Booking> Bookings => Set<Booking>();
     public DbSet<MaintenanceRecord> MaintenanceRecords => Set<MaintenanceRecord>();
+    public DbSet<Notification> Notifications => Set<Notification>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<Notification>(entity =>
+        {
+            entity.ToTable("Notifications");
+            entity.HasKey(n => n.Id);
+            entity.Property(n => n.Category).IsRequired().HasMaxLength(50);
+            entity.Property(n => n.Title).IsRequired().HasMaxLength(200);
+            entity.Property(n => n.Message).IsRequired().HasMaxLength(2000);
+            entity.HasIndex(n => new { n.EventId, n.TargetUserId }).IsUnique();
+            entity.HasIndex(n => new { n.TargetUserId, n.IsRead, n.CreatedAt });
+        });
 
         modelBuilder.Entity<VehicleCategory>(entity =>
         {
