@@ -18,6 +18,9 @@ builder.Services.AddScoped<IVehicleService, VehicleService>();
 builder.Services.AddScoped<IVehicleImageService, VehicleImageService>();
 builder.Services.AddScoped<IMaintenanceService, MaintenanceService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
+builder.Services.AddScoped<IReportingService, ReportingService>();
+builder.Services.AddScoped<IMaintenanceReportSource, UnavailableMaintenanceReportSource>();
+builder.Services.AddSingleton<TimeProvider>(TimeProvider.System);
 
 // Configure Apache Kafka Messaging
 builder.Services.Configure<KafkaSettings>(builder.Configuration.GetSection(KafkaSettings.SectionName));
