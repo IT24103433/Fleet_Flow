@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Modal from './common/Modal';
 import Button from './common/Button';
 import Alert from './Alert';
 import StatusBadge from './common/StatusBadge';
-import { createBooking } from '../services/bookingService';
+import { checkVehicleAvailability, createBooking } from '../services/bookingService';
 import { formatPriceNumber } from '../utils/currencyUtils';
 
 const getTomorrowDateStr = (daysAhead = 1, hour = 9) => {
@@ -16,21 +16,11 @@ const getTomorrowDateStr = (daysAhead = 1, hour = 9) => {
 };
 
 const BookingModal = ({ isOpen, onClose, vehicle, onSuccess }) => {
-  const [startDateTime, setStartDateTime] = useState('');
-  const [endDateTime, setEndDateTime] = useState('');
+  const [startDateTime, setStartDateTime] = useState(() => getTomorrowDateStr(1, 9));
+  const [endDateTime, setEndDateTime] = useState(() => getTomorrowDateStr(4, 9));
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [successBooking, setSuccessBooking] = useState(null);
-
-  useEffect(() => {
-    if (isOpen) {
-      setStartDateTime(getTomorrowDateStr(1, 9));
-      setEndDateTime(getTomorrowDateStr(4, 9));
-      setErrorMessage(null);
-      setSuccessBooking(null);
-      setIsSubmitting(false);
-    }
-  }, [isOpen]);
 
   if (!vehicle) return null;
 
@@ -75,6 +65,19 @@ const BookingModal = ({ isOpen, onClose, vehicle, onSuccess }) => {
     }
 
     setIsSubmitting(true);
+    setSuccessBooking(null);
+
+    const availabilityResult = await checkVehicleAvailability(
+      vehicle.id,
+      startDateObj.toISOString(),
+      endDateObj.toISOString(),
+    );
+
+    if (!availabilityResult.success || !availabilityResult.isAvailable) {
+      setIsSubmitting(false);
+      setErrorMessage(availabilityResult.message || 'The selected vehicle is not available for that rental period.');
+      return;
+    }
 
     const result = await createBooking({
       vehicleId: vehicle.id,
@@ -95,10 +98,18 @@ const BookingModal = ({ isOpen, onClose, vehicle, onSuccess }) => {
   };
 
   const handleModalClose = () => {
+    setStartDateTime(getTomorrowDateStr(1, 9));
+    setEndDateTime(getTomorrowDateStr(4, 9));
+    setIsSubmitting(false);
     setSuccessBooking(null);
     setErrorMessage(null);
     onClose();
   };
+
+  const confirmedVehicle = successBooking?.vehicle || vehicle;
+  const confirmedVehicleName = confirmedVehicle
+    ? `${confirmedVehicle.year} ${confirmedVehicle.make} ${confirmedVehicle.model}`
+    : vehicleName;
 
   return (
     <Modal
@@ -119,12 +130,12 @@ const BookingModal = ({ isOpen, onClose, vehicle, onSuccess }) => {
           <Alert
             type="success"
             title="Rental Reservation Successfully Created!"
-            message={`Your booking for ${vehicleName} has been confirmed. Confirmation ID: ${successBooking.id}`}
+            message={`Your booking for ${confirmedVehicleName} has been confirmed. Confirmation ID: ${successBooking.id}`}
           />
 
           <div style={{ marginTop: '20px', background: 'var(--color-bg-secondary, #f8fafc)', borderRadius: '8px', padding: '16px', border: '1px solid var(--color-border, #e2e8f0)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-              <h4 style={{ margin: 0, fontSize: '15px' }}>{vehicleName}</h4>
+              <h4 style={{ margin: 0, fontSize: '15px' }}>{confirmedVehicleName}</h4>
               <StatusBadge status={successBooking.status || 'Confirmed'} />
             </div>
 
@@ -134,8 +145,8 @@ const BookingModal = ({ isOpen, onClose, vehicle, onSuccess }) => {
                 <div style={{ fontFamily: 'monospace', fontSize: '12px', wordBreak: 'break-all' }}>{successBooking.id}</div>
               </div>
               <div>
-                <strong>Customer ID:</strong>
-                <div style={{ fontFamily: 'monospace', fontSize: '12px', wordBreak: 'break-all' }}>{successBooking.customerId}</div>
+                <strong>Vehicle:</strong>
+                <div>{confirmedVehicle?.licensePlate || successBooking.vehicleId}</div>
               </div>
               <div>
                 <strong>Pick-up Date:</strong>

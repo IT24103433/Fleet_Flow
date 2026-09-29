@@ -22,7 +22,7 @@ public class BookingsController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize]
+    [Authorize(Roles = "CUSTOMER")]
     [ProducesResponseType(typeof(BookingResponse), 201)]
     [ProducesResponseType(400)]
     [ProducesResponseType(401)]
@@ -61,14 +61,26 @@ public class BookingsController : ControllerBase
     }
 
     [HttpGet("{id:guid}", Name = "GetBookingById")]
-    [Authorize]
+    [Authorize(Roles = "CUSTOMER,FLEET_MANAGER,ADMIN")]
     [ProducesResponseType(typeof(BookingResponse), 200)]
     [ProducesResponseType(401)]
     [ProducesResponseType(404)]
     public async Task<ActionResult<BookingResponse>> GetById(Guid id)
     {
+        var requesterId = GetCurrentUserId();
+        if (requesterId == Guid.Empty)
+        {
+            return Unauthorized(new { message = "User identity claim missing or invalid." });
+        }
+
         var booking = await _bookingService.GetBookingByIdAsync(id);
         if (booking == null)
+        {
+            return NotFound(new { message = $"Booking with ID '{id}' was not found." });
+        }
+
+        var hasStaffAccess = User.IsInRole("FLEET_MANAGER") || User.IsInRole("ADMIN");
+        if (!hasStaffAccess && booking.CustomerId != requesterId)
         {
             return NotFound(new { message = $"Booking with ID '{id}' was not found." });
         }
@@ -77,17 +89,11 @@ public class BookingsController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize]
+    [Authorize(Roles = "CUSTOMER")]
     [ProducesResponseType(typeof(IEnumerable<BookingResponse>), 200)]
     [ProducesResponseType(401)]
-    public async Task<ActionResult<IEnumerable<BookingResponse>>> GetMyBookings([FromQuery] Guid? vehicleId = null)
+    public async Task<ActionResult<IEnumerable<BookingResponse>>> GetMyBookings()
     {
-        if (vehicleId.HasValue)
-        {
-            var vehicleBookings = await _bookingService.GetVehicleBookingsAsync(vehicleId.Value);
-            return Ok(vehicleBookings);
-        }
-
         var customerId = GetCurrentUserId();
         if (customerId == Guid.Empty)
         {
@@ -96,6 +102,42 @@ public class BookingsController : ControllerBase
 
         var bookings = await _bookingService.GetCustomerBookingsAsync(customerId);
         return Ok(bookings);
+    }
+
+    [HttpPost("{id:guid}/cancel")]
+    [Authorize(Roles = "CUSTOMER")]
+    [ProducesResponseType(typeof(BookingResponse), 200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(403)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(409)]
+    public async Task<ActionResult<BookingResponse>> CancelBooking(Guid id)
+    {
+        var customerId = GetCurrentUserId();
+        if (customerId == Guid.Empty)
+        {
+            return Unauthorized(new { message = "User identity claim missing or invalid." });
+        }
+
+        try
+        {
+            var cancelled = await _bookingService.CancelBookingAsync(id, customerId);
+            if (cancelled == null)
+            {
+                return NotFound(new { message = $"Booking with ID '{id}' was not found." });
+            }
+
+            return Ok(cancelled);
+        }
+        catch (DuplicateException ex)
+        {
+            return Conflict(new { message = ex.Message });
+        }
+        catch (ValidationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 
     [HttpGet("check-availability")]
@@ -109,8 +151,31 @@ public class BookingsController : ControllerBase
             return BadRequest(new { message = "vehicleId, startDateTime, and endDateTime parameters are required." });
         }
 
-        var isAvailable = await _bookingService.CheckVehicleAvailabilityAsync(vehicleId, startDateTime, endDateTime);
-        return Ok(new { isAvailable, vehicleId, startDateTime, endDateTime });
+        try
+        {
+            var isAvailable = await _bookingService.CheckVehicleAvailabilityAsync(vehicleId, startDateTime, endDateTime);
+            if (!isAvailable)
+            {
+                return Conflict(new
+                {
+                    isAvailable = false,
+                    message = "The selected vehicle has an overlapping booking for the requested timeframe.",
+                    vehicleId,
+                    startDateTime,
+                    endDateTime
+                });
+            }
+
+            return Ok(new { isAvailable = true, vehicleId, startDateTime, endDateTime });
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(new { isAvailable = false, message = ex.Message });
+        }
+        catch (ValidationException ex)
+        {
+            return BadRequest(new { isAvailable = false, message = ex.Message });
+        }
     }
 
     private Guid GetCurrentUserId()
