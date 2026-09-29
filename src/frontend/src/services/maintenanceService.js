@@ -1,5 +1,35 @@
 const FLEET_API_URL = import.meta.env.VITE_FLEET_API_URL || 'http://localhost:5002';
 
+const sendMaintenanceRequest = async (path, token, options = {}) => {
+  try {
+    const headers = {
+      'Accept': 'application/json',
+      ...(options.body ? { 'Content-Type': 'application/json' } : {}),
+      ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+    };
+    const response = await fetch(`${FLEET_API_URL}${path}`, { ...options, headers });
+    const contentType = response.headers.get('content-type');
+    const data = contentType?.includes('application/json') ? await response.json() : null;
+
+    if (!response.ok) {
+      return {
+        success: false,
+        status: response.status,
+        message: data?.message || 'The maintenance request could not be completed.',
+        errors: data?.errors || null,
+      };
+    }
+
+    return { success: true, status: response.status, data };
+  } catch {
+    return {
+      success: false,
+      status: 0,
+      message: 'The maintenance service is currently unreachable. Please check your network and try again.',
+    };
+  }
+};
+
 /**
  * Retrieves the live maintenance dashboard data including persisted status counts,
  * attention items, and vehicles currently in maintenance from the Maintenance API.
@@ -84,3 +114,27 @@ export const getMaintenanceDashboard = async (token, params = {}) => {
     };
   }
 };
+
+export const createMaintenanceRecord = (token, record) => sendMaintenanceRequest(
+  '/api/maintenance/records',
+  token,
+  { method: 'POST', body: JSON.stringify(record) },
+);
+
+export const getVehicleMaintenanceHistory = (token, vehicleId) => sendMaintenanceRequest(
+  `/api/maintenance/records?vehicleId=${encodeURIComponent(vehicleId)}`,
+  token,
+  { method: 'GET' },
+);
+
+export const updateMaintenanceRecord = (token, recordId, record) => sendMaintenanceRequest(
+  `/api/maintenance/records/${recordId}`,
+  token,
+  { method: 'PUT', body: JSON.stringify(record) },
+);
+
+export const updateMaintenanceStatus = (token, recordId, status) => sendMaintenanceRequest(
+  `/api/maintenance/records/${recordId}/status`,
+  token,
+  { method: 'PATCH', body: JSON.stringify({ status }) },
+);

@@ -133,7 +133,7 @@ _ = Task.Run(async () =>
                 await dbContext.SaveChangesAsync();
             }
 
-            // Ensure VehicleImages and Bookings tables exist on pre-existing database
+            // Ensure feature tables exist on pre-existing databases.
             try
             {
                 await dbContext.Database.ExecuteSqlRawAsync(@"
@@ -166,6 +166,24 @@ _ = Task.Run(async () =>
                     CREATE INDEX IF NOT EXISTS ""IX_Bookings_VehicleId"" ON ""Bookings"" (""VehicleId"");
                     CREATE INDEX IF NOT EXISTS ""IX_Bookings_CustomerId"" ON ""Bookings"" (""CustomerId"");
                     CREATE INDEX IF NOT EXISTS ""IX_Bookings_Status"" ON ""Bookings"" (""Status"");
+
+                    CREATE TABLE IF NOT EXISTS ""MaintenanceRecords"" (
+                        ""Id"" uuid NOT NULL PRIMARY KEY,
+                        ""VehicleId"" uuid NOT NULL,
+                        ""CreatedByUserId"" uuid NOT NULL,
+                        ""ScheduledDateTime"" timestamp with time zone NOT NULL,
+                        ""ServiceInformation"" character varying(2000) NOT NULL,
+                        ""Details"" character varying(4000) NULL,
+                        ""Cost"" numeric(18, 2) NOT NULL,
+                        ""Status"" character varying(30) NOT NULL,
+                        ""CreatedAt"" timestamp with time zone NOT NULL,
+                        ""UpdatedAt"" timestamp with time zone NULL,
+                        ""CompletedAt"" timestamp with time zone NULL,
+                        CONSTRAINT ""FK_MaintenanceRecords_Vehicles_VehicleId"" FOREIGN KEY (""VehicleId"") REFERENCES ""Vehicles"" (""Id"") ON DELETE RESTRICT
+                    );
+                    CREATE INDEX IF NOT EXISTS ""IX_MaintenanceRecords_VehicleId"" ON ""MaintenanceRecords"" (""VehicleId"");
+                    CREATE INDEX IF NOT EXISTS ""IX_MaintenanceRecords_Status"" ON ""MaintenanceRecords"" (""Status"");
+                    CREATE INDEX IF NOT EXISTS ""IX_MaintenanceRecords_ScheduledDateTime"" ON ""MaintenanceRecords"" (""ScheduledDateTime"");
                 ");
                 isDbReady = true;
                 Console.WriteLine("[Database] FleetService database initialized and ready.");

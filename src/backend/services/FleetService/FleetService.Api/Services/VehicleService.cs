@@ -534,6 +534,18 @@ public class VehicleService : IVehicleService
             throw new ValidationException("Cannot retire a vehicle that is currently InUse. Active trip or dispatch must be completed first.");
         }
 
+        if (request.Status == VehicleStatus.Available)
+        {
+            var hasActiveMaintenance = await _dbContext.MaintenanceRecords.AnyAsync(record =>
+                record.VehicleId == id &&
+                (record.Status == MaintenanceStatus.SCHEDULED || record.Status == MaintenanceStatus.IN_PROGRESS));
+
+            if (hasActiveMaintenance)
+            {
+                throw new ValidationException("Cannot mark a vehicle as Available while it has an active maintenance record.");
+            }
+        }
+
         vehicle.Status = request.Status;
         vehicle.UpdatedAt = DateTime.UtcNow;
 
