@@ -13,6 +13,7 @@ public class FleetDbContext : DbContext
     public DbSet<VehicleCategory> VehicleCategories => Set<VehicleCategory>();
     public DbSet<VehicleImage> VehicleImages => Set<VehicleImage>();
     public DbSet<Booking> Bookings => Set<Booking>();
+    public DbSet<MaintenanceRecord> MaintenanceRecords => Set<MaintenanceRecord>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -98,6 +99,30 @@ public class FleetDbContext : DbContext
             entity.HasIndex(e => e.VehicleId);
             entity.HasIndex(e => e.CustomerId);
             entity.HasIndex(e => e.Status);
+        });
+
+        modelBuilder.Entity<MaintenanceRecord>(entity =>
+        {
+            entity.ToTable("MaintenanceRecords");
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.CreatedByUserId).IsRequired();
+            entity.Property(e => e.ScheduledDateTime).IsRequired();
+            entity.Property(e => e.ServiceInformation).IsRequired().HasMaxLength(2000);
+            entity.Property(e => e.Details).HasMaxLength(4000);
+            entity.Property(e => e.Cost).HasPrecision(18, 2).IsRequired();
+            entity.Property(e => e.Status).HasConversion<string>().HasMaxLength(30).IsRequired();
+            entity.Property(e => e.CreatedAt).IsRequired();
+            entity.Property(e => e.UpdatedAt);
+            entity.Property(e => e.CompletedAt);
+
+            entity.HasOne(e => e.Vehicle)
+                .WithMany(v => v.MaintenanceRecords)
+                .HasForeignKey(e => e.VehicleId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasIndex(e => e.VehicleId);
+            entity.HasIndex(e => e.Status);
+            entity.HasIndex(e => e.ScheduledDateTime);
         });
     }
 }
