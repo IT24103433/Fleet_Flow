@@ -1,6 +1,7 @@
 import React from 'react';
 import { useAuth } from '../../context/AuthContext';
 import RoleBadge from '../common/RoleBadge';
+import NotificationNavButton from '../NotificationNavButton';
 
 const StaffSidebar = ({ currentView, onNavigate, sidebarCollapsed, onToggleCollapse }) => {
   const { user, roles, logout } = useAuth();
@@ -143,6 +144,7 @@ const StaffSidebar = ({ currentView, onNavigate, sidebarCollapsed, onToggleColla
         )}
 
         <div className="nav-section-label">{!sidebarCollapsed && 'ACCOUNT'}</div>
+        <NotificationNavButton className={`staff-nav-item ${currentView === 'staff-notifications' ? 'active' : ''}`} collapsed={sidebarCollapsed} onClick={() => onNavigate('staff-notifications')} />
 
         <button
           type="button"
