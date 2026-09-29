@@ -30,7 +30,6 @@ export const createBooking = async (bookingData) => {
         vehicleId: bookingData.vehicleId,
         startDateTime: bookingData.startDateTime,
         endDateTime: bookingData.endDateTime,
-        status: bookingData.status || 'Confirmed',
       }),
     });
 
@@ -115,6 +114,51 @@ export const getMyBookings = async () => {
   }
 };
 
+export const cancelBooking = async (bookingId) => {
+  try {
+    const token = getAuthToken();
+    if (!token) {
+      return {
+        success: false,
+        status: 401,
+        message: 'Authentication is required to cancel a rental booking.',
+      };
+    }
+
+    const response = await fetch(`${FLEET_API_URL}/api/bookings/${bookingId}/cancel`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    const contentType = response.headers.get('content-type');
+    const data = contentType?.includes('application/json') ? await response.json() : null;
+
+    if (!response.ok) {
+      return {
+        success: false,
+        status: response.status,
+        message: data?.message || 'Failed to cancel the rental booking.',
+      };
+    }
+
+    return {
+      success: true,
+      status: response.status,
+      data,
+    };
+  } catch (error) {
+    console.error('Error cancelling booking:', error);
+    return {
+      success: false,
+      status: 500,
+      message: 'Network error while cancelling the booking.',
+    };
+  }
+};
+
 export const checkVehicleAvailability = async (vehicleId, startDateTime, endDateTime) => {
   try {
     const query = new URLSearchParams({
@@ -130,14 +174,26 @@ export const checkVehicleAvailability = async (vehicleId, startDateTime, endDate
       },
     });
 
+    const contentType = response.headers.get('content-type');
+    const data = contentType?.includes('application/json') ? await response.json() : null;
+
     if (!response.ok) {
-      return { success: false, isAvailable: false };
+      return {
+        success: false,
+        status: response.status,
+        isAvailable: false,
+        message: data?.message || 'The selected vehicle is not available for that rental period.',
+      };
     }
 
-    const data = await response.json();
-    return { success: true, isAvailable: Boolean(data.isAvailable) };
+    return { success: true, status: response.status, isAvailable: Boolean(data?.isAvailable) };
   } catch (error) {
     console.error('Error checking vehicle availability:', error);
-    return { success: false, isAvailable: false };
+    return {
+      success: false,
+      status: 500,
+      isAvailable: false,
+      message: 'Unable to verify vehicle availability. Please try again.',
+    };
   }
 };

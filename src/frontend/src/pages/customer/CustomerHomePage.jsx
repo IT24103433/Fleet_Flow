@@ -3,9 +3,11 @@ import { useAuth } from '../../context/AuthContext';
 import RoleBadge from '../../components/common/RoleBadge';
 import StatusBadge from '../../components/common/StatusBadge';
 import Button from '../../components/common/Button';
+import Alert from '../../components/Alert';
 import { getVehicles } from '../../services/vehicleService';
-import { getMyBookings } from '../../services/bookingService';
+import { cancelBooking, getMyBookings } from '../../services/bookingService';
 import { formatDailyRate, formatPriceNumber } from '../../utils/currencyUtils';
+import { isBookingCancellable } from '../../validation/bookingValidation';
 
 const CustomerHomePage = ({ onNavigate, onSelectVehicle }) => {
   const { user, roles } = useAuth();
@@ -15,6 +17,9 @@ const CustomerHomePage = ({ onNavigate, onSelectVehicle }) => {
   const [isLoadingVehicles, setIsLoadingVehicles] = useState(true);
   const [customerBookings, setCustomerBookings] = useState([]);
   const [isLoadingBookings, setIsLoadingBookings] = useState(true);
+  const [bookingError, setBookingError] = useState(null);
+  const [bookingNotice, setBookingNotice] = useState(null);
+  const [cancellingBookingId, setCancellingBookingId] = useState(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -36,6 +41,7 @@ const CustomerHomePage = ({ onNavigate, onSelectVehicle }) => {
         setCustomerBookings(bookingsRes.data);
       } else {
         setCustomerBookings([]);
+        setBookingError(bookingsRes.message || 'Unable to load your booking history.');
       }
       setIsLoadingBookings(false);
     });
@@ -44,6 +50,28 @@ const CustomerHomePage = ({ onNavigate, onSelectVehicle }) => {
       isMounted = false;
     };
   }, []);
+
+  const handleCancelBooking = async (booking) => {
+    const shouldCancel = window.confirm(`Cancel booking #${booking.id.substring(0, 8)}? This action cannot be undone.`);
+    if (!shouldCancel) return;
+
+    setBookingError(null);
+    setBookingNotice(null);
+    setCancellingBookingId(booking.id);
+
+    const result = await cancelBooking(booking.id);
+    setCancellingBookingId(null);
+
+    if (!result.success || !result.data) {
+      setBookingError(result.message || 'Unable to cancel this booking.');
+      return;
+    }
+
+    setCustomerBookings((currentBookings) => currentBookings.map((current) => (
+      current.id === result.data.id ? result.data : current
+    )));
+    setBookingNotice(`Booking #${result.data.id.substring(0, 8)} was cancelled and remains available in your history.`);
+  };
 
   return (
     <div className="customer-home-container">
@@ -105,17 +133,29 @@ const CustomerHomePage = ({ onNavigate, onSelectVehicle }) => {
         </div>
       </div>
 
-      {/* Active Reservations Section */}
+      {/* Rental Booking History Section */}
       <section className="home-section">
         <div className="section-header-row">
           <div>
-            <h2 className="section-heading">Active & Upcoming Reservations</h2>
-            <p className="section-subtext">Real-time booking and dispatch status</p>
+            <h2 className="section-heading">Rental Booking History</h2>
+            <p className="section-subtext">Confirmed and cancelled reservations associated with your account</p>
           </div>
           <span className="data-source-badge">
             {isLoadingBookings ? 'Loading...' : `${customerBookings.length} ${customerBookings.length === 1 ? 'Reservation' : 'Reservations'}`}
           </span>
         </div>
+
+        {bookingError && (
+          <div style={{ marginBottom: '16px' }}>
+            <Alert type="error" title="Booking Action Failed" message={bookingError} />
+          </div>
+        )}
+
+        {bookingNotice && (
+          <div style={{ marginBottom: '16px' }}>
+            <Alert type="success" title="Booking Cancelled" message={bookingNotice} />
+          </div>
+        )}
 
         {isLoadingBookings && (
           <div style={{ textAlign: 'center', padding: 'var(--space-6) 0', color: 'var(--color-text-secondary)' }}>
@@ -134,9 +174,9 @@ const CustomerHomePage = ({ onNavigate, onSelectVehicle }) => {
                 <line x1="3" y1="10" x2="21" y2="10" />
               </svg>
             </div>
-            <h3>No Active Bookings Found</h3>
+            <h3>No Booking History Found</h3>
             <p>
-              You do not currently have any active vehicle reservations. Browse our vehicle fleet catalog to select an executive model.
+              You have not created any vehicle reservations yet. Browse our vehicle fleet catalog to select an executive model.
             </p>
             <Button variant="primary" size="md" onClick={() => onNavigate('browse')}>
               Reserve a Vehicle
@@ -177,11 +217,23 @@ const CustomerHomePage = ({ onNavigate, onSelectVehicle }) => {
                     <div><strong>Return:</strong> {new Date(booking.endDateTime).toLocaleString()}</div>
                   </div>
 
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '8px', borderTop: '1px dashed #cbd5e1' }}>
-                    <span style={{ fontSize: '12px', color: 'var(--color-text-secondary, #64748b)' }}>Total Reserved</span>
-                    <span style={{ fontSize: '15px', fontWeight: 'bold', color: 'var(--color-text-primary, #0f172a)' }}>
-                      LKR {formatPriceNumber(booking.totalCost)}
-                    </span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', paddingTop: '8px', borderTop: '1px dashed #cbd5e1' }}>
+                    <div>
+                      <span style={{ display: 'block', fontSize: '12px', color: 'var(--color-text-secondary, #64748b)' }}>Total Reserved</span>
+                      <span style={{ fontSize: '15px', fontWeight: 'bold', color: 'var(--color-text-primary, #0f172a)' }}>
+                        LKR {formatPriceNumber(booking.totalCost)}
+                      </span>
+                    </div>
+                    {isBookingCancellable(booking.status) && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        disabled={cancellingBookingId === booking.id}
+                        onClick={() => handleCancelBooking(booking)}
+                      >
+                        {cancellingBookingId === booking.id ? 'Cancelling...' : 'Cancel Booking'}
+                      </Button>
+                    )}
                   </div>
                 </div>
               );
