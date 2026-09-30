@@ -72,7 +72,7 @@ public class ReportsControllerTests : IClassFixture<CustomWebApplicationFactory<
     }
 
     [Fact]
-    public async Task EmptyReportsExposeZerosAndUnavailableWorkOrders()
+    public async Task EmptyReportsExposeMeasuredZerosAndAvailableWorkOrderSource()
     {
         using var isolated = new CustomWebApplicationFactory<ReportsController>();
         using var client = Client(isolated, "ADMIN");
@@ -83,10 +83,12 @@ public class ReportsControllerTests : IClassFixture<CustomWebApplicationFactory<
         Assert.Empty(bookings.Items);
         var maintenance = (await client.GetFromJsonAsync<MaintenanceReportResponse>("api/reports/maintenance"))!;
         Assert.Empty(maintenance.CurrentVehicles);
-        Assert.False(maintenance.WorkOrders.Available);
+        Assert.True(maintenance.WorkOrders.Available);
+        Assert.Empty(maintenance.WorkOrders.Records);
         var stats = (await client.GetFromJsonAsync<OperationalStatisticsResponse>("api/reports/operational-statistics"))!;
         Assert.Equal(0, stats.Bookings.Total);
-        Assert.Null(stats.Maintenance.WorkOrderCount);
+        Assert.Equal(0, stats.Maintenance.WorkOrderCount);
+        Assert.Equal(0m, stats.Maintenance.RecordedCostTotal);
     }
 
     [Fact]

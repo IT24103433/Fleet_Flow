@@ -230,6 +230,44 @@ public class ReportingServiceTests
     }
 
     [Fact]
+    public async Task PersistedMaintenanceSource_ReportsRealCostsAndHistoricalFinalRecords()
+    {
+        using var db = new FleetDbContext(Options());
+        var vehicle = Vehicle();
+        var creator = Guid.NewGuid();
+        var completed = new MaintenanceRecord
+        {
+            Id = Guid.NewGuid(), VehicleId = vehicle.Id, Vehicle = vehicle, CreatedByUserId = creator,
+            ScheduledDateTime = Now.AddDays(-4), ServiceInformation = "Engine service", Details = "Completed",
+            Cost = 425.50m, Status = MaintenanceStatus.COMPLETED, CreatedAt = Now.AddDays(-5),
+            UpdatedAt = Now.AddDays(-3), CompletedAt = Now.AddDays(-3)
+        };
+        var cancelled = new MaintenanceRecord
+        {
+            Id = Guid.NewGuid(), VehicleId = vehicle.Id, Vehicle = vehicle, CreatedByUserId = creator,
+            ScheduledDateTime = Now.AddDays(-2), ServiceInformation = "Tyre inspection", Details = "Cancelled",
+            Cost = 80m, Status = MaintenanceStatus.CANCELLED, CreatedAt = Now.AddDays(-3), UpdatedAt = Now.AddDays(-1)
+        };
+        db.AddRange(vehicle, completed, cancelled);
+        await db.SaveChangesAsync();
+
+        var source = new MaintenanceReportSource(db);
+        var snapshot = await source.ReadAsync();
+        Assert.True(snapshot.Available);
+        Assert.Null(snapshot.UnavailableReason);
+        Assert.Equal(2, snapshot.Records.Count);
+        Assert.Contains(snapshot.Records, row => row.MaintenanceId == completed.Id &&
+            row.Status == "COMPLETED" && row.Cost == 425.50m && row.LicensePlate == vehicle.LicensePlate);
+        Assert.Contains(snapshot.Records, row => row.MaintenanceId == cancelled.Id &&
+            row.Status == "CANCELLED" && row.Cost == 80m);
+
+        var stats = (await Reports(db, source).GetOperationalStatisticsAsync()).Maintenance;
+        Assert.Equal(2, stats.WorkOrderCount);
+        Assert.Equal(2, stats.CostedWorkOrderCount);
+        Assert.Equal(505.50m, stats.RecordedCostTotal);
+    }
+
+    [Fact]
     public async Task AvailableEmptyMaintenanceSource_HasMeasuredZeroInsteadOfUnavailable()
     {
         using var db = new FleetDbContext(Options());
