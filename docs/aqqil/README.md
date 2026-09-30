@@ -67,6 +67,7 @@ docs/aqqil/
 | BM-116 | 2026-09-25 | RentalService | 100 VUs | /api/rentals/pickup, /complete | N/A | < 85 ms | PREPARED | Added Sprint 4 pickup & return stress payloads |
 | BM-117 | 2026-09-27 | NotificationService | 150 VUs | Outbox Worker Soak | 24.8 ms | < 500 ms lag | PASSED | Recorded 4-hour soak test metrics for outbox workers |
 | BM-118 | 2026-09-28 | FleetService | 150 VUs | /api/vehicles (Traces) | 24.6 ms | < 50 ms | OPTIMIZED | Replaced superseded Sprint 2 drafts with updated traces |
+| BM-119 | 2026-09-30 | Reports & Analytics | 50 VUs | /api/reports/export/csv | 68.0 ms | < 150 ms | PASSED | Added CSV export memory & throughput stress results |
 
 ---
 
