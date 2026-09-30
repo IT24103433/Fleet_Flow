@@ -2,16 +2,25 @@ using Microsoft.EntityFrameworkCore;
 using FleetService.Api.Data;
 using FleetService.Api.Dtos;
 using FleetService.Api.Entities;
+using FleetService.Api.Messaging;
+using FleetService.Api.Messaging.Events;
 
 namespace FleetService.Api.Services;
 
 public class MaintenanceService : IMaintenanceService
 {
     private readonly FleetDbContext _dbContext;
+    private readonly INotificationEventDispatcher? _notifications;
+    private readonly ILogger<MaintenanceService>? _logger;
 
-    public MaintenanceService(FleetDbContext dbContext)
+    public MaintenanceService(
+        FleetDbContext dbContext,
+        INotificationEventDispatcher? notifications = null,
+        ILogger<MaintenanceService>? logger = null)
     {
         _dbContext = dbContext;
+        _notifications = notifications;
+        _logger = logger;
     }
 
     public async Task<MaintenanceDashboardResponse> GetMaintenanceDashboardAsync(string? hub = null, CancellationToken cancellationToken = default)
@@ -209,6 +218,16 @@ public class MaintenanceService : IMaintenanceService
         _dbContext.MaintenanceRecords.Add(record);
         await _dbContext.SaveChangesAsync(cancellationToken);
 
+        TryDispatch(new MaintenanceScheduledEvent
+        {
+            EventId = Guid.NewGuid(),
+            OccurredAt = record.CreatedAt,
+            MaintenanceId = record.Id,
+            VehicleId = record.VehicleId,
+            Activity = record.ServiceInformation,
+            TargetUserIds = [record.CreatedByUserId]
+        }, record.Id);
+
         return MapRecord(record);
     }
 
@@ -330,7 +349,30 @@ public class MaintenanceService : IMaintenanceService
         }
 
         await _dbContext.SaveChangesAsync(cancellationToken);
+        TryDispatch(new MaintenanceStatusChangedEvent
+        {
+            EventId = Guid.NewGuid(),
+            OccurredAt = record.UpdatedAt!.Value,
+            MaintenanceId = record.Id,
+            VehicleId = record.VehicleId,
+            Activity = record.ServiceInformation,
+            Status = record.Status.ToString(),
+            TargetUserIds = [record.CreatedByUserId]
+        }, record.Id);
         return MapRecord(record);
+    }
+
+    private void TryDispatch(NotificationDomainEvent domainEvent, Guid maintenanceId)
+    {
+        try
+        {
+            _notifications?.TryEnqueue(domainEvent);
+        }
+        catch (Exception ex)
+        {
+            _logger?.LogWarning(ex,
+                "Maintenance record {MaintenanceId} persisted but notification dispatch failed.", maintenanceId);
+        }
     }
 
     private static bool IsValidTransition(MaintenanceStatus current, MaintenanceStatus target)

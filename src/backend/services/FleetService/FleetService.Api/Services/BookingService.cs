@@ -137,6 +137,19 @@ public class BookingService : IBookingService
         booking.UpdatedAt = DateTime.UtcNow;
         await _dbContext.SaveChangesAsync();
 
+        try
+        {
+            _notifications?.TryEnqueue(new BookingCancelledEvent
+            {
+                EventId = Guid.NewGuid(), OccurredAt = booking.UpdatedAt.Value,
+                BookingId = booking.Id, CustomerId = booking.CustomerId, VehicleId = booking.VehicleId
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger?.LogWarning(ex, "Booking {BookingId} was cancelled but notification dispatch failed.", booking.Id);
+        }
+
         return MapToResponse(booking, booking.Vehicle);
     }
 
