@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import Alert from '../components/Alert';
+import Button from '../components/common/Button';
 import EmptyState from '../components/common/EmptyState';
 import { notificationClient } from '../services/notificationService';
 import './NotificationsPage.css';
@@ -40,14 +42,24 @@ export default function NotificationsPage() {
     finally { setPendingIds(ids => ids.filter(value => value !== id)); }
   };
 
+  const refresh = () => {
+    setError('');
+    setLoading(true);
+    setRefreshKey(key => key + 1);
+  };
+
+  return <NotificationInboxView items={items} loading={loading} error={error} pendingIds={pendingIds} onMarkRead={markRead} onRefresh={refresh} />;
+}
+
+export function NotificationInboxView({ items, loading, error, pendingIds, onMarkRead, onRefresh }) {
   return (
     <section className="notification-inbox" aria-labelledby="notification-title">
       <div className="notification-heading">
         <div><h1 id="notification-title">Notifications</h1><p>Booking, maintenance and account updates.</p></div>
-        <button type="button" className="btn btn-outline" onClick={() => { setLoading(true); setRefreshKey(key => key + 1); }}>Refresh</button>
+        <Button variant="outline" onClick={onRefresh} disabled={loading}>Refresh</Button>
       </div>
-      {error && <p role="alert">{error}</p>}
-      {loading ? <p role="status">Loading notifications…</p> : (
+      {error && <Alert type="error" title="Unable to Load Notifications" message={error} />}
+      {loading ? <div className="reports-loading" role="status"><span className="spinner" aria-hidden="true" /> Loading notifications…</div> : (
         <>
           {!error && items.length === 0 && <EmptyState badge="Inbox" title="You're all caught up" description="Your notifications will appear here when there are updates." />}
           <ul className="notification-list">
@@ -59,9 +71,9 @@ export default function NotificationsPage() {
                 <p>{item.message}</p>
                 <div className="notification-heading">
                   <time dateTime={item.createdAt}>{new Date(item.createdAt).toLocaleString()}</time>
-                  {!item.isRead && <button type="button" className="btn btn-outline" disabled={pendingIds.includes(item.id)} onClick={() => markRead(item.id)}>
+                  {!item.isRead && <Button variant="outline" disabled={pendingIds.includes(item.id)} onClick={() => onMarkRead(item.id)}>
                     {pendingIds.includes(item.id) ? 'Saving…' : 'Mark as read'}
-                  </button>}
+                  </Button>}
                 </div>
               </li>
             ))}

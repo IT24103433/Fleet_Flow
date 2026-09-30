@@ -5,6 +5,7 @@ import Alert from './Alert';
 import StatusBadge from './common/StatusBadge';
 import { checkVehicleAvailability, createBooking } from '../services/bookingService';
 import { formatPriceNumber } from '../utils/currencyUtils';
+import { normalizeValidationErrors } from '../utils/validationErrorUtils';
 
 const getTomorrowDateStr = (daysAhead = 1, hour = 9) => {
   const date = new Date();
@@ -20,6 +21,7 @@ const BookingModal = ({ isOpen, onClose, vehicle, onSuccess }) => {
   const [endDateTime, setEndDateTime] = useState(() => getTomorrowDateStr(4, 9));
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [fieldErrors, setFieldErrors] = useState({});
   const [successBooking, setSuccessBooking] = useState(null);
 
   if (!vehicle) return null;
@@ -44,9 +46,14 @@ const BookingModal = ({ isOpen, onClose, vehicle, onSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage(null);
+    setFieldErrors({});
 
     if (!startDateTime || !endDateTime) {
       setErrorMessage('Please specify both Start and End rental date & time.');
+      setFieldErrors({
+        ...(!startDateTime ? { startDateTime: 'Start date and time are required.' } : {}),
+        ...(!endDateTime ? { endDateTime: 'End date and time are required.' } : {}),
+      });
       return;
     }
 
@@ -56,11 +63,13 @@ const BookingModal = ({ isOpen, onClose, vehicle, onSuccess }) => {
 
     if (startDateObj < new Date(now.getTime() - 5 * 60000)) {
       setErrorMessage('Rental start date and time must be in the future.');
+      setFieldErrors({ startDateTime: 'Rental start date and time must be in the future.' });
       return;
     }
 
     if (endDateObj <= startDateObj) {
       setErrorMessage('Rental end date and time must be after the start date and time.');
+      setFieldErrors({ endDateTime: 'Rental end date and time must be after the start date and time.' });
       return;
     }
 
@@ -93,6 +102,7 @@ const BookingModal = ({ isOpen, onClose, vehicle, onSuccess }) => {
         onSuccess(result.data);
       }
     } else {
+      setFieldErrors(normalizeValidationErrors(result.errors));
       setErrorMessage(result.message || 'Failed to complete vehicle reservation.');
     }
   };
@@ -103,6 +113,7 @@ const BookingModal = ({ isOpen, onClose, vehicle, onSuccess }) => {
     setIsSubmitting(false);
     setSuccessBooking(null);
     setErrorMessage(null);
+    setFieldErrors({});
     onClose();
   };
 
@@ -157,7 +168,7 @@ const BookingModal = ({ isOpen, onClose, vehicle, onSuccess }) => {
                 <div>{new Date(successBooking.endDateTime).toLocaleString()}</div>
               </div>
               <div style={{ gridColumn: 'span 2', paddingTop: '8px', borderTop: '1px dashed #cbd5e1' }}>
-                <strong style={{ fontSize: '14px', color: 'var(--color-text-primary, #0f172a)' }}>Total Paid / Reserved: </strong>
+                <strong style={{ fontSize: '14px', color: 'var(--color-text-primary, #0f172a)' }}>Total Reserved: </strong>
                 <span style={{ fontSize: '16px', fontWeight: 'bold', color: 'var(--color-primary, #2563eb)' }}>
                   LKR {formatPriceNumber(successBooking.totalCost)}
                 </span>
@@ -197,31 +208,46 @@ const BookingModal = ({ isOpen, onClose, vehicle, onSuccess }) => {
           {/* Date Range Inputs */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
             <div>
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>
+              <label htmlFor="bookingStartDateTime" style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>
                 Start Date & Time <span style={{ color: 'red' }}>*</span>
               </label>
               <input
+                id="bookingStartDateTime"
                 type="datetime-local"
-                className="input-field"
+                className={`input-field ${fieldErrors.startDateTime ? 'input-error' : ''}`.trim()}
                 value={startDateTime}
-                onChange={(e) => setStartDateTime(e.target.value)}
+                onChange={(e) => {
+                  setStartDateTime(e.target.value);
+                  setFieldErrors(current => ({ ...current, startDateTime: undefined }));
+                }}
                 required
+                data-autofocus
+                aria-invalid={Boolean(fieldErrors.startDateTime)}
+                aria-describedby={fieldErrors.startDateTime ? 'bookingStartDateTimeError' : undefined}
                 style={{ width: '100%', padding: '8px 12px', borderRadius: '6px', border: '1px solid #cbd5e1' }}
               />
+              {fieldErrors.startDateTime && <div id="bookingStartDateTimeError" className="field-error-message">{fieldErrors.startDateTime}</div>}
             </div>
 
             <div>
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>
+              <label htmlFor="bookingEndDateTime" style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>
                 End Date & Time <span style={{ color: 'red' }}>*</span>
               </label>
               <input
+                id="bookingEndDateTime"
                 type="datetime-local"
-                className="input-field"
+                className={`input-field ${fieldErrors.endDateTime ? 'input-error' : ''}`.trim()}
                 value={endDateTime}
-                onChange={(e) => setEndDateTime(e.target.value)}
+                onChange={(e) => {
+                  setEndDateTime(e.target.value);
+                  setFieldErrors(current => ({ ...current, endDateTime: undefined }));
+                }}
                 required
+                aria-invalid={Boolean(fieldErrors.endDateTime)}
+                aria-describedby={fieldErrors.endDateTime ? 'bookingEndDateTimeError' : undefined}
                 style={{ width: '100%', padding: '8px 12px', borderRadius: '6px', border: '1px solid #cbd5e1' }}
               />
+              {fieldErrors.endDateTime && <div id="bookingEndDateTimeError" className="field-error-message">{fieldErrors.endDateTime}</div>}
             </div>
           </div>
 

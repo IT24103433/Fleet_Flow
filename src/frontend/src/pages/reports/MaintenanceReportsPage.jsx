@@ -4,6 +4,10 @@ import StatusBadge from '../../components/common/StatusBadge';
 import { formatLKR } from '../../utils/currencyUtils';
 import { formatReportMetric } from '../../utils/reportPermissions';
 
+export function MaintenanceCost({ cost }) {
+  return cost == null ? 'Not recorded' : formatLKR(cost);
+}
+
 export default function MaintenanceReportsPage() {
   const report = useReport('maintenance');
   const data = report.data;
@@ -28,7 +32,7 @@ export default function MaintenanceReportsPage() {
           { label: 'Status', render: row => <StatusBadge status={row.status} /> },
           { label: 'Scheduled', render: row => row.scheduledAt ? new Date(row.scheduledAt).toLocaleString() : 'Not recorded' },
           { label: 'Completed', render: row => row.completedAt ? new Date(row.completedAt).toLocaleString() : 'Not recorded' },
-          { label: 'Recorded cost', render: row => row.cost == null ? 'Not recorded' : formatLKR(row.cost) },
+          { label: 'Recorded cost', render: row => <MaintenanceCost cost={row.cost} /> },
           { label: 'History', render: row => row.history.length === 0 ? 'No recorded history' : <ul>{row.history.map((entry, index) => <li key={`${entry.changedAt}:${index}`}>{new Date(entry.changedAt).toLocaleString()} — {entry.status}{entry.details && `: ${entry.details}`}</li>)}</ul> },
         ]} />
       )}

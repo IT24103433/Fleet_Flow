@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Alert from '../Alert';
 import Button from '../common/Button';
 import Modal from '../common/Modal';
+import StatusBadge from '../common/StatusBadge';
 import { getVehicles } from '../../services/vehicleService';
 import {
   createMaintenanceRecord,
@@ -13,6 +14,7 @@ import {
   getMaintenanceStatusTransitions,
   validateMaintenanceRecord,
 } from '../../validation/maintenanceValidation';
+import { normalizeValidationErrors } from '../../utils/validationErrorUtils';
 
 const createDefaultForm = (vehicleId = '') => {
   const scheduled = new Date(Date.now() + 24 * 60 * 60 * 1000);
@@ -141,7 +143,10 @@ const MaintenanceWorkOrders = ({ token, onDataChanged }) => {
     setIsSaving(false);
 
     if (!result.success) {
-      setFormErrors({ submit: result.message || 'Unable to save the maintenance record.' });
+      const serverErrors = normalizeValidationErrors(result.errors);
+      setFormErrors(Object.keys(serverErrors).length > 0
+        ? serverErrors
+        : { submit: result.message || 'Unable to save the maintenance record.' });
       return;
     }
 
@@ -228,7 +233,7 @@ const MaintenanceWorkOrders = ({ token, onDataChanged }) => {
                 return (
                   <tr key={record.id}>
                     <td>{new Date(record.scheduledDateTime).toLocaleString()}</td>
-                    <td><strong>{formatStatus(record.status)}</strong></td>
+                    <td><StatusBadge status={record.status} /></td>
                     <td>
                       <div style={{ fontWeight: 600 }}>{record.serviceInformation}</div>
                       {record.details && <div style={{ fontSize: '12px', color: '#64748b', marginTop: '3px' }}>{record.details}</div>}
@@ -268,31 +273,97 @@ const MaintenanceWorkOrders = ({ token, onDataChanged }) => {
           <div style={{ display: 'grid', gap: '14px' }}>
             {formErrors.submit && <Alert type="error" title="Unable to Save" message={formErrors.submit} />}
             {!editingRecord && (
-              <label>Vehicle
-                <select value={form.vehicleId} onChange={(event) => setForm({ ...form, vehicleId: event.target.value })} style={{ width: '100%', padding: '9px', marginTop: '5px' }}>
+              <div>
+                <label htmlFor="maintenanceVehicle">Vehicle</label>
+                <select
+                  id="maintenanceVehicle"
+                  value={form.vehicleId}
+                  onChange={(event) => {
+                    setForm({ ...form, vehicleId: event.target.value });
+                    setFormErrors(current => ({ ...current, vehicleId: undefined }));
+                  }}
+                  style={{ width: '100%', padding: '9px', marginTop: '5px' }}
+                  data-autofocus
+                  aria-invalid={Boolean(formErrors.vehicleId)}
+                  aria-describedby={formErrors.vehicleId ? 'maintenanceVehicleError' : undefined}
+                >
                   <option value="">Select a vehicle</option>
                   {schedulableVehicles.map((vehicle) => <option key={vehicle.id} value={vehicle.id}>{vehicle.licensePlate} — {vehicle.make} {vehicle.model}</option>)}
                 </select>
-                {formErrors.vehicleId && <small style={{ color: '#b91c1c' }}>{formErrors.vehicleId}</small>}
-              </label>
+                {formErrors.vehicleId && <div id="maintenanceVehicleError" className="field-error-message">{formErrors.vehicleId}</div>}
+              </div>
             )}
             {!editingRecord && (
-              <label>Maintenance date and time
-                <input type="datetime-local" value={form.scheduledDateTime} onChange={(event) => setForm({ ...form, scheduledDateTime: event.target.value })} style={{ width: '100%', padding: '9px', marginTop: '5px' }} />
-                {formErrors.scheduledDateTime && <small style={{ color: '#b91c1c' }}>{formErrors.scheduledDateTime}</small>}
-              </label>
+              <div>
+                <label htmlFor="maintenanceScheduledDateTime">Maintenance date and time</label>
+                <input
+                  id="maintenanceScheduledDateTime"
+                  type="datetime-local"
+                  value={form.scheduledDateTime}
+                  onChange={(event) => {
+                    setForm({ ...form, scheduledDateTime: event.target.value });
+                    setFormErrors(current => ({ ...current, scheduledDateTime: undefined }));
+                  }}
+                  style={{ width: '100%', padding: '9px', marginTop: '5px' }}
+                  aria-invalid={Boolean(formErrors.scheduledDateTime)}
+                  aria-describedby={formErrors.scheduledDateTime ? 'maintenanceScheduledDateTimeError' : undefined}
+                />
+                {formErrors.scheduledDateTime && <div id="maintenanceScheduledDateTimeError" className="field-error-message">{formErrors.scheduledDateTime}</div>}
+              </div>
             )}
-            <label>Required service information
-              <textarea value={form.serviceInformation} onChange={(event) => setForm({ ...form, serviceInformation: event.target.value })} rows="3" maxLength="2000" style={{ width: '100%', padding: '9px', marginTop: '5px' }} />
-              {formErrors.serviceInformation && <small style={{ color: '#b91c1c' }}>{formErrors.serviceInformation}</small>}
-            </label>
-            <label>Progress / service details
-              <textarea value={form.details} onChange={(event) => setForm({ ...form, details: event.target.value })} rows="3" maxLength="4000" style={{ width: '100%', padding: '9px', marginTop: '5px' }} />
-            </label>
-            <label>Maintenance cost (LKR)
-              <input type="number" min="0" step="0.01" value={form.cost} onChange={(event) => setForm({ ...form, cost: event.target.value })} style={{ width: '100%', padding: '9px', marginTop: '5px' }} />
-              {formErrors.cost && <small style={{ color: '#b91c1c' }}>{formErrors.cost}</small>}
-            </label>
+            <div>
+              <label htmlFor="maintenanceServiceInformation">Required service information</label>
+              <textarea
+                id="maintenanceServiceInformation"
+                value={form.serviceInformation}
+                onChange={(event) => {
+                  setForm({ ...form, serviceInformation: event.target.value });
+                  setFormErrors(current => ({ ...current, serviceInformation: undefined }));
+                }}
+                rows="3"
+                maxLength="2000"
+                style={{ width: '100%', padding: '9px', marginTop: '5px' }}
+                data-autofocus={editingRecord ? true : undefined}
+                aria-invalid={Boolean(formErrors.serviceInformation)}
+                aria-describedby={formErrors.serviceInformation ? 'maintenanceServiceInformationError' : undefined}
+              />
+              {formErrors.serviceInformation && <div id="maintenanceServiceInformationError" className="field-error-message">{formErrors.serviceInformation}</div>}
+            </div>
+            <div>
+              <label htmlFor="maintenanceDetails">Progress / service details</label>
+              <textarea
+                id="maintenanceDetails"
+                value={form.details}
+                onChange={(event) => {
+                  setForm({ ...form, details: event.target.value });
+                  setFormErrors(current => ({ ...current, details: undefined }));
+                }}
+                rows="3"
+                maxLength="4000"
+                style={{ width: '100%', padding: '9px', marginTop: '5px' }}
+                aria-invalid={Boolean(formErrors.details)}
+                aria-describedby={formErrors.details ? 'maintenanceDetailsError' : undefined}
+              />
+              {formErrors.details && <div id="maintenanceDetailsError" className="field-error-message">{formErrors.details}</div>}
+            </div>
+            <div>
+              <label htmlFor="maintenanceCost">Maintenance cost (LKR)</label>
+              <input
+                id="maintenanceCost"
+                type="number"
+                min="0"
+                step="0.01"
+                value={form.cost}
+                onChange={(event) => {
+                  setForm({ ...form, cost: event.target.value });
+                  setFormErrors(current => ({ ...current, cost: undefined }));
+                }}
+                style={{ width: '100%', padding: '9px', marginTop: '5px' }}
+                aria-invalid={Boolean(formErrors.cost)}
+                aria-describedby={formErrors.cost ? 'maintenanceCostError' : undefined}
+              />
+              {formErrors.cost && <div id="maintenanceCostError" className="field-error-message">{formErrors.cost}</div>}
+            </div>
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
               <Button variant="outline" onClick={closeModal} disabled={isSaving}>Cancel</Button>
               <Button variant="primary" onClick={handleSave} disabled={isSaving}>{isSaving ? 'Saving...' : 'Save Maintenance Record'}</Button>
