@@ -23,7 +23,7 @@ public class BookingReportQuery
 
 public record MaintenanceVehicleRow(Guid VehicleId, string LicensePlate, string Make, string Model,
     string HubLocation, int Mileage, VehicleStatus Status, DateTime? LastVehicleUpdateAt);
-// Projection contract only: no work-order entities or lifecycle logic are created in this sprint.
+// Optional transition history remains empty until a persisted transition-audit model is introduced.
 public record MaintenanceHistoryRow(DateTime ChangedAt, string Status, string? Details);
 public record MaintenanceRecordRow(Guid MaintenanceId, Guid VehicleId, string? LicensePlate,
     string Activity, string Status, DateTime? ScheduledAt, DateTime? CompletedAt, decimal? Cost,

@@ -1,11 +1,37 @@
+using FleetService.Api.Data;
 using FleetService.Api.Dtos;
+using Microsoft.EntityFrameworkCore;
 
 namespace FleetService.Api.Services;
 
 public interface IMaintenanceReportSource
 {
-    // Replace with an AsNoTracking projection over PR #26's persisted work orders and history.
     Task<MaintenanceRecordsSnapshot> ReadAsync(CancellationToken ct = default);
+}
+
+public class MaintenanceReportSource(FleetDbContext db) : IMaintenanceReportSource
+{
+    public async Task<MaintenanceRecordsSnapshot> ReadAsync(CancellationToken ct = default)
+    {
+        var records = await db.MaintenanceRecords
+            .AsNoTracking()
+            .Include(record => record.Vehicle)
+            .OrderByDescending(record => record.ScheduledDateTime)
+            .ThenByDescending(record => record.CreatedAt)
+            .ToListAsync(ct);
+
+        return new MaintenanceRecordsSnapshot(true, null, records.Select(record =>
+            new MaintenanceRecordRow(
+                record.Id,
+                record.VehicleId,
+                record.Vehicle?.LicensePlate,
+                record.ServiceInformation,
+                record.Status.ToString(),
+                record.ScheduledDateTime,
+                record.CompletedAt,
+                record.Cost,
+                [])).ToList());
+    }
 }
 
 public class UnavailableMaintenanceReportSource : IMaintenanceReportSource
