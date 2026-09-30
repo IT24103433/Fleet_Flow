@@ -24,21 +24,7 @@ builder.Services.AddHostedService<IdentityService.Api.Messaging.UserEventConsume
 
 // Configure JWT Authentication
 var jwtSection = builder.Configuration.GetSection("Jwt");
-var configuredJwtKey = jwtSection["Key"] ?? builder.Configuration["Jwt__Key"];
-var isDefaultJwtKey = string.IsNullOrEmpty(configuredJwtKey);
-var jwtKey = configuredJwtKey ?? "FleetFlowSuperSecretSecurityKey2026!#ForJWTTokenGeneration";
-
-if (isDefaultJwtKey)
-{
-    if (builder.Environment.IsProduction())
-    {
-        Console.WriteLine("[SECURITY WARNING] Jwt:Key / Jwt__Key is not set in Production environment! Using default fallback secret is insecure.");
-    }
-    else
-    {
-        Console.WriteLine("[INFO] Using local development fallback JWT key.");
-    }
-}
+var jwtKey = IdentityService.Api.Security.JwtSigningKey.Resolve(builder.Configuration, builder.Environment);
 
 builder.Services.AddAuthentication(options =>
 {
