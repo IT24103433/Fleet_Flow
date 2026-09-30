@@ -24,4 +24,7 @@ public class Vehicle
 
     // Images navigation property
     public ICollection<VehicleImage> Images { get; set; } = new List<VehicleImage>();
+
+    // Persisted maintenance history
+    public ICollection<MaintenanceRecord> MaintenanceRecords { get; set; } = new List<MaintenanceRecord>();
 }

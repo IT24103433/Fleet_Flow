@@ -261,4 +261,161 @@ public class BookingServiceTests
         Assert.Single(customer1Bookings);
         Assert.Equal(customer1, customer1Bookings.First().CustomerId);
     }
+
+    [Fact]
+    public async Task CheckVehicleAvailabilityAsync_OverlappingConfirmedBooking_ReturnsFalse()
+    {
+        using var dbContext = GetInMemoryDbContext();
+        var vehicle = await SeedTestVehicleAsync(dbContext);
+        var bookingService = new BookingService(dbContext);
+        var start = DateTime.UtcNow.AddDays(10);
+
+        await bookingService.CreateBookingAsync(Guid.NewGuid(), new CreateBookingRequest
+        {
+            VehicleId = vehicle.Id,
+            StartDateTime = start,
+            EndDateTime = start.AddDays(3)
+        });
+
+        var isAvailable = await bookingService.CheckVehicleAvailabilityAsync(
+            vehicle.Id,
+            start.AddDays(1),
+            start.AddDays(4));
+
+        Assert.False(isAvailable);
+    }
+
+    [Fact]
+    public async Task CheckVehicleAvailabilityAsync_MissingVehicle_ThrowsNotFoundException()
+    {
+        using var dbContext = GetInMemoryDbContext();
+        var bookingService = new BookingService(dbContext);
+
+        await Assert.ThrowsAsync<NotFoundException>(() => bookingService.CheckVehicleAvailabilityAsync(
+            Guid.NewGuid(),
+            DateTime.UtcNow.AddDays(1),
+            DateTime.UtcNow.AddDays(2)));
+    }
+
+    [Fact]
+    public async Task CheckVehicleAvailabilityAsync_InvalidPeriod_ThrowsValidationException()
+    {
+        using var dbContext = GetInMemoryDbContext();
+        var vehicle = await SeedTestVehicleAsync(dbContext);
+        var bookingService = new BookingService(dbContext);
+        var start = DateTime.UtcNow.AddDays(2);
+
+        await Assert.ThrowsAsync<ValidationException>(() => bookingService.CheckVehicleAvailabilityAsync(
+            vehicle.Id,
+            start,
+            start.AddHours(-1)));
+    }
+
+    [Fact]
+    public async Task CheckVehicleAvailabilityAsync_NonAvailableVehicle_ThrowsValidationException()
+    {
+        using var dbContext = GetInMemoryDbContext();
+        var vehicle = await SeedTestVehicleAsync(dbContext, VehicleStatus.Maintenance);
+        var bookingService = new BookingService(dbContext);
+
+        await Assert.ThrowsAsync<ValidationException>(() => bookingService.CheckVehicleAvailabilityAsync(
+            vehicle.Id,
+            DateTime.UtcNow.AddDays(1),
+            DateTime.UtcNow.AddDays(2)));
+    }
+
+    [Fact]
+    public async Task CancelBookingAsync_OwnConfirmedBooking_PersistsCancellationAndReleasesPeriod()
+    {
+        using var dbContext = GetInMemoryDbContext();
+        var vehicle = await SeedTestVehicleAsync(dbContext);
+        var bookingService = new BookingService(dbContext);
+        var customerId = Guid.NewGuid();
+        var start = DateTime.UtcNow.AddDays(15);
+        var end = start.AddDays(3);
+
+        var created = await bookingService.CreateBookingAsync(customerId, new CreateBookingRequest
+        {
+            VehicleId = vehicle.Id,
+            StartDateTime = start,
+            EndDateTime = end
+        });
+
+        var cancelled = await bookingService.CancelBookingAsync(created.Id, customerId);
+        var persisted = await dbContext.Bookings.SingleAsync(b => b.Id == created.Id);
+        var isAvailable = await bookingService.CheckVehicleAvailabilityAsync(vehicle.Id, start, end);
+
+        Assert.NotNull(cancelled);
+        Assert.Equal(BookingStatus.Cancelled, cancelled.Status);
+        Assert.Equal(BookingStatus.Cancelled, persisted.Status);
+        Assert.NotNull(persisted.UpdatedAt);
+        Assert.True(isAvailable);
+    }
+
+    [Fact]
+    public async Task CancelBookingAsync_AnotherCustomersBooking_ReturnsNullAndDoesNotChangeStatus()
+    {
+        using var dbContext = GetInMemoryDbContext();
+        var vehicle = await SeedTestVehicleAsync(dbContext);
+        var bookingService = new BookingService(dbContext);
+        var ownerId = Guid.NewGuid();
+
+        var created = await bookingService.CreateBookingAsync(ownerId, new CreateBookingRequest
+        {
+            VehicleId = vehicle.Id,
+            StartDateTime = DateTime.UtcNow.AddDays(20),
+            EndDateTime = DateTime.UtcNow.AddDays(22)
+        });
+
+        var result = await bookingService.CancelBookingAsync(created.Id, Guid.NewGuid());
+        var persisted = await dbContext.Bookings.SingleAsync(b => b.Id == created.Id);
+
+        Assert.Null(result);
+        Assert.Equal(BookingStatus.Confirmed, persisted.Status);
+    }
+
+    [Fact]
+    public async Task CancelBookingAsync_AlreadyCancelled_ThrowsDuplicateException()
+    {
+        using var dbContext = GetInMemoryDbContext();
+        var vehicle = await SeedTestVehicleAsync(dbContext);
+        var bookingService = new BookingService(dbContext);
+        var customerId = Guid.NewGuid();
+
+        var created = await bookingService.CreateBookingAsync(customerId, new CreateBookingRequest
+        {
+            VehicleId = vehicle.Id,
+            StartDateTime = DateTime.UtcNow.AddDays(25),
+            EndDateTime = DateTime.UtcNow.AddDays(27)
+        });
+
+        await bookingService.CancelBookingAsync(created.Id, customerId);
+
+        var exception = await Assert.ThrowsAsync<DuplicateException>(() =>
+            bookingService.CancelBookingAsync(created.Id, customerId));
+        Assert.Contains("already", exception.Message, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public async Task CancelBookingAsync_CompletedBooking_ThrowsValidationException()
+    {
+        using var dbContext = GetInMemoryDbContext();
+        var vehicle = await SeedTestVehicleAsync(dbContext);
+        var customerId = Guid.NewGuid();
+        var booking = new Booking
+        {
+            CustomerId = customerId,
+            VehicleId = vehicle.Id,
+            StartDateTime = DateTime.UtcNow.AddDays(-3),
+            EndDateTime = DateTime.UtcNow.AddDays(-1),
+            Status = BookingStatus.Completed,
+            TotalCost = 300m
+        };
+        dbContext.Bookings.Add(booking);
+        await dbContext.SaveChangesAsync();
+        var bookingService = new BookingService(dbContext);
+
+        await Assert.ThrowsAsync<ValidationException>(() =>
+            bookingService.CancelBookingAsync(booking.Id, customerId));
+    }
 }

@@ -9,4 +9,7 @@ public class KafkaSettings
     public string ClientId { get; set; } = "FleetService";
     public string VehicleEventsTopic { get; set; } = "fleetflow.vehicle.events";
     public string ConsumerGroupId { get; set; } = "fleetflow.fleet-service.group";
+    public string BookingEventsTopic { get; set; } = "fleetflow.booking.events";
+    public string MaintenanceEventsTopic { get; set; } = "fleetflow.maintenance.events";
+    public string NotificationConsumerGroupId { get; set; } = "fleetflow.notifications.group";
 }

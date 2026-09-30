@@ -1,6 +1,6 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
-import { validateBookingDates, calculateRentalCost } from '../validation/bookingValidation.js';
+import { validateBookingDates, calculateRentalCost, isBookingCancellable } from '../validation/bookingValidation.js';
 
 describe('Booking Date & Pricing Validation', () => {
   test('passes validation with valid future start and end dates', () => {
@@ -51,5 +51,13 @@ describe('Booking Date & Pricing Validation', () => {
     const { totalDays, totalCost } = calculateRentalCost(start, end, dailyRate);
     assert.equal(totalDays, 2);
     assert.equal(totalCost, 400);
+  });
+
+  test('allows cancellation only for pending or confirmed bookings', () => {
+    assert.equal(isBookingCancellable('Pending'), true);
+    assert.equal(isBookingCancellable('CONFIRMED'), true);
+    assert.equal(isBookingCancellable('Cancelled'), false);
+    assert.equal(isBookingCancellable('Completed'), false);
+    assert.equal(isBookingCancellable(null), false);
   });
 });

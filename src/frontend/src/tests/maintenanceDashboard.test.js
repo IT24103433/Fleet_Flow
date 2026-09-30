@@ -1,5 +1,10 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
+import {
+  getMaintenanceStatusTransitions,
+  isTerminalMaintenanceStatus,
+  validateMaintenanceRecord,
+} from '../validation/maintenanceValidation.js';
 
 describe('Maintenance Dashboard Data Integrity & Logic Tests', () => {
   test('status counts correctly report real persisted zero counts without fabricated metrics', () => {
@@ -79,5 +84,39 @@ describe('Maintenance Dashboard Data Integrity & Logic Tests', () => {
     assert.equal(filter('kandy').length, 1);
     assert.equal(filter('kandy')[0].id, '2');
     assert.equal(filter('nonexistent').length, 0);
+  });
+
+  test('maintenance status transitions follow the approved lifecycle', () => {
+    assert.deepEqual(getMaintenanceStatusTransitions('SCHEDULED'), ['IN_PROGRESS', 'CANCELLED']);
+    assert.deepEqual(getMaintenanceStatusTransitions('IN_PROGRESS'), ['COMPLETED', 'CANCELLED']);
+    assert.deepEqual(getMaintenanceStatusTransitions('COMPLETED'), []);
+    assert.deepEqual(getMaintenanceStatusTransitions('CANCELLED'), []);
+    assert.equal(isTerminalMaintenanceStatus('COMPLETED'), true);
+    assert.equal(isTerminalMaintenanceStatus('IN_PROGRESS'), false);
+  });
+
+  test('maintenance record validation accepts valid scheduling data', () => {
+    const errors = validateMaintenanceRecord({
+      vehicleId: 'vehicle-1',
+      scheduledDateTime: new Date(Date.now() + 86400000).toISOString(),
+      serviceInformation: 'Inspect brakes and replace pads',
+      cost: '4500',
+    });
+
+    assert.deepEqual(errors, {});
+  });
+
+  test('maintenance record validation rejects missing, past, and negative values', () => {
+    const errors = validateMaintenanceRecord({
+      vehicleId: '',
+      scheduledDateTime: new Date(Date.now() - 86400000).toISOString(),
+      serviceInformation: ' ',
+      cost: '-1',
+    });
+
+    assert.ok(errors.vehicleId);
+    assert.ok(errors.scheduledDateTime);
+    assert.ok(errors.serviceInformation);
+    assert.ok(errors.cost);
   });
 });

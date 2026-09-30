@@ -203,4 +203,31 @@ public class BookingServiceTests
         var ex = await Assert.ThrowsAsync<DuplicateException>(() => bookingService.CreateBookingAsync(customer2, overlappingRequest));
         Assert.Contains("overlapping", ex.Message, StringComparison.OrdinalIgnoreCase);
     }
+
+    [Fact]
+    public async Task CancelBookingAsync_CancelledBooking_RemainsInHistoryAndNoLongerBlocksAvailability()
+    {
+        using var dbContext = GetInMemoryDbContext();
+        var vehicle = await SeedTestVehicleAsync(dbContext);
+        var bookingService = new BookingService(dbContext);
+        var customerId = Guid.NewGuid();
+        var start = DateTime.UtcNow.AddDays(30);
+        var end = start.AddDays(2);
+
+        var created = await bookingService.CreateBookingAsync(customerId, new CreateBookingRequest
+        {
+            VehicleId = vehicle.Id,
+            StartDateTime = start,
+            EndDateTime = end
+        });
+
+        var cancelled = await bookingService.CancelBookingAsync(created.Id, customerId);
+        var history = (await bookingService.GetCustomerBookingsAsync(customerId)).ToList();
+        var isAvailable = await bookingService.CheckVehicleAvailabilityAsync(vehicle.Id, start, end);
+
+        Assert.NotNull(cancelled);
+        Assert.Equal(BookingStatus.Cancelled, cancelled.Status);
+        Assert.Contains(history, booking => booking.Id == created.Id && booking.Status == BookingStatus.Cancelled);
+        Assert.True(isAvailable);
+    }
 }

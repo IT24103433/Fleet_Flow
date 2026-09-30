@@ -1,6 +1,5 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-using FleetService.Api.Entities;
 
 namespace FleetService.Api.Dtos;
 
@@ -14,6 +13,4 @@ public class CreateBookingRequest
 
     [Required(ErrorMessage = "End date and time is required.")]
     public DateTime EndDateTime { get; set; }
-
-    public BookingStatus? Status { get; set; }
 }
