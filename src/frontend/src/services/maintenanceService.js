@@ -1,4 +1,5 @@
 const FLEET_API_URL = import.meta.env.VITE_FLEET_API_URL || 'http://localhost:5002';
+const isJsonResponse = contentType => /^application\/(?:json|problem\+json)(?:\s*;|\s*$)/i.test(contentType || '');
 
 const sendMaintenanceRequest = async (path, token, options = {}) => {
   try {
@@ -9,7 +10,7 @@ const sendMaintenanceRequest = async (path, token, options = {}) => {
     };
     const response = await fetch(`${FLEET_API_URL}${path}`, { ...options, headers });
     const contentType = response.headers.get('content-type');
-    const data = contentType?.includes('application/json') ? await response.json() : null;
+    const data = isJsonResponse(contentType) ? await response.json() : null;
 
     if (!response.ok) {
       return {
@@ -63,7 +64,7 @@ export const getMaintenanceDashboard = async (token, params = {}) => {
 
     const contentType = response.headers.get('content-type');
     let data = null;
-    if (contentType && contentType.includes('application/json')) {
+    if (isJsonResponse(contentType)) {
       data = await response.json();
     }
 

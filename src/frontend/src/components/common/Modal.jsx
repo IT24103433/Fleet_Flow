@@ -1,4 +1,4 @@
-import React, { useEffect, useId, useRef } from 'react';
+import React, { useEffect, useEffectEvent, useId, useRef } from 'react';
 
 const Modal = ({
   isOpen,
@@ -13,35 +13,32 @@ const Modal = ({
   const previouslyFocusedRef = useRef(null);
   const titleId = useId();
   const subtitleId = useId();
+  const closeFromKeyboard = useEffectEvent(() => onClose());
 
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape' && isOpen) {
-        onClose();
+        closeFromKeyboard();
       }
     };
     if (isOpen) {
       previouslyFocusedRef.current = document.activeElement;
+      const previousOverflow = document.body.style.overflow;
       document.body.style.overflow = 'hidden';
       window.addEventListener('keydown', handleKeyDown);
       const focusTimer = window.setTimeout(() => {
-        const initialFocus = modalRef.current?.querySelector(
-          '[data-autofocus], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled])',
-        );
+        const initialFocus = modalRef.current?.querySelector('[data-autofocus]:not([disabled])') ||
+          modalRef.current?.querySelector('input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), button:not([disabled])');
         (initialFocus || modalRef.current)?.focus();
       }, 0);
       return () => {
         window.clearTimeout(focusTimer);
-        document.body.style.overflow = '';
+        document.body.style.overflow = previousOverflow;
         window.removeEventListener('keydown', handleKeyDown);
-        previouslyFocusedRef.current?.focus?.();
+        if (previouslyFocusedRef.current?.isConnected) previouslyFocusedRef.current.focus?.();
       };
     }
-    return () => {
-      document.body.style.overflow = '';
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [isOpen, onClose]);
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
