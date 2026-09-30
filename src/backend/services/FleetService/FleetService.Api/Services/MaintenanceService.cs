@@ -234,7 +234,7 @@ public class MaintenanceService : IMaintenanceService
             OccurredAt = record.CreatedAt,
             MaintenanceId = record.Id,
             VehicleId = record.VehicleId,
-            Activity = record.ServiceInformation,
+            Activity = SummarizeActivity(record.ServiceInformation),
             TargetUserIds = [record.CreatedByUserId]
         }, record.Id);
 
@@ -377,11 +377,19 @@ public class MaintenanceService : IMaintenanceService
             OccurredAt = record.UpdatedAt!.Value,
             MaintenanceId = record.Id,
             VehicleId = record.VehicleId,
-            Activity = record.ServiceInformation,
+            Activity = SummarizeActivity(record.ServiceInformation),
             Status = record.Status.ToString(),
             TargetUserIds = [record.CreatedByUserId]
         }, record.Id);
         return MapRecord(record);
+    }
+
+    private static string SummarizeActivity(string activity)
+    {
+        if (activity.Length <= 200) return activity;
+        var length = 199; // Include the ellipsis within the consumer's 200 UTF-16 character limit.
+        if (char.IsHighSurrogate(activity[length - 1]) && char.IsLowSurrogate(activity[length])) length--;
+        return activity[..length] + "…";
     }
 
     private void TryDispatch(NotificationDomainEvent domainEvent, Guid maintenanceId)

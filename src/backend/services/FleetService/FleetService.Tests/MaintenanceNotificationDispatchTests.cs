@@ -10,6 +10,33 @@ namespace FleetService.Tests;
 
 public class MaintenanceNotificationDispatchTests
 {
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task LongActivity_IsPreservedInRecord_AndBothEventsRemainProcessable(bool unicodeBoundary)
+    {
+        await using var db = CreateContext();
+        var vehicle = await SeedVehicleAsync(db);
+        var dispatcher = new Dispatcher(db);
+        var service = new MaintenanceService(db, dispatcher);
+        var fullText = unicodeBoundary ? new string('a', 198) + "🚗" + new string('b', 1800) : new string('a', 2000);
+        var request = Request(vehicle.Id);
+        request.ServiceInformation = fullText;
+        var record = await service.CreateMaintenanceRecordAsync(Guid.NewGuid(), request);
+        await service.UpdateMaintenanceStatusAsync(record.Id, MaintenanceStatus.IN_PROGRESS);
+        Assert.Equal(fullText, (await db.MaintenanceRecords.FindAsync(record.Id))!.ServiceInformation);
+        var processor = new NotificationEventProcessor(new NotificationService(db));
+        foreach (var domainEvent in dispatcher.Events)
+        {
+            var activity = domainEvent is MaintenanceScheduledEvent scheduled ? scheduled.Activity : ((MaintenanceStatusChangedEvent)domainEvent).Activity;
+            Assert.InRange(activity.Length, 1, 200);
+            Assert.EndsWith("…", activity);
+            Assert.False(char.IsHighSurrogate(activity[^2]));
+            await processor.ProcessAsync(domainEvent);
+        }
+        Assert.Equal(2, await db.Notifications.CountAsync());
+    }
+
     private sealed class Dispatcher(FleetDbContext db, bool fail = false) : INotificationEventDispatcher
     {
         public List<NotificationDomainEvent> Events { get; } = [];
