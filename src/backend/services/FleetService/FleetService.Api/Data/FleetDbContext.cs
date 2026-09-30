@@ -12,10 +12,24 @@ public class FleetDbContext : DbContext
     public DbSet<Vehicle> Vehicles => Set<Vehicle>();
     public DbSet<VehicleCategory> VehicleCategories => Set<VehicleCategory>();
     public DbSet<VehicleImage> VehicleImages => Set<VehicleImage>();
+    public DbSet<Booking> Bookings => Set<Booking>();
+    public DbSet<MaintenanceRecord> MaintenanceRecords => Set<MaintenanceRecord>();
+    public DbSet<Notification> Notifications => Set<Notification>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<Notification>(entity =>
+        {
+            entity.ToTable("Notifications");
+            entity.HasKey(n => n.Id);
+            entity.Property(n => n.Category).IsRequired().HasMaxLength(50);
+            entity.Property(n => n.Title).IsRequired().HasMaxLength(200);
+            entity.Property(n => n.Message).IsRequired().HasMaxLength(2000);
+            entity.HasIndex(n => new { n.EventId, n.TargetUserId }).IsUnique();
+            entity.HasIndex(n => new { n.TargetUserId, n.IsRead, n.CreatedAt });
+        });
 
         modelBuilder.Entity<VehicleCategory>(entity =>
         {
@@ -73,6 +87,54 @@ public class FleetDbContext : DbContext
                 .WithMany(v => v.Images)
                 .HasForeignKey(vi => vi.VehicleId)
                 .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<Booking>(entity =>
+        {
+            entity.ToTable("Bookings");
+            entity.HasKey(e => e.Id);
+
+            entity.Property(e => e.CustomerId).IsRequired();
+            entity.Property(e => e.VehicleId).IsRequired();
+            entity.Property(e => e.StartDateTime).IsRequired();
+            entity.Property(e => e.EndDateTime).IsRequired();
+            entity.Property(e => e.Status).HasConversion<string>().IsRequired();
+            entity.Property(e => e.TotalCost).HasPrecision(18, 2).IsRequired();
+            entity.Property(e => e.CreatedAt).IsRequired();
+            entity.Property(e => e.UpdatedAt);
+
+            entity.HasOne(b => b.Vehicle)
+                .WithMany()
+                .HasForeignKey(b => b.VehicleId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasIndex(e => e.VehicleId);
+            entity.HasIndex(e => e.CustomerId);
+            entity.HasIndex(e => e.Status);
+        });
+
+        modelBuilder.Entity<MaintenanceRecord>(entity =>
+        {
+            entity.ToTable("MaintenanceRecords");
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.CreatedByUserId).IsRequired();
+            entity.Property(e => e.ScheduledDateTime).IsRequired();
+            entity.Property(e => e.ServiceInformation).IsRequired().HasMaxLength(2000);
+            entity.Property(e => e.Details).HasMaxLength(4000);
+            entity.Property(e => e.Cost).HasPrecision(18, 2).IsRequired();
+            entity.Property(e => e.Status).HasConversion<string>().HasMaxLength(30).IsRequired();
+            entity.Property(e => e.CreatedAt).IsRequired();
+            entity.Property(e => e.UpdatedAt);
+            entity.Property(e => e.CompletedAt);
+
+            entity.HasOne(e => e.Vehicle)
+                .WithMany(v => v.MaintenanceRecords)
+                .HasForeignKey(e => e.VehicleId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasIndex(e => e.VehicleId);
+            entity.HasIndex(e => e.Status);
+            entity.HasIndex(e => e.ScheduledDateTime);
         });
     }
 }

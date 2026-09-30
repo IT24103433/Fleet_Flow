@@ -17,29 +17,26 @@ builder.Services.AddDbContext<FleetDbContext>(options =>
 builder.Services.AddScoped<IVehicleService, VehicleService>();
 builder.Services.AddScoped<IVehicleImageService, VehicleImageService>();
 builder.Services.AddScoped<IMaintenanceService, MaintenanceService>();
+builder.Services.AddScoped<IBookingService, BookingService>();
+builder.Services.AddScoped<NotificationService>();
+builder.Services.AddScoped<NotificationEventProcessor>();
+builder.Services.AddScoped<IReportingService, ReportingService>();
+builder.Services.AddScoped<IMaintenanceReportSource, MaintenanceReportSource>();
+builder.Services.AddSingleton<TimeProvider>(TimeProvider.System);
+builder.Services.AddSingleton<FleetReadiness>();
 
 // Configure Apache Kafka Messaging
 builder.Services.Configure<KafkaSettings>(builder.Configuration.GetSection(KafkaSettings.SectionName));
 builder.Services.AddSingleton<IKafkaProducerService, KafkaProducerService>();
 builder.Services.AddHostedService<VehicleEventConsumerService>();
+builder.Services.AddSingleton<NotificationEventDispatcher>();
+builder.Services.AddSingleton<INotificationEventDispatcher>(sp => sp.GetRequiredService<NotificationEventDispatcher>());
+builder.Services.AddHostedService(sp => sp.GetRequiredService<NotificationEventDispatcher>());
+builder.Services.AddHostedService<NotificationEventConsumerService>();
 
 // Configure JWT Authentication
 var jwtSection = builder.Configuration.GetSection("Jwt");
-var configuredJwtKey = jwtSection["Key"] ?? builder.Configuration["Jwt__Key"];
-var isDefaultJwtKey = string.IsNullOrEmpty(configuredJwtKey);
-var jwtKey = configuredJwtKey ?? "FleetFlowSuperSecretSecurityKey2026!#ForJWTTokenGeneration";
-
-if (isDefaultJwtKey)
-{
-    if (builder.Environment.IsProduction())
-    {
-        Console.WriteLine("[SECURITY WARNING] Jwt:Key / Jwt__Key is not set in Production environment! Using default fallback secret is insecure.");
-    }
-    else
-    {
-        Console.WriteLine("[INFO] Using local development fallback JWT key.");
-    }
-}
+var jwtKey = FleetService.Api.Security.JwtSigningKey.Resolve(builder.Configuration, builder.Environment);
 
 builder.Services.AddAuthentication(options =>
 {
@@ -88,8 +85,7 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-var isDbReady = false;
-string? dbInitError = null;
+var readiness = app.Services.GetRequiredService<FleetReadiness>();
 
 // Non-blocking background database initialization
 _ = Task.Run(async () =>
@@ -132,7 +128,7 @@ _ = Task.Run(async () =>
                 await dbContext.SaveChangesAsync();
             }
 
-            // Ensure VehicleImages table exists on pre-existing database
+            // Ensure feature tables exist on pre-existing databases.
             try
             {
                 await dbContext.Database.ExecuteSqlRawAsync(@"
@@ -149,20 +145,53 @@ _ = Task.Run(async () =>
                         CONSTRAINT ""FK_VehicleImages_Vehicles_VehicleId"" FOREIGN KEY (""VehicleId"") REFERENCES ""Vehicles"" (""Id"") ON DELETE CASCADE
                     );
                     CREATE INDEX IF NOT EXISTS ""IX_VehicleImages_VehicleId"" ON ""VehicleImages"" (""VehicleId"");
+
+                    CREATE TABLE IF NOT EXISTS ""Bookings"" (
+                        ""Id"" uuid NOT NULL PRIMARY KEY,
+                        ""CustomerId"" uuid NOT NULL,
+                        ""VehicleId"" uuid NOT NULL,
+                        ""StartDateTime"" timestamp with time zone NOT NULL,
+                        ""EndDateTime"" timestamp with time zone NOT NULL,
+                        ""Status"" character varying(50) NOT NULL,
+                        ""TotalCost"" numeric(18, 2) NOT NULL,
+                        ""CreatedAt"" timestamp with time zone NOT NULL,
+                        ""UpdatedAt"" timestamp with time zone NULL,
+                        CONSTRAINT ""FK_Bookings_Vehicles_VehicleId"" FOREIGN KEY (""VehicleId"") REFERENCES ""Vehicles"" (""Id"") ON DELETE RESTRICT
+                    );
+                    CREATE INDEX IF NOT EXISTS ""IX_Bookings_VehicleId"" ON ""Bookings"" (""VehicleId"");
+                    CREATE INDEX IF NOT EXISTS ""IX_Bookings_CustomerId"" ON ""Bookings"" (""CustomerId"");
+                    CREATE INDEX IF NOT EXISTS ""IX_Bookings_Status"" ON ""Bookings"" (""Status"");
+
+                    CREATE TABLE IF NOT EXISTS ""MaintenanceRecords"" (
+                        ""Id"" uuid NOT NULL PRIMARY KEY,
+                        ""VehicleId"" uuid NOT NULL,
+                        ""CreatedByUserId"" uuid NOT NULL,
+                        ""ScheduledDateTime"" timestamp with time zone NOT NULL,
+                        ""ServiceInformation"" character varying(2000) NOT NULL,
+                        ""Details"" character varying(4000) NULL,
+                        ""Cost"" numeric(18, 2) NOT NULL,
+                        ""Status"" character varying(30) NOT NULL,
+                        ""CreatedAt"" timestamp with time zone NOT NULL,
+                        ""UpdatedAt"" timestamp with time zone NULL,
+                        ""CompletedAt"" timestamp with time zone NULL,
+                        CONSTRAINT ""FK_MaintenanceRecords_Vehicles_VehicleId"" FOREIGN KEY (""VehicleId"") REFERENCES ""Vehicles"" (""Id"") ON DELETE RESTRICT
+                    );
+                    CREATE INDEX IF NOT EXISTS ""IX_MaintenanceRecords_VehicleId"" ON ""MaintenanceRecords"" (""VehicleId"");
+                    CREATE INDEX IF NOT EXISTS ""IX_MaintenanceRecords_Status"" ON ""MaintenanceRecords"" (""Status"");
+                    CREATE INDEX IF NOT EXISTS ""IX_MaintenanceRecords_ScheduledDateTime"" ON ""MaintenanceRecords"" (""ScheduledDateTime"");
                 ");
-                isDbReady = true;
+                await NotificationSchema.EnsureAsync(dbContext);
+                readiness.MarkInitialized();
                 Console.WriteLine("[Database] FleetService database initialized and ready.");
             }
             catch (Exception ex)
             {
-                dbInitError = ex.Message;
                 Console.WriteLine($"[Startup Warning] Table check: {ex.Message}");
             }
         }
     }
     catch (Exception ex)
     {
-        dbInitError = ex.Message;
         Console.WriteLine($"[Startup Warning] Database initialization deferred: {ex.Message}");
     }
 });
@@ -194,30 +223,21 @@ app.UseStaticFiles(new StaticFileOptions
     RequestPath = "/uploads"
 });
 
+app.UseRouting();
 app.UseCors();
 
 
 app.UseAuthentication();
+app.UseMiddleware<FleetService.Api.Middleware.ForcedPasswordChangeMiddleware>();
 app.UseAuthorization();
 
 app.MapControllers();
 
 app.MapGet("/", () => Results.Redirect("/swagger"));
 
-app.MapGet("/health", async (FleetDbContext dbContext) =>
-{
-    try
-    {
-        var canConnect = await dbContext.Database.CanConnectAsync();
-        return canConnect 
-            ? Results.Ok(new { status = "Healthy", database = "Connected", ready = isDbReady, error = dbInitError })
-            : Results.Problem("Database connection failed");
-    }
-    catch (Exception ex)
-    {
-        return Results.Problem($"Database connection failed: {ex.Message}");
-    }
-});
+app.MapGet("/health", (FleetDbContext dbContext, FleetReadiness state, ILogger<FleetReadiness> logger, CancellationToken ct) =>
+    state.CheckAsync(dbContext, logger, ct)).AllowAnonymous();
+app.MapGet("/health/live", () => Results.Ok(new { status = "Alive" })).AllowAnonymous();
 
 app.Run();
 

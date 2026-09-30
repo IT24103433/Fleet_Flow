@@ -99,10 +99,10 @@ public class AuthenticationService : IAuthenticationService
         var jwtSection = _configuration.GetSection("Jwt");
         var issuer = jwtSection["Issuer"];
         var audience = jwtSection["Audience"];
-        var keyStr = jwtSection["Key"] ?? _configuration["Jwt__Key"] ?? "FleetFlowSuperSecretSecurityKey2026!#ForJWTTokenGeneration";
+        var keyStr = jwtSection["Key"] ?? _configuration["Jwt__Key"];
         var expiryInMinutesStr = jwtSection["ExpiryInMinutes"];
 
-        if (string.IsNullOrEmpty(keyStr) || Encoding.UTF8.GetByteCount(keyStr) < 32)
+        if (string.IsNullOrWhiteSpace(keyStr) || Encoding.UTF8.GetByteCount(keyStr) < 32)
         {
             throw new InvalidOperationException("JWT Signing Key must be configured and must be at least 32 bytes (256 bits) long.");
         }

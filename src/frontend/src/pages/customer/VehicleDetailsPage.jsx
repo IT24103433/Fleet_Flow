@@ -6,6 +6,7 @@ import { getVehicleById } from '../../services/vehicleService';
 import { getVehicleImages } from '../../services/vehicleImageService';
 import { getVehicleImageUrl } from '../../utils/imageUrlUtils';
 import { formatPriceNumber } from '../../utils/currencyUtils';
+import BookingModal from '../../components/BookingModal';
 
 const VehicleDetailsPage = ({ selectedVehicle, onNavigate }) => {
   const [vehicle, setVehicle] = useState(selectedVehicle);
@@ -14,6 +15,7 @@ const VehicleDetailsPage = ({ selectedVehicle, onNavigate }) => {
   const [reservationNotice, setReservationNotice] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -52,11 +54,7 @@ const VehicleDetailsPage = ({ selectedVehicle, onNavigate }) => {
   }, [selectedVehicle]);
 
   const handleReserveClick = () => {
-    setReservationNotice({
-      type: 'info',
-      title: 'Booking Service Integration',
-      message: `Reservation workflow for ${vehicle?.year} ${vehicle?.make} ${vehicle?.model} (VIN: ${vehicle?.vin}) verified. Booking endpoints (POST /api/bookings) will connect to BookingService in Sprint 2.`,
-    });
+    setIsBookingModalOpen(true);
   };
 
   if (isLoading) {
@@ -293,6 +291,19 @@ const VehicleDetailsPage = ({ selectedVehicle, onNavigate }) => {
           </div>
         </div>
       </div>
+
+      <BookingModal
+        isOpen={isBookingModalOpen}
+        onClose={() => setIsBookingModalOpen(false)}
+        vehicle={vehicle}
+        onSuccess={(createdBooking) => {
+          setReservationNotice({
+            type: 'success',
+            title: 'Reservation Confirmed',
+            message: `Booking #${createdBooking.id.substring(0, 8)} successfully created for ${vehicle.year} ${vehicle.make} ${vehicle.model}.`,
+          });
+        }}
+      />
     </div>
   );
 };

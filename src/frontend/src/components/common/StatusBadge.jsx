@@ -25,6 +25,30 @@ const STATUS_CONFIGS = {
     label: 'Retired',
     badgeClass: 'status-badge-retired',
   },
+  PENDING: {
+    label: 'Pending',
+    badgeClass: 'status-badge-maintenance',
+  },
+  SCHEDULED: {
+    label: 'Scheduled',
+    badgeClass: 'status-badge-maintenance',
+  },
+  IN_PROGRESS: {
+    label: 'In Progress',
+    badgeClass: 'status-badge-in-use',
+  },
+  CONFIRMED: {
+    label: 'Confirmed',
+    badgeClass: 'status-badge-available',
+  },
+  CANCELLED: {
+    label: 'Cancelled',
+    badgeClass: 'status-badge-retired',
+  },
+  COMPLETED: {
+    label: 'Completed',
+    badgeClass: 'status-badge-in-use',
+  },
 };
 
 const StatusBadge = ({ status, className = '' }) => {

@@ -9,6 +9,7 @@ import {
 import Button from '../../components/common/Button';
 import Alert from '../../components/Alert';
 import Modal from '../../components/common/Modal';
+import MaintenanceWorkOrders from '../../components/maintenance/MaintenanceWorkOrders';
 
 const HUB_LOCATIONS = [
   'All Hubs',
@@ -54,7 +55,8 @@ const MaintenanceDashboardPage = ({ onNavigate, onSelectVehicle }) => {
   }, [token, selectedHub]);
 
   useEffect(() => {
-    fetchDashboard();
+    const timer = window.setTimeout(fetchDashboard, 0);
+    return () => window.clearTimeout(timer);
   }, [fetchDashboard]);
 
   // Role-filtered status options for modal
@@ -442,6 +444,8 @@ const MaintenanceDashboardPage = ({ onNavigate, onSelectVehicle }) => {
           </div>
         </div>
       </div>
+
+      <MaintenanceWorkOrders token={token} onDataChanged={fetchDashboard} />
 
       {/* 2. Vehicles Requiring Attention Section */}
       <div

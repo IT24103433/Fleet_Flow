@@ -27,6 +27,9 @@ const AdminDashboardPage = ({ onNavigate }) => {
         </div>
 
         <div className="admin-header-actions">
+          <Button variant="outline" size="md" onClick={() => onNavigate('fleet-performance')}>
+            Fleet Performance & Analytics
+          </Button>
           <Button variant="primary" size="md" onClick={() => onNavigate('admin-create-user')}>
             + Create User
           </Button>
