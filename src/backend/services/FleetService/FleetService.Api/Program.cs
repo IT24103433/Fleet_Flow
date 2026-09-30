@@ -23,6 +23,7 @@ builder.Services.AddScoped<NotificationEventProcessor>();
 builder.Services.AddScoped<IReportingService, ReportingService>();
 builder.Services.AddScoped<IMaintenanceReportSource, MaintenanceReportSource>();
 builder.Services.AddSingleton<TimeProvider>(TimeProvider.System);
+builder.Services.AddSingleton<FleetReadiness>();
 
 // Configure Apache Kafka Messaging
 builder.Services.Configure<KafkaSettings>(builder.Configuration.GetSection(KafkaSettings.SectionName));
@@ -84,8 +85,7 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-var isDbReady = false;
-string? dbInitError = null;
+var readiness = app.Services.GetRequiredService<FleetReadiness>();
 
 // Non-blocking background database initialization
 _ = Task.Run(async () =>
@@ -181,19 +181,17 @@ _ = Task.Run(async () =>
                     CREATE INDEX IF NOT EXISTS ""IX_MaintenanceRecords_ScheduledDateTime"" ON ""MaintenanceRecords"" (""ScheduledDateTime"");
                 ");
                 await NotificationSchema.EnsureAsync(dbContext);
-                isDbReady = true;
+                readiness.MarkInitialized();
                 Console.WriteLine("[Database] FleetService database initialized and ready.");
             }
             catch (Exception ex)
             {
-                dbInitError = ex.Message;
                 Console.WriteLine($"[Startup Warning] Table check: {ex.Message}");
             }
         }
     }
     catch (Exception ex)
     {
-        dbInitError = ex.Message;
         Console.WriteLine($"[Startup Warning] Database initialization deferred: {ex.Message}");
     }
 });
@@ -237,20 +235,9 @@ app.MapControllers();
 
 app.MapGet("/", () => Results.Redirect("/swagger"));
 
-app.MapGet("/health", async (FleetDbContext dbContext) =>
-{
-    try
-    {
-        var canConnect = await dbContext.Database.CanConnectAsync();
-        return canConnect 
-            ? Results.Ok(new { status = "Healthy", database = "Connected", ready = isDbReady, error = dbInitError })
-            : Results.Problem("Database connection failed");
-    }
-    catch (Exception ex)
-    {
-        return Results.Problem($"Database connection failed: {ex.Message}");
-    }
-});
+app.MapGet("/health", (FleetDbContext dbContext, FleetReadiness state, ILogger<FleetReadiness> logger, CancellationToken ct) =>
+    state.CheckAsync(dbContext, logger, ct)).AllowAnonymous();
+app.MapGet("/health/live", () => Results.Ok(new { status = "Alive" })).AllowAnonymous();
 
 app.Run();
 

@@ -4,6 +4,10 @@ using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
 using FleetService.Api.Controllers;
+using FleetService.Api.Data;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.IdentityModel.Tokens;
 
 namespace FleetService.Tests;
@@ -40,6 +44,7 @@ public class DeploymentSecurityTests : IClassFixture<CustomWebApplicationFactory
     }
 
     [Theory]
+    [InlineData("/health/live")]
     [InlineData("/api/vehicles")]
     public async Task ForcedPasswordChange_PreservesPublicEndpoints(string path)
     {
@@ -54,4 +59,32 @@ public class DeploymentSecurityTests : IClassFixture<CustomWebApplicationFactory
         Assert.Equal(HttpStatusCode.OK, (await client.GetAsync("/api/notifications")).StatusCode);
     }
 
+    [Fact]
+    public async Task Readiness_UninitializedSchema_Returns503_WhileLivenessSucceeds()
+    {
+        // InMemory cannot execute startup PostgreSQL DDL, so initialization is deliberately unsuccessful.
+        using var client = factory.CreateClient();
+        Assert.Equal(HttpStatusCode.ServiceUnavailable, (await client.GetAsync("/health")).StatusCode);
+        Assert.Equal(HttpStatusCode.OK, (await client.GetAsync("/health/live")).StatusCode);
+    }
+
+    [Fact]
+    public async Task Readiness_RequiresInitialization_EvenWhenDatabaseIsReachable()
+    {
+        await using var db = new FleetDbContext(new DbContextOptionsBuilder<FleetDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options);
+        var readiness = new FleetReadiness();
+        Assert.Equal(503, ((IStatusCodeHttpResult)await readiness.CheckAsync(db, NullLogger<FleetReadiness>.Instance)).StatusCode);
+        readiness.MarkInitialized();
+        Assert.Equal(200, ((IStatusCodeHttpResult)await readiness.CheckAsync(db, NullLogger<FleetReadiness>.Instance)).StatusCode);
+    }
+
+    [Fact]
+    public async Task Readiness_InitializedButDisconnected_Returns503()
+    {
+        await using var db = new FleetDbContext(new DbContextOptionsBuilder<FleetDbContext>()
+            .UseNpgsql("Host=127.0.0.1;Port=1;Database=fleetflow_hardening_unreachable;Username=test;Password=test;Timeout=1;Pooling=false").Options);
+        var readiness = new FleetReadiness();
+        readiness.MarkInitialized();
+        Assert.Equal(503, ((IStatusCodeHttpResult)await readiness.CheckAsync(db, NullLogger<FleetReadiness>.Instance)).StatusCode);
+    }
 }
