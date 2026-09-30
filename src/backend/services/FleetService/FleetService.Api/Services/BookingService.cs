@@ -41,6 +41,7 @@ public class BookingService : IBookingService
         var endUtc = NormalizeUtc(request.EndDateTime);
         ValidateRentalPeriod(startUtc, endUtc);
 
+        await using var transaction = await VehicleWriteTransaction.BeginAsync(_dbContext, request.VehicleId);
         var vehicle = await GetBookableVehicleAsync(request.VehicleId);
 
         if (await HasActiveOverlapAsync(request.VehicleId, startUtc, endUtc))
@@ -66,6 +67,7 @@ public class BookingService : IBookingService
 
         _dbContext.Bookings.Add(booking);
         await _dbContext.SaveChangesAsync();
+        if (transaction != null) await transaction.CommitAsync();
 
         try
         {
@@ -113,6 +115,12 @@ public class BookingService : IBookingService
             throw new ValidationException("Booking and customer identifiers are required.");
         }
 
+        var vehicleId = await _dbContext.Bookings.AsNoTracking()
+            .Where(b => b.Id == id && b.CustomerId == customerId)
+            .Select(b => (Guid?)b.VehicleId).SingleOrDefaultAsync();
+        if (vehicleId == null) return null;
+
+        await using var transaction = await VehicleWriteTransaction.BeginAsync(_dbContext, vehicleId.Value);
         var booking = await _dbContext.Bookings
             .Include(b => b.Vehicle)
             .ThenInclude(v => v!.Category)
@@ -136,6 +144,7 @@ public class BookingService : IBookingService
         booking.Status = BookingStatus.Cancelled;
         booking.UpdatedAt = DateTime.UtcNow;
         await _dbContext.SaveChangesAsync();
+        if (transaction != null) await transaction.CommitAsync();
 
         try
         {

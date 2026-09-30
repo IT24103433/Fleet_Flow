@@ -9,6 +9,65 @@ namespace FleetService.Tests;
 
 public class MaintenanceServiceTests
 {
+    [Theory]
+    [InlineData(BookingStatus.Pending, true, true)]
+    [InlineData(BookingStatus.Confirmed, true, true)]
+    [InlineData(BookingStatus.Cancelled, true, false)]
+    [InlineData(BookingStatus.Completed, true, false)]
+    [InlineData(BookingStatus.Pending, false, false)]
+    [InlineData(BookingStatus.Confirmed, false, false)]
+    public async Task Scheduling_RespectsUnfinishedBookingRule(BookingStatus status, bool futureEnd, bool blocks)
+    {
+        await using var context = CreateContext();
+        var vehicle = await SeedVehicleAsync(context);
+        context.Bookings.Add(new Booking
+        {
+            Id = Guid.NewGuid(), CustomerId = Guid.NewGuid(), VehicleId = vehicle.Id,
+            StartDateTime = DateTime.UtcNow.AddDays(-2),
+            EndDateTime = DateTime.UtcNow.AddDays(futureEnd ? 1 : -1), Status = status
+        });
+        await context.SaveChangesAsync();
+        var service = new MaintenanceService(context);
+        if (blocks)
+        {
+            await Assert.ThrowsAsync<DuplicateException>(() => service.CreateMaintenanceRecordAsync(Guid.NewGuid(), ValidRequest(vehicle.Id, 10)));
+            Assert.Empty(context.MaintenanceRecords);
+            Assert.Equal(VehicleStatus.Available, vehicle.Status);
+        }
+        else
+        {
+            await service.CreateMaintenanceRecordAsync(Guid.NewGuid(), ValidRequest(vehicle.Id));
+            Assert.Single(context.MaintenanceRecords);
+        }
+    }
+
+    [Theory]
+    [InlineData(VehicleStatus.Available)]
+    [InlineData(VehicleStatus.Maintenance)]
+    [InlineData(VehicleStatus.InUse)]
+    public async Task Reactivation_RequiresRetiredVehicle(VehicleStatus status)
+    {
+        await using var context = CreateContext();
+        var vehicle = await SeedVehicleAsync(context, status);
+        await Assert.ThrowsAsync<ValidationException>(() => new VehicleService(context).ReactivateVehicleAsync(vehicle.Id));
+        Assert.Equal(status, vehicle.Status);
+    }
+
+    [Fact]
+    public async Task Reactivation_RejectsActiveMaintenance_ThenAllowsAfterCancellation()
+    {
+        await using var context = CreateContext();
+        var vehicle = await SeedVehicleAsync(context);
+        var maintenance = new MaintenanceService(context);
+        var record = await maintenance.CreateMaintenanceRecordAsync(Guid.NewGuid(), ValidRequest(vehicle.Id));
+        var vehicles = new VehicleService(context);
+        await vehicles.RetireVehicleAsync(vehicle.Id);
+        await Assert.ThrowsAsync<ValidationException>(() => vehicles.ReactivateVehicleAsync(vehicle.Id));
+        await maintenance.UpdateMaintenanceStatusAsync(record.Id, MaintenanceStatus.CANCELLED);
+        Assert.Equal(VehicleStatus.Retired, vehicle.Status);
+        Assert.Equal(VehicleStatus.Available, (await vehicles.ReactivateVehicleAsync(vehicle.Id)).Status);
+    }
+
     [Fact]
     public async Task CreateRecord_PersistsScheduledRecordAndMakesVehicleUnavailable()
     {

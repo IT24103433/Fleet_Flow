@@ -178,6 +178,7 @@ public class MaintenanceService : IMaintenanceService
             throw new Exceptions.ValidationException("Maintenance date and time must be current or in the future.");
         }
 
+        await using var transaction = await VehicleWriteTransaction.BeginAsync(_dbContext, request.VehicleId, cancellationToken);
         var vehicle = await _dbContext.Vehicles
             .FirstOrDefaultAsync(v => v.Id == request.VehicleId, cancellationToken);
         if (vehicle == null)
@@ -199,6 +200,14 @@ public class MaintenanceService : IMaintenanceService
             throw new Exceptions.DuplicateException("This vehicle already has an active maintenance record.");
         }
 
+        var now = DateTime.UtcNow;
+        if (await _dbContext.Bookings.AnyAsync(booking => booking.VehicleId == vehicle.Id &&
+                (booking.Status == BookingStatus.Pending || booking.Status == BookingStatus.Confirmed) &&
+                booking.EndDateTime > now, cancellationToken))
+        {
+            throw new Exceptions.DuplicateException("Cannot schedule maintenance while this vehicle has an active or future rental booking.");
+        }
+
         var record = new MaintenanceRecord
         {
             Id = Guid.NewGuid(),
@@ -217,6 +226,7 @@ public class MaintenanceService : IMaintenanceService
         vehicle.UpdatedAt = DateTime.UtcNow;
         _dbContext.MaintenanceRecords.Add(record);
         await _dbContext.SaveChangesAsync(cancellationToken);
+        if (transaction != null) await transaction.CommitAsync(cancellationToken);
 
         TryDispatch(new MaintenanceScheduledEvent
         {
@@ -278,6 +288,11 @@ public class MaintenanceService : IMaintenanceService
         }
 
         ValidateRecordDetails(request.ServiceInformation, request.Details, request.Cost);
+        var vehicleId = await _dbContext.MaintenanceRecords.AsNoTracking()
+            .Where(item => item.Id == id).Select(item => (Guid?)item.VehicleId)
+            .SingleOrDefaultAsync(cancellationToken);
+        if (vehicleId == null) return null;
+        await using var transaction = await VehicleWriteTransaction.BeginAsync(_dbContext, vehicleId.Value, cancellationToken);
         var record = await _dbContext.MaintenanceRecords
             .Include(item => item.Vehicle)
             .FirstOrDefaultAsync(item => item.Id == id, cancellationToken);
@@ -291,6 +306,7 @@ public class MaintenanceService : IMaintenanceService
         record.Cost = request.Cost;
         record.UpdatedAt = DateTime.UtcNow;
         await _dbContext.SaveChangesAsync(cancellationToken);
+        if (transaction != null) await transaction.CommitAsync(cancellationToken);
 
         return MapRecord(record);
     }
@@ -305,6 +321,11 @@ public class MaintenanceService : IMaintenanceService
             throw new Exceptions.ValidationException("Invalid maintenance status.");
         }
 
+        var vehicleId = await _dbContext.MaintenanceRecords.AsNoTracking()
+            .Where(item => item.Id == id).Select(item => (Guid?)item.VehicleId)
+            .SingleOrDefaultAsync(cancellationToken);
+        if (vehicleId == null) return null;
+        await using var transaction = await VehicleWriteTransaction.BeginAsync(_dbContext, vehicleId.Value, cancellationToken);
         var record = await _dbContext.MaintenanceRecords
             .Include(item => item.Vehicle)
             .FirstOrDefaultAsync(item => item.Id == id, cancellationToken);
@@ -349,6 +370,7 @@ public class MaintenanceService : IMaintenanceService
         }
 
         await _dbContext.SaveChangesAsync(cancellationToken);
+        if (transaction != null) await transaction.CommitAsync(cancellationToken);
         TryDispatch(new MaintenanceStatusChangedEvent
         {
             EventId = Guid.NewGuid(),

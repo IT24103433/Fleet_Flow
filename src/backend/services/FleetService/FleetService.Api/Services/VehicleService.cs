@@ -370,6 +370,7 @@ public class VehicleService : IVehicleService
             throw new ValidationException("Vehicle request payload cannot be null.");
         }
 
+        await using var transaction = await VehicleWriteTransaction.BeginAsync(_dbContext, id);
         var vehicle = await _dbContext.Vehicles
             .Include(v => v.Category)
             .FirstOrDefaultAsync(v => v.Id == id);
@@ -479,6 +480,7 @@ public class VehicleService : IVehicleService
         vehicle.UpdatedAt = DateTime.UtcNow;
 
         await _dbContext.SaveChangesAsync();
+        if (transaction != null) await transaction.CommitAsync();
 
         if (_kafkaProducer != null)
         {
@@ -520,6 +522,7 @@ public class VehicleService : IVehicleService
             throw new ValidationException($"Invalid vehicle status '{request.Status}'. Supported statuses are: {string.Join(", ", Enum.GetNames<VehicleStatus>())}.");
         }
 
+        await using var transaction = await VehicleWriteTransaction.BeginAsync(_dbContext, id);
         var vehicle = await _dbContext.Vehicles
             .Include(v => v.Category)
             .FirstOrDefaultAsync(v => v.Id == id);
@@ -550,6 +553,7 @@ public class VehicleService : IVehicleService
         vehicle.UpdatedAt = DateTime.UtcNow;
 
         await _dbContext.SaveChangesAsync();
+        if (transaction != null) await transaction.CommitAsync();
 
         if (_kafkaProducer != null)
         {
@@ -581,6 +585,7 @@ public class VehicleService : IVehicleService
 
     public async Task<VehicleResponse> RetireVehicleAsync(Guid id, string? reason = null)
     {
+        await using var transaction = await VehicleWriteTransaction.BeginAsync(_dbContext, id);
         var vehicle = await _dbContext.Vehicles
             .Include(v => v.Category)
             .Include(v => v.Images)
@@ -600,6 +605,7 @@ public class VehicleService : IVehicleService
         vehicle.UpdatedAt = DateTime.UtcNow;
 
         await _dbContext.SaveChangesAsync();
+        if (transaction != null) await transaction.CommitAsync();
 
         if (_kafkaProducer != null)
         {
@@ -631,6 +637,7 @@ public class VehicleService : IVehicleService
 
     public async Task<VehicleResponse> ReactivateVehicleAsync(Guid id)
     {
+        await using var transaction = await VehicleWriteTransaction.BeginAsync(_dbContext, id);
         var vehicle = await _dbContext.Vehicles
             .Include(v => v.Category)
             .Include(v => v.Images)
@@ -641,10 +648,22 @@ public class VehicleService : IVehicleService
             throw new NotFoundException($"Vehicle with ID '{id}' was not found.");
         }
 
+        if (vehicle.Status != VehicleStatus.Retired)
+        {
+            throw new ValidationException("Only a retired vehicle can be reactivated.");
+        }
+
+        if (await _dbContext.MaintenanceRecords.AnyAsync(record => record.VehicleId == id &&
+                (record.Status == MaintenanceStatus.SCHEDULED || record.Status == MaintenanceStatus.IN_PROGRESS)))
+        {
+            throw new ValidationException("Cannot reactivate a vehicle while it has an active maintenance record.");
+        }
+
         vehicle.Status = VehicleStatus.Available;
         vehicle.UpdatedAt = DateTime.UtcNow;
 
         await _dbContext.SaveChangesAsync();
+        if (transaction != null) await transaction.CommitAsync();
 
         if (_kafkaProducer != null)
         {
