@@ -50,10 +50,10 @@ jobs:
         run: dotnet build FleetFlow.sln --no-restore --configuration Release
 
       - name: Publish IdentityService Artifacts
-        run: dotnet publish src/backend/services/IdentityService/IdentityService.Api/IdentityService.Api.csproj --configuration Release --no-build --output ./artifacts/identity-service
+        run: dotnet publish src/backend/services/IdentityService/IdentityService.Api/IdentityService.Api.csproj --configuration Release --no-restore --output ./artifacts/identity-service
 
       - name: Publish FleetService Artifacts
-        run: dotnet publish src/backend/services/FleetService/FleetService.Api/FleetService.Api.csproj --configuration Release --no-build --output ./artifacts/fleet-service
+        run: dotnet publish src/backend/services/FleetService/FleetService.Api/FleetService.Api.csproj --configuration Release --no-restore --output ./artifacts/fleet-service
 
       - name: Upload Backend Service Artifacts
         uses: actions/upload-artifact@v4
