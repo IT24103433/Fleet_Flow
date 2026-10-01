@@ -7,7 +7,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-deploy:
+  # =========================================================================
+  # STAGE 1: BUILD & PACKAGE
+  # Installs dependencies, compiles Vite React client, prepares server bundle
+  # =========================================================================
+  build:
+    name: "Frontend : Build & Package"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -34,9 +39,31 @@ jobs:
           cp package.deploy.json dist/package.json
         working-directory: src/frontend
 
+      - name: Upload frontend deployment package
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-deploy-package
+          path: src/frontend/dist
+          retention-days: 7
+
+  # =========================================================================
+  # STAGE 2: DEPLOY TO AZURE
+  # Isolated deployment stage using the verified production package
+  # =========================================================================
+  deploy:
+    name: "Frontend : Deploy to Azure"
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Download frontend package
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-deploy-package
+          path: ./dist
+
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ secrets.AZURE_FRONTEND_APP_NAME }}
           publish-profile: ${{ secrets.AZURE_FRONTEND_PUBLISH_PROFILE }}
-          package: src/frontend/dist
+          package: ./dist
