@@ -7,9 +7,13 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-deploy:
+  # =========================================================================
+  # STAGE 1: BUILD & PACKAGE
+  # Compiles and publishes self-contained Linux binary
+  # =========================================================================
+  build:
+    name: "IdentityService : Build & Package"
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -33,15 +37,40 @@ jobs:
       - name: Build
         run: dotnet build src/backend/services/IdentityService/IdentityService.Api/IdentityService.Api.csproj --configuration Release -r linux-x64 --no-restore
 
-      - name: Publish
-        run: dotnet publish src/backend/services/IdentityService/IdentityService.Api/IdentityService.Api.csproj --configuration Release -r linux-x64 --self-contained true --output ${{ runner.temp }}/identity-app
+      - name: Publish self-contained binary
+        run: dotnet publish src/backend/services/IdentityService/IdentityService.Api/IdentityService.Api.csproj --configuration Release -r linux-x64 --self-contained true --output ./publish/identity-app
 
       - name: Ensure Linux execution permissions
-        run: chmod +x ${{ runner.temp }}/identity-app/IdentityService.Api
+        run: chmod +x ./publish/identity-app/IdentityService.Api
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: identity-service-app
+          path: ./publish/identity-app
+          retention-days: 7
+
+  # =========================================================================
+  # STAGE 2: DEPLOY TO AZURE
+  # Isolated deployment stage using the verified build package
+  # =========================================================================
+  deploy:
+    name: "IdentityService : Deploy to Azure"
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: identity-service-app
+          path: ./identity-app
+
+      - name: Ensure executable permission after artifact download
+        run: chmod +x ./identity-app/IdentityService.Api
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ secrets.AZURE_IDENTITY_SERVICE_APP_NAME }}
           publish-profile: ${{ secrets.AZURE_IDENTITY_SERVICE_PUBLISH_PROFILE }}
-          package: ${{ runner.temp }}/identity-app
+          package: ./identity-app
