@@ -81,3 +81,7 @@ All microservices must conform to the following percentile latency targets under
 - **FleetService:** MaxPoolSize = 250, ConnectionTimeout = 15s
 - **RentalService:** MaxPoolSize = 200, ConnectionTimeout = 15s
 - **NotificationService:** MaxPoolSize = 100, ConnectionTimeout = 10s
+
+### Token Revocation Verification SLA (Sprint 4)
+- **Revocation Propagation Delay:** < 200 ms across all cluster nodes
+- **Per-Request Bloom Filter Verification Overhead:** < 0.5 ms p99

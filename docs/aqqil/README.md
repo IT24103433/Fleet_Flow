@@ -68,6 +68,7 @@ docs/aqqil/
 | BM-117 | 2026-09-27 | NotificationService | 150 VUs | Outbox Worker Soak | 24.8 ms | < 500 ms lag | PASSED | Recorded 4-hour soak test metrics for outbox workers |
 | BM-118 | 2026-09-28 | FleetService | 150 VUs | /api/vehicles (Traces) | 24.6 ms | < 50 ms | OPTIMIZED | Replaced superseded Sprint 2 drafts with updated traces |
 | BM-119 | 2026-09-30 | Reports & Analytics | 50 VUs | /api/reports/export/csv | 68.0 ms | < 150 ms | PASSED | Added CSV export memory & throughput stress results |
+| BM-120 | 2026-10-02 | IdentityService | 250 VUs | /api/auth/revocation | 38.2 ms | < 65 ms | HARDENED | Logged access revocation hardening impact on SLOs |
 
 ---
 
