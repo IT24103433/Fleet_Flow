@@ -70,6 +70,7 @@ docs/aqqil/
 | BM-119 | 2026-09-30 | Reports & Analytics | 50 VUs | /api/reports/export/csv | 68.0 ms | < 150 ms | PASSED | Added CSV export memory & throughput stress results |
 | BM-120 | 2026-10-02 | IdentityService | 250 VUs | /api/auth/revocation | 38.2 ms | < 65 ms | HARDENED | Logged access revocation hardening impact on SLOs |
 | BM-121 | 2026-10-04 | RentalService | 250 VUs | /api/bookings (Decoupled) | N/A | < 130 ms | REFACTORED | Pruned legacy pre-extraction booking payloads |
+| BM-122 | 2026-10-05 | All 4 Services | 500 VUs | Full Platform Peak Stress | 52.6 ms | < 75 ms | PASSED | Recorded 500 VU peak load verification |
 
 ---
 
