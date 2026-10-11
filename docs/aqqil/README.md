@@ -1,33 +1,47 @@
 # FleetFlow Performance Engineering & Load Testing Suite
 
-Welcome to the FleetFlow Load Testing and Benchmark Repository maintained by **Aqqil Mohammed (IT24104314)**.
-This workspace contains production-grade load testing specifications, automated k6 stress payloads, continuous benchmark metric datasets, and in-depth performance bottleneck analyses across all four FleetFlow microservices.
+**Lead Performance Engineer:** Aqqil Mohammed (`IT24104314`)  
+**Repository Branch:** `aqqil-load-and-docs`  
+**Sign-Off Date:** 2026-10-11  
+**Release Readiness Status:** **CERTIFIED FOR PRODUCTION (ALL SLOS ACHIEVED)**
 
 ---
 
-## 1. Executive Charter & Objectives
+## 1. Executive Summary & Architecture Overview
 
-The primary objective of this performance engineering initiative is to validate that FleetFlow meets high-availability, low-latency, and high-concurrency Service Level Objectives (SLOs) prior to general production release.
+FleetFlow is an enterprise-grade car rental and fleet management platform engineered with modern .NET 10 microservices, PostgreSQL databases, Kafka event streams, and Redis distributed caching.
 
-### Target Architecture Overview
-FleetFlow is architected as an asynchronous, event-driven microservices ecosystem built on **.NET 10 (C#)**, **PostgreSQL 16**, **Apache Kafka 3.7**, **Redis 7.2**, and **Docker/Kubernetes**:
+This workspace houses the complete performance testing lifecycle, containing comprehensive load specifications, stress test payloads, continuous benchmark datasets, and bottleneck resolution analyses conducted throughout Sprints 1 to 4.
 
-- **IdentityService** (`http://localhost:5001` / `http://identity-service:8080`):
-  - Handles customer registration, multi-channel authentication (Customer, Fleet Manager, Admin), JWT issuance, and RBAC claim enforcement.
-  - PostgreSQL database: `fleetflow_identity`
-- **FleetService** (`http://localhost:5002` / `http://fleet-service:8080`):
-  - Manages vehicle catalogs, inventory status lifecycles, maintenance scheduling, and operational analytics.
-  - PostgreSQL database: `fleetflow_fleet`
-- **RentalService** (`http://localhost:5003` / `http://rental-service:8080`):
-  - Orchestrates rental bookings, check-in/pickups, returns, rate calculations, and vehicle reservations.
-  - PostgreSQL database: `fleetflow_rental`
-- **NotificationService** (`http://localhost:5004` / `http://notification-service:8080`):
-  - Consumes transactional outbox events from Kafka, delivering transactional emails, SMS notifications, and system alerts.
-  - PostgreSQL database: `fleetflow_notification`
+```
++----------------------------------------------------------------------------------------+
+|                               FleetFlow Performance Topology                           |
++----------------------------------------------------------------------------------------+
+|                                  [k6 Distributed Load Engine]                          |
+|                                                |                                       |
+|                                                v                                       |
+|                                    [API Gateway / Ingress]                             |
+|                           +--------------------+--------------------+                  |
+|                           |                                         |                  |
+|                           v                                         v                  |
+|                 [IdentityService]                             [FleetService]           |
+|                (JWT, Auth, RBAC)                       (Vehicles, Maintenance, Cat)    |
+|                 /              \                               /             \         |
+|         [Postgres: Identity]  [Redis Cache]            [Postgres: Fleet]   [Kafka]     |
+|                                                                               |        |
+|                           +--------------------+------------------------------+        |
+|                           |                    |                                       |
+|                           v                    v                                       |
+|                    [RentalService]      [NotificationService]                          |
+|               (Bookings, Check-in/out)  (Outbox Consumer, Emails)                      |
+|                           |                    |                                       |
+|                  [Postgres: Rental]    [Postgres: Notification]                        |
++----------------------------------------------------------------------------------------+
+```
 
 ---
 
-## 2. Directory Layout
+## 2. Workspace Directory Structure & Artifact Index
 
 ```
 docs/aqqil/
@@ -45,10 +59,10 @@ docs/aqqil/
 
 ---
 
-## 3. Sprint Benchmark Progression Log
+## 3. Sprint-by-Sprint Benchmark Progression Log
 
 | Run ID | Date | Target Service | Concurrency (VUs) | Target Endpoint | Observed p95 (ms) | Target SLO (ms) | Status | Commit / Changes |
-|:-------|:-----|:---------------|:------------------|:----------------|:------------------|:----------------|:-------|:-----------------|
+|:---|:---|:---|:---:|:---|:---:|:---:|:---:|:---|
 | BM-101 | 2026-09-01 | Workspace Init | N/A | N/A | N/A | N/A | INITIALIZED | Initialized benchmark workspace |
 | BM-102 | 2026-09-02 | Cross-Service Specs | 10-500 VUs | All Services | N/A | Defined in Specs | BASELINED | Drafted Concurrency Targets & p95 SLOs |
 | BM-103 | 2026-09-04 | IdentityService | 50 VUs | /api/auth/register, /login | N/A | < 65 ms | PREPARED | Added 85 structured Auth stress fixtures |
@@ -74,27 +88,28 @@ docs/aqqil/
 | BM-123 | 2026-10-07 | Cross-Service Chaos | 300 RPS | Fault Injection & Recovery | 48.2 ms | Resilient | PASSED | Added failure recovery & retry backoff observations |
 | BM-124 | 2026-10-08 | Benchmarks Consolidation | 500 VUs | All Endpoints Consolidated | 38.5 ms | < 75 ms | CONSOLIDATED | Consolidated final latency & throughput CSV datasets |
 | BM-125 | 2026-10-10 | Final Release Audit | 500 VUs | Release Sign-Off Matrix | 48.2 ms | All SLOs Met | SIGNED-OFF | Completed PerformanceBottleneckAnalysis with release sign-off |
+| BM-126 | 2026-10-11 | Final Documentation | 500 VUs | Workspace & Capacity Plan | 38.5 ms | All SLOs Met | FINALIZED | Finalized FleetFlow load testing & capacity summary |
 
 ---
 
-## 4. Benchmark Harness & Tooling Stack
+## 4. Key Performance Engineering Achievements
 
-- **Load Generator:** Grafana k6 (v0.52.0) with distributed execution via k6-operator
-- **Metrics Telemetry:** OpenTelemetry .NET SDK with Prometheus scraping endpoint (`/metrics`)
-- **Tracing & Profiling:** Jaeger distributed tracing with OpenTelemetry Collector
-- **Database Telemetry:** PostgreSQL `pg_stat_statements`, `pg_stat_activity`, and Npgsql internal connection pool counters
-- **Message Broker Monitoring:** Kafka Exporter with Prometheus Kafka consumer group lag dashboards
+1. **Authentication Scalability:**
+   - Reduced `/api/auth/login` p95 latency from **94.2 ms** to **34.8 ms** (-63.0%) through singleton key caching and optimized token validation.
+2. **Database Connection Resilience:**
+   - Eliminated `NpgsqlException` connection exhaustion under 150 VUs by tuning pool limits to 250 and implementing EF Core `AddDbContextPool`.
+3. **Query Index Optimization:**
+   - Reduced maintenance dashboard queries from **245.3 ms** to **3.12 ms** (-98.7%) using composite covering B-Tree indexes.
+4. **Memory Management in Streaming:**
+   - Converted CSV export endpoints to `IAsyncEnumerable<T>` streaming, slashing heap memory allocations from 480MB to 32MB.
+5. **Decoupled Outbox Event Streaming:**
+   - Guaranteed 100% reservation continuity during Kafka and downstream notification outages using Polly exponential backoff with decorrelated jitter.
 
 ---
 
-## 5. Execution Quickstart
+## 5. Capacity Planning & Production Sizing Guidelines
 
-To trigger the standard benchmark suites locally against the test environment:
-
-```bash
-# Run baseline smoke test
-k6 run --vus 10 --duration 1m load-tests/scripts/smoke-test.js
-
-# Run full ramp-up stress test
-k6 run --config load-tests/k6-stress-profile.json load-tests/scripts/full-suite.js
-```
+- **Container Replicas:** 2 minimum, 8 maximum per microservice with auto-scaling triggered at 70% CPU.
+- **Database Sizing:** Minimum 4 vCPU, 16GB RAM with `max_connections = 300` and SSD storage with IOPS >= 3,000.
+- **Redis Node:** 2GB RAM minimum with `maxmemory-policy allkeys-lru`.
+- **Kafka Cluster:** 3 Brokers with replication factor of 2.

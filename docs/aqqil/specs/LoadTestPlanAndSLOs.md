@@ -85,3 +85,11 @@ All microservices must conform to the following percentile latency targets under
 ### Token Revocation Verification SLA (Sprint 4)
 - **Revocation Propagation Delay:** < 200 ms across all cluster nodes
 - **Per-Request Bloom Filter Verification Overhead:** < 0.5 ms p99
+
+---
+
+## 5. Formal Engineering Sign-Off
+
+- **Lead Performance Engineer:** Aqqil Mohammed (IT24104314)
+- **Status:** APPROVED & CERTIFIED
+- **Date:** 2026-10-11
