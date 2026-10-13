@@ -28,3 +28,8 @@ export function createOutboxClient({ baseUrl = FLEET_API_URL, fetchImpl = global
   };
 }
 export const outboxClient = createOutboxClient();
+const rentalUrl = import.meta.env?.VITE_RENTAL_API_URL;
+export const deliverySources = rentalUrl ? [
+  { value: 'fleet', label: 'Fleet · maintenance', client: outboxClient },
+  { value: 'rental', label: 'Rental · bookings', client: createOutboxClient({ baseUrl: rentalUrl }) },
+] : [{ value: 'fleet', label: 'Fleet', client: outboxClient }];

@@ -19,3 +19,5 @@
 .delivery-status-failed { background:#fff0f0; color:#a11e36; }.delivery-status-delivered { background:#edf7f1; color:#246346; }.delivery-status-retry { background:#fff6e8; color:#865911; }
 .delivery-loading { padding:32px 24px; color:#716978; }.delivery-no-action { color:#83778c; font-size:12px; }
 .delivery-replay-context { display:flex; align-items:flex-start; gap:16px; color:#5b1e91; }.delivery-replay-context p { color:#716978; line-height:1.6; margin-bottom:0; }
+
+.delivery-filters { display:flex; align-items:center; gap:20px; }

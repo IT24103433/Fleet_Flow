@@ -48,6 +48,9 @@ services:
     environment:
       <<: *api-environment
       FLEET_DB_NAME: fleetflow_fleet
+      RENTAL_OWNERSHIP: ${RENTAL_OWNERSHIP:-Legacy}
+      RENTAL_MIGRATION_ID: ${RENTAL_MIGRATION_ID:-}
+      INTERNAL_RENTAL_URL: http://rental-service:8080/
       NOTIFICATION_OWNERSHIP: ${NOTIFICATION_OWNERSHIP:-Legacy}
       INTERNAL_NOTIFICATION_URL: http://notification-service:8080/
       SERVICE_AUTH_FLEET_SECRET: ${SERVICE_AUTH_FLEET_SECRET:-}
@@ -64,6 +67,10 @@ services:
     environment:
       <<: *api-environment
       RENTAL_DB_NAME: fleetflow_rental
+      RENTAL_SERVICE_ACTIVE: ${RENTAL_SERVICE_ACTIVE:-false}
+      RENTAL_MIGRATION_ID: ${RENTAL_MIGRATION_ID:-}
+      INTERNAL_FLEET_URL: http://fleet-service:8080/
+      INTERNAL_NOTIFICATION_URL: http://notification-service:8080/
       SERVICE_AUTH_RENTAL_SECRET: ${SERVICE_AUTH_RENTAL_SECRET:-}
     depends_on: [postgres,identity-service]
   notification-service:

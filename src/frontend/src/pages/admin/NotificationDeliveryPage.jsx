@@ -6,7 +6,7 @@ import Button from '../../components/common/Button';
 import Modal from '../../components/common/Modal';
 import EmptyState from '../../components/common/EmptyState';
 import { BentoGrid, BentoCard } from '../../components/common/BentoGrid';
-import { outboxClient } from '../../services/notificationOutboxService';
+import { deliverySources } from '../../services/notificationOutboxService';
 import './NotificationDeliveryPage.css';
 const formatDate = value => value ? new Date(value).toLocaleString() : '—';
 const eventLabel = value => ({ BookingCreatedEvent: 'Booking created', BookingCancelledEvent: 'Booking cancelled',
@@ -14,6 +14,8 @@ const eventLabel = value => ({ BookingCreatedEvent: 'Booking created', BookingCa
 export default function NotificationDeliveryPage() {
   const [rows, setRows] = useState([]);
   const [status, setStatus] = useState('');
+  const [source, setSource] = useState(deliverySources[0].value);
+  const client = deliverySources.find(item => item.value === source).client;
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -26,18 +28,18 @@ export default function NotificationDeliveryPage() {
   useEffect(() => { mounted.current = true; return () => { mounted.current = false; }; }, []);
   useEffect(() => {
     const controller = new AbortController();
-    outboxClient.getEvents(status, controller.signal).then(data => {
+    client.getEvents(status, controller.signal).then(data => {
       if (!controller.signal.aborted) { setRows(data); setError(''); }
     }).catch(e => { if (!controller.signal.aborted) { setRows([]); setError(e.message); } })
       .finally(() => { if (!controller.signal.aborted) setLoading(false); });
     return () => controller.abort();
-  }, [status, revision]);
+  }, [status, revision, client]);
   const refresh = (clearMessage = false) => { if (clearMessage) setSuccess(''); setLoading(true); setRevision(value => value + 1); };
   const replay = async () => {
     if (!selected || submittingRef.current) return;
     submittingRef.current = true; setSubmitting(true); setDialogError(''); setSuccess('');
     try {
-      await outboxClient.replay(selected.id);
+      await client.replay(selected.id);
       if (mounted.current) { setSelected(null); setSuccess('Event queued for another delivery attempt.'); refresh(); }
     } catch (e) { if (mounted.current) setDialogError(e.message); }
     finally { submittingRef.current = false; if (mounted.current) setSubmitting(false); }
@@ -55,10 +57,15 @@ export default function NotificationDeliveryPage() {
         <strong className="workspace-metric">{loading || error ? '—' : value}</strong></BentoCard>)}
     </BentoGrid>
     <div className="delivery-table-panel"><div className="delivery-toolbar"><div><h2>Delivery queue</h2>
-      <p>Latest 100 events. Counts reflect the current view.</p></div><label htmlFor="delivery-filter">Status
+      <p>Latest 100 events. Counts reflect the selected source and current view.</p></div>
+        <div className="delivery-filters">{deliverySources.length > 1 && <label htmlFor="delivery-source">Source
+          <select id="delivery-source" value={source} disabled={submitting} onChange={e => {
+            setLoading(true); setRows([]); setError(''); setSuccess(''); setSelected(null); setSource(e.target.value);
+          }}>{deliverySources.map(item => <option key={item.value} value={item.value}>{item.label}</option>)}</select>
+        </label>}<label htmlFor="delivery-filter">Status
         <select id="delivery-filter" value={status} disabled={submitting} onChange={e => { setLoading(true); setSuccess(''); setStatus(e.target.value); }}>
           <option value="">All statuses</option>{['Pending', 'Retry', 'Failed', 'Delivered'].map(value => <option key={value}>{value}</option>)}
-        </select></label></div>
+        </select></label></div></div>
       {loading ? <p className="delivery-loading" role="status">Loading delivery records…</p> : error ?
         <EmptyState title="Delivery records unavailable" description="Refresh when the service is available. No stale records are displayed." /> : !rows.length ?
           <EmptyState title="No delivery events in this view" description="New booking and maintenance events will appear after their business transaction is saved." /> :
