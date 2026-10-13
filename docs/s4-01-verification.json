@@ -1,0 +1,128 @@
+{
+  "story": "S4-01",
+  "points": 3,
+  "baseCommit": "da8f1699e090f8161000ad660e996565ce09e645",
+  "backend": {
+    "passed": 566,
+    "failed": 0,
+    "skipped": 0,
+    "assemblies": {
+      "RentalService.Tests.dll": {
+        "passed": 33,
+        "failed": 0,
+        "total": 33
+      },
+      "IdentityService.Tests.dll": {
+        "passed": 55,
+        "failed": 0,
+        "total": 55
+      },
+      "FleetFlow.ServiceFoundation.Tests.dll": {
+        "passed": 37,
+        "failed": 0,
+        "total": 37
+      },
+      "FleetFlow.IdentityService.Tests.dll": {
+        "passed": 101,
+        "failed": 0,
+        "total": 101
+      },
+      "FleetService.Tests.dll": {
+        "passed": 251,
+        "failed": 0,
+        "total": 251
+      },
+      "FleetFlow.VehicleService.Tests.dll": {
+        "passed": 69,
+        "failed": 0,
+        "total": 69
+      },
+      "NotificationService.Tests.dll": {
+        "passed": 20,
+        "failed": 0,
+        "total": 20
+      }
+    }
+  },
+  "frontend": {
+    "passed": 140,
+    "failed": 0,
+    "skipped": 0,
+    "lint": "passed",
+    "build": "passed"
+  },
+  "bundle": {
+    "definition": "Entry plus recursively static imports, uncompressed; lazy routes reported separately.",
+    "entryBytes": 308768,
+    "budgetBytes": 350000,
+    "lazy": {
+      "LandingPage": {
+        "ownBytes": 131010,
+        "additionalStaticClosureBytes": 142376
+      },
+      "NotificationDeliveryPage": {
+        "ownBytes": 10668,
+        "additionalStaticClosureBytes": 15793
+      },
+      "RentalQueuePage": {
+        "ownBytes": 4454,
+        "additionalStaticClosureBytes": 8369
+      },
+      "RentalRecordPage": {
+        "ownBytes": 10047,
+        "additionalStaticClosureBytes": 14837
+      }
+    },
+    "passes": true
+  },
+  "design": {
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "staffAndCustomerNoHorizontalOverflow": true,
+    "stableControls": true,
+    "recordReload": "passed",
+    "screenshots": [
+      "s4-pickup-active-1440.jpg",
+      "s4-pickup-confirm-1440.jpg",
+      "s4-pickup-customer-1440.jpg",
+      "s4-pickup-form-1440.jpg",
+      "s4-pickup-queue-1440.jpg"
+    ]
+  },
+  "rehearsal": {
+    "legacyBookingWrites": 0,
+    "isolated": true,
+    "queueCompatibility": true,
+    "pickupNotificationCount": 1,
+    "activeCancellationRejected": 409,
+    "customerPickupRejected": 403,
+    "repeatRejected": 409,
+    "vehicleStatus": "InUse",
+    "pickupActive": true,
+    "cleanedUp": true
+  },
+  "backups": {
+    "restoreVerified": true,
+    "authAndFleetUnchanged": true,
+    "uploadsUnchanged": true,
+    "uploadFiles": 5
+  },
+  "release": {
+    "defaults": "Legacy/inactive preserved",
+    "deployed": false,
+    "remainingStories": [
+      "S4-02",
+      "S4-03",
+      "S4-04",
+      "S4-05",
+      "S4-06",
+      "S4-08",
+      "S4-09",
+      "S4-10",
+      "S4-11",
+      "S4-12"
+    ]
+  }
+}

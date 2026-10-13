@@ -24,6 +24,15 @@ public sealed class InboxTests
             Assert.False(await new InboxService(db).ReadAsync(Guid.NewGuid(),id,default));
         }
     }
+    [Fact]public async Task PickupNotificationIsDeduplicatedAndDeliveredOnlyToItsCustomer()
+    {
+        await using var db=Database();var item=new RentalStartedEvent{EventId=Guid.NewGuid(),OccurredAt=DateTime.UtcNow,RentalId=Guid.NewGuid(),BookingId=Guid.NewGuid(),VehicleId=Guid.NewGuid(),CustomerId=Guid.NewGuid()};
+        var parsed=FleetFlow.Contracts.NotificationEventRendering.Deserialize(System.Text.Json.JsonSerializer.Serialize(item,FleetFlow.Contracts.NotificationEventRendering.JsonOptions));
+        var processor=new NotificationEventProcessor(db);Assert.True(await processor.ProcessAsync(parsed));Assert.False(await processor.ProcessAsync(parsed));
+        var row=Assert.Single(await new InboxService(db).GetInboxAsync(item.CustomerId,default));Assert.Equal("Rental started",row.Title);Assert.Equal("Rental",row.Category);Assert.Equal(item.RentalId,row.RelatedEntityId);
+        Assert.Empty(await new InboxService(db).GetInboxAsync(Guid.NewGuid(),default));
+        await Assert.ThrowsAsync<ArgumentException>(()=>processor.ProcessAsync(item with{EventId=Guid.NewGuid(),RentalId=Guid.Empty}));
+    }
     [Fact]public async Task ReusedEventIdWithDifferentPayloadIsRejected()
     {
         await using var db=Database();var item=Event();var processor=new NotificationEventProcessor(db);

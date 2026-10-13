@@ -6,5 +6,6 @@
     <Content Include="../../src/backend/services/NotificationService/NotificationService.Api/Database/001_foundation.sql" Link="migrations/notifications/001_foundation.sql" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
   <Content Include="../../src/backend/services/NotificationService/NotificationService.Api/Database/002_notifications.sql" Link="migrations/notifications/002_notifications.sql" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
     <Content Include="../../src/backend/services/RentalService/RentalService.Api/Database/002_bookings.sql" Link="migrations/rental/002_bookings.sql" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
-  </ItemGroup>
+  <Content Include="../../src/backend/services/RentalService/RentalService.Api/Database/003_pickup.sql" Link="migrations/rental/003_pickup.sql" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+</ItemGroup>
 </Project>

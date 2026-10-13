@@ -17,6 +17,7 @@ public static class NotificationEventRendering
         var type = discriminator.GetString();
         return type switch
         {
+            nameof(RentalStartedEvent) => JsonSerializer.Deserialize<RentalStartedEvent>(payload, JsonOptions)!,
             nameof(BookingCreatedEvent) => JsonSerializer.Deserialize<BookingCreatedEvent>(payload, JsonOptions)!,
             nameof(BookingCancelledEvent) => JsonSerializer.Deserialize<BookingCancelledEvent>(payload, JsonOptions)!,
             nameof(MaintenanceScheduledEvent) => JsonSerializer.Deserialize<MaintenanceScheduledEvent>(payload, JsonOptions)!,
@@ -35,6 +36,11 @@ public static class NotificationEventRendering
         string category, title, message;
         switch (domainEvent)
         {
+            case RentalStartedEvent e:
+                if(e.BookingId==Guid.Empty)throw new ArgumentException("Booking reference is required.");
+                (relatedId, vehicleId, recipients) = (e.RentalId,e.VehicleId,[e.CustomerId]);
+                (category,title,message)=("Rental","Rental started",$"Vehicle pickup for booking {e.BookingId} is recorded. View your rental details for the handover information.");
+                break;
             case BookingCreatedEvent e:
                 (relatedId, vehicleId, recipients) = (e.BookingId, e.VehicleId, [e.CustomerId]);
                 (category, title, message) = ("Booking", "Booking created", $"Booking {e.BookingId} for vehicle {e.VehicleId} was created successfully.");

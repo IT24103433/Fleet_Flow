@@ -49,7 +49,7 @@ export const calculateRentalCost = (startDateTime, endDateTime, dailyRate) => {
   return { totalDays, totalCost };
 };
 
-export const isBookingCancellable = (status) => {
+export const isBookingCancellable = (status, rentalState) => {
   const normalizedStatus = String(status || '').trim().toUpperCase();
-  return normalizedStatus === 'PENDING' || normalizedStatus === 'CONFIRMED';
+  return !rentalState && (normalizedStatus === 'PENDING' || normalizedStatus === 'CONFIRMED');
 };

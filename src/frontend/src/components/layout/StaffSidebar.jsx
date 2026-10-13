@@ -1,3 +1,4 @@
+import { KeyIcon } from '@phosphor-icons/react/dist/csr/Key';
 import { CarProfileIcon } from "@phosphor-icons/react/dist/csr/CarProfile";
 import { CaretDoubleLeftIcon } from "@phosphor-icons/react/dist/csr/CaretDoubleLeft";
 import { CaretDoubleRightIcon } from "@phosphor-icons/react/dist/csr/CaretDoubleRight";
@@ -52,6 +53,8 @@ const StaffSidebar = ({
           <SquaresFourIcon className="nav-item-icon" weight="regular" aria-hidden="true" />
           {!sidebarCollapsed && <span className="nav-item-label">Dashboard</span>}
         </button>
+
+        {canAddVehicle && <button type="button" className={`staff-nav-item ${['rental-queue', 'staff-rental-record'].includes(currentView) ? 'active' : ''}`} onClick={() => onNavigate('rental-queue')} title="Rental handovers" aria-label="Rental handovers"><KeyIcon className="nav-item-icon" weight="regular" aria-hidden="true" />{!sidebarCollapsed && <span className="nav-item-label">Rentals</span>}</button>}
 
         <button type="button" className={`staff-nav-item ${currentView === 'manage-fleet' ? 'active' : ''}`} onClick={() => onNavigate('manage-fleet')} title="Vehicles Inventory">
           <CarProfileIcon className="nav-item-icon" weight="regular" aria-hidden="true" />

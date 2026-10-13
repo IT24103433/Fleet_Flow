@@ -53,6 +53,29 @@ public sealed class RentalApiTests
   using var foreign=f.Browser(Guid.NewGuid());Assert.Equal(HttpStatusCode.NotFound,(await foreign.GetAsync($"/api/bookings/{row.Id}")).StatusCode);
   Assert.Equal(HttpStatusCode.ServiceUnavailable,(await client.GetAsync($"/api/bookings/{row.Id}")).StatusCode);
  }
+ [Fact]public async Task PickupEndpointsEnforceStaffRolesOwnershipAndActiveCancellationRestriction()
+ {
+  using var f=new RentalFactory();var owner=Guid.NewGuid();using var customer=f.Browser(owner);
+  var row=(await (await customer.PostAsJsonAsync("/api/bookings",new CreateBookingRequest{VehicleId=Guid.NewGuid(),StartDateTime=DateTime.UtcNow.AddMinutes(-1),EndDateTime=DateTime.UtcNow.AddHours(2)})).Content.ReadFromJsonAsync<BookingResponse>())!;
+  var path=$"/api/rentals/bookings/{row.Id}/pickup";var request=new PickupRequest{Odometer=1200,FuelPercentage=75,Condition="Bodywork and cabin checked."};
+  Assert.Equal(HttpStatusCode.Forbidden,(await customer.PostAsJsonAsync(path,request)).StatusCode);Assert.Equal(HttpStatusCode.Forbidden,(await customer.GetAsync("/api/rentals/queue")).StatusCode);
+  using var maintenance=f.Browser(Guid.NewGuid(),"MAINTENANCE_STAFF");Assert.Equal(HttpStatusCode.Forbidden,(await maintenance.PostAsJsonAsync(path,request)).StatusCode);
+  using var manager=f.Browser(Guid.NewGuid(),"FLEET_MANAGER");var response=await manager.PostAsJsonAsync(path,request);Assert.Equal(HttpStatusCode.OK,response.StatusCode);var rental=(await response.Content.ReadFromJsonAsync<RentalResponse>())!;Assert.Equal(RentalLifecycleState.Active,rental.State);
+  Assert.Equal(HttpStatusCode.Conflict,(await manager.PostAsJsonAsync(path,request)).StatusCode);Assert.Equal(HttpStatusCode.Conflict,(await customer.PostAsync($"/api/bookings/{row.Id}/cancel",null)).StatusCode);
+  Assert.Equal(HttpStatusCode.OK,(await customer.GetAsync($"/api/rentals/{rental.Id}")).StatusCode);
+  using var foreign=f.Browser(Guid.NewGuid());Assert.Equal(HttpStatusCode.NotFound,(await foreign.GetAsync($"/api/rentals/{rental.Id}")).StatusCode);
+  f.Gateway.VehicleUnavailable=true;Assert.Equal(HttpStatusCode.NotFound,(await foreign.GetAsync($"/api/rentals/{rental.Id}")).StatusCode);Assert.Equal(HttpStatusCode.ServiceUnavailable,(await customer.GetAsync($"/api/rentals/{rental.Id}")).StatusCode);
+ }
+ [Fact]public async Task PickupRejectsInvalidBodyForcedPasswordInactiveServiceAndMissingRecords()
+ {
+  using var f=new RentalFactory();using var staff=f.Browser(Guid.NewGuid(),"ADMIN");var path=$"/api/rentals/bookings/{Guid.NewGuid()}/pickup";
+  Assert.Equal(HttpStatusCode.BadRequest,(await staff.PostAsJsonAsync(path,new PickupRequest{Odometer=-1,FuelPercentage=101,Condition=""})).StatusCode);
+  Assert.Equal(HttpStatusCode.BadRequest,(await staff.PostAsJsonAsync(path,new{condition="Checked"})).StatusCode);
+  Assert.Equal(HttpStatusCode.NotFound,(await staff.PostAsJsonAsync(path,new PickupRequest{Odometer=0,FuelPercentage=100,Condition="Checked"})).StatusCode);
+  Assert.Equal(HttpStatusCode.BadRequest,(await staff.GetAsync("/api/rentals/queue?state=unknown")).StatusCode);
+  using var forced=f.Browser(Guid.NewGuid(),"ADMIN",true);Assert.Equal(HttpStatusCode.Forbidden,(await forced.GetAsync("/api/rentals/queue")).StatusCode);
+  using var inactive=new RentalFactory(false);using var blocked=inactive.Browser(Guid.NewGuid(),"ADMIN");Assert.Equal(HttpStatusCode.ServiceUnavailable,(await blocked.GetAsync("/api/rentals/queue")).StatusCode);
+ }
  [Fact]public async Task AnonymousAvailabilityRetainsValidationAndConflictShape()
  {
   using var f=new RentalFactory();using var client=f.CreateClient();Assert.Equal(HttpStatusCode.BadRequest,(await client.GetAsync("/api/bookings/check-availability")).StatusCode);
@@ -87,6 +110,7 @@ public sealed class RentalFactory(bool active=true):WebApplicationFactory<Rental
   public bool Available{get;set;}=true;public bool VehicleUnavailable{get;set;}private readonly Dictionary<Guid,ReservationAcknowledgement> rows=[];
   public Task<ReservationAcknowledgement> ReserveAsync(ReserveVehicleCommand c,CancellationToken ct){if(!rows.TryGetValue(c.BookingId,out var row))rows[c.BookingId]=row=new(c.BookingId,false,18000,new(){Id=c.VehicleId,Make="Toyota",Model="Corolla",DailyRate=9000});return Task.FromResult(row);}
   public Task<ReservationAcknowledgement> ReleaseAsync(Guid id,CancellationToken ct){var row=rows[id] with{Released=true};rows[id]=row;return Task.FromResult(row);}
+  public Task<RentalHoldAcknowledgement> HoldAsync(RentalHoldCommand c,CancellationToken ct)=>Task.FromResult(new RentalHoldAcknowledgement(c.BookingId,c.RentalId,true));
   public Task<VehicleResponse> VehicleAsync(Guid id,CancellationToken ct)=>VehicleUnavailable?throw new BookingRequestException(503,"Fleet unavailable."):Task.FromResult(new VehicleResponse{Id=id,Make="Toyota",Model="Corolla",DailyRate=9000});
   public Task<bool> AvailableAsync(Guid vehicleId,DateTime start,DateTime end,CancellationToken ct)=>Task.FromResult(Available);
  }

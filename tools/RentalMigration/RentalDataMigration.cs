@@ -98,6 +98,7 @@ public static class RentalDataMigration
    await tx.CommitAsync(ct);
   }
   await db.Database.ExecuteSqlInterpolatedAsync($"""UPDATE "RentalMigrationReceipts" SET "Verified"=true WHERE "Id"={id} AND "SourceHash"={expectedHash}""",ct);
+  await PickupSchemaUpgrade.ApplyAsync(source,target,ct);
   return new(id,rows.Count,expectedHash,true);
  }
  public sealed class ImportReceipt{public Guid Id{get;set;}public string SourceHash{get;set;}="";public bool Verified{get;set;}}
@@ -106,6 +107,7 @@ public static class RentalDataMigration
   Guard(source,true);Guard(target,false);var rows=Validate(json,hash);
   await using(var rental=Rental(target))
   {
+   if(await rental.Pickups.AnyAsync(ct))throw new InvalidOperationException("Pickup history cannot be represented by the legacy booking owner; preserve Rental and use a lifecycle-aware recovery plan.");
    if(await rental.Workflows.AnyAsync(w=>w.Phase!="Done"&&w.Phase!="Rejected",ct)||await rental.NotificationOutbox.AnyAsync(o=>o.Status!="Delivered",ct))
     throw new InvalidOperationException("Recovery/delivery is incomplete. Resolve workflows and outboxes before legacy reconciliation.");
    if(await ExportAsync(target,false,ct)!=Canonical(rows))throw new InvalidOperationException("Rental changed after export.");

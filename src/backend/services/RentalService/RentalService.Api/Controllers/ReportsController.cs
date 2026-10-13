@@ -24,7 +24,7 @@ public sealed class ReportsController(RentalDbContext db,TimeProvider clock):Con
   var groups=await db.Bookings.AsNoTracking().GroupBy(b=>b.Status).Select(g=>new{Status=g.Key,Count=g.Count(),Value=g.Sum(b=>b.TotalCost)}).ToListAsync(ct);
   int Count(BookingStatus status)=>groups.FirstOrDefault(g=>g.Status==status)?.Count??0;
   var stats=new BookingStatistics(groups.Sum(g=>g.Count),Count(BookingStatus.Pending),Count(BookingStatus.Confirmed),Count(BookingStatus.Cancelled),Count(BookingStatus.Completed),Count(BookingStatus.Pending)+Count(BookingStatus.Confirmed),groups.Where(g=>g.Status!=BookingStatus.Cancelled).Sum(g=>g.Value));
-  var ids=await db.Bookings.AsNoTracking().Where(b=>b.Status==BookingStatus.Confirmed&&b.StartDateTime<=now&&b.EndDateTime>now).Select(b=>b.VehicleId).Distinct().ToListAsync(ct);
+  var ids=await db.Bookings.AsNoTracking().Where(b=>b.Status==BookingStatus.Confirmed&&(b.StartDateTime<=now&&b.EndDateTime>now||db.Pickups.Any(p=>p.BookingId==b.Id&&p.State==RentalLifecycleState.Active))).Select(b=>b.VehicleId).Distinct().ToListAsync(ct);
   return Ok(new RentalStatisticsResponse(stats,ids));
  }
 }

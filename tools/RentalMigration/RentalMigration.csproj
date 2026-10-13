@@ -3,6 +3,7 @@
 <ProjectReference Include="../../src/backend/services/FleetService/FleetService.Api/FleetService.Api.csproj" />
 <ProjectReference Include="../ServiceDatabaseTool/ServiceDatabaseTool.csproj" />
 <Content Include="../../src/backend/services/RentalService/RentalService.Api/Database/002_bookings.sql" Link="migrations/rental/002_bookings.sql" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+<Content Include="../../src/backend/services/RentalService/RentalService.Api/Database/003_pickup.sql" Link="migrations/rental/003_pickup.sql" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
 </ItemGroup>
 <!-- This offline console tool reads explicit environment settings only. API appsettings
      are not its configuration and collide when two API assemblies are referenced. -->

@@ -55,7 +55,7 @@ export function NotificationInboxView({ items, loading, error, pendingIds, onMar
   return (
     <section className="notification-inbox" aria-labelledby="notification-title">
       <div className="notification-heading">
-        <div><h1 id="notification-title">Notifications</h1><p>Booking, maintenance and account updates.</p></div>
+        <div><h1 id="notification-title">Notifications</h1><p>Booking, rental, maintenance and account updates.</p></div>
         <Button variant="outline" onClick={onRefresh} disabled={loading}>Refresh</Button>
       </div>
       {error && <Alert type="error" title="Unable to Load Notifications" message={error} />}

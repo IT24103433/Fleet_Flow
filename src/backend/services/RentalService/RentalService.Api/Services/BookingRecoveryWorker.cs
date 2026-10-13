@@ -12,7 +12,7 @@ public sealed class BookingRecoveryWorker(IServiceScopeFactory scopes,RentalActi
     if(activation.Active&&await ready.IsReadyAsync(ct))
     {
      using var scope=scopes.CreateScope();var db=scope.ServiceProvider.GetRequiredService<RentalDbContext>();
-     var ids=await db.Workflows.AsNoTracking().Where(w=>(w.Phase=="ReserveRequested"||w.Phase=="CancelRequested")&&w.NextAttemptAt<=DateTime.UtcNow).OrderBy(w=>w.CreatedAt).Select(w=>w.Id).Take(20).ToListAsync(ct);
+     var ids=await db.Workflows.AsNoTracking().Where(w=>(w.Phase=="ReserveRequested"||w.Phase=="CancelRequested"||w.Phase=="PickupRequested")&&w.NextAttemptAt<=DateTime.UtcNow).OrderBy(w=>w.CreatedAt).Select(w=>w.Id).Take(20).ToListAsync(ct);
      foreach(var id in ids)
       try{await scope.ServiceProvider.GetRequiredService<BookingCoordinator>().ResumeAsync(id,ct);}
       catch(BookingRequestException){db.ChangeTracker.Clear();}

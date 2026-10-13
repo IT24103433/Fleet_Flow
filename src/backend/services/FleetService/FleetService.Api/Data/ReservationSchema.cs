@@ -9,6 +9,10 @@ public static class ReservationSchema
  "Released" boolean NOT NULL,"TotalCost" numeric(18,2) NOT NULL,"VehicleSnapshot" text NOT NULL,
  "CreatedAt" timestamptz NOT NULL,"ReleasedAt" timestamptz NULL,
  CONSTRAINT "ReservationPeriod" CHECK ("EndDateTime">"StartDateTime"));
+ ALTER TABLE "VehicleReservations" ADD COLUMN IF NOT EXISTS "IsHeld" boolean NOT NULL DEFAULT false;
+ ALTER TABLE "VehicleReservations" ADD COLUMN IF NOT EXISTS "HeldRentalId" uuid NULL;
+ ALTER TABLE "VehicleReservations" ADD COLUMN IF NOT EXISTS "PickupOdometer" integer NULL;
+ ALTER TABLE "VehicleReservations" ADD COLUMN IF NOT EXISTS "PickupAt" timestamptz NULL;
  CREATE INDEX IF NOT EXISTS "IX_VehicleReservations_VehicleId" ON "VehicleReservations"("VehicleId");
  CREATE TABLE IF NOT EXISTS "RentalLedgerMigrationReceipts" ("Id" uuid PRIMARY KEY,"SourceHash" text NOT NULL,"RecordCount" integer NOT NULL,"Verified" boolean NOT NULL);
  """;

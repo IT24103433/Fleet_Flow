@@ -9,7 +9,7 @@ import { BentoGrid, BentoCard } from '../../components/common/BentoGrid';
 import { deliverySources } from '../../services/notificationOutboxService';
 import './NotificationDeliveryPage.css';
 const formatDate = value => value ? new Date(value).toLocaleString() : '—';
-const eventLabel = value => ({ BookingCreatedEvent: 'Booking created', BookingCancelledEvent: 'Booking cancelled',
+const eventLabel = value => ({ RentalStartedEvent: 'Rental started', BookingCreatedEvent: 'Booking created', BookingCancelledEvent: 'Booking cancelled',
   MaintenanceScheduledEvent: 'Maintenance scheduled', MaintenanceStatusChangedEvent: 'Maintenance updated' })[value] || value;
 export default function NotificationDeliveryPage() {
   const [rows, setRows] = useState([]);
