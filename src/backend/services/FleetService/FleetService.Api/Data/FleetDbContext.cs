@@ -5,13 +5,25 @@ namespace FleetService.Api.Data;
 
 public class FleetDbContext : DbContext
 {
-    public FleetDbContext(DbContextOptions<FleetDbContext> options) : base(options)
+    public FleetDbContext(DbContextOptions<FleetDbContext> options, FleetService.Api.Services.RentalRouting? rentalRouting = null) : base(options)
     {
+        RentalRouting = rentalRouting;
     }
 
+    public FleetService.Api.Services.RentalRouting? RentalRouting {get;}
+    private void GuardLegacyWriter()
+    {
+        if(RentalRouting?.Remote==true && ChangeTracker.Entries<Booking>().Any(e=>e.State is EntityState.Added or EntityState.Modified or EntityState.Deleted))
+            throw new FleetService.Api.Services.RentalUnavailableException();
+    }
+    public override Task<int> SaveChangesAsync(CancellationToken ct=default){GuardLegacyWriter();return base.SaveChangesAsync(ct);}
+    public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess,CancellationToken ct=default){GuardLegacyWriter();return base.SaveChangesAsync(acceptAllChangesOnSuccess,ct);}
+    public override int SaveChanges(){GuardLegacyWriter();return base.SaveChanges();}
+    public override int SaveChanges(bool acceptAllChangesOnSuccess){GuardLegacyWriter();return base.SaveChanges(acceptAllChangesOnSuccess);}
     public DbSet<Vehicle> Vehicles => Set<Vehicle>();
     public DbSet<VehicleCategory> VehicleCategories => Set<VehicleCategory>();
     public DbSet<VehicleImage> VehicleImages => Set<VehicleImage>();
+    public DbSet<VehicleReservation> VehicleReservations => Set<VehicleReservation>();
     public DbSet<Booking> Bookings => Set<Booking>();
     public DbSet<MaintenanceRecord> MaintenanceRecords => Set<MaintenanceRecord>();
     public DbSet<Notification> Notifications => Set<Notification>();
@@ -20,6 +32,7 @@ public class FleetDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<VehicleReservation>(e=> {e.ToTable("VehicleReservations");e.HasKey(r=>r.BookingId);e.Property(r=>r.TotalCost).HasPrecision(18,2);e.HasIndex(r=>r.VehicleId);e.HasOne<Vehicle>().WithMany().HasForeignKey(r=>r.VehicleId).OnDelete(DeleteBehavior.Restrict);});
 
         modelBuilder.Entity<NotificationOutbox>(entity =>
         {

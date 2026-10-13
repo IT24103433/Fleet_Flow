@@ -67,6 +67,9 @@ jobs:
       - name: Publish Notification Migration Tool
         run: dotnet publish tools/NotificationMigration/NotificationMigration.csproj --configuration Release --no-restore --output ./artifacts/notification-migration
 
+      - name: Publish Rental Migration Tool
+        run: dotnet publish tools/RentalMigration/RentalMigration.csproj --configuration Release --no-restore --output ./artifacts/rental-migration
+
       - name: Upload Backend Service Artifacts
         uses: actions/upload-artifact@v4
         with:

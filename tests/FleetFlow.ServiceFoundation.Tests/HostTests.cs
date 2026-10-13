@@ -40,7 +40,7 @@ public sealed class HostTests
         client.DefaultRequestHeaders.Authorization=new("Bearer",InternalToken(deniedClient));
         Assert.Equal(HttpStatusCode.Forbidden,(await client.GetAsync("/internal/service")).StatusCode);
         // Foundation must not claim booking/inbox ownership before extraction.
-        Assert.Equal(HttpStatusCode.NotFound,(await client.GetAsync("/api/bookings")).StatusCode);
+        Assert.Equal(name=="RentalService"?HttpStatusCode.Unauthorized:HttpStatusCode.NotFound,(await client.GetAsync("/api/bookings")).StatusCode);
         Assert.Equal(name=="NotificationService"?HttpStatusCode.Unauthorized:HttpStatusCode.NotFound,(await client.GetAsync("/api/notifications")).StatusCode);
     }
     [Theory][InlineData(true,true)][InlineData(true,false)][InlineData(false,true)][InlineData(false,false)]

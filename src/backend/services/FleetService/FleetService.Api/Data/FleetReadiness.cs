@@ -14,7 +14,7 @@ public sealed class FleetReadiness
 
         try
         {
-            if (await db.Database.CanConnectAsync(ct))
+            if (await db.Database.CanConnectAsync(ct) && (db.RentalRouting?.Remote != true || await db.RentalRouting.ReadyAsync(db,ct)))
                 return Results.Ok(new { status = "Healthy", database = "Connected", ready = true });
         }
         catch (Exception ex) when (ex is not OperationCanceledException)

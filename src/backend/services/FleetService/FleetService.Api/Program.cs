@@ -18,6 +18,10 @@ builder.Services.AddScoped<IVehicleService, VehicleService>();
 builder.Services.AddScoped<IVehicleImageService, VehicleImageService>();
 builder.Services.AddScoped<IMaintenanceService, MaintenanceService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
+builder.Services.AddSingleton(RentalRouting.Read(builder.Configuration,builder.Environment));
+builder.Services.AddScoped<RentalForwarder>();builder.Services.AddScoped<ReservationService>();
+builder.Services.AddHttpClient("RentalService",(sp,c)=>{c.BaseAddress=sp.GetRequiredService<RentalRouting>().BaseUrl;c.Timeout=TimeSpan.FromSeconds(5);})
+.ConfigurePrimaryHttpMessageHandler(()=>new HttpClientHandler{AllowAutoRedirect=false});
 builder.Services.AddSingleton(NotificationRouting.Read(builder.Configuration,builder.Environment));
 builder.Services.AddScoped<NotificationForwarder>();
 builder.Services.AddHttpClient("NotificationService",(sp,client)=>
@@ -190,6 +194,7 @@ _ = Task.Run(async () =>
                 ");
                 await NotificationSchema.EnsureAsync(dbContext);
                 await NotificationOutboxSchema.EnsureAsync(dbContext);
+                await ReservationSchema.EnsureAsync(dbContext);
                 readiness.MarkInitialized();
                 Console.WriteLine("[Database] FleetService database initialized and ready.");
             }
@@ -236,6 +241,7 @@ app.UseRouting();
 app.UseCors();
 
 
+app.UseMiddleware<FleetService.Api.Middleware.RentalAvailabilityMiddleware>();
 app.UseAuthentication();
 app.UseMiddleware<FleetService.Api.Middleware.ForcedPasswordChangeMiddleware>();
 app.UseAuthorization();

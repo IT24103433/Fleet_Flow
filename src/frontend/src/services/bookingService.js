@@ -1,4 +1,4 @@
-const FLEET_API_URL = import.meta.env.VITE_FLEET_API_URL || 'http://localhost:5002';
+const RENTAL_API_URL = import.meta.env?.VITE_RENTAL_API_URL || import.meta.env?.VITE_FLEET_API_URL || 'http://localhost:5002';
 const isJsonResponse = contentType => /^application\/(?:json|problem\+json)(?:\s*;|\s*$)/i.test(contentType || '');
 
 const getAuthToken = () => {
@@ -9,9 +9,13 @@ const getAuthToken = () => {
   }
 };
 
-export const createBooking = async (bookingData) => {
+export function createBookingClient({ baseUrl = RENTAL_API_URL, fetchImpl = (...args) => globalThis.fetch(...args), getToken = getAuthToken,
+  newKey = () => crypto.randomUUID() } = {}) {
+  const pending = new Map();
+  let accountToken;
+const createBooking = async (bookingData) => {
   try {
-    const token = getAuthToken();
+    const token = getToken();
     if (!token) {
       return {
         success: false,
@@ -20,10 +24,17 @@ export const createBooking = async (bookingData) => {
       };
     }
 
-    const response = await fetch(`${FLEET_API_URL}/api/bookings`, {
+    if (accountToken !== token) { pending.clear(); accountToken = token; }
+    const signature = JSON.stringify([bookingData.vehicleId, bookingData.startDateTime, bookingData.endDateTime]);
+    if (!pending.has(signature)) {
+      if (pending.size >= 32) pending.delete(pending.keys().next().value);
+      pending.set(signature, newKey());
+    }
+    const response = await fetchImpl(`${baseUrl}/api/bookings`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Idempotency-Key': pending.get(signature),
         'Accept': 'application/json',
         'Authorization': `Bearer ${token}`,
       },
@@ -40,6 +51,7 @@ export const createBooking = async (bookingData) => {
       data = await response.json();
     }
 
+    if (response.ok || [400, 404, 409].includes(response.status)) pending.delete(signature);
     if (!response.ok) {
       return {
         success: false,
@@ -64,9 +76,9 @@ export const createBooking = async (bookingData) => {
   }
 };
 
-export const getMyBookings = async () => {
+const getMyBookings = async () => {
   try {
-    const token = getAuthToken();
+    const token = getToken();
     if (!token) {
       return {
         success: false,
@@ -76,7 +88,7 @@ export const getMyBookings = async () => {
       };
     }
 
-    const response = await fetch(`${FLEET_API_URL}/api/bookings`, {
+    const response = await fetchImpl(`${baseUrl}/api/bookings`, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -115,9 +127,9 @@ export const getMyBookings = async () => {
   }
 };
 
-export const cancelBooking = async (bookingId) => {
+const cancelBooking = async (bookingId) => {
   try {
-    const token = getAuthToken();
+    const token = getToken();
     if (!token) {
       return {
         success: false,
@@ -126,7 +138,7 @@ export const cancelBooking = async (bookingId) => {
       };
     }
 
-    const response = await fetch(`${FLEET_API_URL}/api/bookings/${bookingId}/cancel`, {
+    const response = await fetchImpl(`${baseUrl}/api/bookings/${bookingId}/cancel`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -160,7 +172,7 @@ export const cancelBooking = async (bookingId) => {
   }
 };
 
-export const checkVehicleAvailability = async (vehicleId, startDateTime, endDateTime) => {
+const checkVehicleAvailability = async (vehicleId, startDateTime, endDateTime) => {
   try {
     const query = new URLSearchParams({
       vehicleId,
@@ -168,7 +180,7 @@ export const checkVehicleAvailability = async (vehicleId, startDateTime, endDate
       endDateTime,
     });
 
-    const response = await fetch(`${FLEET_API_URL}/api/bookings/check-availability?${query.toString()}`, {
+    const response = await fetchImpl(`${baseUrl}/api/bookings/check-availability?${query.toString()}`, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -198,3 +210,11 @@ export const checkVehicleAvailability = async (vehicleId, startDateTime, endDate
     };
   }
 };
+
+  return { createBooking, getMyBookings, cancelBooking, checkVehicleAvailability };
+}
+const client = createBookingClient();
+export const createBooking = client.createBooking;
+export const getMyBookings = client.getMyBookings;
+export const cancelBooking = client.cancelBooking;
+export const checkVehicleAvailability = client.checkVehicleAvailability;

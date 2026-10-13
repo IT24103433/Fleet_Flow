@@ -1,0 +1,153 @@
+{
+  "baseCommit": "2682b6f75f480d802b25dd5ea8a1444c76509668",
+  "backend": {
+    "uniquePassed": 554,
+    "failed": 0,
+    "skipped": 0,
+    "runs": [
+      {
+        "phase": "final-tests",
+        "passed": 55,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "phase": "final-tests",
+        "passed": 101,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "phase": "final-tests",
+        "passed": 251,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "phase": "final-tests",
+        "passed": 37,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "phase": "final-tests",
+        "passed": 21,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "phase": "final-tests",
+        "passed": 69,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "phase": "final-tests",
+        "passed": 19,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "phase": "final-api-tests",
+        "passed": 5,
+        "failed": 0,
+        "skipped": 0
+      }
+    ],
+    "definition": "Full 553-test milestone plus one additional focused ownership/outage regression; duplicate reruns counted once."
+  },
+  "frontend": {
+    "passed": 132,
+    "failed": 0,
+    "lint": "passed",
+    "productionBuild": "passed",
+    "bundle": {
+      "definition": "Entry plus recursively static imports, uncompressed; lazy routes reported separately.",
+      "entryBytes": 303286,
+      "budgetBytes": 350000,
+      "lazy": {
+        "LandingPage": {
+          "ownBytes": 131010,
+          "additionalStaticClosureBytes": 142376
+        },
+        "NotificationDeliveryPage": {
+          "ownBytes": 10632,
+          "additionalStaticClosureBytes": 15757
+        }
+      },
+      "passes": true
+    }
+  },
+  "backup": {
+    "verified": true,
+    "bookingCount": 4,
+    "uploads": 5,
+    "archiveHashes": {
+      "fleetflow_fleet": "ec05f718b79abe79931b4fd20310974cf6111e57176f46842832e1fe3cb1783c",
+      "fleetflow_auth": "d8ce48b3929e0f58b75420b560cfa94b79c7358da78ee57957cff281522d580b"
+    },
+    "uploadsSha256": "e7a87cf942e92d0fd2d3746f81a9bc71034ceef8781a7ea13a02b7551943f965"
+  },
+  "cutoverRehearsal": {
+    "reservationReleased": true,
+    "workingDatabasesUntouched": true,
+    "legacyBookingWrites": 0,
+    "browserInternalRejected": 401,
+    "migratedNotifications": 16,
+    "notificationEvents": 2,
+    "reportsUseRental": true,
+    "migratedBookings": 4,
+    "overlapRejected": 409,
+    "cancelled": true,
+    "createdAndRetriedSameId": true,
+    "estimatedCost": 18000,
+    "foreignCustomerRejected": 404,
+    "compatibilityBookingsMatch": true
+  },
+  "rollbackRehearsal": {
+    "freshBackupRestoreVerified": true,
+    "historicalRecordsRetained": 4,
+    "reconciledRecords": 6,
+    "newRecordsRetained": 2,
+    "verified": true,
+    "workingDatabasesUntouched": true,
+    "writePause": true
+  },
+  "workingData": {
+    "databases": {
+      "fleetflow_fleet": true,
+      "fleetflow_auth": true
+    },
+    "uploadsUnchanged": true,
+    "uploadCount": 5,
+    "relationships": {
+      "bookings": 4,
+      "missingCustomerReferences": 0,
+      "missingVehicleReferences": 0
+    },
+    "verified": true
+  },
+  "review": {
+    "viewport": "1440x900",
+    "horizontalOverflow": false,
+    "workingImages": true,
+    "primaryHeadings": 1,
+    "customerBookingAndCancellation": "passed",
+    "staffDeliverySourcesAndReports": "passed",
+    "screenshots": [
+      "s4-rental-booking-1440.jpg",
+      "s4-rental-confirmed-1440.jpg",
+      "s4-rental-delivery-1440.jpg",
+      "s4-rental-history-1440.jpg",
+      "s4-rental-reports-1440.jpg"
+    ],
+    "mobileTablet": "not performed"
+  },
+  "deployment": "Not performed",
+  "defaultBookingOwner": "Legacy",
+  "rentalActiveByDefault": false,
+  "prerequisiteStories": [
+    "S4-07 remains counted once"
+  ],
+  "remainingStories": "Pickup and later lifecycle features are separate PRs; S4-12 waits for actual deployment/QA."
+}

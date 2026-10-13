@@ -15,18 +15,21 @@ namespace FleetService.Api.Services;
 public class BookingService : IBookingService
 {
     private readonly FleetDbContext _dbContext;
+    private readonly RentalRouting? _routing;
     private readonly INotificationEventDispatcher? _notifications;
     private readonly ILogger<BookingService>? _logger;
 
-    public BookingService(FleetDbContext dbContext, INotificationEventDispatcher? notifications = null, ILogger<BookingService>? logger = null)
+    public BookingService(FleetDbContext dbContext, INotificationEventDispatcher? notifications = null, ILogger<BookingService>? logger = null, RentalRouting? routing = null)
     {
         _dbContext = dbContext;
+        _routing = routing ?? dbContext.RentalRouting;
         _notifications = notifications;
         _logger = logger;
     }
 
     public async Task<BookingResponse> CreateBookingAsync(Guid customerId, CreateBookingRequest request)
     {
+        if (_routing?.Remote == true) throw new RentalUnavailableException();
         if (customerId == Guid.Empty)
         {
             throw new ValidationException("Customer ID is required.");
@@ -89,6 +92,7 @@ public class BookingService : IBookingService
 
     public async Task<BookingResponse?> GetBookingByIdAsync(Guid id)
     {
+        if (_routing?.Remote == true) throw new RentalUnavailableException();
         var booking = await _dbContext.Bookings
             .Include(b => b.Vehicle)
             .ThenInclude(v => v!.Category)
@@ -99,6 +103,7 @@ public class BookingService : IBookingService
 
     public async Task<IEnumerable<BookingResponse>> GetCustomerBookingsAsync(Guid customerId)
     {
+        if (_routing?.Remote == true) throw new RentalUnavailableException();
         var bookings = await _dbContext.Bookings
             .Include(b => b.Vehicle)
             .ThenInclude(v => v!.Category)
@@ -112,6 +117,7 @@ public class BookingService : IBookingService
 
     public async Task<BookingResponse?> CancelBookingAsync(Guid id, Guid customerId)
     {
+        if (_routing?.Remote == true) throw new RentalUnavailableException();
         if (id == Guid.Empty || customerId == Guid.Empty)
         {
             throw new ValidationException("Booking and customer identifiers are required.");
@@ -168,6 +174,7 @@ public class BookingService : IBookingService
 
     public async Task<bool> CheckVehicleAvailabilityAsync(Guid vehicleId, DateTime startDateTime, DateTime endDateTime, Guid? excludeBookingId = null)
     {
+        if (_routing?.Remote == true) throw new RentalUnavailableException();
         var startUtc = NormalizeUtc(startDateTime);
         var endUtc = NormalizeUtc(endDateTime);
         ValidateRentalPeriod(startUtc, endUtc);

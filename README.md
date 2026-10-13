@@ -2,7 +2,7 @@
 
 [![FleetFlow CI/CD Pipeline](https://github.com/IT24103433/Fleet_Flow/actions/workflows/ci.yml/badge.svg)](https://github.com/IT24103433/Fleet_Flow/actions/workflows/ci.yml)
 [![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen.svg)]()
-[![Automated Tests](https://img.shields.io/badge/Backend%20tests-532%20Passed-success.svg)](docs/four-service-foundation.md#ci-and-verification)
+[![Automated Tests](https://img.shields.io/badge/Backend%20tests-554%20Passed-success.svg)](docs/four-service-foundation.md#ci-and-verification)
 [![.NET Version](https://img.shields.io/badge/.NET-10.0-purple.svg)](https://dotnet.microsoft.com/)
 [![Node Version](https://img.shields.io/badge/Node.js-22.x-green.svg)](https://nodejs.org/)
 
@@ -12,7 +12,7 @@
 
 ## Sprint 4 service foundation
 
-The repository builds four API artifacts: Identity (5001), Fleet (5002), Rental (5003) and Notification (5004). Booking ownership remains in Fleet until Rental extraction. NotificationService now implements inbox ownership with an explicit verified-import cutover gate; the safe defaults retain the current Legacy owner. See [notification extraction and S4-07](docs/notification-extraction-outbox.md). See [startup, security, database ownership and rollback](docs/four-service-foundation.md). The approved frontend stays unchanged.
+The repository builds four API artifacts: Identity (5001), Fleet (5002), Rental (5003) and Notification (5004). RentalService now implements booking ownership, Fleet reservations and recovery behind an explicit verified-import cutover gate; the safe defaults keep Legacy ownership. See [Rental extraction](docs/rental-extraction-recovery.md). NotificationService now implements inbox ownership with an explicit verified-import cutover gate; the safe defaults retain the current Legacy owner. See [notification extraction and S4-07](docs/notification-extraction-outbox.md). See [startup, security, database ownership and rollback](docs/four-service-foundation.md). The approved frontend stays unchanged.
 
 ## Table of Contents
 
