@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Identity;
 using IdentityService.Api.Entities;
 using IdentityService.Api.Middleware;
 using IdentityService.Api.Services;
+using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +27,14 @@ builder.Services.AddHostedService<IdentityService.Api.Messaging.UserEventConsume
 // Configure JWT Authentication
 var jwtSection = builder.Configuration.GetSection("Jwt");
 var jwtKey = IdentityService.Api.Security.JwtSigningKey.Resolve(builder.Configuration, builder.Environment);
+FleetFlow.ServiceDefaults.ServiceAuthentication.AddInternalServiceAuthentication(builder.Services, builder.Configuration, jwtKey);
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.AddPolicy("service-token", context => RateLimitPartition.GetFixedWindowLimiter(
+        context.Connection.RemoteIpAddress?.ToString() ?? "unknown", _ => new FixedWindowRateLimiterOptions
+        { PermitLimit = 60, Window = TimeSpan.FromMinutes(1), QueueLimit = 0, AutoReplenishment = true }));
+});
 
 builder.Services.AddAuthentication(options =>
 {
@@ -215,7 +225,9 @@ app.UseStaticFiles(new StaticFileOptions
     RequestPath = "/uploads"
 });
 
+app.UseRouting();
 app.UseCors();
+app.UseRateLimiter();
 
 
 app.UseAuthentication();
@@ -227,6 +239,19 @@ app.UseMiddleware<ForcedPasswordChangeMiddleware>();
 app.MapControllers();
 
 app.MapGet("/", () => Results.Redirect("/swagger"));
+app.MapGet("/health/live", () => Results.Ok(new { status = "Alive" })).AllowAnonymous();
+app.MapGet("/health/ready", async (IdentityDbContext dbContext) =>
+{
+    try
+    {
+        var ready = isDbReady && await dbContext.Database.CanConnectAsync();
+        return Results.Json(new { status = ready ? "Ready" : "NotReady", ready }, statusCode: ready ? 200 : 503);
+    }
+    catch (Exception)
+    {
+        return Results.Json(new { status = "NotReady", ready = false }, statusCode: 503);
+    }
+}).AllowAnonymous();
 
 app.MapGet("/health", async (IdentityDbContext dbContext) =>
 {

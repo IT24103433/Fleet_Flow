@@ -1,0 +1,78 @@
+# Opt-in local API overlay. Does not change the infrastructure-only default.
+x-api-environment: &api-environment
+  ASPNETCORE_ENVIRONMENT: Development
+  DB_HOST: postgres
+  DB_PORT: 5432
+  DB_USER: ${DB_USER:-postgres}
+  DB_PASSWORD: ${DB_PASSWORD:?Configure the local PostgreSQL password}
+  Jwt__Key: ${JWT_SECRET:?Configure a private JWT signing key}
+  Jwt__Issuer: FleetFlow.IdentityService
+  Jwt__Audience: FleetFlow.Client
+  SERVICE_AUTH_ENABLED: ${SERVICE_AUTH_ENABLED:-false}
+  SERVICE_AUTH_SIGNING_KEY: ${SERVICE_AUTH_SIGNING_KEY:-}
+  INTERNAL_IDENTITY_URL: http://identity-service:8080/
+  Kafka__Enabled: ${KAFKA_ENABLED:-false}
+  Kafka__BootstrapServers: kafka:19092
+  ALLOWED_ORIGINS: http://localhost:5173,http://127.0.0.1:5173
+
+services:
+  kafka:
+    environment:
+      KAFKA_LISTENERS: EXTERNAL://:9092,INTERNAL://:19092,CONTROLLER://:9093
+      KAFKA_ADVERTISED_LISTENERS: EXTERNAL://${KAFKA_HOST:-localhost}:9092,INTERNAL://kafka:19092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: EXTERNAL:PLAINTEXT,INTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+  identity-service:
+    profiles: [apps]
+    build:
+      context: .
+      dockerfile: src/backend/Dockerfile.service
+      args: { SERVICE: IdentityService }
+    ports: ["127.0.0.1:5001:8080"]
+    environment:
+      <<: *api-environment
+      AUTH_DB_NAME: fleetflow_auth
+      SERVICE_AUTH_RENTAL_SECRET: ${SERVICE_AUTH_RENTAL_SECRET:-}
+      SERVICE_AUTH_FLEET_SECRET: ${SERVICE_AUTH_FLEET_SECRET:-}
+      SERVICE_AUTH_NOTIFICATION_SECRET: ${SERVICE_AUTH_NOTIFICATION_SECRET:-}
+      IDENTITY_UPLOAD_ROOT: /app/uploads
+    volumes: [fleetflow_identity_uploads:/app/uploads]
+    depends_on: [postgres]
+  fleet-service:
+    profiles: [apps]
+    build:
+      context: .
+      dockerfile: src/backend/Dockerfile.service
+      args: { SERVICE: FleetService }
+    ports: ["127.0.0.1:5002:8080"]
+    environment:
+      <<: *api-environment
+      FLEET_DB_NAME: fleetflow_fleet
+      SERVICE_AUTH_FLEET_SECRET: ${SERVICE_AUTH_FLEET_SECRET:-}
+      FLEET_UPLOAD_ROOT: /app/uploads
+    volumes: [fleetflow_fleet_uploads:/app/uploads]
+    depends_on: [postgres]
+  rental-service:
+    profiles: [apps]
+    build:
+      context: .
+      dockerfile: src/backend/Dockerfile.service
+      args: { SERVICE: RentalService }
+    ports: ["127.0.0.1:5003:8080"]
+    environment:
+      <<: *api-environment
+      RENTAL_DB_NAME: fleetflow_rental
+      SERVICE_AUTH_RENTAL_SECRET: ${SERVICE_AUTH_RENTAL_SECRET:-}
+    depends_on: [postgres,identity-service]
+  notification-service:
+    profiles: [apps]
+    build:
+      context: .
+      dockerfile: src/backend/Dockerfile.service
+      args: { SERVICE: NotificationService }
+    ports: ["127.0.0.1:5004:8080"]
+    environment:
+      <<: *api-environment
+      NOTIFICATION_DB_NAME: fleetflow_notifications
+      SERVICE_AUTH_NOTIFICATION_SECRET: ${SERVICE_AUTH_NOTIFICATION_SECRET:-}
+    depends_on: [postgres,identity-service]

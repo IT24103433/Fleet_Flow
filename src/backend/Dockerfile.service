@@ -1,0 +1,18 @@
+# Build from the repository root. The explicit service argument selects one artifact.
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+ARG SERVICE
+WORKDIR /source
+COPY src/backend/ src/backend/
+RUN case "$SERVICE" in IdentityService|FleetService|RentalService|NotificationService) ;; *) exit 2 ;; esac && \
+    dotnet publish "src/backend/services/$SERVICE/$SERVICE.Api/$SERVICE.Api.csproj" -c Release -o /publish --no-self-contained
+
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
+ARG SERVICE
+WORKDIR /app
+ENV ASPNETCORE_HTTP_PORTS=8080
+ENV SERVICE_DLL=${SERVICE}.Api.dll
+COPY --from=build --chown=app:app /publish/ ./
+RUN mkdir -p /app/uploads/profiles /app/uploads/vehicles && chown -R app:app /app/uploads
+USER app
+EXPOSE 8080
+ENTRYPOINT ["sh", "-c", "exec dotnet \"$SERVICE_DLL\""]
