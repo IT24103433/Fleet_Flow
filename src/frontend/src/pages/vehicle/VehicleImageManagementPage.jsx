@@ -1,3 +1,8 @@
+import { ArrowLeftIcon } from "@phosphor-icons/react/dist/csr/ArrowLeft";
+import { ImagesIcon } from "@phosphor-icons/react/dist/csr/Images";
+import { UploadSimpleIcon } from "@phosphor-icons/react/dist/csr/UploadSimple";
+import UploadedImage from "../../components/common/UploadedImage";
+import useConfirmAction from "../../components/common/useConfirmAction";
 import React, { useState, useEffect } from 'react';
 import Button from '../../components/common/Button';
 import Alert from '../../components/Alert';
@@ -6,11 +11,19 @@ import InputField from '../../components/InputField';
 import { useAuth } from '../../context/AuthContext';
 import { getVehicleImages, uploadVehicleImage, replaceVehicleImage, deleteVehicleImage } from '../../services/vehicleImageService';
 import { getVehicleImageUrl } from '../../utils/imageUrlUtils';
-
-const VehicleImageManagementPage = ({ selectedVehicle, onNavigate }) => {
-  const { roles, token } = useAuth();
-  const canManagePhotos = (roles || []).some((r) => ['FLEET_MANAGER', 'ADMIN'].includes(String(r).toUpperCase()));
-
+const VehicleImageManagementPage = ({
+  selectedVehicle,
+  onNavigate
+}) => {
+  const {
+    requestConfirmation,
+    confirmationDialog
+  } = useConfirmAction();
+  const {
+    roles,
+    token
+  } = useAuth();
+  const canManagePhotos = (roles || []).some(r => ['FLEET_MANAGER', 'ADMIN'].includes(String(r).toUpperCase()));
   const [images, setImages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isUploading, setIsUploading] = useState(false);
@@ -30,15 +43,12 @@ const VehicleImageManagementPage = ({ selectedVehicle, onNavigate }) => {
   const [replaceCaption, setReplaceCaption] = useState('');
   const [isReplaceModalOpen, setIsReplaceModalOpen] = useState(false);
   const [isReplacing, setIsReplacing] = useState(false);
-
   const vehicle = selectedVehicle;
   const vehicleId = vehicle?.id;
-
   useEffect(() => {
     let isMounted = true;
     if (!vehicleId) return;
-
-    getVehicleImages(vehicleId, token).then((result) => {
+    getVehicleImages(vehicleId, token).then(result => {
       if (!isMounted) return;
       setIsLoading(false);
       if (result.success) {
@@ -47,76 +57,67 @@ const VehicleImageManagementPage = ({ selectedVehicle, onNavigate }) => {
         setNotice({
           type: 'error',
           title: 'Error Loading Photos',
-          message: result.message || 'Could not load photos for this vehicle.',
+          message: result.message || 'Could not load photos for this vehicle.'
         });
       }
     });
-
     return () => {
       isMounted = false;
     };
   }, [vehicleId, token]);
-
   if (!vehicle) {
-    return (
-      <div className="vehicle-image-mgmt-container">
+    return <div className="vehicle-image-mgmt-container">
         <div className="admin-page-header">
           <div>
             <button type="button" className="back-link-btn" onClick={() => onNavigate('manage-fleet')}>
-              ← Back to Fleet Inventory
+              <ArrowLeftIcon size={18} weight="regular" aria-hidden="true" /> Back to Fleet Inventory
             </button>
             <h1 className="admin-page-title">Vehicle Photo Asset Workspace</h1>
           </div>
         </div>
-        <div className="empty-state-card" style={{ padding: 'var(--space-8)' }}>
+        <div className="empty-state-card view-79525567">
           <h3>No Vehicle Selected</h3>
-          <p style={{ color: 'var(--color-text-secondary)', marginBottom: '16px' }}>
+          <p className="view-bd7f6405">
             Please select a vehicle from Fleet Inventory to inspect or manage its photo assets.
           </p>
           <Button variant="primary" onClick={() => onNavigate('manage-fleet')}>
             Go to Fleet Inventory
           </Button>
         </div>
-      </div>
-    );
+      </div>;
   }
-
   const primaryImage = images[0] || null;
   const galleryImages = images.slice(1);
-
-  const handleFileSelect = (e) => {
+  const handleFileSelect = e => {
     if (!canManagePhotos) {
       setNotice({
         type: 'error',
         title: 'Unauthorized Action',
-        message: 'Only Fleet Managers and Administrators have permission to upload photos.',
+        message: 'Only Fleet Managers and Administrators have permission to upload photos.'
       });
       e.target.value = '';
       return;
     }
-
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
         setNotice({
           type: 'error',
           title: 'File Too Large',
-          message: 'Selected photo exceeds the 5 MB limit. Please select a smaller image file.',
+          message: 'Selected photo exceeds the 5 MB limit. Please select a smaller image file.'
         });
         e.target.value = '';
         return;
       }
-
       if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
         setNotice({
           type: 'error',
           title: 'Unsupported Image Type',
-          message: 'Only JPEG, PNG, and WebP image formats are accepted.',
+          message: 'Only JPEG, PNG, and WebP image formats are accepted.'
         });
         e.target.value = '';
         return;
       }
-
       setSelectedFile(file);
       const previewUrl = URL.createObjectURL(file);
       setPendingPreviewUrl(previewUrl);
@@ -126,51 +127,44 @@ const VehicleImageManagementPage = ({ selectedVehicle, onNavigate }) => {
     }
     e.target.value = '';
   };
-
-  const handleConfirmUpload = async (e) => {
+  const handleConfirmUpload = async e => {
     e.preventDefault();
     if (!selectedFile || !vehicle?.id) return;
-
     setIsUploading(true);
     setNotice(null);
-
     const result = await uploadVehicleImage(vehicle.id, selectedFile, caption, token);
     setIsUploading(false);
-
     if (result.success && result.data) {
-      setImages((prev) => [...prev, result.data]);
+      setImages(prev => [...prev, result.data]);
       setNotice({
         type: 'success',
         title: 'Photo Uploaded',
-        message: 'Vehicle photo uploaded successfully and saved to persistent file storage.',
+        message: 'Vehicle photo uploaded successfully and saved to persistent file storage.'
       });
       handleCloseModal();
     } else {
       setNotice({
         type: 'error',
         title: 'Upload Failed',
-        message: result.message || 'Could not upload vehicle photo.',
+        message: result.message || 'Could not upload vehicle photo.'
       });
     }
   };
-
-  const handleOpenReplaceModal = (img) => {
+  const handleOpenReplaceModal = img => {
     if (!canManagePhotos) {
       setNotice({
         type: 'error',
         title: 'Unauthorized Action',
-        message: 'Only Fleet Managers and Administrators have permission to replace photos.',
+        message: 'Only Fleet Managers and Administrators have permission to replace photos.'
       });
       return;
     }
-
     setReplacingImage(img);
     setReplaceFile(null);
     setReplacePreviewUrl(null);
     setReplaceCaption(img.caption || img.originalFileName || '');
     setIsReplaceModalOpen(true);
   };
-
   const handleCloseReplaceModal = () => {
     if (isReplacing) return;
     if (replacePreviewUrl) {
@@ -182,30 +176,27 @@ const VehicleImageManagementPage = ({ selectedVehicle, onNavigate }) => {
     setReplacePreviewUrl(null);
     setReplaceCaption('');
   };
-
-  const handleReplaceFileSelect = (e) => {
+  const handleReplaceFileSelect = e => {
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
         setNotice({
           type: 'error',
           title: 'File Too Large',
-          message: 'Replacement photo exceeds the 5 MB limit. Please select a smaller image file.',
+          message: 'Replacement photo exceeds the 5 MB limit. Please select a smaller image file.'
         });
         e.target.value = '';
         return;
       }
-
       if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
         setNotice({
           type: 'error',
           title: 'Unsupported Image Type',
-          message: 'Only JPEG, PNG, and WebP image formats are accepted.',
+          message: 'Only JPEG, PNG, and WebP image formats are accepted.'
         });
         e.target.value = '';
         return;
       }
-
       setReplaceFile(file);
       if (replacePreviewUrl) {
         URL.revokeObjectURL(replacePreviewUrl);
@@ -214,75 +205,74 @@ const VehicleImageManagementPage = ({ selectedVehicle, onNavigate }) => {
     }
     e.target.value = '';
   };
-
-  const handleConfirmReplace = async (e) => {
+  const handleConfirmReplace = async e => {
     e.preventDefault();
     if (!replaceFile || !vehicle?.id || !replacingImage?.id) {
       setNotice({
         type: 'error',
         title: 'Replacement File Required',
-        message: 'Please select a replacement image file before confirming.',
+        message: 'Please select a replacement image file before confirming.'
       });
       return;
     }
-
     setIsReplacing(true);
     setNotice(null);
-
     const result = await replaceVehicleImage(vehicle.id, replacingImage.id, replaceFile, replaceCaption, token);
     setIsReplacing(false);
-
     if (result.success && result.data) {
       const updated = result.data;
-      setImages((prev) => prev.map((img) => (img.id === updated.id ? updated : img)));
+      setImages(prev => prev.map(img => img.id === updated.id ? updated : img));
       setNotice({
         type: 'success',
         title: 'Photo Replaced',
-        message: 'Vehicle photo was successfully replaced and updated in storage.',
+        message: 'Vehicle photo was successfully replaced and updated in storage.'
       });
       handleCloseReplaceModal();
     } else {
       setNotice({
         type: 'error',
         title: 'Replacement Failed',
-        message: result.message || 'Could not replace vehicle photo.',
+        message: result.message || 'Could not replace vehicle photo.'
       });
     }
   };
-
-  const handleDeleteImage = async (imageId) => {
+  const handleDeleteImage = async imageId => {
     if (!canManagePhotos) {
       setNotice({
         type: 'error',
         title: 'Unauthorized Action',
-        message: 'Only Fleet Managers and Administrators have permission to delete photos.',
+        message: 'Only Fleet Managers and Administrators have permission to delete photos.'
       });
       return;
     }
-
-    if (!vehicle?.id || !imageId) return;
-    setDeletingId(imageId);
-    setNotice(null);
-
-    const result = await deleteVehicleImage(vehicle.id, imageId, token);
-    setDeletingId(null);
-
-    if (result.success) {
-      setImages((prev) => prev.filter((img) => img.id !== imageId));
-      setNotice({
-        type: 'success',
-        title: 'Photo Deleted',
-        message: 'Vehicle photo was permanently deleted from storage.',
-      });
-    } else {
-      setNotice({
-        type: 'error',
-        title: 'Delete Failed',
-        message: result.message || 'Could not delete vehicle photo.',
-      });
-    }
+    requestConfirmation({
+      title: "Delete this vehicle photo?",
+      message: "The photo will be permanently removed. Upload it again if you need to restore it.",
+      action: async () => {
+        if (!vehicle?.id || !imageId) return;
+        setDeletingId(imageId);
+        setNotice(null);
+        const result = await deleteVehicleImage(vehicle.id, imageId, token);
+        setDeletingId(null);
+        if (result.success) {
+          setImages(prev => prev.filter(img => img.id !== imageId));
+          setNotice({
+            type: 'success',
+            title: 'Photo Deleted',
+            message: 'Vehicle photo was permanently deleted from storage.'
+          });
+        } else {
+          setNotice({
+            type: 'error',
+            title: 'Delete Failed',
+            message: result.message || 'Could not delete vehicle photo.'
+          });
+        }
+      },
+      label: "Delete photo",
+      variant: "danger"
+    });
   };
-
   const handleCloseModal = () => {
     if (pendingPreviewUrl) {
       URL.revokeObjectURL(pendingPreviewUrl);
@@ -292,39 +282,27 @@ const VehicleImageManagementPage = ({ selectedVehicle, onNavigate }) => {
     setPendingPreviewUrl(null);
     setCaption('');
   };
-
-  return (
-    <div className="vehicle-image-mgmt-container">
+  return <div className="vehicle-image-mgmt-container">
       {/* Header */}
       <div className="admin-page-header">
         <div>
           <button type="button" className="back-link-btn" onClick={() => onNavigate('manage-fleet')}>
-            ← Back to Fleet Inventory
+            <ArrowLeftIcon size={18} weight="regular" aria-hidden="true" /> Back to Fleet Inventory
           </button>
           <h1 className="admin-page-title">
             Photo Management: {vehicle.year} {vehicle.make} {vehicle.model}
           </h1>
           <p className="admin-page-subtitle">
-            Upload and organize high-resolution vehicle photos stored securely in backend persistent storage.
+            Upload clear photographs and organise the images customers see.
           </p>
         </div>
 
         <div className="admin-header-actions">
           <div className="file-input-wrapper">
-            <input
-              type="file"
-              id="newVehiclePhoto"
-              accept="image/jpeg,image/png,image/webp"
-              onChange={handleFileSelect}
-              className="file-input-native"
-            />
+            <input type="file" id="newVehiclePhoto" accept="image/jpeg,image/png,image/webp" onChange={handleFileSelect} className="file-input-native" />
             <label htmlFor="newVehiclePhoto" className="file-input-label">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16">
-                <circle cx="12" cy="12" r="10" />
-                <line x1="12" y1="8" x2="12" y2="16" />
-                <line x1="8" y1="12" x2="16" y2="12" />
-              </svg>
-              <span>+ Add Vehicle Photo</span>
+              <UploadSimpleIcon width="16" height="16" weight="regular" aria-hidden="true" />
+              <span>Add Vehicle Photo</span>
             </label>
           </div>
         </div>
@@ -333,45 +311,26 @@ const VehicleImageManagementPage = ({ selectedVehicle, onNavigate }) => {
       {notice && <Alert type={notice.type} title={notice.title} message={notice.message} />}
 
       {/* Main Content Area */}
-      {isLoading ? (
-        <div className="empty-state-card" style={{ padding: 'var(--space-10) var(--space-6)', textAlign: 'center' }}>
-          <p style={{ color: 'var(--color-text-secondary)', fontSize: '14px' }}>Loading photos from storage...</p>
-        </div>
-      ) : images.length === 0 ? (
-        <div className="empty-state-card" style={{ padding: 'var(--space-10) var(--space-6)', textAlign: 'center' }}>
-          <div style={{ color: 'var(--color-text-muted)', marginBottom: '16px' }}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" width="48" height="48" style={{ margin: '0 auto' }}>
-              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-              <circle cx="8.5" cy="8.5" r="1.5" />
-              <polyline points="21 15 16 10 5 21" />
-            </svg>
+      {isLoading ? <div className="empty-state-card view-81b1c487">
+          <p className="view-423e9651">Loading photos from storage...</p>
+        </div> : images.length === 0 ? <div className="empty-state-card view-81b1c487">
+          <div className="view-4ae5eb10">
+            <ImagesIcon width="48" height="48" className="view-6002529c" weight="regular" aria-hidden="true" />
           </div>
-          <h3 style={{ fontSize: '18px', fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: '8px' }}>
+          <h3 className="view-0109de75">
             No photos added yet
           </h3>
-          <p style={{ color: 'var(--color-text-secondary)', fontSize: '14px', maxWidth: '460px', margin: '0 auto 20px' }}>
+          <p className="view-a096a4a0">
             Upload real photos to document this vehicle's appearance and condition.
           </p>
-          <div className="file-input-wrapper" style={{ display: 'inline-block' }}>
-            <input
-              type="file"
-              id="emptyStateVehiclePhoto"
-              accept="image/jpeg,image/png,image/webp"
-              onChange={handleFileSelect}
-              className="file-input-native"
-            />
-            <label htmlFor="emptyStateVehiclePhoto" className="file-input-label" style={{ display: 'inline-flex' }}>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16">
-                <circle cx="12" cy="12" r="10" />
-                <line x1="12" y1="8" x2="12" y2="16" />
-                <line x1="8" y1="12" x2="16" y2="12" />
-              </svg>
-              <span>+ Add Vehicle Photo</span>
+          <div className="file-input-wrapper view-0524ca21">
+            <input type="file" id="emptyStateVehiclePhoto" accept="image/jpeg,image/png,image/webp" onChange={handleFileSelect} className="file-input-native" />
+            <label htmlFor="emptyStateVehiclePhoto" className="file-input-label view-d348b10f">
+              <UploadSimpleIcon width="16" height="16" weight="regular" aria-hidden="true" />
+              <span>Add Vehicle Photo</span>
             </label>
           </div>
-        </div>
-      ) : (
-        <div className="image-mgmt-grid">
+        </div> : <div className="image-mgmt-grid">
           {/* Primary Asset Card */}
           <div className="primary-asset-card">
             <div className="panel-header-strip">
@@ -380,40 +339,21 @@ const VehicleImageManagementPage = ({ selectedVehicle, onNavigate }) => {
             </div>
 
             <div className="primary-hero-preview">
-              {primaryImage?.relativeUrl ? (
-                <img
-                  src={getVehicleImageUrl(primaryImage.relativeUrl)}
-                  alt={primaryImage.caption || `${vehicle.make} ${vehicle.model}`}
-                  className="primary-img-view"
-                />
-              ) : (
-                <div className="primary-img-placeholder">
+              {primaryImage?.relativeUrl ? <UploadedImage src={getVehicleImageUrl(primaryImage.relativeUrl)} alt={primaryImage.caption || `${vehicle.make} ${vehicle.model}`} className="primary-img-view" /> : <div className="primary-img-placeholder">
                   <span>Main Vehicle Photo</span>
-                </div>
-              )}
+                </div>}
             </div>
 
-            <div className="primary-meta-strip" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div className="primary-meta-strip view-3490dbc8">
               <div>
                 <strong className="primary-title">{primaryImage?.caption || primaryImage?.originalFileName || 'Primary Showcase'}</strong>
                 <p className="primary-sub">Displayed on browse fleet cards and top hero view.</p>
               </div>
-              <div style={{ display: 'flex', gap: '8px' }}>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleOpenReplaceModal(primaryImage)}
-                  disabled={!canManagePhotos}
-                >
+              <div className="view-a9c77021">
+                <Button variant="outline" size="sm" onClick={() => handleOpenReplaceModal(primaryImage)} disabled={!canManagePhotos}>
                   Replace
                 </Button>
-                <Button
-                  variant="danger"
-                  size="sm"
-                  onClick={() => handleDeleteImage(primaryImage.id)}
-                  disabled={!canManagePhotos || deletingId === primaryImage.id}
-                  isLoading={deletingId === primaryImage.id}
-                >
+                <Button variant="danger" size="sm" onClick={() => handleDeleteImage(primaryImage.id)} disabled={!canManagePhotos || deletingId === primaryImage.id} isLoading={deletingId === primaryImage.id}>
                   Delete
                 </Button>
               </div>
@@ -426,87 +366,42 @@ const VehicleImageManagementPage = ({ selectedVehicle, onNavigate }) => {
               <h3 className="panel-heading">Additional Gallery Photos ({galleryImages.length})</h3>
             </div>
 
-            {galleryImages.length === 0 ? (
-              <div className="no-gallery-items">
+            {galleryImages.length === 0 ? <div className="no-gallery-items">
                 <p>No additional gallery photos added yet.</p>
-              </div>
-            ) : (
-              <div className="gallery-items-grid">
-                {galleryImages.map((img) => (
-                  <div key={img.id} className="gallery-item-card">
+              </div> : <div className="gallery-items-grid">
+                {galleryImages.map(img => <div key={img.id} className="gallery-item-card">
                     <div className="gallery-item-thumb">
-                      <img
-                        src={getVehicleImageUrl(img.relativeUrl)}
-                        alt={img.caption || img.originalFileName}
-                        className="thumb-img"
-                      />
+                      <UploadedImage src={getVehicleImageUrl(img.relativeUrl)} alt={img.caption || img.originalFileName} className="thumb-img" />
                     </div>
 
                     <div className="gallery-item-info">
                       <span className="gallery-item-name">{img.caption || img.originalFileName}</span>
                       <div className="gallery-item-actions">
-                        <button
-                          type="button"
-                          className="btn-gallery-action replace"
-                          onClick={() => handleOpenReplaceModal(img)}
-                          disabled={!canManagePhotos}
-                        >
+                        <button type="button" className="btn-gallery-action replace" onClick={() => handleOpenReplaceModal(img)} disabled={!canManagePhotos}>
                           Replace
                         </button>
-                        <button
-                          type="button"
-                          className="btn-gallery-action remove"
-                          onClick={() => handleDeleteImage(img.id)}
-                          disabled={!canManagePhotos || deletingId === img.id}
-                        >
+                        <button type="button" className="btn-gallery-action remove" onClick={() => handleDeleteImage(img.id)} disabled={!canManagePhotos || deletingId === img.id}>
                           {deletingId === img.id ? 'Deleting...' : 'Delete'}
                         </button>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            )}
+                  </div>)}
+              </div>}
           </div>
-        </div>
-      )}
+        </div>}
 
       {/* Caption & Description Entry Modal */}
-      <Modal
-        isOpen={isCaptionModalOpen}
-        onClose={handleCloseModal}
-        title="Upload Vehicle Photo"
-        subtitle="Provide an optional description for this photo asset."
-      >
+      <Modal isOpen={isCaptionModalOpen} onClose={handleCloseModal} title="Upload Vehicle Photo" subtitle="Provide an optional description for this photo asset.">
         <form onSubmit={handleConfirmUpload}>
-          <div style={{ marginBottom: 'var(--space-4)', textAlign: 'center' }}>
-            {pendingPreviewUrl && (
-              <img
-                src={pendingPreviewUrl}
-                alt="Selected preview"
-                style={{
-                  maxWidth: '100%',
-                  maxHeight: '220px',
-                  objectFit: 'contain',
-                  borderRadius: 'var(--radius-sm)',
-                  border: '1px solid var(--color-border)',
-                }}
-              />
-            )}
+          <div className="view-ef60b435">
+            {pendingPreviewUrl && <UploadedImage src={pendingPreviewUrl} alt="Selected preview" className="view-ffc0710b" />}
           </div>
 
-          <div style={{ marginBottom: 'var(--space-4)' }}>
-            <InputField
-              label="Photo Description / Caption (Optional)"
-              id="photoCaption"
-              name="photoCaption"
-              value={caption}
-              onChange={(e) => setCaption(e.target.value)}
-              placeholder="e.g. Front exterior view, Rear cockpit"
-            />
+          <div className="view-0636788d">
+            <InputField label="Photo Description / Caption (Optional)" id="photoCaption" name="photoCaption" value={caption} onChange={e => setCaption(e.target.value)} placeholder="e.g. Front exterior view, Rear cockpit" />
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 'var(--space-3)' }}>
+          <div className="view-8db44f75">
             <Button type="button" variant="outline" onClick={handleCloseModal} disabled={isUploading}>
               Cancel
             </Button>
@@ -518,69 +413,37 @@ const VehicleImageManagementPage = ({ selectedVehicle, onNavigate }) => {
       </Modal>
 
       {/* Replace Photo Modal */}
-      <Modal
-        isOpen={isReplaceModalOpen}
-        onClose={handleCloseReplaceModal}
-        title="Replace Vehicle Photo"
-        subtitle="Select a new image file to replace this asset in storage."
-      >
+      <Modal isOpen={isReplaceModalOpen} onClose={handleCloseReplaceModal} title="Replace Vehicle Photo" subtitle="Select a new image file to replace this asset in storage.">
         <form onSubmit={handleConfirmReplace}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
-            <div style={{ textAlign: 'center' }}>
-              <span style={{ display: 'block', fontSize: '12px', fontWeight: 600, marginBottom: '6px', color: 'var(--color-text-secondary)' }}>
+          <div className="view-630ecae1">
+            <div className="view-fb5ec070">
+              <span className="view-90a10d1e">
                 Current Photo
               </span>
-              {replacingImage?.relativeUrl && (
-                <img
-                  src={getVehicleImageUrl(replacingImage.relativeUrl)}
-                  alt="Current"
-                  style={{ width: '100%', height: '140px', objectFit: 'cover', borderRadius: '6px', border: '1px solid var(--color-border)' }}
-                />
-              )}
+              {replacingImage?.relativeUrl && <UploadedImage src={getVehicleImageUrl(replacingImage.relativeUrl)} alt="Current" className="view-48a15216" />}
             </div>
-            <div style={{ textAlign: 'center' }}>
-              <span style={{ display: 'block', fontSize: '12px', fontWeight: 600, marginBottom: '6px', color: 'var(--color-text-secondary)' }}>
+            <div className="view-fb5ec070">
+              <span className="view-90a10d1e">
                 Replacement Photo
               </span>
-              {replacePreviewUrl ? (
-                <img
-                  src={replacePreviewUrl}
-                  alt="New preview"
-                  style={{ width: '100%', height: '140px', objectFit: 'cover', borderRadius: '6px', border: '2px solid var(--color-primary)' }}
-                />
-              ) : (
-                <div style={{ width: '100%', height: '140px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#f1f5f9', borderRadius: '6px', border: '1px dashed var(--color-border)' }}>
-                  <span style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>Select file below</span>
-                </div>
-              )}
+              {replacePreviewUrl ? <UploadedImage src={replacePreviewUrl} alt="New preview" className="view-3d316dd8" /> : <div className="view-bcbf45c0">
+                  <span className="view-d8212c8d">Select file below</span>
+                </div>}
             </div>
           </div>
 
-          <div style={{ marginBottom: '16px' }}>
-            <label htmlFor="replaceFileInput" style={{ display: 'block', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>
+          <div className="view-4933c088">
+            <label htmlFor="replaceFileInput" className="view-83e308c1">
               Choose Replacement Image (JPEG, PNG, WebP up to 5 MB):
             </label>
-            <input
-              type="file"
-              id="replaceFileInput"
-              accept="image/jpeg,image/png,image/webp"
-              onChange={handleReplaceFileSelect}
-              style={{ width: '100%', fontSize: '13px' }}
-            />
+            <input type="file" id="replaceFileInput" accept="image/jpeg,image/png,image/webp" onChange={handleReplaceFileSelect} className="view-5c740006" />
           </div>
 
-          <div style={{ marginBottom: '16px' }}>
-            <InputField
-              label="Photo Description / Caption"
-              id="replaceCaption"
-              name="replaceCaption"
-              value={replaceCaption}
-              onChange={(e) => setReplaceCaption(e.target.value)}
-              placeholder="e.g. Front 3/4 Exterior View"
-            />
+          <div className="view-4933c088">
+            <InputField label="Photo Description / Caption" id="replaceCaption" name="replaceCaption" value={replaceCaption} onChange={e => setReplaceCaption(e.target.value)} placeholder="e.g. Front 3/4 Exterior View" />
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 'var(--space-3)' }}>
+          <div className="view-8db44f75">
             <Button type="button" variant="outline" onClick={handleCloseReplaceModal} disabled={isReplacing}>
               Cancel
             </Button>
@@ -590,8 +453,6 @@ const VehicleImageManagementPage = ({ selectedVehicle, onNavigate }) => {
           </div>
         </form>
       </Modal>
-    </div>
-  );
+    {confirmationDialog}</div>;
 };
-
 export default VehicleImageManagementPage;

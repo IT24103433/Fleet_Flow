@@ -1,311 +1,34 @@
-import React, { useState, useEffect } from 'react';
-import StatusBadge from '../../components/common/StatusBadge';
+import { ArrowLeftIcon } from "@phosphor-icons/react/dist/csr/ArrowLeft";
+import React, { useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
 import Button from '../../components/common/Button';
-import Alert from '../../components/Alert';
-import { getVehicleById } from '../../services/vehicleService';
-import { getVehicleImages } from '../../services/vehicleImageService';
-import { getVehicleImageUrl } from '../../utils/imageUrlUtils';
-import { formatPriceNumber } from '../../utils/currencyUtils';
+import StatusBadge from '../../components/common/StatusBadge';
 import BookingModal from '../../components/BookingModal';
-
-const VehicleDetailsPage = ({ selectedVehicle, onNavigate }) => {
-  const [vehicle, setVehicle] = useState(selectedVehicle);
-  const [images, setImages] = useState([]);
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const [reservationNotice, setReservationNotice] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
-
-  useEffect(() => {
-    let isMounted = true;
-    const vehicleId = selectedVehicle?.id;
-    if (vehicleId) {
-      Promise.all([
-        getVehicleById(vehicleId),
-        getVehicleImages(vehicleId),
-      ]).then(([vehicleRes, imagesRes]) => {
-        if (!isMounted) return;
-        if (vehicleRes.success && vehicleRes.data) {
-          setVehicle(vehicleRes.data);
-        } else if (vehicleRes.status === 404) {
-          setErrorMessage('Vehicle record was not found in the fleet catalog.');
-        } else if (!selectedVehicle) {
-          setErrorMessage(vehicleRes.message || 'Failed to retrieve vehicle details.');
-        }
-
-        if (imagesRes.success && Array.isArray(imagesRes.data)) {
-          const mapped = imagesRes.data.map((img) => ({
-            id: img.id,
-            url: getVehicleImageUrl(img.relativeUrl),
-            title: img.caption || img.originalFileName || 'Vehicle Photo',
-          }));
-          setImages(mapped);
-          setSelectedImageIndex(0);
-        } else {
-          setImages([]);
-        }
-        setIsLoading(false);
-      });
-    }
-    return () => {
-      isMounted = false;
-    };
-  }, [selectedVehicle]);
-
-  const handleReserveClick = () => {
-    setIsBookingModalOpen(true);
+import { getVehicleImageUrl } from '../../utils/imageUrlUtils';
+import { formatDailyRate } from '../../utils/currencyUtils';
+import { routeHash } from '../../utils/navigation';
+export default function VehicleDetailsPage({
+  selectedVehicle: vehicle,
+  onNavigate
+}) {
+  const {
+    isAuthenticated
+  } = useAuth();
+  const [imageIndex, setImageIndex] = useState(0);
+  const [failedImages, setFailedImages] = useState([]);
+  const [bookingOpen, setBookingOpen] = useState(false);
+  if (!vehicle) return <div className="record-empty"><h1>Choose a vehicle to continue</h1><Button onClick={() => onNavigate('browse')}>Browse vehicles</Button></div>;
+  const name = `${vehicle.make} ${vehicle.model}`;
+  const images = (vehicle.images || []).filter(image => image.relativeUrl);
+  const image = images[imageIndex];
+  const specs = [['Category', vehicle.categoryName], ['Seats', vehicle.seatingCapacity], ['Transmission', vehicle.transmission], ['Fuel type', vehicle.fuelType], ['Pickup location', vehicle.hubLocation], ['Model year', vehicle.year], ['Mileage', vehicle.mileage != null ? `${vehicle.mileage.toLocaleString()} mi` : null], ['Registration', vehicle.licensePlate]];
+  const available = String(vehicle.status).toUpperCase() === 'AVAILABLE';
+  const reserve = () => {
+    if (!isAuthenticated) onNavigate('login', {
+      returnTo: routeHash('vehicle-details', {
+        vehicleId: vehicle.id
+      })
+    });else setBookingOpen(true);
   };
-
-  if (isLoading) {
-    return (
-      <div className="vehicle-details-container" style={{ textAlign: 'center', padding: 'var(--space-12) 0' }}>
-        <div className="spinner" style={{ width: '32px', height: '32px', borderTopColor: 'var(--color-primary)', borderRightColor: 'var(--color-primary)', margin: '0 auto 12px' }} />
-        <p>Loading vehicle specification details from FleetService...</p>
-      </div>
-    );
-  }
-
-  if (errorMessage && !vehicle) {
-    return (
-      <div className="vehicle-details-container">
-        <div className="details-top-bar">
-          <button
-            type="button"
-            className="back-catalog-btn"
-            onClick={() => onNavigate('browse')}
-          >
-            ← Back to Fleet Catalog
-          </button>
-        </div>
-        <Alert type="error" title="Vehicle Details Error" message={errorMessage} />
-      </div>
-    );
-  }
-
-  if (!vehicle) {
-    return (
-      <div className="vehicle-details-container">
-        <div className="details-top-bar">
-          <button
-            type="button"
-            className="back-catalog-btn"
-            onClick={() => onNavigate('browse')}
-          >
-            ← Back to Fleet Catalog
-          </button>
-        </div>
-        <div className="empty-state-card" style={{ padding: 'var(--space-8)' }}>
-          <h3>No Vehicle Selected</h3>
-          <p style={{ color: 'var(--color-text-secondary)', marginBottom: '16px' }}>Please choose a vehicle from the catalog to inspect details.</p>
-          <Button variant="primary" onClick={() => onNavigate('browse')}>Browse Fleet Catalog</Button>
-        </div>
-      </div>
-    );
-  }
-
-  const categoryName = vehicle.categoryName || vehicle.category || '—';
-  const fuelType = vehicle.fuelType || vehicle.fuel || '—';
-  const transmission = vehicle.transmission || '—';
-  const seating = vehicle.seatingCapacity || vehicle.seating || '—';
-  const hubLocation = vehicle.hubLocation || vehicle.hub || '—';
-  const licensePlate = vehicle.licensePlate || vehicle.plate || '—';
-  const mileage = typeof vehicle.mileage === 'number' ? `${vehicle.mileage.toLocaleString()} mi` : (vehicle.mileage ? `${vehicle.mileage} mi` : '—');
-  const isAvailable = vehicle.status === 'Available' || vehicle.status === 'AVAILABLE';
-
-  const currentImage = images[selectedImageIndex] || null;
-
-  const standardFeatures = [
-    'Advanced Driver Assistance & Lane Assist',
-    'Adaptive Cruise Control with Stop & Go',
-    'High-Resolution Navigation & Telematics',
-    'Keyless Smart Access & Digital Key Integration',
-    'Multi-Zone Automatic Climate Control',
-    'Apple CarPlay & Android Auto Compatibility',
-  ];
-
-  return (
-    <div className="vehicle-details-container">
-      {/* Top Navigation & Breadcrumb */}
-      <div className="details-top-bar">
-        <button
-          type="button"
-          className="back-catalog-btn"
-          onClick={() => onNavigate('browse')}
-        >
-          ← Back to Fleet Catalog
-        </button>
-        <div className="top-status-slot">
-          <StatusBadge status={vehicle.status} />
-        </div>
-      </div>
-
-      {reservationNotice && (
-        <div style={{ marginBottom: 'var(--space-6)' }}>
-          <Alert
-            type={reservationNotice.type}
-            title={reservationNotice.title}
-            message={reservationNotice.message}
-          />
-        </div>
-      )}
-
-      {/* Main Grid: Gallery on left, Pricing & Summary on right */}
-      <div className="vehicle-main-grid">
-        {/* Gallery & Showcase Column */}
-        <div className="vehicle-gallery-col">
-          <div className="hero-image-frame">
-            {currentImage?.title && (
-              <span className="hero-img-badge">{currentImage.title}</span>
-            )}
-            {currentImage?.url ? (
-              <img src={currentImage.url} alt={currentImage.title || `${vehicle.make} ${vehicle.model}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-            ) : (
-              <div className="hero-model-watermark">
-                <h2>{vehicle.make} {vehicle.model}</h2>
-                <p>{categoryName} • {fuelType}</p>
-              </div>
-            )}
-          </div>
-
-          {/* Thumbnail Strip */}
-          {images.length > 1 ? (
-            <div className="thumbnail-gallery-strip">
-              {images.map((img, idx) => (
-                <button
-                  key={img.id || idx}
-                  type="button"
-                  className={`thumb-btn ${selectedImageIndex === idx ? 'active' : ''}`}
-                  onClick={() => setSelectedImageIndex(idx)}
-                >
-                  <div className="thumb-preview">
-                    {img.url ? (
-                      <img src={img.url} alt={img.title || `View ${idx + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    ) : (
-                      <span>View {idx + 1}</span>
-                    )}
-                  </div>
-                  <span className="thumb-label">{img.title || `Photo ${idx + 1}`}</span>
-                </button>
-              ))}
-            </div>
-          ) : (
-            <p className="no-photos-subtle" style={{ fontSize: '13px', color: 'var(--color-text-muted)', textAlign: 'center', margin: 'var(--space-2) 0' }}>
-              {images.length === 0 ? 'No photos added yet.' : 'No additional photos available.'}
-            </p>
-          )}
-
-          {/* Key Features & Equipment */}
-          <div className="features-checklist-card">
-            <h3 className="features-card-title">Standard Equipment & Technology</h3>
-            <ul className="features-bullet-list">
-              {standardFeatures.map((feat, i) => (
-                <li key={i} className="feature-item">
-                  <svg viewBox="0 0 20 20" fill="currentColor" className="check-svg-icon" aria-hidden="true">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  <span>{feat}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        {/* Vehicle Specs & Reservation Summary Column */}
-        <div className="vehicle-summary-col">
-          <div className="summary-card">
-            <div className="summary-title-section">
-              <span className="category-tag">{categoryName}</span>
-              <h1 className="summary-vehicle-title">{vehicle.year} {vehicle.make} {vehicle.model}</h1>
-              <p className="summary-hub-line">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="14" height="14" aria-hidden="true">
-                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                  <circle cx="12" cy="10" r="3" />
-                </svg>
-                <span>Station: {hubLocation}</span>
-              </p>
-            </div>
-
-            <div className="daily-pricing-box">
-              {vehicle?.dailyRate != null && !isNaN(Number(vehicle.dailyRate)) ? (
-                <div className="price-tag-big">
-                  <span className="currency-mark">LKR</span>
-                  <span className="rate-num">{formatPriceNumber(vehicle.dailyRate)}</span>
-                  <span className="rate-unit">/day</span>
-                </div>
-              ) : (
-                <div className="price-tag-big">
-                  <span className="rate-num">—</span>
-                </div>
-              )}
-              <span className="tax-notice">Includes standard liability & unlimited local mileage</span>
-            </div>
-
-            <div className="reservation-action-block">
-              <Button
-                variant="primary"
-                size="lg"
-                fullWidth
-                onClick={handleReserveClick}
-                disabled={!isAvailable}
-              >
-                {isAvailable ? 'Reserve This Vehicle' : `Vehicle ${vehicle.status}`}
-              </Button>
-              <p className="instant-confirm-text">
-                Free cancellation up to 24 hours prior to scheduled dispatch.
-              </p>
-            </div>
-
-            {/* Technical Specifications Grid */}
-            <div className="specs-detail-table">
-              <h4 className="specs-table-heading">Technical Specifications</h4>
-              <div className="spec-table-row">
-                <span className="spec-name">Powertrain</span>
-                <span className="spec-data">{fuelType}</span>
-              </div>
-              <div className="spec-table-row">
-                <span className="spec-name">Transmission</span>
-                <span className="spec-data">{transmission}</span>
-              </div>
-              <div className="spec-table-row">
-                <span className="spec-name">Seating Capacity</span>
-                <span className="spec-data">{seating}</span>
-              </div>
-              <div className="spec-table-row">
-                <span className="spec-name">Assigned Station</span>
-                <span className="spec-data">{hubLocation}</span>
-              </div>
-              <div className="spec-table-row">
-                <span className="spec-name">Odometer</span>
-                <span className="spec-data font-mono">{mileage}</span>
-              </div>
-              <div className="spec-table-row">
-                <span className="spec-name">License Plate</span>
-                <span className="spec-data font-mono">{licensePlate}</span>
-              </div>
-              <div className="spec-table-row">
-                <span className="spec-name">VIN</span>
-                <span className="spec-data font-mono" style={{ wordBreak: 'break-all', fontSize: '11px' }}>{vehicle.vin}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <BookingModal
-        isOpen={isBookingModalOpen}
-        onClose={() => setIsBookingModalOpen(false)}
-        vehicle={vehicle}
-        onSuccess={(createdBooking) => {
-          setReservationNotice({
-            type: 'success',
-            title: 'Reservation Confirmed',
-            message: `Booking #${createdBooking.id.substring(0, 8)} successfully created for ${vehicle.year} ${vehicle.make} ${vehicle.model}.`,
-          });
-        }}
-      />
-    </div>
-  );
-};
-
-export default VehicleDetailsPage;
+  return <div className="vehicle-details-container"><button type="button" className="back-link-btn" onClick={() => onNavigate('browse')}><ArrowLeftIcon size={18} weight="regular" aria-hidden="true" /> Back to vehicles</button><div className="vehicle-main-grid"><section className="vehicle-gallery-col" aria-label="Vehicle photographs"><div className="hero-image-frame">{image && !failedImages.includes(image.id) ? <img src={getVehicleImageUrl(image.relativeUrl)} alt={`${vehicle.year} ${name}`} onError={() => setFailedImages(current => [...current, image.id])} /> : <div className="vehicle-photo-empty"><h2>{name}</h2><p>Photo unavailable</p></div>}</div>{images.length > 1 && <div className="thumbnail-gallery-strip">{images.map((photo, index) => <button type="button" key={photo.id} className={`thumb-btn ${index === imageIndex ? 'active' : ''}`} aria-label={`View photo ${index + 1}`} aria-pressed={index === imageIndex} onClick={() => setImageIndex(index)}><img src={getVehicleImageUrl(photo.relativeUrl)} alt={`${name}, view ${index + 1}`} loading="lazy" /></button>)}</div>}<div className="vehicle-details-note"><h2>Know what you’re booking.</h2><p>Review the recorded specifications and daily rate. Choose your rental dates to check availability and see an estimate.</p></div></section><section className="vehicle-summary-col"><div className="summary-card"><p className="eyebrow">{vehicle.categoryName || 'FleetFlow vehicle'}</p><h1>{name}</h1><p className="vehicle-year">{vehicle.year} · {vehicle.hubLocation || 'Location not recorded'}</p><StatusBadge status={vehicle.status} /><div className="daily-pricing-box"><strong>{formatDailyRate(vehicle.dailyRate)}</strong><span>Your estimate depends on your rental dates.</span></div><Button size="lg" fullWidth disabled={!available || vehicle.dailyRate == null} onClick={reserve}>{available ? isAuthenticated ? 'Choose dates & book' : 'Sign in to book' : 'Currently unavailable'}</Button><p className="reservation-note">Pending and confirmed bookings can be cancelled from My bookings.</p><dl className="vehicle-specifications">{specs.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value ?? 'Not recorded'}</dd></div>)}</dl></div></section></div><BookingModal key={vehicle.id} isOpen={bookingOpen} onClose={() => setBookingOpen(false)} vehicle={vehicle} onNavigate={onNavigate} /></div>;
+}

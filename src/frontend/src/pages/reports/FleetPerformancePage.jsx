@@ -2,12 +2,16 @@ import useReport from './useReport';
 import { ReportShell, ReportMetrics } from './ReportComponents';
 import { formatReportMetric } from '../../utils/reportPermissions';
 import { formatLKR } from '../../utils/currencyUtils';
+import FleetDistribution from '../../components/common/FleetDistribution';
+import BookingDistribution from '../../components/common/BookingDistribution';
+import { BentoGrid } from '../../components/common/BentoGrid';
 
 export default function FleetPerformancePage() {
   const report = useReport('operational-statistics');
   const { fleet, bookings, maintenance } = report.data || {};
   return <ReportShell title="Fleet performance & analytics" report={report}>
     {fleet && <>
+      <BentoGrid className="report-visual-overview"><FleetDistribution counts={{totalVehicles:fleet.vehicles.total,available:fleet.vehicles.available,inUse:fleet.vehicles.inUse,undergoingMaintenance:fleet.vehicles.maintenance,retired:fleet.vehicles.retired}} /><BookingDistribution bookings={bookings} /></BentoGrid>
       <h2>Fleet status</h2>
       <ReportMetrics metrics={[
         { label: 'Total vehicles', value: formatReportMetric(fleet.vehicles.total) },

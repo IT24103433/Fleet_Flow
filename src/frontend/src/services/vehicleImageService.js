@@ -1,6 +1,6 @@
 const FLEET_API_URL = import.meta.env.VITE_FLEET_API_URL || 'http://localhost:5002';
 
-export const getVehicleImages = async (vehicleId, token) => {
+export const getVehicleImages = async (vehicleId, token, signal) => {
   try {
     const headers = {
       'Accept': 'application/json',
@@ -12,6 +12,7 @@ export const getVehicleImages = async (vehicleId, token) => {
     const response = await fetch(`${FLEET_API_URL}/api/vehicles/${vehicleId}/images`, {
       method: 'GET',
       headers,
+      signal,
     });
 
     const contentType = response.headers.get('content-type');

@@ -28,7 +28,6 @@ const RoleBadge = ({ role, className = '' }) => {
 
   return (
     <span className={`role-badge ${config.badgeClass} ${className}`.trim()}>
-      <span className="role-badge-dot" aria-hidden="true" />
       <span>{config.label}</span>
     </span>
   );

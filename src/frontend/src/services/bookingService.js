@@ -59,7 +59,7 @@ export const createBooking = async (bookingData) => {
     return {
       success: false,
       status: 500,
-      message: 'Network error or service unavailable. Please check your connection and try again.',
+      message: 'We couldn’t complete the booking request. Check My bookings before trying again.',
     };
   }
 };
@@ -109,7 +109,7 @@ export const getMyBookings = async () => {
     return {
       success: false,
       status: 500,
-      message: 'Network error fetching bookings.',
+      message: 'Booking history is unavailable right now. Check your connection and try again.',
       data: [],
     };
   }
@@ -155,7 +155,7 @@ export const cancelBooking = async (bookingId) => {
     return {
       success: false,
       status: 500,
-      message: 'Network error while cancelling the booking.',
+      message: 'We couldn’t confirm the cancellation. Refresh your bookings to check the current status.',
     };
   }
 };

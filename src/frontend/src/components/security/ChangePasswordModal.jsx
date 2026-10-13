@@ -3,8 +3,12 @@ import Modal from '../common/Modal';
 import InputField from '../InputField';
 import Alert from '../Alert';
 import Button from '../common/Button';
+import { useAuth } from '../../context/AuthContext';
+import { changePassword } from '../../services/authService';
+import { normalizeValidationErrors } from '../../utils/validationErrorUtils';
 
 const ChangePasswordModal = ({ isOpen, onClose }) => {
+  const { token, logout } = useAuth();
   const [formData, setFormData] = useState({
     currentPassword: '',
     newPassword: '',
@@ -15,6 +19,15 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
   const [notice, setNotice] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  const handleClose = () => {
+    if (isLoading) return;
+    if (notice?.type === 'success') logout();
+    setFormData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+    setErrors({});
+    setNotice(null);
+    onClose();
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -24,7 +37,7 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
     if (notice) setNotice(null);
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
 
@@ -35,6 +48,8 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
       newErrors.newPassword = 'New password is required.';
     } else if (formData.newPassword.length < 8) {
       newErrors.newPassword = 'Password must be at least 8 characters.';
+    } else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).+$/.test(formData.newPassword)) {
+      newErrors.newPassword = 'Include uppercase and lowercase letters, a number, and a special character.';
     }
     if (formData.newPassword !== formData.confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match.';
@@ -46,29 +61,30 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
     }
 
     setIsLoading(true);
+    setErrors({});
+    setNotice(null);
 
-    // Simulate flow and honestly communicate backend integration state
-    setTimeout(() => {
-      setIsLoading(false);
-      setNotice({
-        type: 'info',
-        title: 'Backend Integration State',
-        message: 'Security validation verified. Password update endpoint will be connected to IdentityService in Sprint 2.',
-      });
+    const result = await changePassword(token, formData.newPassword, formData.currentPassword);
+    setIsLoading(false);
+    if (result.success) {
+      setNotice({ type: 'success', title: 'Password updated', message: 'Your new password has been saved. Sign in again to continue.' });
       setFormData({ currentPassword: '', newPassword: '', confirmPassword: '' });
-    }, 600);
+    } else {
+      setErrors(normalizeValidationErrors(result.errors));
+      setNotice({ type: 'error', title: 'Password not updated', message: result.message || 'Please try again.' });
+    }
   };
 
   return (
     <Modal
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={handleClose}
       title="Change Account Password"
       subtitle="Update your security credentials. We recommend using a strong, unique password."
     >
       {notice && <Alert type={notice.type} title={notice.title} message={notice.message} />}
 
-      <form onSubmit={handleFormSubmit} noValidate>
+      {notice?.type === 'success' ? <Button fullWidth onClick={logout}>Sign in again</Button> : <form onSubmit={handleFormSubmit} noValidate>
         <InputField
           label="Current Password"
           type="password"
@@ -113,20 +129,21 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
           <ul className="rules-list">
             <li className={formData.newPassword.length >= 8 ? 'met' : ''}>At least 8 characters long</li>
             <li className={/[A-Z]/.test(formData.newPassword) ? 'met' : ''}>Contains an uppercase letter</li>
+            <li className={/[a-z]/.test(formData.newPassword) ? 'met' : ''}>Contains a lowercase letter</li>
             <li className={/[0-9]/.test(formData.newPassword) ? 'met' : ''}>Contains a digit (0-9)</li>
             <li className={/[^A-Za-z0-9]/.test(formData.newPassword) ? 'met' : ''}>Contains a special character</li>
           </ul>
         </div>
 
         <div className="modal-actions-row">
-          <Button variant="outline" onClick={onClose} disabled={isLoading}>
+          <Button variant="outline" onClick={handleClose} disabled={isLoading}>
             Cancel
           </Button>
           <Button type="submit" variant="primary" isLoading={isLoading}>
             Update Password
           </Button>
         </div>
-      </form>
+      </form>}
     </Modal>
   );
 };
