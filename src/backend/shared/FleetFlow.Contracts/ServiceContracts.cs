@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 namespace FleetFlow.Contracts;
 
-public sealed record ServiceTokenRequest([property: Required, MaxLength(100)] string ClientId,
-    [property: Required, MaxLength(512)] string ClientSecret);
+public sealed record ServiceTokenRequest([Required, MaxLength(100)] string ClientId,
+    [Required, MaxLength(512)] string ClientSecret);
 public sealed record ServiceTokenResponse(string AccessToken, string TokenType, int ExpiresIn);
 public sealed record ServiceInformation(string Service, string Database, int SchemaVersion, bool BusinessActivated);
 
@@ -21,12 +21,13 @@ public static class ServiceScopes
     public const string RentalReportsRead = "rental.reports.read";
     public const string IdentityAccessRead = "identity.access.read";
     public const string IdentityStaffRead = "identity.staff.read";
+    public const string NotificationDeliver = "notifications.deliver";
     public const string NotificationOperations = "notifications.operations";
     public static readonly IReadOnlyDictionary<string, string[]> ClientGrants =
         new Dictionary<string, string[]>(StringComparer.Ordinal)
         {
-            ["rental-service"] = [FleetRead, ReservationWrite, IdentityAccessRead],
-            ["fleet-service"] = [RentalReportsRead, IdentityAccessRead, IdentityStaffRead],
+            ["rental-service"] = [FleetRead, ReservationWrite, IdentityAccessRead, NotificationDeliver],
+            ["fleet-service"] = [RentalReportsRead, IdentityAccessRead, IdentityStaffRead, NotificationDeliver],
             ["notification-service"] = [IdentityAccessRead, NotificationOperations]
         };
 }

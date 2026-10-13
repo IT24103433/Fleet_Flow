@@ -66,16 +66,18 @@ public class BookingService : IBookingService
         };
 
         _dbContext.Bookings.Add(booking);
+        var domainEvent = new BookingCreatedEvent
+        {
+            EventId=Guid.NewGuid(), OccurredAt=booking.CreatedAt,
+            BookingId=booking.Id, CustomerId=customerId, VehicleId=booking.VehicleId
+        };
+        _dbContext.NotificationOutbox.Add(NotificationOutbox.From(domainEvent));
         await _dbContext.SaveChangesAsync();
         if (transaction != null) await transaction.CommitAsync();
 
         try
         {
-            _notifications?.TryEnqueue(new BookingCreatedEvent
-            {
-                EventId = Guid.NewGuid(), OccurredAt = booking.CreatedAt,
-                BookingId = booking.Id, CustomerId = customerId, VehicleId = booking.VehicleId
-            });
+            _notifications?.TryEnqueue(domainEvent);
         }
         catch (Exception ex)
         {
@@ -143,16 +145,18 @@ public class BookingService : IBookingService
 
         booking.Status = BookingStatus.Cancelled;
         booking.UpdatedAt = DateTime.UtcNow;
+        var domainEvent = new BookingCancelledEvent
+        {
+            EventId=Guid.NewGuid(), OccurredAt=booking.UpdatedAt.Value,
+            BookingId=booking.Id, CustomerId=booking.CustomerId, VehicleId=booking.VehicleId
+        };
+        _dbContext.NotificationOutbox.Add(NotificationOutbox.From(domainEvent));
         await _dbContext.SaveChangesAsync();
         if (transaction != null) await transaction.CommitAsync();
 
         try
         {
-            _notifications?.TryEnqueue(new BookingCancelledEvent
-            {
-                EventId = Guid.NewGuid(), OccurredAt = booking.UpdatedAt.Value,
-                BookingId = booking.Id, CustomerId = booking.CustomerId, VehicleId = booking.VehicleId
-            });
+            _notifications?.TryEnqueue(domainEvent);
         }
         catch (Exception ex)
         {

@@ -18,6 +18,12 @@ builder.Services.AddScoped<IVehicleService, VehicleService>();
 builder.Services.AddScoped<IVehicleImageService, VehicleImageService>();
 builder.Services.AddScoped<IMaintenanceService, MaintenanceService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
+builder.Services.AddSingleton(NotificationRouting.Read(builder.Configuration,builder.Environment));
+builder.Services.AddScoped<NotificationForwarder>();
+builder.Services.AddHttpClient("NotificationService",(sp,client)=>
+{ client.BaseAddress=sp.GetRequiredService<NotificationRouting>().BaseUrl;client.Timeout=TimeSpan.FromSeconds(5); })
+.ConfigurePrimaryHttpMessageHandler(()=>new HttpClientHandler{AllowAutoRedirect=false});
+builder.Services.AddSingleton<IReliableNotificationPublisher,ReliableNotificationPublisher>();
 builder.Services.AddScoped<NotificationService>();
 builder.Services.AddScoped<NotificationEventProcessor>();
 builder.Services.AddScoped<IReportingService, ReportingService>();
@@ -183,6 +189,7 @@ _ = Task.Run(async () =>
                     CREATE INDEX IF NOT EXISTS ""IX_MaintenanceRecords_ScheduledDateTime"" ON ""MaintenanceRecords"" (""ScheduledDateTime"");
                 ");
                 await NotificationSchema.EnsureAsync(dbContext);
+                await NotificationOutboxSchema.EnsureAsync(dbContext);
                 readiness.MarkInitialized();
                 Console.WriteLine("[Database] FleetService database initialized and ready.");
             }

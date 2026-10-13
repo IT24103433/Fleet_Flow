@@ -1,13 +1,21 @@
 using FleetFlow.Contracts;
 using FleetFlow.ServiceDefaults;
-
-var builder = WebApplication.CreateBuilder(args);
-builder.AddServiceFoundation(new OwnedServiceDescriptor("NotificationService", "fleetflow_notifications", "NOTIFICATION"));
-builder.Services.AddOpenApi();
-var app = builder.Build();
-app.MapOpenApi();
-app.UseSwaggerUI(options => options.SwaggerEndpoint("/openapi/v1.json", "NotificationService v1"));
-app.MapServiceFoundation(ServiceScopes.NotificationOperations);
-app.Run();
-
-namespace NotificationService.Api { public sealed class NotificationApplication { } }
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using NotificationService.Api.Data;
+using NotificationService.Api.Messaging;
+using NotificationService.Api.Services;
+var builder=WebApplication.CreateBuilder(args);
+builder.AddServiceFoundation(new OwnedServiceDescriptor("NotificationService","fleetflow_notifications","NOTIFICATION"));
+var activation=NotificationActivation.Read(builder.Configuration);
+builder.Services.AddSingleton(activation);
+builder.Services.AddDbContext<NotificationDbContext>((sp,options)=>options.UseNpgsql(sp.GetRequiredService<OwnedDatabase>().ConnectionString));
+builder.Services.AddScoped<InboxService>();builder.Services.AddScoped<NotificationEventProcessor>();
+builder.Services.AddScoped<NotificationActivationFilter>();
+builder.Services.RemoveAll<IDatabaseReadiness>();builder.Services.AddSingleton<IDatabaseReadiness,NotificationReadiness>();
+builder.Services.Configure<KafkaSettings>(builder.Configuration.GetSection("Kafka"));builder.Services.AddHostedService<NotificationKafkaConsumer>();
+builder.Services.AddControllers();builder.Services.AddOpenApi();
+var app=builder.Build();app.MapOpenApi();app.UseSwaggerUI(o=>o.SwaggerEndpoint("/openapi/v1.json","NotificationService v1"));
+app.MapServiceFoundation(ServiceScopes.NotificationOperations,activation.Active,2);
+app.UseMiddleware<NotificationService.Api.Middleware.ForcedPasswordChangeMiddleware>();app.MapControllers();app.Run();
+namespace NotificationService.Api { public sealed class NotificationApplication {} }

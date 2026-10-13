@@ -41,7 +41,7 @@ public sealed class HostTests
         Assert.Equal(HttpStatusCode.Forbidden,(await client.GetAsync("/internal/service")).StatusCode);
         // Foundation must not claim booking/inbox ownership before extraction.
         Assert.Equal(HttpStatusCode.NotFound,(await client.GetAsync("/api/bookings")).StatusCode);
-        Assert.Equal(HttpStatusCode.NotFound,(await client.GetAsync("/api/notifications")).StatusCode);
+        Assert.Equal(name=="NotificationService"?HttpStatusCode.Unauthorized:HttpStatusCode.NotFound,(await client.GetAsync("/api/notifications")).StatusCode);
     }
     [Theory][InlineData(true,true)][InlineData(true,false)][InlineData(false,true)][InlineData(false,false)]
     public async Task LivenessDoesNotDependOnReadiness(bool rental,bool ready)

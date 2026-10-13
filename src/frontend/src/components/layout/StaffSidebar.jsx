@@ -79,6 +79,11 @@ const StaffSidebar = ({
               <UserPlusIcon className="nav-item-icon" weight="regular" aria-hidden="true" />
               {!sidebarCollapsed && <span className="nav-item-label">Create User</span>}
             </button>
+        <button type="button" className={`staff-nav-item ${currentView === 'admin-notification-delivery' ? 'active' : ''}`}
+          onClick={() => onNavigate('admin-notification-delivery')} title="Notification delivery" aria-label="Notification delivery">
+          <ChartBarIcon className="nav-item-icon" weight="regular" aria-hidden="true" />
+          {!sidebarCollapsed && <span className="nav-item-label">Notification delivery</span>}
+        </button>
           </>}
 
         <div className="nav-section-label">{!sidebarCollapsed && 'REPORTS'}</div>
@@ -95,6 +100,7 @@ const StaffSidebar = ({
             <ChartBarIcon className="nav-item-icon" weight="regular" aria-hidden="true" />
             {!sidebarCollapsed && <span className="nav-item-label">{item.label}</span>}
           </button>)}
+
 
         <div className="nav-section-label">{!sidebarCollapsed && 'ACCOUNT'}</div>
         <NotificationNavButton className={`staff-nav-item ${currentView === 'staff-notifications' ? 'active' : ''}`} collapsed={sidebarCollapsed} onClick={() => onNavigate('staff-notifications')} />

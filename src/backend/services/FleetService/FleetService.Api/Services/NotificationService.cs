@@ -6,19 +6,26 @@ using Npgsql;
 
 namespace FleetService.Api.Services;
 
-public class NotificationService(FleetDbContext db)
+public class NotificationService(FleetDbContext db, FleetService.Api.Messaging.NotificationRouting? routing = null)
 {
-    public async Task<IReadOnlyList<NotificationResponse>> GetInboxAsync(Guid userId, CancellationToken ct = default) =>
-        await db.Notifications.AsNoTracking().Where(n => n.TargetUserId == userId)
+    public async Task<IReadOnlyList<NotificationResponse>> GetInboxAsync(Guid userId, CancellationToken ct = default)
+    {
+        EnsureLegacyOwner();
+        return await db.Notifications.AsNoTracking().Where(n => n.TargetUserId == userId)
             .OrderByDescending(n => n.CreatedAt).ThenBy(n => n.Id)
             .Select(n => new NotificationResponse(n.Id, n.Category, n.Title, n.Message,
                 n.RelatedEntityId, n.VehicleId, n.CreatedAt, n.IsRead)).ToListAsync(ct);
+    }
 
-    public Task<int> GetUnreadCountAsync(Guid userId, CancellationToken ct = default) =>
-        db.Notifications.CountAsync(n => n.TargetUserId == userId && !n.IsRead, ct);
+    public Task<int> GetUnreadCountAsync(Guid userId, CancellationToken ct = default)
+    {
+        EnsureLegacyOwner();
+        return db.Notifications.CountAsync(n => n.TargetUserId == userId && !n.IsRead, ct);
+    }
 
     public async Task<bool> MarkReadAsync(Guid userId, Guid id, CancellationToken ct = default)
     {
+        EnsureLegacyOwner();
         var notification = await db.Notifications.SingleOrDefaultAsync(n => n.Id == id && n.TargetUserId == userId, ct);
         if (notification == null) return false;
         notification.IsRead = true;
@@ -26,9 +33,15 @@ public class NotificationService(FleetDbContext db)
         return true;
     }
 
+    private void EnsureLegacyOwner()
+    {
+        if (routing?.Remote == true) throw new InvalidOperationException("Fleet no longer owns the notification inbox.");
+    }
+
     public async Task PersistAsync(Guid eventId, Guid userId, string category, string title, string message,
         Guid? relatedId = null, Guid? vehicleId = null, CancellationToken ct = default)
     {
+        EnsureLegacyOwner();
         if (eventId == Guid.Empty || userId == Guid.Empty || string.IsNullOrWhiteSpace(title) ||
             title.Length > 200 || string.IsNullOrWhiteSpace(message) || message.Length > 2000)
             throw new ArgumentException("A valid event, target user, title and message are required.");

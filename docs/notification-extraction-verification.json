@@ -1,0 +1,183 @@
+{
+  "baseDevelop": "f8566511986d25b29fd23bfd0ca2f4ca5cdfcdd2",
+  "branch": "feat/s4-notification-outbox",
+  "story": "S4-07 counted once, 5 points; extraction is additional architecture work",
+  "backend": {
+    "baselinePreserved": 502,
+    "fullMilestonePassed": 530,
+    "additionalFocusedPassed": 2,
+    "uniquePassed": 532,
+    "failed": 0,
+    "skipped": 0,
+    "reports": [
+      {
+        "passed": 55,
+        "failed": 0,
+        "skipped": 0,
+        "sha256": "8498d96d49f6ef6c4da4c93f10781fb1e47e3e00da9310053823614c03585242"
+      },
+      {
+        "passed": 101,
+        "failed": 0,
+        "skipped": 0,
+        "sha256": "77d93110471e8453ce8d60f9f7aa97caa3c5cca6cc74e17b9732435b5d9fa8e7"
+      },
+      {
+        "passed": 37,
+        "failed": 0,
+        "skipped": 0,
+        "sha256": "ca7a7e57a3d66c6baa62d2aca8e9b0a85388521933a6f35be9e9df4f81af771e"
+      },
+      {
+        "passed": 251,
+        "failed": 0,
+        "skipped": 0,
+        "sha256": "b4c4eaac4533bff2ade8d8e45a3ec875c00825716047f63670c2d1c205f5290b"
+      },
+      {
+        "passed": 69,
+        "failed": 0,
+        "skipped": 0,
+        "sha256": "dcb33b1b7fe00c0400d9ea5e21f9b5af55bb1b7d7aeb867243a02a89f212eb62"
+      },
+      {
+        "passed": 17,
+        "failed": 0,
+        "skipped": 0,
+        "sha256": "af0be9fc4b41da384414f910f560a24f2be83930a3ef74c6e193f34ab9bd9dfe"
+      }
+    ],
+    "focused": [
+      {
+        "kind": "activation gate",
+        "passed": 1,
+        "sha256": "f1e67134704865c788cfa0c05c3d01d3978bfb61a46167dbae2617b52683df31"
+      },
+      {
+        "kind": "real Kafka",
+        "passed": 1,
+        "sha256": "6e343a422d112a12a831944c1f75f75e4d9411766fb5cc5155251802eacf610a"
+      }
+    ]
+  },
+  "frontend": {
+    "baselinePreserved": 126,
+    "passed": 129,
+    "lint": "passed",
+    "productionBuild": "passed",
+    "bundle": {
+      "definition": "Entry plus recursively static imports, uncompressed; lazy routes reported separately.",
+      "entryBytes": 303286,
+      "budgetBytes": 350000,
+      "lazy": {
+        "LandingPage": {
+          "ownBytes": 131010,
+          "additionalStaticClosureBytes": 142376
+        },
+        "NotificationDeliveryPage": {
+          "ownBytes": 10160,
+          "additionalStaticClosureBytes": 15285
+        }
+      },
+      "passes": true
+    }
+  },
+  "backup": {
+    "verified": true,
+    "databases": {
+      "fleetflow_fleet": {
+        "sha256": "296cfe8a9591e5275b45b10838f3d27e94751515076e3e0281bf77512814c9fb",
+        "restoredAndVerified": true
+      },
+      "fleetflow_auth": {
+        "sha256": "96986dcc75ebd622c7c0f25809f2299a4273fe1d60c3ea72f5427c46d4ef5dd7",
+        "restoredAndVerified": true
+      }
+    },
+    "uploads": {
+      "count": 5,
+      "sha256": "e7a87cf942e92d0fd2d3746f81a9bc71034ceef8781a7ea13a02b7551943f965",
+      "verified": true
+    },
+    "affectedManifestSha256": "22f6249abcb1b17f7cf9b2ea372a6c13a2849d696f629ef8808b97157bc99665"
+  },
+  "cutoverRehearsal": {
+    "migratedRecords": 16,
+    "failedReplayEvent": "a8ecf75a-9c80-4b3e-94b6-3ddf545a3777",
+    "compatibilityInboxMatches": true,
+    "workingDatabasesUntouched": true,
+    "crossAccountReadRejected": 404,
+    "bookingCreated": true,
+    "cancelled": true,
+    "cancelNoticeId": "574fe4d2-ce45-485b-bb1f-7164f24ad3d1",
+    "compatibilityMarkRead": 204,
+    "readStatePreservedBeforeReplay": true,
+    "desktopReplayDelivered": true,
+    "readStatePreservedAfterReplay": true
+  },
+  "desktop": {
+    "viewport": [
+      1440,
+      900
+    ],
+    "horizontalOverflow": false,
+    "states": [
+      "empty",
+      "populated",
+      "filtered",
+      "confirmation",
+      "replayed",
+      "failed request"
+    ],
+    "screenshots": [
+      {
+        "file": "review/s4-notification-delivered-1440.jpg",
+        "sha256": "f2ef38981e56ab5343d23b6ed48539f82768a8a09bd2ec39838d48517ddac8e9"
+      },
+      {
+        "file": "review/s4-notification-delivery-1440.jpg",
+        "sha256": "a70a7070730034f490894dbd24b4169bb3a58ffc449a84c60ae0b7ccf01f01e0"
+      },
+      {
+        "file": "review/s4-notification-replay-1440.jpg",
+        "sha256": "1195a1df4e4d09d31cf667a475dbb7c8532f69e03448f9924c9db680839c8191"
+      },
+      {
+        "file": "review/s4-notification-unavailable-1440.jpg",
+        "sha256": "ea5859f581a0cffcd14ad6df2a577909f0cbbfff7e372d62009bd7cf6ef1241f"
+      }
+    ],
+    "dedicatedMobileOrTabletReview": false
+  },
+  "artifacts": [
+    {
+      "service": "IdentityService",
+      "dllSha256": "d557718957e89b1548be3f476f6175f00eff0e7e78442f6acabf8202a98594bf"
+    },
+    {
+      "service": "FleetService",
+      "dllSha256": "ff9d236100e988af26f69414d02ff9e3b8f707769cd2b2edefe520322986060a"
+    },
+    {
+      "service": "RentalService",
+      "dllSha256": "62a67fa9f20b71f7ab2c2fe5fdd642eb2b6c11be50bb8d2a4b2480f8330a2640"
+    },
+    {
+      "service": "NotificationService",
+      "dllSha256": "f465d953fdf7870d7c27b31e71c261f32f4162d1f3857ec839e8768096e5586e"
+    }
+  ],
+  "safety": {
+    "workingDatabasesMatchBackup": true,
+    "reviewProcessesAndDatabasesRemoved": true,
+    "azureModified": false,
+    "deploymentPerformed": false,
+    "defaultOwner": "Legacy",
+    "defaultNotificationActive": false
+  },
+  "limitations": [
+    "Production cutover and deployed acceptance remain DevOps/QA work.",
+    "Three nullable warnings remain in unchanged legacy Identity test files.",
+    "Kafka-disabled local delivery intentionally omits broker acknowledgement."
+  ]
+}

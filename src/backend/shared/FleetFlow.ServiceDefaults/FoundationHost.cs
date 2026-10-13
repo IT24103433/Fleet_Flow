@@ -37,10 +37,10 @@ public static class FoundationHost
             .AllowAnyHeader().AllowAnyMethod().WithExposedHeaders("X-Total-Count","X-Page","X-Page-Size","X-Total-Pages")));
     }
 
-    public static void MapServiceFoundation(this WebApplication app, string internalScope)
+    public static void MapServiceFoundation(this WebApplication app, string internalScope, bool businessActivated = false, int schemaVersion = 1)
     {
         var descriptor = app.Services.GetRequiredService<OwnedDatabase>().Service;
-        var information = new ServiceInformation(descriptor.Name, descriptor.Database, 1, false);
+        var information = new ServiceInformation(descriptor.Name, descriptor.Database, schemaVersion, businessActivated);
         app.UseCors();
         app.UseAuthentication();
         app.UseAuthorization();
@@ -49,7 +49,7 @@ public static class FoundationHost
         {
             var ready = await database.IsReadyAsync(cancellationToken);
             return Results.Json(new { status = ready ? "Ready" : "NotReady", service = descriptor.Name,
-                database = descriptor.Database, schemaVersion = ready ? 1 : 0, businessActivated = false },
+                database = descriptor.Database, schemaVersion = ready ? schemaVersion : 0, businessActivated },
                 statusCode: ready ? StatusCodes.Status200OK : StatusCodes.Status503ServiceUnavailable);
         }
         app.MapGet("/health/ready", Ready);

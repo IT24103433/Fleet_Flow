@@ -15,11 +15,20 @@ public class FleetDbContext : DbContext
     public DbSet<Booking> Bookings => Set<Booking>();
     public DbSet<MaintenanceRecord> MaintenanceRecords => Set<MaintenanceRecord>();
     public DbSet<Notification> Notifications => Set<Notification>();
+    public DbSet<NotificationOutbox> NotificationOutbox => Set<NotificationOutbox>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
+        modelBuilder.Entity<NotificationOutbox>(entity =>
+        {
+            entity.ToTable("NotificationOutbox"); entity.HasKey(e => e.Id);
+            entity.Property(e => e.EventType).HasMaxLength(100).IsRequired();
+            entity.Property(e => e.Payload).IsRequired(); entity.Property(e => e.Status).HasMaxLength(20).IsRequired();
+            entity.Property(e => e.LastErrorCode).HasMaxLength(50);
+            entity.HasIndex(e => new { e.Status, e.NextAttemptAt });
+        });
         modelBuilder.Entity<Notification>(entity =>
         {
             entity.ToTable("Notifications");
