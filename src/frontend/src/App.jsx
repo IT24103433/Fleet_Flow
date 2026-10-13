@@ -38,13 +38,14 @@ const MaintenanceDashboardPage = React.lazy(() => import('./pages/maintenance/Ma
 // Security Pages
 import ForcePasswordChangePage from './pages/security/ForcePasswordChangePage';
 import './App.css';
+const NotificationDeliveryPage = React.lazy(() => import('./pages/admin/NotificationDeliveryPage'));
 const NotificationsPage = React.lazy(() => import('./pages/NotificationsPage'));
 import { REPORT_VIEWS, canViewReport } from './utils/reportPermissions';
 const FleetPerformancePage = React.lazy(() => import('./pages/reports/FleetPerformancePage'));
 const BookingReportsPage = React.lazy(() => import('./pages/reports/BookingReportsPage'));
 const MaintenanceReportsPage = React.lazy(() => import('./pages/reports/MaintenanceReportsPage'));
 const STAFF_ROLES = ['FLEET_MANAGER', 'MAINTENANCE_STAFF', 'ADMIN'];
-const STAFF_VIEWS = [...REPORT_VIEWS, 'staff-dashboard', 'staff-notifications', 'admin-dashboard', 'admin-users', 'admin-create-user', 'admin-edit-user', 'admin-user-details', 'staff-profile', 'manage-fleet', 'maintenance-dashboard', 'add-vehicle', 'edit-vehicle', 'staff-vehicle-details', 'vehicle-images'];
+const STAFF_VIEWS = [...REPORT_VIEWS, 'staff-dashboard', 'staff-notifications', 'admin-dashboard', 'admin-notification-delivery', 'admin-users', 'admin-create-user', 'admin-edit-user', 'admin-user-details', 'staff-profile', 'manage-fleet', 'maintenance-dashboard', 'add-vehicle', 'edit-vehicle', 'staff-vehicle-details', 'vehicle-images'];
 const CUSTOMER_ONLY_VIEWS = ['customer-home', 'customer-profile', 'notifications'];
 function AppContent() {
   const {
@@ -171,7 +172,7 @@ function AppContent() {
       activeView = 'customer-home';
     } else if (isStaffUser && REPORT_VIEWS.includes(currentView) && !canViewReport(currentView, userRoles)) {
       activeView = 'staff-dashboard';
-    } else if (isStaffUser && ['admin-dashboard', 'admin-users', 'admin-create-user', 'admin-edit-user', 'admin-user-details'].includes(currentView) && !isAdminUser) {
+    } else if (isStaffUser && ['admin-dashboard', 'admin-notification-delivery', 'admin-users', 'admin-create-user', 'admin-edit-user', 'admin-user-details'].includes(currentView) && !isAdminUser) {
       activeView = 'staff-dashboard';
     } else if (isStaffUser && currentView === 'add-vehicle' && !canAddVehicle) {
       activeView = 'manage-fleet';
@@ -240,6 +241,8 @@ function AppContent() {
     }
     const renderStaffContent = () => {
       switch (activeView) {
+        case 'admin-notification-delivery':
+          return <NotificationDeliveryPage key={user?.id} />;
         case 'staff-notifications':
           return <NotificationsPage key={user?.id} />;
         case 'fleet-performance':
@@ -279,6 +282,8 @@ function AppContent() {
     };
     const getStaffHeaderTitle = () => {
       switch (activeView) {
+        case 'admin-notification-delivery':
+          return 'Notification operations';
         case 'staff-notifications':
           return 'Notifications';
         case 'fleet-performance':

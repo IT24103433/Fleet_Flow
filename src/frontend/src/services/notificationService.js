@@ -1,6 +1,6 @@
-const FLEET_API_URL = import.meta.env?.VITE_FLEET_API_URL || 'http://localhost:5002';
+const NOTIFICATION_API_URL = import.meta.env?.VITE_NOTIFICATION_API_URL || import.meta.env?.VITE_FLEET_API_URL || 'http://localhost:5002';
 
-export function createNotificationClient({ baseUrl = FLEET_API_URL, fetchImpl = globalThis.fetch,
+export function createNotificationClient({ baseUrl = NOTIFICATION_API_URL, fetchImpl = globalThis.fetch,
   getToken = () => sessionStorage.getItem('token') } = {}) {
   async function request(path, method = 'GET', signal) {
     const token = getToken();

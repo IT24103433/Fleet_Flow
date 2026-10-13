@@ -48,6 +48,8 @@ services:
     environment:
       <<: *api-environment
       FLEET_DB_NAME: fleetflow_fleet
+      NOTIFICATION_OWNERSHIP: ${NOTIFICATION_OWNERSHIP:-Legacy}
+      INTERNAL_NOTIFICATION_URL: http://notification-service:8080/
       SERVICE_AUTH_FLEET_SECRET: ${SERVICE_AUTH_FLEET_SECRET:-}
       FLEET_UPLOAD_ROOT: /app/uploads
     volumes: [fleetflow_fleet_uploads:/app/uploads]
@@ -74,5 +76,7 @@ services:
     environment:
       <<: *api-environment
       NOTIFICATION_DB_NAME: fleetflow_notifications
+      NOTIFICATION_SERVICE_ACTIVE: ${NOTIFICATION_SERVICE_ACTIVE:-false}
+      NOTIFICATION_MIGRATION_ID: ${NOTIFICATION_MIGRATION_ID:-}
       SERVICE_AUTH_NOTIFICATION_SECRET: ${SERVICE_AUTH_NOTIFICATION_SECRET:-}
     depends_on: [postgres,identity-service]

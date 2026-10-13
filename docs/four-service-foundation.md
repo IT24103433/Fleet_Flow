@@ -1,5 +1,7 @@
 # Four-service foundation: Sprint 4 architecture PR
 
+This document records the foundation milestone. The subsequent [Notification extraction + S4-07](notification-extraction-outbox.md) adds its business endpoints and verified cutover gate.
+
 This PR adds independently buildable Rental and Notification API hosts, owned database initialization, internal authentication, and packaging. **Bookings and notifications still run in Fleet.** The frontend still uses Identity and Fleet; no cutover, booking migration, inbox migration, rental-lifecycle feature, or Azure change occurs here. The two new hosts report `businessActivated: false`. Four operational business services require the subsequent extraction PRs.
 
 ## Service boundaries and local interfaces

@@ -225,10 +225,7 @@ public class MaintenanceService : IMaintenanceService
         vehicle.Status = VehicleStatus.Maintenance;
         vehicle.UpdatedAt = DateTime.UtcNow;
         _dbContext.MaintenanceRecords.Add(record);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-        if (transaction != null) await transaction.CommitAsync(cancellationToken);
-
-        TryDispatch(new MaintenanceScheduledEvent
+        var domainEvent = new MaintenanceScheduledEvent
         {
             EventId = Guid.NewGuid(),
             OccurredAt = record.CreatedAt,
@@ -236,7 +233,12 @@ public class MaintenanceService : IMaintenanceService
             VehicleId = record.VehicleId,
             Activity = SummarizeActivity(record.ServiceInformation),
             TargetUserIds = [record.CreatedByUserId]
-        }, record.Id);
+        };
+        _dbContext.NotificationOutbox.Add(NotificationOutbox.From(domainEvent));
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        if (transaction != null) await transaction.CommitAsync(cancellationToken);
+
+        TryDispatch(domainEvent, record.Id);
 
         return MapRecord(record);
     }
@@ -369,9 +371,7 @@ public class MaintenanceService : IMaintenanceService
             }
         }
 
-        await _dbContext.SaveChangesAsync(cancellationToken);
-        if (transaction != null) await transaction.CommitAsync(cancellationToken);
-        TryDispatch(new MaintenanceStatusChangedEvent
+        var domainEvent = new MaintenanceStatusChangedEvent
         {
             EventId = Guid.NewGuid(),
             OccurredAt = record.UpdatedAt!.Value,
@@ -380,7 +380,11 @@ public class MaintenanceService : IMaintenanceService
             Activity = SummarizeActivity(record.ServiceInformation),
             Status = record.Status.ToString(),
             TargetUserIds = [record.CreatedByUserId]
-        }, record.Id);
+        };
+        _dbContext.NotificationOutbox.Add(NotificationOutbox.From(domainEvent));
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        if (transaction != null) await transaction.CommitAsync(cancellationToken);
+        TryDispatch(domainEvent, record.Id);
         return MapRecord(record);
     }
 

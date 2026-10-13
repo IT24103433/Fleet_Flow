@@ -300,3 +300,5 @@ static string GetDatabaseConnectionString(IConfiguration configuration)
     var sslMode = requiresSsl ? ";Ssl Mode=Require;Trust Server Certificate=true" : "";
     return $"Host={host};Port={port};Database={dbName};Username={user};Password={password}{sslMode};Timeout=10;Command Timeout=30;";
 }
+
+namespace IdentityService.Api { public sealed class IdentityApplication { } }

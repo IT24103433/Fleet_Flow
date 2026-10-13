@@ -64,6 +64,9 @@ jobs:
       - name: Publish Guarded Database Tool
         run: dotnet publish tools/ServiceDatabaseTool/ServiceDatabaseTool.csproj --configuration Release --no-restore --output ./artifacts/database-tool
 
+      - name: Publish Notification Migration Tool
+        run: dotnet publish tools/NotificationMigration/NotificationMigration.csproj --configuration Release --no-restore --output ./artifacts/notification-migration
+
       - name: Upload Backend Service Artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -91,7 +94,27 @@ jobs:
         options: >-
           --health-cmd "pg_isready -U postgres -d fleetflow_hardening_ci"
           --health-interval 5s --health-timeout 5s --health-retries 10
+      kafka:
+        image: apache/kafka:3.7.0
+        env:
+          KAFKA_NODE_ID: '1'
+          KAFKA_PROCESS_ROLES: broker,controller
+          KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+          KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+          KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+          KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+          KAFKA_CONTROLLER_QUORUM_VOTERS: 1@localhost:9093
+          KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: '1'
+          KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: '1'
+          KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: '1'
+          KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: '0'
+        ports:
+          - 9092:9092
+        options: >-
+          --health-cmd "/opt/kafka/bin/kafka-broker-api-versions.sh --bootstrap-server localhost:9092"
+          --health-interval 5s --health-timeout 10s --health-retries 12
     env:
+      FLEET_TEST_KAFKA: 127.0.0.1:9092
       FLEET_TEST_POSTGRES: Host=localhost;Port=5432;Database=fleetflow_hardening_ci;Username=postgres;Password=foundation_ci_only
     steps:
       - name: Checkout Source Code

@@ -12,6 +12,8 @@ public class NotificationEventConsumerService(IServiceScopeFactory scopes, IOpti
     {
         var settings = options.Value;
         if (!settings.Enabled) return;
+        using (var scope = scopes.CreateScope())
+            if (scope.ServiceProvider.GetRequiredService<NotificationRouting>().Remote) return;
         await Task.Yield();
         // Reconnect after initialization/consumer failures without stopping the API host.
         while (!stoppingToken.IsCancellationRequested)
