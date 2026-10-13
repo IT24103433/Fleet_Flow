@@ -1,9 +1,8 @@
 name: Build and deploy ASP.Net Core app to Azure Web App - fleetflow-app-24103433
 
+# Development integration must not deploy to Azure. DevOps explicitly runs this
+# workflow after development and release acceptance are ready.
 on:
-  push:
-    branches:
-      - develop
   workflow_dispatch:
 
 jobs:
