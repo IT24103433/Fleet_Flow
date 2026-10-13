@@ -112,7 +112,7 @@ export const getVehicles = async (params = {}) => {
     return {
       success: false,
       status: 0,
-      message: 'The fleet service is currently unreachable. Please check your network and ensure FleetService is running.',
+      message: 'Vehicles are unavailable right now. Check your connection and try again.',
     };
   }
 };

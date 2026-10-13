@@ -7,6 +7,9 @@ export function createReportClient({ baseUrl = FLEET_API_URL, fetchImpl = global
     if (!token) throw new Error('Please log in to view reports.');
     const response = await fetchImpl(`${baseUrl}/api/reports/${path}`, {
       headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' }, signal, cache: 'no-store',
+    }).catch(error => {
+      if (error.name === 'AbortError') throw error;
+      throw new Error('Reports are unavailable right now. Check your connection and try again.');
     });
     if (!response.ok) throw new Error(response.status === 401 ? 'Your session expired. Please log in again.'
       : response.status === 403 ? 'You do not have permission to view this report.'

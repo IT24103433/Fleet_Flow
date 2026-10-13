@@ -1,324 +1,81 @@
-import React, { useState, useEffect } from 'react';
+import { ArrowUpRightIcon } from "@phosphor-icons/react/dist/csr/ArrowUpRight";
+import React, { useEffect, useRef, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import RoleBadge from '../../components/common/RoleBadge';
-import StatusBadge from '../../components/common/StatusBadge';
 import Button from '../../components/common/Button';
+import Modal from '../../components/common/Modal';
+import StatusBadge from '../../components/common/StatusBadge';
+import VehicleCard from '../../components/common/VehicleCard';
 import Alert from '../../components/Alert';
 import { getVehicles } from '../../services/vehicleService';
 import { cancelBooking, getMyBookings } from '../../services/bookingService';
-import { formatDailyRate, formatPriceNumber } from '../../utils/currencyUtils';
+import { formatLKR } from '../../utils/currencyUtils';
 import { isBookingCancellable } from '../../validation/bookingValidation';
-
-const CustomerHomePage = ({ onNavigate, onSelectVehicle }) => {
-  const { user, roles } = useAuth();
-  const primaryRole = roles?.[0] || 'CUSTOMER';
-
-  const [recommendedVehicles, setRecommendedVehicles] = useState([]);
-  const [isLoadingVehicles, setIsLoadingVehicles] = useState(true);
-  const [customerBookings, setCustomerBookings] = useState([]);
-  const [isLoadingBookings, setIsLoadingBookings] = useState(true);
-  const [bookingError, setBookingError] = useState(null);
-  const [bookingNotice, setBookingNotice] = useState(null);
-  const [cancellingBookingId, setCancellingBookingId] = useState(null);
-
+export default function CustomerHomePage({
+  onNavigate
+}) {
+  const {
+    user,
+    token
+  } = useAuth();
+  const [result, setResult] = useState(null);
+  const [revision, setRevision] = useState(0);
+  const [cancelTarget, setCancelTarget] = useState(null);
+  const [pending, setPending] = useState(false);
+  const [notice, setNotice] = useState(null);
+  const submitting = useRef(false);
+  const key = `${token}:${revision}`;
   useEffect(() => {
-    let isMounted = true;
-
-    Promise.all([
-      getVehicles({ status: 'Available', pageSize: 4 }),
-      getMyBookings(),
-    ]).then(([vehiclesRes, bookingsRes]) => {
-      if (!isMounted) return;
-
-      if (vehiclesRes.success && Array.isArray(vehiclesRes.data)) {
-        setRecommendedVehicles(vehiclesRes.data);
-      } else {
-        setRecommendedVehicles([]);
-      }
-      setIsLoadingVehicles(false);
-
-      if (bookingsRes.success && Array.isArray(bookingsRes.data)) {
-        setCustomerBookings(bookingsRes.data);
-      } else {
-        setCustomerBookings([]);
-        setBookingError(bookingsRes.message || 'Unable to load your booking history.');
-      }
-      setIsLoadingBookings(false);
+    let active = true;
+    Promise.all([getMyBookings(), getVehicles({
+      status: 'Available',
+      pageSize: 3
+    })]).then(([bookings, vehicles]) => {
+      if (active) setResult({
+        key,
+        bookings,
+        vehicles
+      });
     });
-
     return () => {
-      isMounted = false;
+      active = false;
     };
-  }, []);
-
-  const handleCancelBooking = async (booking) => {
-    const shouldCancel = window.confirm(`Cancel booking #${booking.id.substring(0, 8)}? This action cannot be undone.`);
-    if (!shouldCancel) return;
-
-    setBookingError(null);
-    setBookingNotice(null);
-    setCancellingBookingId(booking.id);
-
-    const result = await cancelBooking(booking.id);
-    setCancellingBookingId(null);
-
-    if (!result.success || !result.data) {
-      setBookingError(result.message || 'Unable to cancel this booking.');
-      return;
-    }
-
-    setCustomerBookings((currentBookings) => currentBookings.map((current) => (
-      current.id === result.data.id ? result.data : current
-    )));
-    setBookingNotice(`Booking #${result.data.id.substring(0, 8)} was cancelled and remains available in your history.`);
+  }, [token, key]);
+  const current = result?.key === key ? result : null;
+  const submitCancellation = async () => {
+    if (submitting.current || !cancelTarget) return;
+    submitting.current = true;
+    setPending(true);
+    const response = await cancelBooking(cancelTarget.id);
+    submitting.current = false;
+    setPending(false);
+    if (response.success && response.data) {
+      setResult(previous => ({
+        ...previous,
+        bookings: {
+          ...previous.bookings,
+          data: previous.bookings.data.map(booking => booking.id === response.data.id ? response.data : booking)
+        }
+      }));
+      setCancelTarget(null);
+      setNotice({
+        type: 'success',
+        message: 'Booking cancelled. It remains in your booking history.'
+      });
+    } else setNotice({
+      type: 'error',
+      message: response.message || 'We couldn’t cancel this booking. Please try again.'
+    });
   };
-
-  return (
-    <div className="customer-home-container">
-      {/* Customer Header Banner */}
-      <div className="customer-hero-card">
-        <div className="customer-hero-left">
-          <div className="customer-status-pill">
-            <span className="live-dot" aria-hidden="true" />
-            <span>Active Customer Session</span>
-          </div>
-          <h1 className="customer-welcome-title">Welcome, {user?.username}!</h1>
-          <p className="customer-welcome-subtitle">
-            Explore our curated vehicle catalog, manage active reservations, or update your account details.
-          </p>
-          <div className="customer-meta-strip">
-            <RoleBadge role={primaryRole} />
-            <span className="customer-email-tag">{user?.email || 'Registered Customer'}</span>
-          </div>
-        </div>
-
-        <div className="customer-hero-actions">
-          <Button variant="primary" size="lg" onClick={() => onNavigate('browse')}>
-            Browse Available Fleet
-          </Button>
-          <Button variant="outline" size="lg" onClick={() => onNavigate('customer-profile')}>
-            Account Profile & Security
-          </Button>
-        </div>
-      </div>
-
-      {/* Quick Operations Shortcuts */}
-      <div className="home-shortcuts-grid">
-        <div className="home-shortcut-card" onClick={() => onNavigate('browse')} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && onNavigate('browse')}>
-          <div className="shortcut-icon-mark">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C2.1 10.7 2 10.8 2 11v5c0 .6.4 1 1 1h2" />
-              <circle cx="7" cy="17" r="2" />
-              <path d="M9 17h6" />
-              <circle cx="17" cy="17" r="2" />
-            </svg>
-          </div>
-          <div className="shortcut-card-text">
-            <h4>Explore Vehicle Fleet</h4>
-            <p>Browse full catalog, filter by category, and inspect detailed vehicle specifications.</p>
-          </div>
-        </div>
-
-        <div className="home-shortcut-card" onClick={() => onNavigate('customer-profile')} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && onNavigate('customer-profile')}>
-          <div className="shortcut-icon-mark">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-              <circle cx="12" cy="7" r="4" />
-            </svg>
-          </div>
-          <div className="shortcut-card-text">
-            <h4>Profile & Password Security</h4>
-            <p>Manage personal details, upload profile photo preview, and update credentials.</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Rental Booking History Section */}
-      <section className="home-section">
-        <div className="section-header-row">
-          <div>
-            <h2 className="section-heading">Rental Booking History</h2>
-            <p className="section-subtext">Confirmed and cancelled reservations associated with your account</p>
-          </div>
-          <span className="data-source-badge">
-            {isLoadingBookings ? 'Loading...' : `${customerBookings.length} ${customerBookings.length === 1 ? 'Reservation' : 'Reservations'}`}
-          </span>
-        </div>
-
-        {bookingError && (
-          <div style={{ marginBottom: '16px' }}>
-            <Alert type="error" title="Booking Action Failed" message={bookingError} />
-          </div>
-        )}
-
-        {bookingNotice && (
-          <div style={{ marginBottom: '16px' }}>
-            <Alert type="success" title="Booking Cancelled" message={bookingNotice} />
-          </div>
-        )}
-
-        {isLoadingBookings && (
-          <div style={{ textAlign: 'center', padding: 'var(--space-6) 0', color: 'var(--color-text-secondary)' }}>
-            <div className="spinner" style={{ width: '24px', height: '24px', borderTopColor: 'var(--color-primary)', borderRightColor: 'var(--color-primary)', margin: '0 auto 8px' }} />
-            <p style={{ fontSize: '13px' }}>Loading your reservations...</p>
-          </div>
-        )}
-
-        {!isLoadingBookings && customerBookings.length === 0 && (
-          <div className="empty-reservations-box">
-            <div className="empty-icon-circle">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                <line x1="16" y1="2" x2="16" y2="6" />
-                <line x1="8" y1="2" x2="8" y2="6" />
-                <line x1="3" y1="10" x2="21" y2="10" />
-              </svg>
-            </div>
-            <h3>No Booking History Found</h3>
-            <p>
-              You have not created any vehicle reservations yet. Browse our vehicle fleet catalog to select an executive model.
-            </p>
-            <Button variant="primary" size="md" onClick={() => onNavigate('browse')}>
-              Reserve a Vehicle
-            </Button>
-          </div>
-        )}
-
-        {!isLoadingBookings && customerBookings.length > 0 && (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '16px' }}>
-            {customerBookings.map((booking) => {
-              const vehicle = booking.vehicle;
-              const title = vehicle ? `${vehicle.year} ${vehicle.make} ${vehicle.model}` : `Vehicle #${booking.vehicleId.substring(0, 8)}`;
-              const station = vehicle?.hubLocation || 'Central Station';
-
-              return (
-                <div
-                  key={booking.id}
-                  style={{
-                    background: '#ffffff',
-                    border: '1px solid var(--color-border, #e2e8f0)',
-                    borderRadius: '10px',
-                    padding: '16px',
-                    boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
-                  }}
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                    <span style={{ fontSize: '12px', fontWeight: 'bold', color: 'var(--color-primary, #2563eb)', fontFamily: 'monospace' }}>
-                      #{booking.id.substring(0, 8)}
-                    </span>
-                    <StatusBadge status={booking.status || 'Confirmed'} />
-                  </div>
-
-                  <h4 style={{ margin: '0 0 4px', fontSize: '16px', fontWeight: '600' }}>{title}</h4>
-                  <p style={{ margin: '0 0 12px', fontSize: '12px', color: 'var(--color-text-secondary, #64748b)' }}>Station: {station}</p>
-
-                  <div style={{ fontSize: '13px', background: 'var(--color-bg-secondary, #f8fafc)', padding: '10px', borderRadius: '6px', marginBottom: '12px' }}>
-                    <div><strong>Pick-up:</strong> {new Date(booking.startDateTime).toLocaleString()}</div>
-                    <div><strong>Return:</strong> {new Date(booking.endDateTime).toLocaleString()}</div>
-                  </div>
-
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', paddingTop: '8px', borderTop: '1px dashed #cbd5e1' }}>
-                    <div>
-                      <span style={{ display: 'block', fontSize: '12px', color: 'var(--color-text-secondary, #64748b)' }}>Total Reserved</span>
-                      <span style={{ fontSize: '15px', fontWeight: 'bold', color: 'var(--color-text-primary, #0f172a)' }}>
-                        LKR {formatPriceNumber(booking.totalCost)}
-                      </span>
-                    </div>
-                    {isBookingCancellable(booking.status) && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        disabled={cancellingBookingId === booking.id}
-                        onClick={() => handleCancelBooking(booking)}
-                      >
-                        {cancellingBookingId === booking.id ? 'Cancelling...' : 'Cancel Booking'}
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </section>
-
-      {/* Featured Fleet Recommendations */}
-      <section className="home-section">
-        <div className="section-header-row">
-          <div>
-            <h2 className="section-heading">Recommended Vehicles</h2>
-            <p className="section-subtext">Featured executive and high-efficiency models</p>
-          </div>
-          <button type="button" className="link-btn-subtle" onClick={() => onNavigate('browse')}>
-            View All Vehicles →
-          </button>
-        </div>
-
-        {isLoadingVehicles && (
-          <div style={{ textAlign: 'center', padding: 'var(--space-6) 0', color: 'var(--color-text-secondary)' }}>
-            <div className="spinner" style={{ width: '24px', height: '24px', borderTopColor: 'var(--color-primary)', borderRightColor: 'var(--color-primary)', margin: '0 auto 8px' }} />
-            <p style={{ fontSize: '13px' }}>Loading fleet recommendations...</p>
-          </div>
-        )}
-
-        {!isLoadingVehicles && recommendedVehicles.length === 0 && (
-          <div className="empty-state-card" style={{ padding: 'var(--space-6)', textAlign: 'center' }}>
-            <p style={{ color: 'var(--color-text-secondary)', marginBottom: '12px' }}>
-              Browse our complete vehicle catalog to discover and reserve available mobility units.
-            </p>
-            <Button variant="primary" size="sm" onClick={() => onNavigate('browse')}>
-              Browse Vehicle Catalog
-            </Button>
-          </div>
-        )}
-
-        {!isLoadingVehicles && recommendedVehicles.length > 0 && (
-          <div className="recommended-grid">
-            {recommendedVehicles.map((vehicle) => {
-              const vehicleName = `${vehicle.year} ${vehicle.make} ${vehicle.model}`;
-              const categoryName = vehicle.categoryName || vehicle.category || '—';
-              const fuel = vehicle.fuelType || vehicle.fuel || '—';
-              const transmission = vehicle.transmission || '—';
-
-              return (
-                <div key={vehicle.id} className="recommended-card">
-                  <div className="rec-img-placeholder">
-                    <span>{categoryName} Visual Model</span>
-                  </div>
-                  <div className="rec-body">
-                    <div className="rec-title-row">
-                      <h4 className="rec-name">{vehicleName}</h4>
-                      <StatusBadge status={vehicle.status} />
-                    </div>
-                    <div className="rec-specs">
-                      <span>{fuel}</span>
-                      <span>•</span>
-                      <span>{transmission}</span>
-                    </div>
-                    <div className="rec-footer">
-                      <span className="rec-rate">{formatDailyRate(vehicle.dailyRate)}</span>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => {
-                          if (onSelectVehicle) {
-                            onSelectVehicle(vehicle);
-                          }
-                          onNavigate('vehicle-details');
-                        }}
-                      >
-                        View Details
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </section>
-    </div>
-  );
-};
-
-export default CustomerHomePage;
+  return <div className="customer-home-container"><div className="account-heading"><div><p className="eyebrow">Your FleetFlow account</p><h1>Good to see you, {user?.fullName || user?.username || 'there'}.</h1><p>Your bookings, dates, and details. All in view.</p></div><Button onClick={() => onNavigate('browse')}>Find a vehicle <span aria-hidden="true"><ArrowUpRightIcon size={18} weight="regular" aria-hidden="true" /></span></Button></div>{notice && !cancelTarget && <Alert {...notice} />}
+    <section className="home-section" aria-labelledby="bookings-title"><div className="section-heading-row"><div><h2 id="bookings-title">My bookings</h2><p>Upcoming plans and your rental history.</p></div><Button variant="outline" size="sm" disabled={!current} onClick={() => setRevision(value => value + 1)}>Refresh</Button></div>{!current ? <p className="state-panel" role="status">Loading your bookings…</p> : !current.bookings.success ? <Alert type="error" title="Booking history unavailable" message={current.bookings.message || 'Please try again.'} /> : !current.bookings.data.length ? <div className="state-panel"><h3>Your next journey starts with a vehicle.</h3><p>You haven’t made a booking yet. Your reservations will appear here.</p><Button onClick={() => onNavigate('browse')}>Browse vehicles</Button></div> : <div className="booking-grid">{current.bookings.data.map(booking => <article className="booking-card" key={booking.id}><div className="booking-card-heading"><span className="booking-reference">#{booking.id.slice(0, 8)}</span><StatusBadge status={booking.status} /></div><h3>{booking.vehicle ? `${booking.vehicle.make} ${booking.vehicle.model}` : 'Vehicle details unavailable'}</h3><p>{booking.vehicle?.hubLocation || 'Location not recorded'}</p><dl className="booking-dates"><div><dt>Pickup</dt><dd>{new Date(booking.startDateTime).toLocaleString('en-GB')}</dd></div><div><dt>Return</dt><dd>{new Date(booking.endDateTime).toLocaleString('en-GB')}</dd></div></dl><div className="booking-card-bottom"><div><span>Reserved amount</span><strong>{formatLKR(booking.totalCost)}</strong></div>{isBookingCancellable(booking.status) && <Button variant="outline" size="sm" onClick={() => {
+              setNotice(null);
+              setCancelTarget(booking);
+            }}>Cancel booking</Button>}</div></article>)}</div>}</section>
+    <section className="home-section"><div className="section-heading-row"><div><p className="eyebrow">Planning ahead?</p><h2>Available vehicles</h2><p>A selection from the current fleet.</p></div><Button variant="outline" onClick={() => onNavigate('browse')}>View all vehicles</Button></div>{!current ? <p className="state-panel" role="status">Loading vehicles…</p> : !current.vehicles.success ? <Alert type="error" title="Vehicles unavailable" message={current.vehicles.message || 'Please try again.'} /> : current.vehicles.data.length ? <div className="vehicle-grid">{current.vehicles.data.map(vehicle => <VehicleCard key={vehicle.id} vehicle={vehicle} onSelect={selected => onNavigate('vehicle-details', {
+          vehicle: selected
+        })} />)}</div> : <p className="state-panel">No available vehicles are listed right now. Check the catalogue again later.</p>}</section>
+    <Modal isOpen={Boolean(cancelTarget)} onClose={() => {
+      if (!pending) setCancelTarget(null);
+    }} title="Cancel this booking?" subtitle="This action cannot be undone. Your cancelled booking will remain in your history.">{cancelTarget && <><p className="booking-reference">Booking #{cancelTarget.id.slice(0, 8)}</p>{notice?.type === 'error' && <Alert {...notice} />}<div className="modal-actions-row"><Button variant="outline" disabled={pending} onClick={() => setCancelTarget(null)}>Keep booking</Button><Button variant="danger" isLoading={pending} onClick={submitCancellation}>Cancel booking</Button></div></>}</Modal>
+  </div>;
+}

@@ -1,264 +1,82 @@
-import React from 'react';
+import { ArrowUpRightIcon } from "@phosphor-icons/react/dist/csr/ArrowUpRight";
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import RoleBadge from '../components/common/RoleBadge';
-
-const StaffDashboardPage = ({ onNavigate }) => {
-  const { user, roles } = useAuth();
-  const primaryRole = roles?.[0] || 'FLEET_MANAGER';
-  const isMaintenanceStaff = primaryRole === 'MAINTENANCE_STAFF';
-
-  return (
-    <div className="staff-dashboard-container">
-      {/* Staff Welcome Banner */}
-      <div className="staff-welcome-card">
-        <div className="staff-welcome-content">
-          <div className="welcome-tag">
-            <span className="live-indicator-dot" aria-hidden="true" />
-            <span>Staff Session Authenticated</span>
-          </div>
-          <h2 className="welcome-title">
-            {isMaintenanceStaff ? 'Maintenance & Service Workspace' : `Welcome back, ${user?.username || 'Fleet Operations'}`}
-          </h2>
-          <p className="welcome-subtitle">
-            {isMaintenanceStaff
-              ? 'Authorized for recording maintenance tasks, inspecting vehicle health statuses, and managing service logs.'
-              : 'Authorized for vehicle inventory ingestion, vehicle dispatch, schedule management, and operational tracking.'}
-          </p>
-          <div className="staff-role-chip-row">
-            <span className="role-label-text">Active Authorization Level:</span>
-            <RoleBadge role={primaryRole} />
-          </div>
-        </div>
-      </div>
-
-      {/* Operational Metrics Placeholders (Awaiting FleetService API) */}
-      <div className="dashboard-section-header">
-        <h3 className="section-title">
-          {isMaintenanceStaff ? 'Maintenance Work Queue Overview' : 'Fleet Operations Overview'}
-        </h3>
-        <span className="data-source-badge">Awaiting FleetService API (Sprint 2)</span>
-      </div>
-
-      {isMaintenanceStaff ? (
-        <div className="metrics-grid">
-          <div className="stat-card placeholder-card">
-            <div className="stat-card-header">
-              <span className="stat-label">Pending Inspections</span>
-              <span className="stat-badge-phase">Phase 2</span>
-            </div>
-            <div className="stat-value-placeholder">
-              <span className="placeholder-dash">—</span>
-              <span className="placeholder-sub">Awaiting inspection queue</span>
-            </div>
-          </div>
-
-          <div className="stat-card placeholder-card">
-            <div className="stat-card-header">
-              <span className="stat-label">Vehicles in Service</span>
-              <span className="stat-badge-phase">Phase 2</span>
-            </div>
-            <div className="stat-value-placeholder">
-              <span className="placeholder-dash">—</span>
-              <span className="placeholder-sub">Awaiting workshop logs</span>
-            </div>
-          </div>
-
-          <div className="stat-card placeholder-card">
-            <div className="stat-card-header">
-              <span className="stat-label">Scheduled Repairs</span>
-              <span className="stat-badge-phase">Phase 2</span>
-            </div>
-            <div className="stat-value-placeholder">
-              <span className="placeholder-dash">—</span>
-              <span className="placeholder-sub">Awaiting repair schedule</span>
-            </div>
-          </div>
-
-          <div className="stat-card placeholder-card">
-            <div className="stat-card-header">
-              <span className="stat-label">Completed This Month</span>
-              <span className="stat-badge-phase">Phase 2</span>
-            </div>
-            <div className="stat-value-placeholder">
-              <span className="placeholder-dash">—</span>
-              <span className="placeholder-sub">Awaiting historical logs</span>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <div className="metrics-grid">
-          <div className="stat-card placeholder-card">
-            <div className="stat-card-header">
-              <span className="stat-label">Total Fleet Size</span>
-              <span className="stat-badge-phase">Phase 2</span>
-            </div>
-            <div className="stat-value-placeholder">
-              <span className="placeholder-dash">—</span>
-              <span className="placeholder-sub">Awaiting fleet database</span>
-            </div>
-          </div>
-
-          <div className="stat-card placeholder-card">
-            <div className="stat-card-header">
-              <span className="stat-label">Active Rentals</span>
-              <span className="stat-badge-phase">Phase 2</span>
-            </div>
-            <div className="stat-value-placeholder">
-              <span className="placeholder-dash">—</span>
-              <span className="placeholder-sub">Awaiting booking service</span>
-            </div>
-          </div>
-
-          <div className="stat-card placeholder-card">
-            <div className="stat-card-header">
-              <span className="stat-label">In Maintenance</span>
-              <span className="stat-badge-phase">Phase 2</span>
-            </div>
-            <div className="stat-value-placeholder">
-              <span className="placeholder-dash">—</span>
-              <span className="placeholder-sub">Awaiting service logs</span>
-            </div>
-          </div>
-
-          <div className="stat-card placeholder-card">
-            <div className="stat-card-header">
-              <span className="stat-label">Utilization Rate</span>
-              <span className="stat-badge-phase">Phase 2</span>
-            </div>
-            <div className="stat-value-placeholder">
-              <span className="placeholder-dash">—</span>
-              <span className="placeholder-sub">Awaiting analytics backend</span>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Operational Modules & Implementation Status */}
-      <div className="operations-two-col">
-        {/* Module Status Card */}
-        <div className="dashboard-panel-card">
-          <div className="panel-card-header">
-            <h4 className="panel-title">Operations Services Status</h4>
-            <span className="panel-status-tag">Operational</span>
-          </div>
-
-          <div className="module-status-list">
-            <div className="module-status-item ready">
-              <div className="module-item-left">
-                <span className="status-indicator-dot ready" aria-hidden="true" />
-                <div>
-                  <strong className="module-name">Fleet Inventory Management</strong>
-                  <p className="module-desc">Vehicle catalog, availability, and pricing management</p>
-                </div>
-              </div>
-              <span className="module-badge ready">Active</span>
-            </div>
-
-            <div className="module-status-item ready">
-              <div className="module-item-left">
-                <span className="status-indicator-dot ready" aria-hidden="true" />
-                <div>
-                  <strong className="module-name">Staff Access & Permissions</strong>
-                  <p className="module-desc">Role-authorized operational workspace controls</p>
-                </div>
-              </div>
-              <span className="module-badge ready">Active</span>
-            </div>
-
-            <div className="module-status-item ready">
-              <div className="module-item-left">
-                <span className="status-indicator-dot ready" aria-hidden="true" />
-                <div>
-                  <strong className="module-name">Operations Console</strong>
-                  <p className="module-desc">Unified interface for fleet monitoring and controls</p>
-                </div>
-              </div>
-              <span className="module-badge ready">Active</span>
-            </div>
-
-            <div
-              className="module-status-item ready"
-              style={{ cursor: 'pointer' }}
-              onClick={() => onNavigate('maintenance-dashboard')}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => e.key === 'Enter' && onNavigate('maintenance-dashboard')}
-              title="Open Maintenance Dashboard"
-            >
-              <div className="module-item-left">
-                <span className="status-indicator-dot ready" aria-hidden="true" />
-                <div>
-                  <strong className="module-name">Maintenance & Telematics</strong>
-                  <p className="module-desc">Real-time status tracking, attention queue, and service logs</p>
-                </div>
-              </div>
-              <span className="module-badge ready">Active</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Quick Operations Actions Card */}
-        <div className="dashboard-panel-card">
-          <div className="panel-card-header">
-            <h4 className="panel-title">Operations Shortcuts</h4>
-          </div>
-
-          <div className="shortcut-actions-list">
-            <button
-              type="button"
-              className="shortcut-action-btn"
-              onClick={() => onNavigate('maintenance-dashboard')}
-            >
-              <div className="shortcut-icon-box" style={{ backgroundColor: 'rgba(245, 158, 11, 0.15)', color: '#d97706' }}>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
-                </svg>
-              </div>
-              <div className="shortcut-text">
-                <span className="shortcut-title">Maintenance & Health Queue</span>
-                <span className="shortcut-subtitle">Inspect flagged attention units, vehicle status counts, and service queue</span>
-              </div>
-            </button>
-
-            <button
-              type="button"
-              className="shortcut-action-btn"
-              onClick={() => onNavigate('staff-profile')}
-            >
-              <div className="shortcut-icon-box">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                  <circle cx="12" cy="7" r="4" />
-                </svg>
-              </div>
-              <div className="shortcut-text">
-                <span className="shortcut-title">Staff Profile & Credentials</span>
-                <span className="shortcut-subtitle">View staff identity, update station details, or change password</span>
-              </div>
-            </button>
-
-            {primaryRole === 'ADMIN' && (
-              <button
-                type="button"
-                className="shortcut-action-btn"
-                onClick={() => onNavigate('admin-dashboard')}
-              >
-                <div className="shortcut-icon-box">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                  </svg>
-                </div>
-                <div className="shortcut-text">
-                  <span className="shortcut-title">Administrator Workspace</span>
-                  <span className="shortcut-subtitle">Manage user accounts, roles, and administrative resets</span>
-                </div>
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default StaffDashboardPage;
+import Button from '../components/common/Button';
+import Alert from '../components/Alert';
+import FleetDistribution from '../components/common/FleetDistribution';
+import { accountName } from '../utils/accountPresentation';
+import { getMaintenanceDashboard } from '../services/maintenanceService';
+export function FleetSnapshot({
+  data,
+  loading,
+  error,
+  onRefresh
+}) {
+  const metrics = [['Total vehicles', 'totalVehicles'], ['Available', 'available'], ['In use', 'inUse'], ['In maintenance', 'undergoingMaintenance']];
+  return <section className="workspace-snapshot" aria-labelledby="snapshot-title">
+    <div className="dashboard-section-header"><h3 id="snapshot-title">Fleet at a glance</h3><Button variant="outline" size="sm" onClick={onRefresh} disabled={loading}>Refresh</Button></div>
+    {loading ? <p role="status">Loading fleet overview…</p> : error ? <Alert type="error" message={error} /> : <>
+      <div className="metrics-grid">{metrics.map(([label, key]) => <div className="stat-card" key={key}><span className="stat-label">{label}</span><strong className="workspace-metric">{typeof data?.statusCounts?.[key] === 'number' ? data.statusCounts[key].toLocaleString() : 'Unavailable'}</strong></div>)}</div>
+      {data?.statusCounts?.totalVehicles === 0 && <p className="workspace-empty">No vehicles have been added yet.</p>}
+      <FleetDistribution counts={data?.statusCounts} />
+    </>}
+  </section>;
+}
+export function AttentionPreview({ data, loading, error, onNavigate }) {
+  const items = Array.isArray(data?.attentionItems) ? data.attentionItems : null;
+  return <section className="workspace-attention" aria-labelledby="attention-title"><div className="dashboard-section-header"><h2 id="attention-title">Needs attention</h2><Button variant="ghost" size="sm" onClick={() => onNavigate('maintenance-dashboard')}>View queue</Button></div>
+    {loading ? <p role="status">Loading attention queue…</p> : error ? <Alert type="error" message="The attention queue is unavailable. Please refresh the overview." /> : !items ? <p className="workspace-empty">Attention data unavailable.</p> : !items.length ? <p className="workspace-empty">No vehicles in the current attention queue.</p> : <ul>{items.slice(0,5).map(item => <li key={item.id}><div><strong>{item.year} {item.make} {item.model}</strong><p>{String(item.attentionReason || '').replace(/([a-z])([A-Z])/g, '$1 $2')}</p><span className="plate-pill">{item.licensePlate || item.vin}</span></div><span className="attention-urgency">{item.urgency}</span></li>)}</ul>}
+  </section>;
+}
+export function WorkspaceTasks({ actions, onNavigate, label = 'Workspace tasks' }) {
+  return <section className="workspace-task-panel" aria-label={label}><h2>Quick access</h2><ul>{actions.map(action => <li key={action.view}><button type="button" className="workspace-action" onClick={() => onNavigate(action.view)}><span><strong>{action.title}</strong><span>{action.text}</span></span><ArrowUpRightIcon size={18} weight="regular" aria-hidden="true" /></button></li>)}</ul></section>;
+}
+export default function StaffDashboardPage({
+  onNavigate
+}) {
+  const {
+    user,
+    roles,
+    token
+  } = useAuth();
+  const [revision, setRevision] = useState(0);
+  const [result, setResult] = useState(null);
+  const key = `${token}:${revision}`;
+  useEffect(() => {
+    let active = true;
+    getMaintenanceDashboard(token).then(response => {
+      if (active) setResult({
+        key,
+        data: response.success ? response.data : null,
+        error: response.success ? '' : 'We couldn’t load the fleet overview. Please try again.'
+      });
+    });
+    return () => {
+      active = false;
+    };
+  }, [token, key]);
+  const current = result?.key === key ? result : null;
+  const canManage = roles?.some(role => ['ADMIN', 'FLEET_MANAGER'].includes(String(role).toUpperCase()));
+  const actions = [...(canManage ? [{
+    title: 'Vehicle inventory',
+    text: 'Review vehicles, pricing, and operational status.',
+    view: 'manage-fleet'
+  }] : []), {
+    title: 'Maintenance workspace',
+    text: 'Review the attention queue and manage work orders.',
+    view: 'maintenance-dashboard'
+  }, {
+    title: 'Maintenance reports',
+    text: 'Review recorded work orders and maintenance costs.',
+    view: 'maintenance-reports'
+  }, {
+    title: 'Profile & security',
+    text: 'Review your profile and account settings.',
+    view: 'staff-profile'
+  }];
+  return <div className="staff-dashboard-container">
+    <div className="workspace-welcome"><p className="landing-eyebrow">Your operations workspace</p><h1>Welcome back, {accountName(user)}.</h1><p>{canManage ? 'Keep the fleet organised, monitor vehicle status, and plan maintenance.' : 'Review vehicle maintenance needs and keep work orders up to date.'}</p></div>
+    <FleetSnapshot data={current?.data} loading={!current} error={current?.error} onRefresh={() => setRevision(value => value + 1)} />
+    <div className="workspace-overview-grid"><AttentionPreview data={current?.data} loading={!current} error={current?.error} onNavigate={onNavigate} /><WorkspaceTasks actions={actions} onNavigate={onNavigate} label="Operations shortcuts" /></div>
+  </div>;
+}

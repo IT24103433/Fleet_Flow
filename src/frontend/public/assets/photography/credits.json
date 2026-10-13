@@ -1,0 +1,107 @@
+[
+  {
+    "key": "corolla-hatchback-hero",
+    "file": "2019_Toyota_Corolla_front.jpg",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/6/67/2019_Toyota_Corolla_front.jpg",
+    "creator": "ae_works",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+    "usage": "Marketing only; not a sedan listing",
+    "originalDimensions": [
+      6000,
+      4000
+    ],
+    "originalBytes": 14093997,
+    "originalSha256": "c648dc9152f36e034730064051f387feb0f5dc22f73a1192948f79a4a44d60f5",
+    "source": "https://commons.wikimedia.org/wiki/File:2019_Toyota_Corolla_front.jpg",
+    "modifications": "Resized and re-encoded; metadata removed. Original aspect ratio retained. Display may crop with CSS.",
+    "variants": [
+      {
+        "file": "corolla-hatchback-hero-960.webp",
+        "width": 960,
+        "height": 640,
+        "bytes": 139990
+      },
+      {
+        "file": "corolla-hatchback-hero-960.avif",
+        "width": 960,
+        "height": 640,
+        "bytes": 83303
+      },
+      {
+        "file": "corolla-hatchback-hero-1440.webp",
+        "width": 1440,
+        "height": 960,
+        "bytes": 287500
+      },
+      {
+        "file": "corolla-hatchback-hero-1440.avif",
+        "width": 1440,
+        "height": 960,
+        "bytes": 174707
+      },
+      {
+        "file": "corolla-hatchback-hero-1920.webp",
+        "width": 1920,
+        "height": 1280,
+        "bytes": 448094
+      },
+      {
+        "file": "corolla-hatchback-hero-1920.avif",
+        "width": 1920,
+        "height": 1280,
+        "bytes": 277413
+      }
+    ]
+  },
+  {
+    "key": "corolla-hybrid-sedan-qa",
+    "file": "2019_Toyota_Corolla_Hybrid_Saloon.jpg",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/7/7b/2019_Toyota_Corolla_Hybrid_Saloon.jpg",
+    "creator": "Vauxford",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "usage": "Local demonstration sedan",
+    "originalDimensions": [
+      4371,
+      2536
+    ],
+    "originalBytes": 5193720,
+    "originalSha256": "9198907ff1e07e73a74b43bdd9d7f6a63cf625e11708bcefe38d7987f665916f",
+    "source": "https://commons.wikimedia.org/wiki/File:2019_Toyota_Corolla_Hybrid_Saloon.jpg",
+    "modifications": "Resized and re-encoded; metadata removed. Original aspect ratio retained. Display may crop with CSS.",
+    "variants": [
+      {
+        "file": "corolla-hybrid-sedan-qa-1600.webp",
+        "width": 1600,
+        "height": 928,
+        "bytes": 166092
+      }
+    ]
+  },
+  {
+    "key": "mazda-cx5-diesel-qa",
+    "file": "2019_Mazda_CX-5_SE-L_NAV+_Diesel_2.2_Front.jpg",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/0/09/2019_Mazda_CX-5_SE-L_NAV%2B_Diesel_2.2_Front.jpg",
+    "creator": "Vauxford",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "usage": "Local demonstration SUV",
+    "originalDimensions": [
+      4778,
+      2463
+    ],
+    "originalBytes": 6060729,
+    "originalSha256": "95537a95c666714d23b939aea9aa852a74d49416c2201c060fac4d855aec4a99",
+    "source": "https://commons.wikimedia.org/wiki/File:2019_Mazda_CX-5_SE-L_NAV%2B_Diesel_2.2_Front.jpg",
+    "modifications": "Resized and re-encoded; metadata removed. Original aspect ratio retained. Display may crop with CSS.",
+    "variants": [
+      {
+        "file": "mazda-cx5-diesel-qa-1600.webp",
+        "width": 1600,
+        "height": 825,
+        "bytes": 168348
+      }
+    ]
+  }
+]

@@ -1,5 +1,5 @@
+import { XIcon } from "@phosphor-icons/react/dist/csr/X";
 import React, { useEffect, useEffectEvent, useId, useRef } from 'react';
-
 const Modal = ({
   isOpen,
   onClose,
@@ -7,18 +7,32 @@ const Modal = ({
   subtitle,
   children,
   footer,
-  maxWidth = '520px',
+  maxWidth = '520px'
 }) => {
   const modalRef = useRef(null);
   const previouslyFocusedRef = useRef(null);
   const titleId = useId();
   const subtitleId = useId();
   const closeFromKeyboard = useEffectEvent(() => onClose());
-
   useEffect(() => {
-    const handleKeyDown = (e) => {
+    const handleKeyDown = e => {
       if (e.key === 'Escape' && isOpen) {
         closeFromKeyboard();
+      }
+      if (e.key === 'Tab' && isOpen) {
+        const focusable = [...(modalRef.current?.querySelectorAll('button, input, select, textarea, a[href], [tabindex]') || [])].filter(item => !item.disabled && item.tabIndex >= 0 && !item.closest('[hidden]') && item.type !== 'hidden');
+        const first = focusable[0];
+        const last = focusable.at(-1);
+        if (!first) {
+          e.preventDefault();
+          modalRef.current?.focus();
+        } else if (e.shiftKey && (document.activeElement === first || !modalRef.current?.contains(document.activeElement))) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && (document.activeElement === last || !modalRef.current?.contains(document.activeElement))) {
+          e.preventDefault();
+          first.focus();
+        }
       }
     };
     if (isOpen) {
@@ -27,8 +41,7 @@ const Modal = ({
       document.body.style.overflow = 'hidden';
       window.addEventListener('keydown', handleKeyDown);
       const focusTimer = window.setTimeout(() => {
-        const initialFocus = modalRef.current?.querySelector('[data-autofocus]:not([disabled])') ||
-          modalRef.current?.querySelector('input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), button:not([disabled])');
+        const initialFocus = modalRef.current?.querySelector('[data-autofocus]:not([disabled])') || modalRef.current?.querySelector('input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), button:not([disabled])');
         (initialFocus || modalRef.current)?.focus();
       }, 0);
       return () => {
@@ -39,36 +52,18 @@ const Modal = ({
       };
     }
   }, [isOpen]);
-
   if (!isOpen) return null;
-
-  return (
-    <div className="modal-backdrop" onClick={onClose}>
-      <div
-        ref={modalRef}
-        className="modal-container"
-        style={{ maxWidth }}
-        onClick={(e) => e.stopPropagation()}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby={titleId}
-        aria-describedby={subtitle ? subtitleId : undefined}
-        tabIndex={-1}
-      >
+  return <div className="modal-backdrop" onClick={onClose}>
+      <div ref={modalRef} className="modal-container" style={{
+      maxWidth
+    }} onClick={e => e.stopPropagation()} role="dialog" aria-modal="true" aria-labelledby={titleId} aria-describedby={subtitle ? subtitleId : undefined} tabIndex={-1}>
         <div className="modal-header">
           <div className="modal-title-group">
             <h3 className="modal-title" id={titleId}>{title}</h3>
             {subtitle && <p className="modal-subtitle" id={subtitleId}>{subtitle}</p>}
           </div>
-          <button
-            type="button"
-            className="modal-close-btn"
-            onClick={onClose}
-            aria-label="Close dialog"
-          >
-            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2" fill="none" aria-hidden="true">
-              <path d="M18 6L6 18M6 6l12 12" />
-            </svg>
+          <button type="button" className="modal-close-btn" onClick={onClose} aria-label="Close dialog">
+            <XIcon width="20" height="20" weight="regular" aria-hidden="true" />
           </button>
         </div>
 
@@ -76,14 +71,10 @@ const Modal = ({
           {children}
         </div>
 
-        {footer && (
-          <div className="modal-footer">
+        {footer && <div className="modal-footer">
             {footer}
-          </div>
-        )}
+          </div>}
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default Modal;
