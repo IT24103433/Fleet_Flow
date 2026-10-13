@@ -1,7 +1,8 @@
 -- Create databases for each microservice to respect the database-per-service principle
 CREATE DATABASE fleetflow_auth;
 CREATE DATABASE fleetflow_fleet;
-CREATE DATABASE fleetflow_booking;
+CREATE DATABASE fleetflow_rental;
+CREATE DATABASE fleetflow_notifications;
 
 -- Ensure both postgres and admin roles exist with full permissions
 DO $$
@@ -13,6 +14,7 @@ END $$;
 
 GRANT ALL PRIVILEGES ON DATABASE fleetflow_auth TO admin;
 GRANT ALL PRIVILEGES ON DATABASE fleetflow_fleet TO admin;
-GRANT ALL PRIVILEGES ON DATABASE fleetflow_booking TO admin;
+GRANT ALL PRIVILEGES ON DATABASE fleetflow_rental TO admin;
+GRANT ALL PRIVILEGES ON DATABASE fleetflow_notifications TO admin;
 
 

@@ -2,13 +2,17 @@
 
 [![FleetFlow CI/CD Pipeline](https://github.com/IT24103433/Fleet_Flow/actions/workflows/ci.yml/badge.svg)](https://github.com/IT24103433/Fleet_Flow/actions/workflows/ci.yml)
 [![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen.svg)]()
-[![Automated Tests](https://img.shields.io/badge/Tests-272%20Passed-success.svg)]()
+[![Automated Tests](https://img.shields.io/badge/Backend%20tests-502%20Passed-success.svg)](docs/four-service-foundation.md#ci-and-verification)
 [![.NET Version](https://img.shields.io/badge/.NET-10.0-purple.svg)](https://dotnet.microsoft.com/)
 [![Node Version](https://img.shields.io/badge/Node.js-22.x-green.svg)](https://nodejs.org/)
 
 **FleetFlow** is an enterprise-grade, microservice-oriented vehicle fleet management system featuring role-based access control (RBAC), vehicle lifecycle tracking, maintenance scheduling, and real-time Kafka event streaming.
 
 ---
+
+## Sprint 4 service foundation
+
+The repository builds four API artifacts: Identity (5001), Fleet (5002), Rental (5003) and Notification (5004). Booking and notification business ownership remains in Fleet until their extraction PRs; the new hosts expose authenticated metadata and health checks. See [startup, security, database ownership and rollback](docs/four-service-foundation.md). The approved frontend stays unchanged.
 
 ## Table of Contents
 
@@ -54,7 +58,10 @@ Fleet_Flow/
 │   ├── backend/                  # .NET 10 microservices
 │   │   ├── services/
 │   │   │   ├── IdentityService/  # Authentication, JWT, and RBAC service
-│   │   │   └── FleetService/     # Vehicle catalog, status, and maintenance service
+│   │   │   ├── FleetService/     # Vehicle catalog, status, and maintenance service
+│   │   │   ├── RentalService/    # Booking extraction foundation (5003)
+│   │   │   └── NotificationService/ # Inbox extraction foundation (5004)
+│   │   ├── shared/              # Internal contracts and authentication
 │   │   └── FleetFlow.sln         # Backend solution file
 │   └── frontend/                 # React 19 + Vite single page application
 │       ├── src/                  # Components, pages, hooks, state, and API services

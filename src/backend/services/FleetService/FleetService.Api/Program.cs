@@ -37,6 +37,8 @@ builder.Services.AddHostedService<NotificationEventConsumerService>();
 // Configure JWT Authentication
 var jwtSection = builder.Configuration.GetSection("Jwt");
 var jwtKey = FleetService.Api.Security.JwtSigningKey.Resolve(builder.Configuration, builder.Environment);
+FleetFlow.ServiceDefaults.ServiceAuthentication.AddInternalServiceAuthentication(builder.Services, builder.Configuration, jwtKey);
+FleetFlow.ServiceDefaults.ServiceAuthentication.AddServiceTokenClient(builder.Services, builder.Configuration, builder.Environment, "fleet-service");
 
 builder.Services.AddAuthentication(options =>
 {
@@ -238,6 +240,10 @@ app.MapGet("/", () => Results.Redirect("/swagger"));
 app.MapGet("/health", (FleetDbContext dbContext, FleetReadiness state, ILogger<FleetReadiness> logger, CancellationToken ct) =>
     state.CheckAsync(dbContext, logger, ct)).AllowAnonymous();
 app.MapGet("/health/live", () => Results.Ok(new { status = "Alive" })).AllowAnonymous();
+app.MapGet("/health/ready", (FleetDbContext dbContext, FleetReadiness state, ILogger<FleetReadiness> logger, CancellationToken ct) =>
+    state.CheckAsync(dbContext, logger, ct)).AllowAnonymous();
+app.MapGet("/internal/service", () => new FleetFlow.Contracts.ServiceInformation("FleetService", "fleetflow_fleet", 0, true))
+    .RequireAuthorization(FleetFlow.Contracts.ServiceScopes.FleetRead);
 
 app.Run();
 

@@ -98,7 +98,7 @@ if [ "$SKIP_BACKEND" = false ]; then
   if [ "$SKIP_TESTS" = false ]; then
     echo -e "\n>> 4. Executing Backend Automated Tests"
     mkdir -p "$SCRIPT_DIR/TestResults"
-    dotnet test "$BACKEND_SLN" --no-build --configuration "$CONFIGURATION" --logger "trx;LogFileName=backend-results.trx" --results-directory "$SCRIPT_DIR/TestResults"
+    dotnet test "$BACKEND_SLN" --no-build --configuration "$CONFIGURATION" --logger "trx" --results-directory "$SCRIPT_DIR/TestResults"
     echo "[SUCCESS] All backend test suites passed."
   fi
 fi
@@ -120,7 +120,7 @@ if [ "$SKIP_FRONTEND" = false ]; then
   
   if [ "$SKIP_TESTS" = false ]; then
     echo -e "\n>> 6. Executing Frontend Automated Tests"
-    npm test -- --run
+    npm test
     echo "[SUCCESS] All frontend tests passed."
   fi
   

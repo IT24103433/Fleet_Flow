@@ -101,9 +101,10 @@ catch {
     exit 1
 }
 
-# Check npm
+# Check npm (use the Windows executable shim to avoid PowerShell script-policy failures)
+$npmExec = if (Get-Command "npm.cmd" -ErrorAction SilentlyContinue) { "npm.cmd" } else { "npm" }
 try {
-    $npmVersion = & npm --version
+    $npmVersion = & $npmExec --version
     Write-Success "npm detected: v$npmVersion"
 }
 catch {
@@ -159,7 +160,7 @@ if (-not $SkipBackend) {
         if (-not (Test-Path $resultsDir)) {
             New-Item -ItemType Directory -Path $resultsDir | Out-Null
         }
-        $trxLog = "trx;LogFileName=backend-results.trx"
+        $trxLog = "trx"
         & dotnet test "$BackendSln" --no-build --configuration $Configuration --logger $trxLog --results-directory "$resultsDir"
         if ($LASTEXITCODE -ne 0) {
             Write-Failure "Backend tests failed."
@@ -202,7 +203,7 @@ if (-not $SkipFrontend) {
         if (-not $SkipTests) {
             Write-StepHeader "6. Executing Frontend Automated Tests"
             Write-Info "Running client-side test suite..."
-            & $npmExec test -- --run
+            & $npmExec test
             if ($LASTEXITCODE -ne 0) {
                 Write-Failure "Frontend tests failed."
                 exit $LASTEXITCODE
