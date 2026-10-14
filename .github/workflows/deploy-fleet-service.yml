@@ -12,18 +12,18 @@ jobs:
   # =========================================================================
   build:
     name: "FleetService : Build & Package"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '10.0.x'
 
       - name: Cache NuGet packages
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.nuget/packages
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/*.props') }}
@@ -43,7 +43,7 @@ jobs:
         run: chmod +x ./publish/fleet-app/FleetService.Api
 
       - name: Upload build artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: fleet-service-app
           path: ./publish/fleet-app
@@ -55,11 +55,11 @@ jobs:
   # =========================================================================
   deploy:
     name: "FleetService : Deploy to Azure"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: build
     steps:
       - name: Download build artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: fleet-service-app
           path: ./fleet-app
