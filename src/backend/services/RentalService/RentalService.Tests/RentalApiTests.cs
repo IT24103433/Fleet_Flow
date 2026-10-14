@@ -45,6 +45,17 @@ public sealed class RentalApiTests
   using var rental=f.Internal("rental-service");Assert.Equal(HttpStatusCode.Forbidden,(await rental.GetAsync("/internal/reports/statistics")).StatusCode);
   using var fleet=f.Internal("fleet-service");Assert.Equal(HttpStatusCode.OK,(await fleet.GetAsync("/internal/reports/statistics")).StatusCode);Assert.Equal(HttpStatusCode.OK,(await fleet.GetAsync("/internal/reports/bookings")).StatusCode);Assert.Equal(HttpStatusCode.Unauthorized,(await fleet.GetAsync("/api/bookings")).StatusCode);
  }
+ [Fact]public async Task BookingExportUsesRentalOwnershipAndInternalAudienceOnly()
+ {
+  using var f=new RentalFactory();using var customer=f.Browser(Guid.NewGuid());
+  var created=await customer.PostAsJsonAsync("/api/bookings",new CreateBookingRequest{VehicleId=Guid.NewGuid(),StartDateTime=DateTime.UtcNow.AddDays(1),EndDateTime=DateTime.UtcNow.AddDays(2)});
+  var row=(await created.Content.ReadFromJsonAsync<BookingResponse>())!;
+  using var browser=f.Browser(Guid.NewGuid(),"ADMIN");Assert.Equal(HttpStatusCode.Unauthorized,(await browser.GetAsync("/internal/reports/bookings/export")).StatusCode);
+  using var wrong=f.Internal("rental-service");Assert.Equal(HttpStatusCode.Forbidden,(await wrong.GetAsync("/internal/reports/bookings/export")).StatusCode);
+  using var fleet=f.Internal("fleet-service");var export=(await fleet.GetFromJsonAsync<BookingExportResponse>("/internal/reports/bookings/export?status=Confirmed"))!;Assert.Equal(row.Id,Assert.Single(export.Items).BookingId);
+  Assert.Empty((await fleet.GetFromJsonAsync<BookingExportResponse>("/internal/reports/bookings/export?status=Cancelled"))!.Items);
+  Assert.Equal(HttpStatusCode.BadRequest,(await fleet.GetAsync("/internal/reports/bookings/export?status=99")).StatusCode);
+ }
  [Fact]public async Task ForeignBookingsRemainNotFoundDuringFleetOutages()
  {
   using var f=new RentalFactory();var owner=Guid.NewGuid();using var client=f.Browser(owner);

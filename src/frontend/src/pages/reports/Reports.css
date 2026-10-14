@@ -22,3 +22,5 @@
 .reports-empty .empty-state-desc { margin-bottom: 0; max-width: none; }
 .reports-table caption, .reports-table th { background: #F7F5FB; font-size: 12px; }
 .reports-table td { font-size: 12px; line-height: 1.6; }
+
+.reports-heading-actions{display:flex;align-items:flex-start;gap:12px}.report-export-action{max-width:300px}.report-export-action .alert{margin-top:12px}.report-export-notice{font-size:12px;margin:8px 0 0}

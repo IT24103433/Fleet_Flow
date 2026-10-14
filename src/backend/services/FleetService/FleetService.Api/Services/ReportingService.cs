@@ -53,6 +53,27 @@ public class ReportingService(FleetDbContext db, IMaintenanceReportSource mainte
             (int)Math.Ceiling(count / (decimal)query.PageSize));
     }
 
+    public async Task<BookingExportResponse> GetBookingExportAsync(BookingExportQuery query, CancellationToken ct = default)
+    {
+        if (query.Status.HasValue && !Enum.IsDefined(query.Status.Value)) throw new ArgumentException("Invalid export status.");
+        if (rental?.Enabled == true)
+        {
+            var report = await rental.ExportAsync(query, ct);
+            var ids = report.Items.Select(r => r.VehicleId).Distinct().ToArray();
+            var vehicles = await db.Vehicles.AsNoTracking().Where(v => ids.Contains(v.Id)).ToDictionaryAsync(v => v.Id, ct);
+            return report with { Items = report.Items.Select(r => vehicles.TryGetValue(r.VehicleId, out var vehicle)
+                ? r with { LicensePlate = vehicle.LicensePlate, Make = vehicle.Make, Model = vehicle.Model } : r).ToList() };
+        }
+        var bookings = db.Bookings.AsNoTracking().AsQueryable();
+        if (query.Status.HasValue) bookings = bookings.Where(b => b.Status == query.Status.Value);
+        var rows = await bookings.OrderByDescending(b => b.CreatedAt).ThenBy(b => b.Id).Take(BookingExportQuery.MaxRows + 1)
+            .Select(b => new BookingReportRow(b.Id, b.CustomerId, b.VehicleId, b.Vehicle == null ? null : b.Vehicle.LicensePlate,
+                b.Vehicle == null ? null : b.Vehicle.Make, b.Vehicle == null ? null : b.Vehicle.Model, b.Status,
+                b.StartDateTime, b.EndDateTime, b.TotalCost, b.CreatedAt, b.UpdatedAt)).ToListAsync(ct);
+        if (rows.Count > BookingExportQuery.MaxRows) throw new ArgumentException("Export exceeds the supported row limit.");
+        return new(clock.GetUtcNow().UtcDateTime, rows);
+    }
+
     public async Task<MaintenanceReportResponse> GetMaintenanceReportAsync(CancellationToken ct = default)
     {
         var vehicles = await db.Vehicles.AsNoTracking().Where(v => v.Status == VehicleStatus.Maintenance)

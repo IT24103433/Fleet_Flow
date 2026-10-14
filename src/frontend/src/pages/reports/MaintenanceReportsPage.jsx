@@ -1,3 +1,4 @@
+import ReportExportButton from './ReportExportButton';
 import useReport from './useReport';
 import { ReportShell, ReportMetrics, ReportTable } from './ReportComponents';
 import StatusBadge from '../../components/common/StatusBadge';
@@ -11,7 +12,8 @@ export function MaintenanceCost({ cost }) {
 export default function MaintenanceReportsPage() {
   const report = useReport('maintenance');
   const data = report.data;
-  return <ReportShell title="Maintenance reports" report={report}>
+  return <ReportShell title="Maintenance reports" report={report} action={<ReportExportButton path="maintenance/export" filename="fleetflow-maintenance.csv" disabled={report.loading || !data?.workOrders?.available} />}>
+    <p>CSV exports include current maintenance vehicle states and recorded activities. Dates use UTC and amounts use LKR.</p>
     {data && <>
       <ReportMetrics metrics={[{ label: 'Vehicles currently in maintenance', value: formatReportMetric(data.currentVehicles.length) }]} />
       <h2>Current vehicle maintenance state</h2>
