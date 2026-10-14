@@ -8,6 +8,7 @@ import { useAuth } from '../../context/AuthContext';
 import RoleBadge from '../common/RoleBadge';
 import Button from '../common/Button';
 import NotificationNavButton from '../NotificationNavButton';
+import useLogoutConfirmation from '../common/useLogoutConfirmation';
 const CustomerNav = ({
   currentView,
   onNavigate
@@ -15,10 +16,10 @@ const CustomerNav = ({
   const {
     isAuthenticated,
     user,
-    roles,
-    logout
+    roles
   } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { requestLogout, logoutDialog } = useLogoutConfirmation(() => setMobileMenuOpen(false));
   const menuToggle = useRef(null);
   useEffect(() => {
     if (!mobileMenuOpen) return;
@@ -75,7 +76,7 @@ const CustomerNav = ({
               <span className="view-7d0d107c">
                 Password Update Required
               </span>
-              <Button variant="outline" size="sm" onClick={logout}>
+              <Button variant="outline" size="sm" onClick={requestLogout}>
                 Log Out
               </Button>
             </div> : <>
@@ -88,7 +89,7 @@ const CustomerNav = ({
                   <button className="user-info-chip clickable" onClick={() => handleNavClick(authenticatedProfile)} title="View Profile Details" type="button">
                     <AccountPresentation account={user} role={primaryRole} />
                   </button>
-                  <Button variant="outline" size="sm" onClick={logout}>
+                  <Button variant="outline" size="sm" onClick={requestLogout}>
                     Log Out
                   </Button>
                 </div> : <div className="auth-btn-group">
@@ -128,10 +129,7 @@ const CustomerNav = ({
                     <p className="mobile-user-name">Signed in as <strong>{user?.username}</strong></p>
                     {primaryRole && <RoleBadge role={primaryRole} />}
                   </button>
-                  <Button variant="outline" fullWidth onClick={() => {
-              logout();
-              setMobileMenuOpen(false);
-            }}>
+                  <Button variant="outline" fullWidth onClick={requestLogout}>
                     Log Out
                   </Button>
                 </div> : <div className="mobile-auth-actions">
@@ -145,6 +143,7 @@ const CustomerNav = ({
             </div>
           </nav>
         </div>}
+      {logoutDialog}
     </header>;
 };
 export default CustomerNav;
