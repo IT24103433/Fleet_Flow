@@ -12,13 +12,13 @@ jobs:
   # =========================================================================
   build:
     name: "Frontend : Build & Package"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: '22.x'
           cache: 'npm'
@@ -39,7 +39,7 @@ jobs:
         working-directory: src/frontend
 
       - name: Upload frontend deployment package
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: frontend-deploy-package
           path: src/frontend/dist
@@ -51,11 +51,11 @@ jobs:
   # =========================================================================
   deploy:
     name: "Frontend : Deploy to Azure"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: build
     steps:
       - name: Download frontend package
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: frontend-deploy-package
           path: ./dist
