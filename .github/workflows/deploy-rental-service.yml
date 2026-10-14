@@ -1,0 +1,75 @@
+name: Deploy RentalService to Azure App Service
+
+# Sprint 4 requires a coordinated four-service release; a main merge must not
+# automatically deploy only the legacy Identity/Fleet/frontend applications.
+on:
+  workflow_dispatch:
+
+jobs:
+  # =========================================================================
+  # STAGE 1: BUILD & PACKAGE
+  # Compiles and publishes self-contained Linux binary
+  # =========================================================================
+  build:
+    name: "RentalService : Build & Package"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/*.props') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Restore dependencies
+        run: dotnet restore src/backend/services/RentalService/RentalService.Api/RentalService.Api.csproj -r linux-x64
+
+      - name: Build
+        run: dotnet build src/backend/services/RentalService/RentalService.Api/RentalService.Api.csproj --configuration Release -r linux-x64 --no-restore
+
+      - name: Publish self-contained binary
+        run: dotnet publish src/backend/services/RentalService/RentalService.Api/RentalService.Api.csproj --configuration Release -r linux-x64 --self-contained true --output ./publish/rental-app
+
+      - name: Ensure Linux execution permissions
+        run: chmod +x ./publish/rental-app/RentalService.Api
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rental-service-app
+          path: ./publish/rental-app
+          retention-days: 7
+
+  # =========================================================================
+  # STAGE 2: DEPLOY TO AZURE
+  # Isolated deployment stage using the verified build package
+  # =========================================================================
+  deploy:
+    name: "RentalService : Deploy to Azure"
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: rental-service-app
+          path: ./rental-app
+
+      - name: Ensure executable permission after artifact download
+        run: chmod +x ./rental-app/RentalService.Api
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ secrets.AZURE_RENTAL_SERVICE_APP_NAME }}
+          publish-profile: ${{ secrets.AZURE_RENTAL_SERVICE_PUBLISH_PROFILE }}
+          package: ./rental-app

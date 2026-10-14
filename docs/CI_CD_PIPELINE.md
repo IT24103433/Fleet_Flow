@@ -43,10 +43,10 @@ flowchart TD
 
 | Job / Stage | Scope & Tools | Outputs / Artifacts | How Failure is Attributed |
 | :--- | :--- | :--- | :--- |
-| **`backend-build`** | `dotnet restore`<br>`dotnet build --configuration Release`<br>`dotnet publish` | `backend-binaries`<br>(IdentityService & FleetService) | **Compilation / Syntax / Missing NuGet Package**.<br>If this fails, no backend tests run. |
-| **`backend-test`** | `dotnet test --no-build`<br>Runs 170+ xUnit tests | `backend-test-results`<br>(TRX logs) | **Backend Logic Regression / Assertion Failure**.<br>TRX artifact contains exact failing test case and stack trace. |
+| **`backend-build`** | `dotnet restore`<br>`dotnet build --configuration Release`<br>`dotnet publish` | `backend-binaries`<br>(IdentityService, FleetService, RentalService, NotificationService & Tools) | **Compilation / Syntax / Missing NuGet Package**.<br>If this fails, no backend tests run. |
+| **`backend-test`** | `dotnet test --no-build`<br>Runs 630+ xUnit & integration tests | `backend-test-results`<br>(TRX logs) | **Backend Logic Regression / Assertion Failure**.<br>TRX artifact contains exact failing test case and stack trace. |
 | **`frontend-lint`** | `npm run lint`<br>ESLint 9.x | Console report | **Frontend Formatting / Code Style / Linter Error**.<br>Flags unused variables, invalid hooks, or syntax issues. |
-| **`frontend-test`** | `npm test -- --run`<br>102+ client unit tests | Console report / TAP | **Client-side State / Logic / Validation Error**.<br>Flags client regression without waiting for bundle compilation. |
+| **`frontend-test`** | `npm test`<br>160+ client unit tests | Console report / TAP | **Client-side State / Logic / Validation Error**.<br>Flags client regression without waiting for bundle compilation. |
 | **`frontend-build`** | `npm run build`<br>Vite production bundler | `frontend-dist`<br>(Production static bundle) | **Vite Bundle Error / Asset Resolution Failure**.<br>Only runs after linting and tests pass. |
 | **`ci-quality-gate`** | Aggregation barrier | Pipeline badge green status | **Overall Quality Assurance Gate**.<br>Guarantees all sub-systems are verified before deployment. |
 | **`deploy-*`** | Isolated `build` and `deploy` jobs | Azure App Service deployment | **Environment / Credential / Cloud Configuration Failure**.<br>Isolated from code logic issues. |
