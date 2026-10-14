@@ -31,6 +31,7 @@ public static class FoundationHost
         builder.Services.AddInternalServiceAuthentication(builder.Configuration, key);
         builder.Services.AddServiceTokenClient(builder.Configuration, builder.Environment,
             service.Name == "RentalService" ? "rental-service" : "notification-service");
+        builder.Services.AddRemoteAccountAccess(builder.Configuration, builder.Environment);
         var origins = (builder.Configuration["ALLOWED_ORIGINS"] ?? "http://localhost:5173,http://127.0.0.1:5173")
             .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
         builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.WithOrigins(origins)
@@ -43,6 +44,7 @@ public static class FoundationHost
         var information = new ServiceInformation(descriptor.Name, descriptor.Database, schemaVersion, businessActivated);
         app.UseCors();
         app.UseAuthentication();
+        app.UseAccountAccess();
         app.UseAuthorization();
         app.MapGet("/health/live", () => Results.Ok(new { status = "Alive", service = descriptor.Name }));
         async Task<IResult> Ready(IDatabaseReadiness database, CancellationToken cancellationToken)

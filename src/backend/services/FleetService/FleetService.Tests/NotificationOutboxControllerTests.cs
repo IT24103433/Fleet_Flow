@@ -16,7 +16,7 @@ public sealed class NotificationOutboxControllerTests:IClassFixture<CustomWebApp
     public NotificationOutboxControllerTests(CustomWebApplicationFactory<Program> factory)=>this.factory=factory;
     private HttpClient Client(string role,Guid user)
     {
-        var jwt=new JwtSecurityToken("FleetFlow.IdentityService","FleetFlow.Client",[new Claim(ClaimTypes.Role,role),new Claim("sub",user.ToString())],
+        var jwt=new JwtSecurityToken("FleetFlow.IdentityService","FleetFlow.Client",[new Claim(ClaimTypes.Role,role),new Claim("access_version", "0"), new Claim("sub",user.ToString())],
             expires:DateTime.UtcNow.AddMinutes(5),signingCredentials:new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("TestSigningKeyAtLeast32BytesLongSoItIsValidAndDoesNotError")),SecurityAlgorithms.HmacSha256));
         var client=factory.CreateClient();client.DefaultRequestHeaders.Authorization=new("Bearer",new JwtSecurityTokenHandler().WriteToken(jwt));return client;
     }

@@ -8,6 +8,7 @@ namespace IdentityService.Api.Controllers;
 
 [Authorize(Roles = "ADMIN")]
 [ApiController]
+[RequestSizeLimit(65536)]
 [Route("api/admin/users")]
 public class AdminUsersController : ControllerBase
 {

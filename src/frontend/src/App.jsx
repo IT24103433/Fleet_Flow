@@ -167,6 +167,8 @@ function AppContent() {
   if (!isLoading) {
     if (isAuthenticated && user?.mustChangePassword) {
       activeView = 'force-password-change';
+    } else if (currentView === 'force-password-change') {
+      activeView = isAuthenticated ? getRoleDefaultView(userRoles) : 'login';
     } else if (isStaffUser && CUSTOMER_ONLY_VIEWS.includes(currentView)) {
       activeView = getRoleDefaultView(userRoles);
     } else if (!isAuthenticated && CUSTOMER_ONLY_VIEWS.includes(currentView)) {

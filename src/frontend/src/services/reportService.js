@@ -1,6 +1,7 @@
+import { fetchWithSession } from './sessionFetch.js';
 const FLEET_API_URL = import.meta.env?.VITE_FLEET_API_URL || 'http://localhost:5002';
 
-export function createReportClient({ baseUrl = FLEET_API_URL, fetchImpl = (...args) => globalThis.fetch(...args),
+export function createReportClient({ baseUrl = FLEET_API_URL, fetchImpl = (...args) => fetchWithSession(...args),
   getToken = () => sessionStorage.getItem('token') } = {}) {
   async function getReport(path, signal) {
     const token = getToken();

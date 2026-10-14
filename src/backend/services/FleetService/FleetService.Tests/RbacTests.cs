@@ -32,7 +32,7 @@ public class RbacTests : IClassFixture<CustomWebApplicationFactory<WeatherForeca
     {
         var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString()),
+            new Claim("access_version", "0"), new Claim(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString()),
             new Claim(ClaimTypes.Name, username),
             new Claim(ClaimTypes.Email, email),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
@@ -87,7 +87,7 @@ public class RbacTests : IClassFixture<CustomWebApplicationFactory<WeatherForeca
         var client = _factory.CreateClient();
         var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString()),
+            new Claim("access_version", "0"), new Claim(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString()),
             new Claim(ClaimTypes.Name, "expiredUser"),
             new Claim(ClaimTypes.Email, "expired@example.com"),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),

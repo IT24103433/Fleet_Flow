@@ -64,7 +64,7 @@ public sealed class HostTests
     internal static string InternalToken(string client)=>new ServiceTokenIssuer(SecurityTests.Options(),TimeProvider.System)
         .Issue(new(client,SecurityTests.Secret))!.AccessToken;
     internal static string BrowserToken()=>new JwtSecurityTokenHandler().WriteToken(new JwtSecurityToken(
-        "FleetFlow.IdentityService","FleetFlow.Client",[new Claim("sub",Guid.NewGuid().ToString()),new Claim("role","ADMIN")],
+        "FleetFlow.IdentityService","FleetFlow.Client",[new Claim("sub",Guid.NewGuid().ToString()),new Claim("access_version","0"),new Claim("role","ADMIN")],
         DateTime.UtcNow.AddSeconds(-1),DateTime.UtcNow.AddMinutes(5),new SigningCredentials(
             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SecurityTests.UserKey)),SecurityAlgorithms.HmacSha256)));
 }
@@ -83,7 +83,7 @@ internal sealed class FoundationFactory<T>(bool ready):WebApplicationFactory<T> 
         builder.ConfigureServices(services=>
         {
             services.RemoveAll<IDatabaseReadiness>();
-            services.AddSingleton<IDatabaseReadiness>(new Probe(ready));
+            services.AddSingleton<IDatabaseReadiness>(new Probe(ready));services.RemoveAll<IAccountAccessReader>();services.AddSingleton<IAccountAccessReader>(new ContractAccounts());
         });
     }
     private sealed class Probe(bool ready):IDatabaseReadiness
@@ -91,3 +91,6 @@ internal sealed class FoundationFactory<T>(bool ready):WebApplicationFactory<T> 
         public Task<bool> IsReadyAsync(CancellationToken cancellationToken)=>Task.FromResult(ready);
     }
 }
+
+// Synthetic current accounts isolate these existing ownership/role contract tests.
+internal sealed class ContractAccounts : IAccountAccessReader { public Task<AccountAccessState?> ReadAsync(Guid id,CancellationToken ct)=>Task.FromResult<AccountAccessState?>(new(id,0,true,false)); }

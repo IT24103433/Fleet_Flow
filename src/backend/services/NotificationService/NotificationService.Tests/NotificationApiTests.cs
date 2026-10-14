@@ -65,12 +65,12 @@ public sealed class NotificationFactory(bool active=true):WebApplicationFactory<
         {
             foreach(var d in services.Where(d=>d.ServiceType==typeof(NotificationDbContext)||d.ServiceType.FullName?.Contains("EntityFrameworkCore")==true||d.ServiceType.FullName?.Contains("Npgsql")==true).ToList())services.Remove(d);
             services.AddDbContext<NotificationDbContext>(o=>o.UseInMemoryDatabase(database));
-            services.RemoveAll<IDatabaseReadiness>();services.AddSingleton<IDatabaseReadiness>(new Ready());
+            services.RemoveAll<IDatabaseReadiness>();services.AddSingleton<IDatabaseReadiness>(new Ready());services.RemoveAll<IAccountAccessReader>();services.AddSingleton<IAccountAccessReader>(new ContractAccounts());
         });
     }
     public HttpClient Browser(Guid user,string role="CUSTOMER",bool forced=false)
     {
-        var claims=new[]{new Claim("sub",user.ToString()),new Claim(ClaimTypes.Role,role),new Claim("must_change_password",forced.ToString().ToLowerInvariant())};
+        var claims=new[]{new Claim("sub",user.ToString()),new Claim("access_version","0"),new Claim(ClaimTypes.Role,role),new Claim("must_change_password",forced.ToString().ToLowerInvariant())};
         var token=new JwtSecurityToken("FleetFlow.IdentityService","FleetFlow.Client",claims,DateTime.UtcNow.AddSeconds(-1),DateTime.UtcNow.AddMinutes(5),
             new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(UserKey)),SecurityAlgorithms.HmacSha256));
         var client=CreateClient();client.DefaultRequestHeaders.Authorization=new("Bearer",new JwtSecurityTokenHandler().WriteToken(token));return client;
@@ -82,3 +82,6 @@ public sealed class NotificationFactory(bool active=true):WebApplicationFactory<
     }
     private sealed class Ready:IDatabaseReadiness{public Task<bool> IsReadyAsync(CancellationToken ct)=>Task.FromResult(true);}
 }
+
+// Synthetic current accounts isolate these existing ownership/role contract tests.
+internal sealed class ContractAccounts : IAccountAccessReader { public Task<AccountAccessState?> ReadAsync(Guid id,CancellationToken ct)=>Task.FromResult<AccountAccessState?>(new(id,0,true,false)); }

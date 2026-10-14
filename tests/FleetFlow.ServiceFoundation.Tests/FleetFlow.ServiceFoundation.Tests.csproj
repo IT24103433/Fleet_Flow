@@ -11,6 +11,7 @@
     <Using Include="Xunit" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="../../src/backend/services/FleetService/FleetService.Api/FleetService.Api.csproj" />
     <ProjectReference Include="../../src/backend/services/RentalService/RentalService.Api/RentalService.Api.csproj" />
     <ProjectReference Include="../../src/backend/services/NotificationService/NotificationService.Api/NotificationService.Api.csproj" />
     <ProjectReference Include="../../src/backend/services/IdentityService/IdentityService.Api/IdentityService.Api.csproj" />

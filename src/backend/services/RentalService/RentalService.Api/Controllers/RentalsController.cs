@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RentalService.Api.Services;
 namespace RentalService.Api.Controllers;
-[ApiController][Route("api/rentals")][ServiceFilter(typeof(RentalActivationFilter))]
+[ApiController]
+[RequestSizeLimit(65536)][Route("api/rentals")][ServiceFilter(typeof(RentalActivationFilter))]
 public sealed class RentalsController(PickupCoordinator service,ReturnCoordinator returns,RentalTimelineService timeline):ControllerBase
 {
  private Guid UserId=>Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier)??User.FindFirstValue("sub"),out var id)?id:Guid.Empty;

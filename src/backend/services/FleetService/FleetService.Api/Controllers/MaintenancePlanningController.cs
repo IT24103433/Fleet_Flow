@@ -5,6 +5,7 @@ using FleetService.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 namespace FleetService.Api.Controllers;
+[RequestSizeLimit(65536)]
 [ApiController, Route("api/maintenance"), Authorize(Roles = "ADMIN,FLEET_MANAGER,MAINTENANCE_STAFF")]
 public sealed class MaintenancePlanningController(IMaintenanceService maintenance, IMaintenanceStaffDirectory staff) : ControllerBase
 {

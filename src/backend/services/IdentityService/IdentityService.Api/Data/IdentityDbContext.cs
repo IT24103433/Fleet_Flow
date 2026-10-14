@@ -19,6 +19,7 @@ public class IdentityDbContext : DbContext
         modelBuilder.Entity<User>(entity =>
         {
             entity.ToTable("Users");
+            entity.Property(e => e.AccessVersion).IsConcurrencyToken().HasDefaultValue(0L);
             entity.HasKey(e => e.Id);
             entity.Property(e => e.FullName).HasMaxLength(100).HasDefaultValue(string.Empty);
             entity.Property(e => e.Username).IsRequired().HasMaxLength(50);

@@ -5,9 +5,11 @@ namespace IdentityService.Api.Dtos;
 public class LoginRequest
 {
     [Required(ErrorMessage = "Username or email is required.")]
+    [StringLength(100)]
     public string UsernameOrEmail { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Password is required.")]
+    [StringLength(1024)]
     public string Password { get; set; } = string.Empty;
 
     /// <summary>

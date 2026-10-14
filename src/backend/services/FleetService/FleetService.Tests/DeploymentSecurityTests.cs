@@ -21,7 +21,7 @@ public class DeploymentSecurityTests : IClassFixture<CustomWebApplicationFactory
     {
         var client = factory.CreateClient();
         var token = new JwtSecurityToken("FleetFlow.IdentityService", "FleetFlow.Client",
-            [new Claim(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString()), new Claim(ClaimTypes.Role, role),
+            [new Claim("access_version", "0"), new Claim(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString()), new Claim(ClaimTypes.Role, role),
              new Claim("must_change_password", mustChange ? "true" : "false")],
             expires: DateTime.UtcNow.AddMinutes(5), signingCredentials: new SigningCredentials(
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes("TestSigningKeyAtLeast32BytesLongSoItIsValidAndDoesNotError")), SecurityAlgorithms.HmacSha256));

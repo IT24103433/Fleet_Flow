@@ -59,6 +59,7 @@ public class AdminUserService : IAdminUserService
             throw new ArgumentException("Initial password is required.", nameof(request.InitialPassword));
         }
 
+        if (request.InitialPassword.Length > 128) throw new ArgumentException("Initial password must be no more than 128 characters.");
         if (request.InitialPassword.Length < 8)
         {
             throw new ArgumentException("Initial password must be at least 8 characters long.", nameof(request.InitialPassword));
@@ -216,6 +217,7 @@ public class AdminUserService : IAdminUserService
 
     public async Task<AdminUserResponse> UpdateUserAsync(Guid id, UpdateAdminUserRequest request, Guid currentUserId)
     {
+        await using var transaction = await IdentityService.Api.Data.AccountWriteTransaction.BeginAsync(_dbContext);
         if (request == null)
         {
             throw new ArgumentNullException(nameof(request));
@@ -269,6 +271,8 @@ public class AdminUserService : IAdminUserService
             {
                 throw new InvalidOperationException("Cannot demote the only remaining Administrator account in the system.");
             }
+            if (user.IsActive && await _dbContext.Users.CountAsync(u => u.IsActive && u.Roles.Any(r => r.Name.ToUpper() == "ADMIN")) <= 1)
+                throw new InvalidOperationException("Cannot demote the last active Administrator account.");
         }
 
         // Uniqueness checks excluding current user
@@ -363,10 +367,13 @@ public class AdminUserService : IAdminUserService
             }
         }
 
+        var rolesChanged = user.Roles.Count != 1 || !user.Roles.Any(existing => existing.Name.Equals(role.Name, StringComparison.OrdinalIgnoreCase));
         user.Roles.Clear();
         user.Roles.Add(role);
+        if (rolesChanged) user.AccessVersion = checked(user.AccessVersion + 1);
 
         await _dbContext.SaveChangesAsync();
+        if (transaction != null) await transaction.CommitAsync();
 
         if (_kafkaProducer != null)
         {
@@ -406,6 +413,7 @@ public class AdminUserService : IAdminUserService
 
     public async Task DeleteUserAsync(Guid id, Guid currentUserId)
     {
+        await using var transaction = await IdentityService.Api.Data.AccountWriteTransaction.BeginAsync(_dbContext);
         var user = await _dbContext.Users
             .Include(u => u.Roles)
             .FirstOrDefaultAsync(u => u.Id == id);
@@ -432,16 +440,20 @@ public class AdminUserService : IAdminUserService
             {
                 throw new InvalidOperationException("Cannot delete the last remaining ADMIN account.");
             }
+            if (user.IsActive && await _dbContext.Users.CountAsync(u => u.IsActive && u.Roles.Any(r => r.Name.ToUpper() == "ADMIN")) <= 1)
+                throw new InvalidOperationException("Cannot delete the last active Administrator account.");
         }
 
         // Remove UserRole mappings and User entity safely
         user.Roles.Clear();
         _dbContext.Users.Remove(user);
         await _dbContext.SaveChangesAsync();
+        if (transaction != null) await transaction.CommitAsync();
     }
 
     public async Task<AdminUserResponse> SetUserStatusAsync(Guid id, bool isActive, Guid currentUserId)
     {
+        await using var transaction = await IdentityService.Api.Data.AccountWriteTransaction.BeginAsync(_dbContext);
         var user = await _dbContext.Users
             .Include(u => u.Roles)
             .FirstOrDefaultAsync(u => u.Id == id);
@@ -473,8 +485,10 @@ public class AdminUserService : IAdminUserService
             }
         }
 
+        if (user.IsActive != isActive) user.AccessVersion = checked(user.AccessVersion + 1);
         user.IsActive = isActive;
         await _dbContext.SaveChangesAsync();
+        if (transaction != null) await transaction.CommitAsync();
 
         if (_kafkaProducer != null)
         {
@@ -555,6 +569,7 @@ public class AdminUserService : IAdminUserService
         if (!string.IsNullOrWhiteSpace(request?.CustomTemporaryPassword))
         {
             tempPassword = request.CustomTemporaryPassword.Trim();
+            if (tempPassword.Length > 128) throw new ArgumentException("Temporary password must be no more than 128 characters.");
             if (tempPassword.Length < 8)
             {
                 throw new ArgumentException("Temporary password must be at least 8 characters long.", nameof(request.CustomTemporaryPassword));
@@ -568,6 +583,7 @@ public class AdminUserService : IAdminUserService
         // Securely hash the temporary password - existing password hash is overwritten and never disclosed
         user.PasswordHash = _passwordHasher.HashPassword(user, tempPassword);
         user.MustChangePassword = request?.ForcePasswordChange ?? true;
+        user.AccessVersion = checked(user.AccessVersion + 1);
 
         await _dbContext.SaveChangesAsync();
 
@@ -611,6 +627,7 @@ public class AdminUserService : IAdminUserService
             throw new NotFoundException($"User with ID '{id}' was not found.");
         }
 
+        if (user.MustChangePassword != mustChangePassword) user.AccessVersion = checked(user.AccessVersion + 1);
         user.MustChangePassword = mustChangePassword;
         await _dbContext.SaveChangesAsync();
 

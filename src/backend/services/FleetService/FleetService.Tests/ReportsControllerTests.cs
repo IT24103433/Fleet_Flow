@@ -26,7 +26,7 @@ public class ReportsControllerTests : IClassFixture<CustomWebApplicationFactory<
     {
         var client = app.CreateClient();
         if (role == null) return client;
-        var claims = new[] { new Claim(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString()), new Claim(ClaimTypes.Role, role) };
+        var claims = new[] { new Claim("access_version", "0"), new Claim(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString()), new Claim(ClaimTypes.Role, role) };
         var token = new JwtSecurityToken("FleetFlow.IdentityService", "FleetFlow.Client", claims,
             expires: DateTime.UtcNow.AddHours(1), signingCredentials: new SigningCredentials(new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes("TestSigningKeyAtLeast32BytesLongSoItIsValidAndDoesNotError")), SecurityAlgorithms.HmacSha256));

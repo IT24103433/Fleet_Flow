@@ -15,7 +15,7 @@ builder.Services.AddScoped<NotificationActivationFilter>();
 builder.Services.RemoveAll<IDatabaseReadiness>();builder.Services.AddSingleton<IDatabaseReadiness,NotificationReadiness>();
 builder.Services.Configure<KafkaSettings>(builder.Configuration.GetSection("Kafka"));builder.Services.AddHostedService<NotificationKafkaConsumer>();
 builder.Services.AddControllers();builder.Services.AddOpenApi();
-var app=builder.Build();app.MapOpenApi();app.UseSwaggerUI(o=>o.SwaggerEndpoint("/openapi/v1.json","NotificationService v1"));
+var app=builder.Build();app.UseMiddleware<FleetFlow.ServiceDefaults.ApiErrorsMiddleware>();app.MapOpenApi();app.UseSwaggerUI(o=>o.SwaggerEndpoint("/openapi/v1.json","NotificationService v1"));
 app.MapServiceFoundation(ServiceScopes.NotificationOperations,activation.Active,2);
 app.UseMiddleware<NotificationService.Api.Middleware.ForcedPasswordChangeMiddleware>();app.MapControllers();app.Run();
 namespace NotificationService.Api { public sealed class NotificationApplication {} }

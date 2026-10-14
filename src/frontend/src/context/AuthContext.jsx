@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
 import { extractRolesFromToken, isTokenExpired } from '../utils/roleUtils';
 
 const AuthContext = createContext(null);
@@ -82,7 +82,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
+  const logout = useCallback(() => {
     try {
       // Clear sessionStorage active session
       sessionStorage.removeItem('token');
@@ -102,7 +102,13 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error("Error removing authentication state from sessionStorage:", error);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    const revoked = () => logout();
+    window.addEventListener('fleetflow:session-revoked', revoked);
+    return () => window.removeEventListener('fleetflow:session-revoked', revoked);
+  }, [logout]);
 
   const updateUser = (partialUser) => {
     setUser((prevUser) => {
