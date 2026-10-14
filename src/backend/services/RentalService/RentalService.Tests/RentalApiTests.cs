@@ -77,6 +77,24 @@ public sealed class RentalApiTests
   using var foreign=f.Browser(Guid.NewGuid());Assert.Equal(HttpStatusCode.NotFound,(await foreign.GetAsync($"/api/rentals/{rental.Id}")).StatusCode);
   f.Gateway.VehicleUnavailable=true;Assert.Equal(HttpStatusCode.NotFound,(await foreign.GetAsync($"/api/rentals/{rental.Id}")).StatusCode);Assert.Equal(HttpStatusCode.ServiceUnavailable,(await customer.GetAsync($"/api/rentals/{rental.Id}")).StatusCode);
  }
+ [Fact]public async Task ReturnAndTimelinePreserveOwnershipRolesFinalAmountAndOriginalEstimate()
+ {
+  using var f=new RentalFactory();var owner=Guid.NewGuid();using var customer=f.Browser(owner);
+  var b=(await (await customer.PostAsJsonAsync("/api/bookings",new CreateBookingRequest{VehicleId=Guid.NewGuid(),StartDateTime=DateTime.UtcNow.AddMinutes(-1),EndDateTime=DateTime.UtcNow.AddHours(2)})).Content.ReadFromJsonAsync<BookingResponse>())!;
+  using var manager=f.Browser(Guid.NewGuid(),"FLEET_MANAGER");var rental=(await (await manager.PostAsJsonAsync($"/api/rentals/bookings/{b.Id}/pickup",new PickupRequest{Odometer=1000,FuelPercentage=80,Condition="Checked"})).Content.ReadFromJsonAsync<RentalResponse>())!;
+  var path=$"/api/rentals/{rental.Id}/complete";var body=new ReturnRequest{Odometer=1100,FuelPercentage=40,Condition="Returned and checked",ExtraCharges=123.45m,ExtraChargeReason="Agreed cleaning charge"};
+  Assert.Equal(HttpStatusCode.Forbidden,(await customer.PostAsJsonAsync(path,body)).StatusCode);
+  using var maintenance=f.Browser(Guid.NewGuid(),"MAINTENANCE_STAFF");Assert.Equal(HttpStatusCode.Forbidden,(await maintenance.PostAsJsonAsync(path,body)).StatusCode);
+  Assert.Equal(HttpStatusCode.BadRequest,(await manager.PostAsJsonAsync(path,new{condition="Checked"})).StatusCode);
+  var result=(await (await manager.PostAsJsonAsync(path,body)).Content.ReadFromJsonAsync<RentalResponse>())!;
+  Assert.Equal(RentalLifecycleState.Completed,result.State);Assert.Equal(b.TotalCost,result.Booking.TotalCost);Assert.Equal(b.TotalCost+123.45m,result.Return!.FinalAmount);
+  Assert.Equal(HttpStatusCode.Conflict,(await manager.PostAsJsonAsync(path,body)).StatusCode);
+  var mine=Assert.Single((await customer.GetFromJsonAsync<BookingResponse[]>("/api/bookings"))!);Assert.Equal(result.Return.FinalAmount,mine.FinalRentalAmount);
+  var timeline=(await customer.GetFromJsonAsync<RentalTimelineResponse>($"/api/bookings/{b.Id}/timeline"))!;Assert.Equal("Completed",timeline.Items.Last().Kind);
+  using var foreign=f.Browser(Guid.NewGuid());Assert.Equal(HttpStatusCode.NotFound,(await foreign.GetAsync($"/api/bookings/{b.Id}/timeline")).StatusCode);
+  f.Gateway.VehicleUnavailable=true;Assert.Equal(HttpStatusCode.OK,(await customer.GetAsync($"/api/bookings/{b.Id}/timeline")).StatusCode);
+  using var forced=f.Browser(Guid.NewGuid(),"ADMIN",true);Assert.Equal(HttpStatusCode.Forbidden,(await forced.GetAsync($"/api/bookings/{b.Id}/timeline")).StatusCode);
+ }
  [Fact]public async Task PickupRejectsInvalidBodyForcedPasswordInactiveServiceAndMissingRecords()
  {
   using var f=new RentalFactory();using var staff=f.Browser(Guid.NewGuid(),"ADMIN");var path=$"/api/rentals/bookings/{Guid.NewGuid()}/pickup";
@@ -121,6 +139,7 @@ public sealed class RentalFactory(bool active=true):WebApplicationFactory<Rental
   public bool Available{get;set;}=true;public bool VehicleUnavailable{get;set;}private readonly Dictionary<Guid,ReservationAcknowledgement> rows=[];
   public Task<ReservationAcknowledgement> ReserveAsync(ReserveVehicleCommand c,CancellationToken ct){if(!rows.TryGetValue(c.BookingId,out var row))rows[c.BookingId]=row=new(c.BookingId,false,18000,new(){Id=c.VehicleId,Make="Toyota",Model="Corolla",DailyRate=9000});return Task.FromResult(row);}
   public Task<ReservationAcknowledgement> ReleaseAsync(Guid id,CancellationToken ct){var row=rows[id] with{Released=true};rows[id]=row;return Task.FromResult(row);}
+  public Task<RentalCompletionAcknowledgement> CompleteAsync(RentalCompletionCommand c,CancellationToken ct)=>Task.FromResult(new RentalCompletionAcknowledgement(c.BookingId,c.RentalId,true));
   public Task<RentalHoldAcknowledgement> HoldAsync(RentalHoldCommand c,CancellationToken ct)=>Task.FromResult(new RentalHoldAcknowledgement(c.BookingId,c.RentalId,true));
   public Task<VehicleResponse> VehicleAsync(Guid id,CancellationToken ct)=>VehicleUnavailable?throw new BookingRequestException(503,"Fleet unavailable."):Task.FromResult(new VehicleResponse{Id=id,Make="Toyota",Model="Corolla",DailyRate=9000});
   public Task<bool> AvailableAsync(Guid vehicleId,DateTime start,DateTime end,CancellationToken ct)=>Task.FromResult(Available);

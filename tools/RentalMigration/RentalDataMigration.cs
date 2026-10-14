@@ -98,7 +98,7 @@ public static class RentalDataMigration
    await tx.CommitAsync(ct);
   }
   await db.Database.ExecuteSqlInterpolatedAsync($"""UPDATE "RentalMigrationReceipts" SET "Verified"=true WHERE "Id"={id} AND "SourceHash"={expectedHash}""",ct);
-  await PickupSchemaUpgrade.ApplyAsync(source,target,ct);
+  await ReturnSchemaUpgrade.ApplyAsync(source,target,ct);
   return new(id,rows.Count,expectedHash,true);
  }
  public sealed class ImportReceipt{public Guid Id{get;set;}public string SourceHash{get;set;}="";public bool Verified{get;set;}}

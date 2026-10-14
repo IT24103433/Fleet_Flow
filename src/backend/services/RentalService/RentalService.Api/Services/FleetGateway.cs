@@ -9,6 +9,7 @@ namespace RentalService.Api.Services;
 public sealed class BookingRequestException(int status,string message):Exception(message){public int Status {get;}=status;}
 public interface IFleetGateway
 {
+ Task<RentalCompletionAcknowledgement> CompleteAsync(RentalCompletionCommand command,CancellationToken ct);
  Task<RentalHoldAcknowledgement> HoldAsync(RentalHoldCommand command,CancellationToken ct);
  Task<ReservationAcknowledgement> ReserveAsync(ReserveVehicleCommand command,CancellationToken ct);
  Task<ReservationAcknowledgement> ReleaseAsync(Guid bookingId,CancellationToken ct);
@@ -39,6 +40,7 @@ public sealed class FleetGateway(IHttpClientFactory clients,IServiceTokenProvide
   {throw new BookingRequestException(503,"Vehicle availability is temporarily unavailable. Check My bookings before retrying.");}
  }
  public Task<VehicleResponse> VehicleAsync(Guid vehicleId,CancellationToken ct)=>SendAsync<VehicleResponse>(HttpMethod.Get,$"internal/vehicles/{vehicleId}",null,ct);
+ public Task<RentalCompletionAcknowledgement> CompleteAsync(RentalCompletionCommand command,CancellationToken ct)=>SendAsync<RentalCompletionAcknowledgement>(HttpMethod.Post,$"internal/reservations/{command.BookingId}/complete",command,ct);
  public Task<RentalHoldAcknowledgement> HoldAsync(RentalHoldCommand command,CancellationToken ct)=>SendAsync<RentalHoldAcknowledgement>(HttpMethod.Post,$"internal/reservations/{command.BookingId}/pickup",command,ct);
  public Task<ReservationAcknowledgement> ReserveAsync(ReserveVehicleCommand command,CancellationToken ct)=>SendAsync<ReservationAcknowledgement>(HttpMethod.Put,$"internal/reservations/{command.BookingId}",command,ct);
  public Task<ReservationAcknowledgement> ReleaseAsync(Guid id,CancellationToken ct)=>SendAsync<ReservationAcknowledgement>(HttpMethod.Post,$"internal/reservations/{id}/release",null,ct);

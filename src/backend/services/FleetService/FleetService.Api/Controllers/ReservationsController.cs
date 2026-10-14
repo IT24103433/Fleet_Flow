@@ -29,6 +29,12 @@ public sealed class ReservationsController(ReservationService service,RentalRout
   catch(DuplicateException ex){return Conflict(new{message=ex.Message});}
   catch(NotFoundException ex){return NotFound(new{message=ex.Message});}
  }
+ [HttpPost("{id:guid}/complete")][ProducesResponseType(typeof(RentalCompletionAcknowledgement),200)]
+ public async Task<IActionResult> Complete(Guid id,RentalCompletionCommand command,CancellationToken ct)
+ {
+  if(!await routing.ReadyAsync(db,ct))return StatusCode(503);if(id!=command.BookingId)return BadRequest();
+  try{return Ok(await service.CompleteAsync(command,ct));}catch(ValidationException ex){return BadRequest(new{message=ex.Message});}catch(DuplicateException ex){return Conflict(new{message=ex.Message});}catch(NotFoundException ex){return NotFound(new{message=ex.Message});}
+ }
  [HttpGet("availability")][Authorize(Policy=ServiceScopes.FleetRead)]public async Task<IActionResult> Availability(Guid vehicleId,DateTime startDateTime,DateTime endDateTime,CancellationToken ct)
  {
   if(!await routing.ReadyAsync(db,ct))return StatusCode(503);

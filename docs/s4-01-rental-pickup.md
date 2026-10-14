@@ -1,5 +1,7 @@
 # S4-01: Start rental / vehicle pickup
 
+This records the pickup PR's original scope and schema-3 evidence. For current schema-4 upgrades, return behavior and rollback limits, see [S4-02/S4-03 completion and timeline](s4-02-03-rental-completion.md).
+
 Admins and Fleet Managers can open Rentals, inspect a confirmed booking and record odometer, fuel percentage and condition before handing over the keys. Pickup is allowed at the booked start time and before the booked return time. The service records the actual UTC pickup timestamp and authenticated staff ID; the browser cannot choose either. Customers see their own handover details from My bookings. Maintenance Staff cannot perform or inspect rental handovers.
 
 Booking status remains Confirmed. A separate lifecycle state is PickupPending or Active; both prevent customer cancellation. The original LKR booking estimate is retained. Vehicle return, final charges and timeline presentation are separate S4-02/S4-03 work. There is deliberately no return action in this PR.

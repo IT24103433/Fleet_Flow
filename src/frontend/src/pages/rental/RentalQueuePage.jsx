@@ -7,7 +7,7 @@ import { BentoGrid, BentoCard } from '../../components/common/BentoGrid';
 import { rentalClient } from '../../services/rentalService';
 import { formatLKR } from '../../utils/currencyUtils';
 import './Rentals.css';
-const states = [['AwaitingPickup', 'Awaiting pickup'], ['Active', 'Active rentals'], ['PickupPending', 'Awaiting confirmation']];
+const states = [['AwaitingPickup', 'Awaiting pickup'], ['Active', 'Active rentals'], ['PickupPending', 'Pickup awaiting confirmation'], ['CompletionPending', 'Return awaiting confirmation'], ['Completed', 'Completed rentals'], ['Cancelled', 'Cancelled bookings']];
 export default function RentalQueuePage({ onNavigate }) {
   const [filter, setFilter] = useState({ state: 'AwaitingPickup', page: 1 });
   const [revision, setRevision] = useState(0);

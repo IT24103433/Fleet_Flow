@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using RentalService.Api.Data;
 namespace RentalService.Api.Services;
-public sealed class BookingCoordinator(RentalDbContext db,IFleetGateway fleet,PickupCoordinator? pickups=null)
+public sealed class BookingCoordinator(RentalDbContext db,IFleetGateway fleet,PickupCoordinator? pickups=null,ReturnCoordinator? returns=null)
 {
  public async Task<BookingResponse> CreateAsync(Guid customer,CreateBookingRequest request,Guid requestKey,CancellationToken ct=default)
  {
@@ -36,7 +36,7 @@ public sealed class BookingCoordinator(RentalDbContext db,IFleetGateway fleet,Pi
   return Map(await db.Bookings.AsNoTracking().SingleOrDefaultAsync(b=>b.Id==workflow.Id,ct)??throw new BookingRequestException(503,"Booking is being reconciled. Check My bookings before trying again."));
  }
  public async Task<BookingResponse?> GetAsync(Guid id,CancellationToken ct=default,Guid? customerId=null)
- {var row=await db.Bookings.AsNoTracking().SingleOrDefaultAsync(b=>b.Id==id&&(!customerId.HasValue||b.CustomerId==customerId.Value),ct);if(row==null)return null;var result=Map(row);result.Vehicle=await fleet.VehicleAsync(row.VehicleId,ct);var pickup=await db.Pickups.AsNoTracking().SingleOrDefaultAsync(p=>p.BookingId==id,ct);if(pickup!=null){result.RentalId=pickup.Id;result.RentalState=pickup.State;}return result;}
+ {var row=await db.Bookings.AsNoTracking().SingleOrDefaultAsync(b=>b.Id==id&&(!customerId.HasValue||b.CustomerId==customerId.Value),ct);if(row==null)return null;var result=Map(row);result.Vehicle=await fleet.VehicleAsync(row.VehicleId,ct);var pickup=await db.Pickups.AsNoTracking().SingleOrDefaultAsync(p=>p.BookingId==id,ct);if(pickup!=null){result.RentalId=pickup.Id;result.RentalState=pickup.State;if(pickup.State==RentalLifecycleState.Completed)result.FinalRentalAmount=await db.Returns.AsNoTracking().Where(r=>r.RentalId==pickup.Id).Select(r=>(decimal?)r.FinalAmount).SingleOrDefaultAsync(ct);}return result;}
  public async Task<IReadOnlyList<BookingResponse>> MineAsync(Guid customer,CancellationToken ct=default)
  {
   var rows=await db.Bookings.AsNoTracking().Where(b=>b.CustomerId==customer).OrderByDescending(b=>b.StartDateTime).ThenByDescending(b=>b.CreatedAt).ToListAsync(ct);
@@ -47,7 +47,8 @@ public sealed class BookingCoordinator(RentalDbContext db,IFleetGateway fleet,Pi
    foreach(var value in values)vehicles[value.id]=value.vehicle;
   }
   var ids=rows.Select(b=>b.Id).ToArray();var records=await db.Pickups.AsNoTracking().Where(p=>ids.Contains(p.BookingId)).ToDictionaryAsync(p=>p.BookingId,ct);
-  return rows.Select(b=>{var row=Map(b);row.Vehicle=vehicles[b.VehicleId];if(records.TryGetValue(b.Id,out var p)){row.RentalId=p.Id;row.RentalState=p.State;}return row;}).ToList();
+  var rentalIds=records.Values.Select(p=>p.Id).ToArray();var finalAmounts=await db.Returns.AsNoTracking().Where(r=>rentalIds.Contains(r.RentalId)).ToDictionaryAsync(r=>r.RentalId,r=>r.FinalAmount,ct);
+  return rows.Select(b=>{var row=Map(b);row.Vehicle=vehicles[b.VehicleId];if(records.TryGetValue(b.Id,out var p)){row.RentalId=p.Id;row.RentalState=p.State;if(p.State==RentalLifecycleState.Completed&&finalAmounts.TryGetValue(p.Id,out var final))row.FinalRentalAmount=final;}return row;}).ToList();
  }
  public async Task<BookingResponse?> CancelAsync(Guid id,Guid customer,CancellationToken ct=default)
  {
@@ -67,6 +68,8 @@ public sealed class BookingCoordinator(RentalDbContext db,IFleetGateway fleet,Pi
  public async Task ResumeAsync(Guid id,CancellationToken ct=default)
  {
   db.ChangeTracker.Clear();
+  if(await db.Workflows.AsNoTracking().AnyAsync(w=>w.Id==id&&w.Phase=="ReturnRequested",ct))
+  {await (returns??new ReturnCoordinator(db,fleet,TimeProvider.System)).ResumeAsync(id,ct);return;}
   if(await db.Workflows.AsNoTracking().AnyAsync(w=>w.Id==id&&w.Phase=="PickupRequested",ct))
   {await (pickups??new PickupCoordinator(db,fleet,TimeProvider.System)).ResumeAsync(id,ct);return;}
   await using var tx=await LockAsync(id,ct);
@@ -82,6 +85,7 @@ public sealed class BookingCoordinator(RentalDbContext db,IFleetGateway fleet,Pi
     if(ack.BookingId!=flow.Id||ack.Released||ack.Vehicle.Id!=flow.VehicleId)throw new BookingRequestException(503,"Fleet returned an incomplete reservation acknowledgement.");
     var booking=new RentalBooking{Id=flow.Id,CustomerId=flow.CustomerId,VehicleId=flow.VehicleId,StartDateTime=flow.StartDateTime,EndDateTime=flow.EndDateTime,
      Status=BookingStatus.Confirmed,TotalCost=ack.TotalCost,CreatedAt=flow.CreatedAt,VehicleSnapshot=JsonSerializer.Serialize(ack.Vehicle)};
+    db.LifecycleEvents.Add(new(){BookingId=booking.Id,Kind="Confirmed",OccurredAt=RentalPeriod.Utc(DateTime.UtcNow),ActorId=booking.CustomerId});
     db.Bookings.Add(booking);db.NotificationOutbox.Add(NotificationOutbox.From(new BookingCreatedEvent{EventId=Guid.NewGuid(),OccurredAt=DateTime.UtcNow,BookingId=flow.Id,CustomerId=flow.CustomerId,VehicleId=flow.VehicleId}));
    }
    else if(flow.Phase=="CancelRequested")
@@ -89,6 +93,7 @@ public sealed class BookingCoordinator(RentalDbContext db,IFleetGateway fleet,Pi
     var ack=await fleet.ReleaseAsync(flow.Id,ct);
     if(ack.BookingId!=flow.Id||!ack.Released||ack.Vehicle.Id!=flow.VehicleId)throw new BookingRequestException(503,"Fleet did not acknowledge reservation release.");
     var booking=await db.Bookings.SingleAsync(b=>b.Id==id,ct);booking.Status=BookingStatus.Cancelled;booking.UpdatedAt=DateTime.UtcNow;
+    db.LifecycleEvents.Add(new(){BookingId=id,Kind="Cancelled",OccurredAt=booking.UpdatedAt.Value,ActorId=booking.CustomerId});
     db.NotificationOutbox.Add(NotificationOutbox.From(new BookingCancelledEvent{EventId=Guid.NewGuid(),OccurredAt=booking.UpdatedAt.Value,BookingId=id,CustomerId=flow.CustomerId,VehicleId=flow.VehicleId}));
    }
    else throw new InvalidOperationException("Unknown workflow phase.");
