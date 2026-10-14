@@ -4,6 +4,7 @@ import Button from '../common/Button';
 import AccountPresentation from '../common/AccountPresentation';
 import React from 'react';
 import { useAuth } from '../../context/AuthContext';
+import useLogoutConfirmation from '../common/useLogoutConfirmation';
 const StaffHeader = ({
   title = 'Operations Dashboard',
   onToggleSidebar,
@@ -12,9 +13,9 @@ const StaffHeader = ({
 }) => {
   const {
     user,
-    roles,
-    logout
+    roles
   } = useAuth();
+  const { requestLogout, logoutDialog } = useLogoutConfirmation(() => onNavigate('staff-login'));
   const primaryRole = roles?.[0];
   const todayFormatted = new Intl.DateTimeFormat('en-US', {
     weekday: 'short',
@@ -35,8 +36,9 @@ const StaffHeader = ({
 
       <div className="staff-header-right">
         <AccountPresentation account={user} role={primaryRole} />
-        <Button variant="outline" size="sm" className="header-logout" onClick={() => { logout(); onNavigate('staff-login'); }}><SignOutIcon size={18} weight="regular" aria-hidden="true" />Log out</Button>
+        <Button variant="outline" size="sm" className="header-logout" onClick={requestLogout}><SignOutIcon size={18} weight="regular" aria-hidden="true" />Log out</Button>
       </div>
+      {logoutDialog}
     </header>;
 };
 export default StaffHeader;

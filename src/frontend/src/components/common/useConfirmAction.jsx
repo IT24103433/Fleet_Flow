@@ -19,7 +19,7 @@ export default function useConfirmAction() {
     confirmationDialog: <Modal isOpen={Boolean(confirmation)} onClose={close} title={confirmation?.title}>
       <p className="confirmation-message">{confirmation?.message}</p>
       <div className="action-row">
-        <Button variant="outline" onClick={close} disabled={pending}>Keep current state</Button>
+        <Button variant="outline" onClick={close} disabled={pending} data-autofocus={confirmation?.cancelLabel ? true : undefined}>{confirmation?.cancelLabel || 'Keep current state'}</Button>
         <Button variant={confirmation?.variant || 'primary'} onClick={confirm} isLoading={pending}>{confirmation?.label || 'Confirm change'}</Button>
       </div>
     </Modal>,
