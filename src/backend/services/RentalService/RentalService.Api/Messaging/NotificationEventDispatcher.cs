@@ -94,7 +94,7 @@ public sealed class NotificationEventDispatcher : BackgroundService,INotificatio
                 }
                 if(settings.Enabled && row.KafkaPublishedAt is null)
                 {
-                    var topic=domainEvent is BookingCreatedEvent or BookingCancelledEvent?settings.BookingEventsTopic:settings.MaintenanceEventsTopic;
+                    var topic=domainEvent is BookingCreatedEvent or BookingCancelledEvent or RentalStartedEvent?settings.BookingEventsTopic:settings.MaintenanceEventsTopic;
                     await provider.GetRequiredService<IReliableNotificationPublisher>().PublishAsync(topic,row.Id,row.Payload,ct);
                     row.KafkaPublishedAt=clock.GetUtcNow().UtcDateTime;
                 }

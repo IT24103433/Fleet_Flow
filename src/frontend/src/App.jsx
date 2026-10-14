@@ -17,6 +17,9 @@ const VehicleDetailsPage = React.lazy(() => import('./pages/customer/VehicleDeta
 const CustomerHomePage = React.lazy(() => import('./pages/customer/CustomerHomePage'));
 const CustomerProfilePage = React.lazy(() => import('./pages/customer/CustomerProfilePage'));
 
+const RentalQueuePage = React.lazy(() => import('./pages/rental/RentalQueuePage'));
+const RentalRecordPage = React.lazy(() => import('./pages/rental/RentalRecordPage'));
+
 // Staff & Admin Pages
 const StaffLoginPage = React.lazy(() => import('./pages/StaffLoginPage'));
 const StaffDashboardPage = React.lazy(() => import('./pages/StaffDashboardPage'));
@@ -45,8 +48,8 @@ const FleetPerformancePage = React.lazy(() => import('./pages/reports/FleetPerfo
 const BookingReportsPage = React.lazy(() => import('./pages/reports/BookingReportsPage'));
 const MaintenanceReportsPage = React.lazy(() => import('./pages/reports/MaintenanceReportsPage'));
 const STAFF_ROLES = ['FLEET_MANAGER', 'MAINTENANCE_STAFF', 'ADMIN'];
-const STAFF_VIEWS = [...REPORT_VIEWS, 'staff-dashboard', 'staff-notifications', 'admin-dashboard', 'admin-notification-delivery', 'admin-users', 'admin-create-user', 'admin-edit-user', 'admin-user-details', 'staff-profile', 'manage-fleet', 'maintenance-dashboard', 'add-vehicle', 'edit-vehicle', 'staff-vehicle-details', 'vehicle-images'];
-const CUSTOMER_ONLY_VIEWS = ['customer-home', 'customer-profile', 'notifications'];
+const STAFF_VIEWS = ['rental-queue', 'staff-rental-record', ...REPORT_VIEWS, 'staff-dashboard', 'staff-notifications', 'admin-dashboard', 'admin-notification-delivery', 'admin-users', 'admin-create-user', 'admin-edit-user', 'admin-user-details', 'staff-profile', 'manage-fleet', 'maintenance-dashboard', 'add-vehicle', 'edit-vehicle', 'staff-vehicle-details', 'vehicle-images'];
+const CUSTOMER_ONLY_VIEWS = ['rental-record', 'customer-home', 'customer-profile', 'notifications'];
 function AppContent() {
   const {
     isAuthenticated,
@@ -174,6 +177,8 @@ function AppContent() {
       activeView = 'staff-dashboard';
     } else if (isStaffUser && ['admin-dashboard', 'admin-notification-delivery', 'admin-users', 'admin-create-user', 'admin-edit-user', 'admin-user-details'].includes(currentView) && !isAdminUser) {
       activeView = 'staff-dashboard';
+    } else if (isStaffUser && ['rental-queue', 'staff-rental-record'].includes(currentView) && !canAddVehicle) {
+      activeView = 'staff-dashboard';
     } else if (isStaffUser && currentView === 'add-vehicle' && !canAddVehicle) {
       activeView = 'manage-fleet';
     } else if (isStaffUser && currentView === 'edit-vehicle' && !canAddVehicle) {
@@ -241,6 +246,10 @@ function AppContent() {
     }
     const renderStaffContent = () => {
       switch (activeView) {
+        case 'rental-queue':
+          return <RentalQueuePage key={user?.id} onNavigate={navigateTo} />;
+        case 'staff-rental-record':
+          return <RentalRecordPage key={`${user?.id}:${route.params.bookingId || route.params.rentalId}`} staff bookingId={route.params.bookingId} rentalId={route.params.rentalId} onNavigate={navigateTo} />;
         case 'admin-notification-delivery':
           return <NotificationDeliveryPage key={user?.id} />;
         case 'staff-notifications':
@@ -282,6 +291,10 @@ function AppContent() {
     };
     const getStaffHeaderTitle = () => {
       switch (activeView) {
+        case 'rental-queue':
+          return 'Rental handovers';
+        case 'staff-rental-record':
+          return 'Rental record';
         case 'admin-notification-delivery':
           return 'Notification operations';
         case 'staff-notifications':
@@ -362,6 +375,8 @@ function AppContent() {
   // Customer Portal Views
   const renderCustomerView = () => {
     switch (activeView) {
+      case 'rental-record':
+        return <RentalRecordPage key={`${user?.id}:${route.params.rentalId}`} rentalId={route.params.rentalId} onNavigate={navigateTo} />;
       case 'notifications':
         return <NotificationsPage key={user?.id} />;
       case 'login':

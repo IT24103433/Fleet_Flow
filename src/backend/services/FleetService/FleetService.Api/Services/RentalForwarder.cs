@@ -13,11 +13,11 @@ public sealed class RentalForwarder(RentalRouting routing,IHttpClientFactory cli
 {
  public bool Enabled=>routing.Remote;
  private static readonly JsonSerializerOptions Json=new(JsonSerializerDefaults.Web){Converters={new JsonStringEnumConverter()}};
- public async Task<ActionResult> ForwardAsync(HttpRequest request,string path,object? body=null)
+ public async Task<ActionResult> ForwardAsync(HttpRequest request,string path,object? body=null,string resource="api/bookings")
  {
   var ct=request.HttpContext.RequestAborted;
   if(!await routing.ReadyAsync(db,ct))return new ObjectResult(new{message="Rental ownership has not passed verification."}){StatusCode=503};
-  using var message=new HttpRequestMessage(new HttpMethod(request.Method),"api/bookings"+path);
+  using var message=new HttpRequestMessage(new HttpMethod(request.Method),resource+path);
   message.Headers.TryAddWithoutValidation("Authorization",request.Headers.Authorization.ToString());
   if(request.Headers.TryGetValue("Idempotency-Key",out var key))message.Headers.TryAddWithoutValidation("Idempotency-Key",key.ToString());
   if(body!=null)message.Content=JsonContent.Create(body,options:Json);

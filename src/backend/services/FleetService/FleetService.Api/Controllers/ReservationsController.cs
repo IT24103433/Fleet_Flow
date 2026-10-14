@@ -18,7 +18,17 @@ public sealed class ReservationsController(ReservationService service,RentalRout
   catch(NotFoundException ex){return NotFound(new{message=ex.Message});}
  }
  [HttpPost("{id:guid}/release")][ProducesResponseType(typeof(ReservationAcknowledgement),200)][ProducesResponseType(404)][ProducesResponseType(503)]public async Task<IActionResult> Release(Guid id,CancellationToken ct)
- {if(!await routing.ReadyAsync(db,ct))return StatusCode(503);var row=await service.ReleaseAsync(id,ct);return row==null?NotFound():Ok(row);}
+ {if(!await routing.ReadyAsync(db,ct))return StatusCode(503);try{var row=await service.ReleaseAsync(id,ct);return row==null?NotFound():Ok(row);}catch(ValidationException ex){return BadRequest(new{message=ex.Message});}}
+ [HttpPost("{id:guid}/pickup")][ProducesResponseType(typeof(RentalHoldAcknowledgement),200)]
+ public async Task<IActionResult> Pickup(Guid id,RentalHoldCommand command,CancellationToken ct)
+ {
+  if(!await routing.ReadyAsync(db,ct))return StatusCode(503);
+  if(id!=command.BookingId)return BadRequest();
+  try{return Ok(await service.HoldAsync(command,ct));}
+  catch(ValidationException ex){return BadRequest(new{message=ex.Message});}
+  catch(DuplicateException ex){return Conflict(new{message=ex.Message});}
+  catch(NotFoundException ex){return NotFound(new{message=ex.Message});}
+ }
  [HttpGet("availability")][Authorize(Policy=ServiceScopes.FleetRead)]public async Task<IActionResult> Availability(Guid vehicleId,DateTime startDateTime,DateTime endDateTime,CancellationToken ct)
  {
   if(!await routing.ReadyAsync(db,ct))return StatusCode(503);

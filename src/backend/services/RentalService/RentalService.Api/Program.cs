@@ -14,12 +14,12 @@ var notificationUrl=InternalEndpoint.Read(builder.Configuration["INTERNAL_NOTIFI
 builder.Services.AddHttpClient("FleetService",c=>{c.BaseAddress=fleetUrl;c.Timeout=TimeSpan.FromSeconds(5);}).ConfigurePrimaryHttpMessageHandler(()=>new HttpClientHandler{AllowAutoRedirect=false});
 builder.Services.AddHttpClient("NotificationService",c=>{c.BaseAddress=notificationUrl;c.Timeout=TimeSpan.FromSeconds(5);}).ConfigurePrimaryHttpMessageHandler(()=>new HttpClientHandler{AllowAutoRedirect=false});
 builder.Services.AddDbContext<RentalDbContext>((sp,o)=>o.UseNpgsql(sp.GetRequiredService<OwnedDatabase>().ConnectionString));
-builder.Services.AddScoped<IFleetGateway,FleetGateway>();builder.Services.AddScoped<BookingCoordinator>();builder.Services.AddSingleton<TimeProvider>(TimeProvider.System);
+builder.Services.AddScoped<PickupCoordinator>();builder.Services.AddScoped<IFleetGateway,FleetGateway>();builder.Services.AddScoped<BookingCoordinator>();builder.Services.AddSingleton<TimeProvider>(TimeProvider.System);
 builder.Services.AddScoped<RentalActivationFilter>();builder.Services.RemoveAll<IDatabaseReadiness>();builder.Services.AddSingleton<IDatabaseReadiness,RentalReadiness>();
 builder.Services.AddHostedService<BookingRecoveryWorker>();builder.Services.Configure<KafkaSettings>(builder.Configuration.GetSection("Kafka"));
 builder.Services.AddSingleton<IReliableNotificationPublisher,ReliableNotificationPublisher>();
 builder.Services.AddSingleton<NotificationEventDispatcher>();builder.Services.AddSingleton<INotificationEventDispatcher>(sp=>sp.GetRequiredService<NotificationEventDispatcher>());builder.Services.AddHostedService(sp=>sp.GetRequiredService<NotificationEventDispatcher>());
 builder.Services.AddControllers().AddJsonOptions(o=>o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));builder.Services.AddOpenApi();
 var app=builder.Build();app.UseMiddleware<RentalService.Api.Middleware.BookingErrorsMiddleware>();app.MapOpenApi();app.UseSwaggerUI(o=>o.SwaggerEndpoint("/openapi/v1.json","RentalService v1"));
-app.MapServiceFoundation(ServiceScopes.RentalReportsRead,activation.Active,2);app.UseMiddleware<RentalService.Api.Middleware.ForcedPasswordChangeMiddleware>();app.MapControllers();app.Run();
+app.MapServiceFoundation(ServiceScopes.RentalReportsRead,activation.Active,3);app.UseMiddleware<RentalService.Api.Middleware.ForcedPasswordChangeMiddleware>();app.MapControllers();app.Run();
 namespace RentalService.Api{public sealed class RentalApplication{}}

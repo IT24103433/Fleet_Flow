@@ -2,7 +2,7 @@
 
 RentalService now owns booking creation, customer history, cancellation and booking-report data. FleetService owns vehicles, maintenance and the reservation ledger. NotificationService owns the inbox; each producer owns its own durable notification outbox. IdentityService owns user and service authentication. The four hosts build and run independently with separate owned databases.
 
-**Safe defaults remain `RENTAL_OWNERSHIP=Legacy`, `RENTAL_SERVICE_ACTIVE=false`, and a blank `VITE_RENTAL_API_URL`.** Merging this PR does not migrate data, switch the active writer or deploy anything. The approved frontend stays in its existing layout. Pickup, return and lifecycle timelines are subsequent story PRs. Extraction is architecture work outside the 12-story/36-point Sprint 4 baseline; S4-07 is not counted again.
+**Safe defaults remain `RENTAL_OWNERSHIP=Legacy`, `RENTAL_SERVICE_ACTIVE=false`, and a blank `VITE_RENTAL_API_URL`.** Merging this PR does not migrate data, switch the active writer or deploy anything. The approved frontend stays in its existing layout. Pickup is implemented in S4-01; see [pickup upgrade and rollback limits](s4-01-rental-pickup.md). Return and lifecycle timelines are subsequent story PRs. Extraction is architecture work outside the 12-story/36-point Sprint 4 baseline; S4-07 is not counted again.
 
 ## Ownership and durability
 
@@ -72,6 +72,9 @@ dotnet tools/RentalMigration/bin/Release/net10.0/RentalMigration.dll --mode impo
 The backup receipt format matches the earlier Notification tool: `verified=true`; `databases.fleetflow_auth` and `.fleetflow_fleet` contain `dump`, `sha256`, and `restoredAndVerified=true`; `uploads` contains `archive`, `sha256`, and `verified=true`. Reconciliation additionally requires a fresh `.fleetflow_rental` dump. The CLI verifies archive bytes and refuses missing/unverified receipts or an absent `--write-pause confirmed` acknowledgement. Keep receipts/dumps/exports outside Git: they contain private account/history data.
 
 ## Rollback after cutover
+
+S4-01 adds pickup history and active holds. If any pickup intent exists, the legacy reconciliation tool refuses rollback; follow the stricter [pickup rollback limits](s4-01-rental-pickup.md#rollback-limits). Do not run schema-2 Fleet/Rental versions against active handovers.
+
 
 Before any new Rental writes, a coordinated switch back to the preserved Legacy writer is possible under a write pause. **After new writes, changing only the URL/mode would lose or misrepresent history.** Keep ingress closed, stop all producers/recovery, take and restore-verify fresh auth/Fleet/Rental backups and uploads, resolve every pending recovery workflow and outbox delivery, then export Rental's current records and reconcile:
 

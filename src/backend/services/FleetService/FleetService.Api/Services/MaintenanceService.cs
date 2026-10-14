@@ -202,7 +202,7 @@ public class MaintenanceService : IMaintenanceService
 
         var now = DateTime.UtcNow;
         if (_dbContext.RentalRouting?.Remote == true
-            ? await _dbContext.VehicleReservations.AnyAsync(r=>r.VehicleId==vehicle.Id && !r.Released && r.EndDateTime>now,cancellationToken)
+            ? await _dbContext.VehicleReservations.AnyAsync(r=>r.VehicleId==vehicle.Id && !r.Released && (r.IsHeld || r.EndDateTime>now),cancellationToken)
             : await _dbContext.Bookings.AnyAsync(booking => booking.VehicleId == vehicle.Id &&
                 (booking.Status == BookingStatus.Pending || booking.Status == BookingStatus.Confirmed) && booking.EndDateTime > now,cancellationToken))
         {

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using RentalService.Api.Data;
 namespace RentalService.Api.Services;
-public sealed class BookingCoordinator(RentalDbContext db,IFleetGateway fleet)
+public sealed class BookingCoordinator(RentalDbContext db,IFleetGateway fleet,PickupCoordinator? pickups=null)
 {
  public async Task<BookingResponse> CreateAsync(Guid customer,CreateBookingRequest request,Guid requestKey,CancellationToken ct=default)
  {
@@ -36,7 +36,7 @@ public sealed class BookingCoordinator(RentalDbContext db,IFleetGateway fleet)
   return Map(await db.Bookings.AsNoTracking().SingleOrDefaultAsync(b=>b.Id==workflow.Id,ct)??throw new BookingRequestException(503,"Booking is being reconciled. Check My bookings before trying again."));
  }
  public async Task<BookingResponse?> GetAsync(Guid id,CancellationToken ct=default,Guid? customerId=null)
- {var row=await db.Bookings.AsNoTracking().SingleOrDefaultAsync(b=>b.Id==id&&(!customerId.HasValue||b.CustomerId==customerId.Value),ct);if(row==null)return null;var result=Map(row);result.Vehicle=await fleet.VehicleAsync(row.VehicleId,ct);return result;}
+ {var row=await db.Bookings.AsNoTracking().SingleOrDefaultAsync(b=>b.Id==id&&(!customerId.HasValue||b.CustomerId==customerId.Value),ct);if(row==null)return null;var result=Map(row);result.Vehicle=await fleet.VehicleAsync(row.VehicleId,ct);var pickup=await db.Pickups.AsNoTracking().SingleOrDefaultAsync(p=>p.BookingId==id,ct);if(pickup!=null){result.RentalId=pickup.Id;result.RentalState=pickup.State;}return result;}
  public async Task<IReadOnlyList<BookingResponse>> MineAsync(Guid customer,CancellationToken ct=default)
  {
   var rows=await db.Bookings.AsNoTracking().Where(b=>b.CustomerId==customer).OrderByDescending(b=>b.StartDateTime).ThenByDescending(b=>b.CreatedAt).ToListAsync(ct);
@@ -46,7 +46,8 @@ public sealed class BookingCoordinator(RentalDbContext db,IFleetGateway fleet)
    var values=await Task.WhenAll(batch.Select(async id=>(id,vehicle:await fleet.VehicleAsync(id,ct))));
    foreach(var value in values)vehicles[value.id]=value.vehicle;
   }
-  return rows.Select(b=>{var row=Map(b);row.Vehicle=vehicles[b.VehicleId];return row;}).ToList();
+  var ids=rows.Select(b=>b.Id).ToArray();var records=await db.Pickups.AsNoTracking().Where(p=>ids.Contains(p.BookingId)).ToDictionaryAsync(p=>p.BookingId,ct);
+  return rows.Select(b=>{var row=Map(b);row.Vehicle=vehicles[b.VehicleId];if(records.TryGetValue(b.Id,out var p)){row.RentalId=p.Id;row.RentalState=p.State;}return row;}).ToList();
  }
  public async Task<BookingResponse?> CancelAsync(Guid id,Guid customer,CancellationToken ct=default)
  {
@@ -54,6 +55,7 @@ public sealed class BookingCoordinator(RentalDbContext db,IFleetGateway fleet)
   await using(var tx=await LockAsync(id,ct))
   {
    var booking=await db.Bookings.SingleOrDefaultAsync(b=>b.Id==id&&b.CustomerId==customer,ct);if(booking==null)return null;
+   if(await db.Pickups.AnyAsync(p=>p.BookingId==id,ct))throw new BookingRequestException(409,"A rental with a pending or completed pickup cannot be cancelled.");
    if(booking.Status==BookingStatus.Cancelled)throw new BookingRequestException(409,"This booking has already been cancelled.");
    if(booking.Status is not (BookingStatus.Pending or BookingStatus.Confirmed))throw new BookingRequestException(400,$"A booking in '{booking.Status}' status cannot be cancelled.");
    var flow=await db.Workflows.SingleAsync(w=>w.Id==id,ct);
@@ -64,7 +66,10 @@ public sealed class BookingCoordinator(RentalDbContext db,IFleetGateway fleet)
  }
  public async Task ResumeAsync(Guid id,CancellationToken ct=default)
  {
-  db.ChangeTracker.Clear();await using var tx=await LockAsync(id,ct);
+  db.ChangeTracker.Clear();
+  if(await db.Workflows.AsNoTracking().AnyAsync(w=>w.Id==id&&w.Phase=="PickupRequested",ct))
+  {await (pickups??new PickupCoordinator(db,fleet,TimeProvider.System)).ResumeAsync(id,ct);return;}
+  await using var tx=await LockAsync(id,ct);
   var flow=await db.Workflows.SingleAsync(w=>w.Id==id,ct);
   if(flow.Phase=="Rejected")throw new BookingRequestException(flow.FailureStatus??409,flow.FailureMessage??"Booking was rejected.");
   if(flow.Phase=="Done")return;
@@ -98,13 +103,7 @@ public sealed class BookingCoordinator(RentalDbContext db,IFleetGateway fleet)
    await db.SaveChangesAsync(ct);if(tx!=null)await tx.CommitAsync(ct);throw;
   }
  }
- private async Task<IDbContextTransaction?> LockAsync(Guid id,CancellationToken ct)
- {
-  if(!db.Database.IsRelational())return null;
-  var tx=await db.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted,ct);
-  try{await db.Workflows.FromSqlInterpolated($"""SELECT * FROM "BookingWorkflows" WHERE "Id"={id} FOR UPDATE""").AsNoTracking().ToListAsync(ct);return tx;}
-  catch{await tx.DisposeAsync();throw;}
- }
+ private Task<IDbContextTransaction?> LockAsync(Guid id,CancellationToken ct)=>BookingWorkflowLock.BeginAsync(db,id,ct);
  public static BookingResponse Map(RentalBooking b)=>new(){Id=b.Id,CustomerId=b.CustomerId,VehicleId=b.VehicleId,StartDateTime=b.StartDateTime,EndDateTime=b.EndDateTime,Status=b.Status,
   TotalCost=b.TotalCost,CreatedAt=b.CreatedAt,UpdatedAt=b.UpdatedAt,Vehicle=string.IsNullOrWhiteSpace(b.VehicleSnapshot)?null:JsonSerializer.Deserialize<VehicleResponse>(b.VehicleSnapshot)};
 }

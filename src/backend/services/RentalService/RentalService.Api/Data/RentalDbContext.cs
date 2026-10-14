@@ -31,11 +31,13 @@ public sealed class BookingWorkflow
 }
 public sealed class RentalDbContext(DbContextOptions<RentalDbContext> options):DbContext(options)
 {
+ public DbSet<RentalPickup> Pickups=>Set<RentalPickup>();
  public DbSet<RentalBooking> Bookings=>Set<RentalBooking>();
  public DbSet<BookingWorkflow> Workflows=>Set<BookingWorkflow>();
  public DbSet<NotificationOutbox> NotificationOutbox=>Set<NotificationOutbox>();
  protected override void OnModelCreating(ModelBuilder model)
  {
+  model.Entity<RentalPickup>(e=>{e.ToTable("RentalPickups");e.HasKey(p=>p.Id);e.HasIndex(p=>p.BookingId).IsUnique();e.Property(p=>p.State).HasConversion<string>();e.Property(p=>p.PickupCondition).HasMaxLength(2000);e.HasOne<RentalBooking>().WithMany().HasForeignKey(p=>p.BookingId).OnDelete(DeleteBehavior.Restrict);});
   model.Entity<RentalBooking>(e=>{e.ToTable("Bookings");e.HasKey(b=>b.Id);e.Property(b=>b.Status).HasConversion<string>();e.Property(b=>b.TotalCost).HasPrecision(18,2);e.HasIndex(b=>b.CustomerId);});
   model.Entity<BookingWorkflow>(e=>{e.ToTable("BookingWorkflows");e.HasKey(w=>w.Id);e.HasIndex(w=>new{w.CustomerId,w.RequestKey}).IsUnique();e.HasIndex(w=>new{w.Phase,w.NextAttemptAt});});
   model.Entity<NotificationOutbox>(e=>{e.ToTable("NotificationOutbox");e.HasKey(o=>o.Id);e.Property(o=>o.EventType).HasMaxLength(100);e.Property(o=>o.Status).HasMaxLength(20);e.Property(o=>o.LastErrorCode).HasMaxLength(50);e.HasIndex(o=>new{o.Status,o.NextAttemptAt});});

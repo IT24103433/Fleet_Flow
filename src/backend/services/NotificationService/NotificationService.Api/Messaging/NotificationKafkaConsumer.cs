@@ -42,7 +42,7 @@ public class NotificationKafkaConsumer(IServiceScopeFactory scopes, IOptions<Kaf
                         try
                         {
                             var domainEvent = NotificationEventRendering.Deserialize(result.Message.Value);
-                            var expectedTopic = domainEvent is BookingCreatedEvent or BookingCancelledEvent
+                            var expectedTopic = domainEvent is BookingCreatedEvent or BookingCancelledEvent or RentalStartedEvent
                                 ? settings.BookingEventsTopic : settings.MaintenanceEventsTopic;
                             if (result.Topic != expectedTopic) throw new ArgumentException("Event received on the wrong domain topic.");
                             using var scope = scopes.CreateScope();
