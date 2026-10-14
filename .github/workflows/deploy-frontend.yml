@@ -1,9 +1,8 @@
 name: Deploy Frontend to Azure App Service
 
+# Sprint 4 requires a coordinated four-service release; a main merge must not
+# automatically deploy only the legacy Identity/Fleet/frontend applications.
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 jobs:

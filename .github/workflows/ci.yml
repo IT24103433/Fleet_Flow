@@ -231,6 +231,16 @@ jobs:
         working-directory: src/frontend
         run: npm run build
 
+      - name: Enforce Entry JavaScript Budget
+        run: node tools/Check-FrontendBundle.mjs --output artifacts/frontend-bundle-budget.json
+
+      - name: Upload Frontend Bundle Evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-bundle-budget
+          path: artifacts/frontend-bundle-budget.json
+          retention-days: 14
+
       - name: Upload Frontend Production Artifact
         uses: actions/upload-artifact@v4
         with:
