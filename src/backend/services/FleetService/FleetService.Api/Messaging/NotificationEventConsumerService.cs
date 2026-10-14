@@ -36,7 +36,7 @@ public class NotificationEventConsumerService(IServiceScopeFactory scopes, IOpti
                         try
                         {
                             var domainEvent = NotificationEventProcessor.Deserialize(result.Message.Value);
-                            var expectedTopic = domainEvent is RentalStartedEvent or BookingCreatedEvent or BookingCancelledEvent
+                            var expectedTopic = domainEvent is RentalCompletedEvent or RentalStartedEvent or BookingCreatedEvent or BookingCancelledEvent
                                 ? settings.BookingEventsTopic : settings.MaintenanceEventsTopic;
                             if (result.Topic != expectedTopic) throw new ArgumentException("Event received on the wrong domain topic.");
                             using var scope = scopes.CreateScope();

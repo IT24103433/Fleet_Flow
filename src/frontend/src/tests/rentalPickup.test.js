@@ -4,6 +4,8 @@ import React, { act } from 'react';
 import { JSDOM, VirtualConsole } from 'jsdom';
 import { createServer } from 'vite';
 import { createRentalClient } from '../services/rentalService.js';
+import { returnErrors } from '../validation/returnValidation.js';
+import { rentalStateLabel } from '../utils/rentalPresentation.js';
 import { pickupErrors, canStartPickup } from '../validation/pickupValidation.js';
 import { isBookingCancellable } from '../validation/bookingValidation.js';
 import { routeHash, parseRoute, safeCustomerReturn } from '../utils/navigation.js';
@@ -47,10 +49,70 @@ const booking = { id, customerId: id, vehicleId: id, status: 'Confirmed', totalC
   startDateTime: new Date(Date.now() - 60000).toISOString(), endDateTime: new Date(Date.now() + 7200000).toISOString(),
   vehicle: { id, make: 'Toyota', model: 'Corolla QA', licensePlate: 'QA-01', hubLocation: 'Colombo', mileage: 1200, images: [] } };
 const record = { id: rentalId, bookingId: id, state: 'Active', booking, pickupAt: new Date().toISOString(), pickupOdometer: 1200, pickupFuelPercentage: 60, pickupCondition: 'Bodywork checked', pickedUpByUserId: id };
+
+test('return validation preserves mileage, requires charge reasons and supports historical record routes', () => {
+  const values = { odometer: '1300', fuelPercentage: '40', condition: 'Checked on return', extraCharges: '0', extraChargeReason: '' };
+  assert.deepEqual(returnErrors(values, 1200), {});
+  assert.ok(returnErrors({ ...values, odometer: '1199' }, 1200).odometer);
+  for (const fee of ['-1', '1.001', '1e3', '']) assert.ok(returnErrors({ ...values, extraCharges: fee }).extraCharges);
+  assert.ok(returnErrors({ ...values, extraCharges: '500' }).extraChargeReason);
+  assert.deepEqual(returnErrors({ ...values, extraCharges: '500.50', extraChargeReason: 'Cleaning agreed' }, 1200), {});
+  assert.equal(rentalStateLabel('Completed'), 'Rental completed');
+  assert.equal(isBookingCancellable('Confirmed', 'CompletionPending'), false);
+  assert.equal(parseRoute(routeHash('rental-record', { bookingId: id })).params.bookingId, id);
+  assert.equal(safeCustomerReturn(`#/rental-record?bookingId=${id}`), `#/rental-record?bookingId=${id}`);
+});
+
+test('return form prevents unreasoned charges and duplicate confirmation writes', async () => {
+  const Form = (await server.ssrLoadModule('/src/pages/rental/RentalReturnForm.jsx')).default;
+  let resolvePost, sent, completed = 0, posts = 0;
+  globalThis.fetch = async (_url, options) => { posts++; sent = JSON.parse(options.body); return new Promise(resolve => { resolvePost = () => resolve(json({ ...record, state: 'Completed' })); }); };
+  const root = createRoot(document.getElementById('root'));
+  try {
+    await act(async () => root.render(React.createElement(Form, { rental: record, onComplete() { completed++; }, onUncertain() {} })));
+    await act(async () => fill('return-fuelPercentage', '40')); await act(async () => fill('return-condition', 'Checked on return'));
+    await act(async () => fill('return-charges', '500'));
+    await act(async () => document.querySelector('form').dispatchEvent(new window.Event('submit', { bubbles: true, cancelable: true })));
+    assert.match(document.body.textContent, /Explain the additional charges/); assert.equal(posts, 0);
+    await act(async () => fill('return-reason', 'Agreed cleaning charge'));
+    await act(async () => document.querySelector('form').dispatchEvent(new window.Event('submit', { bubbles: true, cancelable: true })));
+    await wait(() => Boolean(button('Confirm return')));
+    await act(async () => { button('Confirm return').click(); button('Processing...')?.click(); });
+    assert.equal(posts, 1); assert.equal(completed, 0); assert.equal(sent.extraCharges, 500); assert.equal(sent.extraChargeReason, 'Agreed cleaning charge');
+    await act(async () => resolvePost()); assert.equal(completed, 1);
+  } finally { await act(async () => root.unmount()); }
+});
+
+test('reduced-motion timeline stays visible, marks unknown times and cleans up listeners', async () => {
+  let listeners = 0;
+  window.matchMedia = query => ({ matches: query.includes('reduce') && !query.includes('no-preference'), media: query,
+    addListener() { listeners++; }, removeListener() { listeners--; }, addEventListener() { listeners++; }, removeEventListener() { listeners--; } });
+  const Timeline = (await server.ssrLoadModule('/src/pages/rental/RentalTimeline.jsx')).default;
+  const root = createRoot(document.getElementById('root'));
+  try {
+    await act(async () => root.render(React.createElement(Timeline, { timeline: { items: [{ kind: 'Confirmed', title: 'Booking confirmed', occurredAt: null, details: 'Historical time not recorded', actorId: id }] }, staff: false })));
+    assert.match(document.body.textContent, /Booking confirmed/); assert.match(document.body.textContent, /Time not recorded/);
+    assert.equal(document.body.textContent.includes(id.slice(0, 8)), false); assert.equal(document.querySelector('li').style.opacity, '');
+  } finally { await act(async () => root.unmount()); }
+  assert.equal(listeners, 0);
+});
+
+test('completed customer records show final amounts and hide staff return controls', async () => {
+  window.matchMedia = query => ({ matches: false, media: query, addListener() {}, removeListener() {}, addEventListener() {}, removeEventListener() {} });
+  const finished = { ...record, state: 'Completed', booking: { ...booking, status: 'Completed', finalRentalAmount: 9500 },
+    return: { returnedAt: new Date().toISOString(), odometer: 1300, fuelPercentage: 40, condition: 'Checked on return', extraCharges: 500, extraChargeReason: 'Cleaning agreed', finalAmount: 9500, isLate: false, completedByUserId: id } };
+  globalThis.fetch = async url => json(url.endsWith('/timeline') ? { items: [{ kind: 'Completed', title: 'Rental completed', occurredAt: new Date().toISOString() }] } : finished);
+  const root = createRoot(document.getElementById('root'));
+  try {
+    await act(async () => root.render(React.createElement(Record, { rentalId, onNavigate() {} })));
+    await wait(() => document.body.textContent.includes('Return confirmed'));
+    assert.match(document.body.textContent, /9,500/); assert.match(document.body.textContent, /Rental completed/); assert.equal(button('Review return'), undefined);
+  } finally { await act(async () => root.unmount()); }
+});
 before(async () => {
   const console = new VirtualConsole(); console.on('jsdomError', e => domErrors.push(e));
   dom = new JSDOM('<html><body><div id="root"></div></body></html>', { url: 'http://localhost', virtualConsole: console });
-  for (const [key, value] of Object.entries({ window: dom.window, document: dom.window.document, HTMLElement: dom.window.HTMLElement, sessionStorage: dom.window.sessionStorage, localStorage: dom.window.localStorage, IS_REACT_ACT_ENVIRONMENT: true })) {
+  for (const [key, value] of Object.entries({ window: dom.window, document: dom.window.document, HTMLElement: dom.window.HTMLElement, getComputedStyle: dom.window.getComputedStyle.bind(dom.window), sessionStorage: dom.window.sessionStorage, localStorage: dom.window.localStorage, IS_REACT_ACT_ENVIRONMENT: true })) {
     previous.set(key, Object.getOwnPropertyDescriptor(globalThis, key)); Object.defineProperty(globalThis, key, { configurable: true, writable: true, value });
   }
   previous.set('fetch', Object.getOwnPropertyDescriptor(globalThis, 'fetch'));
@@ -61,6 +123,7 @@ before(async () => {
   Queue = (await server.ssrLoadModule('/src/pages/rental/RentalQueuePage.jsx')).default;
 });
 after(async () => {
+  const motion = await import('gsap'); (motion.gsap || motion.default.gsap || motion.default).ticker.sleep();
   await server?.close(); dom?.window.close();
   for (const [key, descriptor] of previous) { if (descriptor) Object.defineProperty(globalThis, key, descriptor); else delete globalThis[key]; }
   assert.deepEqual(domErrors, []);

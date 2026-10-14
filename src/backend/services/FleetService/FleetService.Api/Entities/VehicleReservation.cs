@@ -11,6 +11,8 @@ public sealed class VehicleReservation
  public Guid? HeldRentalId {get;set;}
  public int? PickupOdometer {get;set;}
  public DateTime? PickupAt {get;set;}
+ public DateTime? ReturnedAt {get;set;}
+ public int? ReturnOdometer {get;set;}
  public bool Released {get;set;}
  public decimal TotalCost {get;set;}
  public string VehicleSnapshot {get;set;}="";

@@ -20,7 +20,7 @@ public sealed class RentalReadiness(OwnedDatabase database,RentalActivation acti
   if(!activation.Active)return false;
   try{
    await using var db=new NpgsqlConnection(database.ConnectionString);await db.OpenAsync(ct);
-   await using var cmd=new NpgsqlCommand("""SELECT EXISTS(SELECT 1 FROM "__FleetFlowServiceSchema" s,"RentalMigrationReceipts" m WHERE s.version=3 AND s.service_name='RentalService' AND m."Id"=@id AND m."Verified"=true)""",db);
+   await using var cmd=new NpgsqlCommand("""SELECT EXISTS(SELECT 1 FROM "__FleetFlowServiceSchema" s,"RentalMigrationReceipts" m WHERE s.version=4 AND s.service_name='RentalService' AND m."Id"=@id AND m."Verified"=true)""",db);
    cmd.Parameters.AddWithValue("id",activation.MigrationId);return (bool)(await cmd.ExecuteScalarAsync(ct))!;
   }catch(Exception ex)when(ex is NpgsqlException or InvalidOperationException or TimeoutException){return false;}
  }

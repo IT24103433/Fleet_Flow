@@ -13,6 +13,8 @@ public static class ReservationSchema
  ALTER TABLE "VehicleReservations" ADD COLUMN IF NOT EXISTS "HeldRentalId" uuid NULL;
  ALTER TABLE "VehicleReservations" ADD COLUMN IF NOT EXISTS "PickupOdometer" integer NULL;
  ALTER TABLE "VehicleReservations" ADD COLUMN IF NOT EXISTS "PickupAt" timestamptz NULL;
+ ALTER TABLE "VehicleReservations" ADD COLUMN IF NOT EXISTS "ReturnedAt" timestamptz NULL;
+ ALTER TABLE "VehicleReservations" ADD COLUMN IF NOT EXISTS "ReturnOdometer" integer NULL;
  CREATE INDEX IF NOT EXISTS "IX_VehicleReservations_VehicleId" ON "VehicleReservations"("VehicleId");
  CREATE TABLE IF NOT EXISTS "RentalLedgerMigrationReceipts" ("Id" uuid PRIMARY KEY,"SourceHash" text NOT NULL,"RecordCount" integer NOT NULL,"Verified" boolean NOT NULL);
  """;

@@ -19,6 +19,7 @@ public sealed class PickupTests
   public Task<ReservationAcknowledgement> ReleaseAsync(Guid id,CancellationToken ct)=>inner.ReleaseAsync(id,ct);
   public Task<FleetService.Api.Dtos.VehicleResponse> VehicleAsync(Guid id,CancellationToken ct)=>inner.VehicleAsync(id,ct);
   public Task<bool> AvailableAsync(Guid id,DateTime a,DateTime b,CancellationToken ct)=>inner.AvailableAsync(id,a,b,ct);
+  public Task<RentalCompletionAcknowledgement> CompleteAsync(RentalCompletionCommand c,CancellationToken ct)=>inner.CompleteAsync(c,ct);
   public async Task<RentalHoldAcknowledgement> HoldAsync(RentalHoldCommand c,CancellationToken ct){var ack=await inner.HoldAsync(c,ct);if(!lost){lost=true;throw new BookingRequestException(503,"Lost committed pickup response.");}return ack;}
  }
  [RentalPostgresFact]public async Task ConfirmedPickupOwnsRecordHoldsVehicleAndEmitsOneDurableEvent()

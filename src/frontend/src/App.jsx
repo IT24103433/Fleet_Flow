@@ -376,7 +376,7 @@ function AppContent() {
   const renderCustomerView = () => {
     switch (activeView) {
       case 'rental-record':
-        return <RentalRecordPage key={`${user?.id}:${route.params.rentalId}`} rentalId={route.params.rentalId} onNavigate={navigateTo} />;
+        return <RentalRecordPage key={`${user?.id}:${route.params.rentalId || route.params.bookingId}`} bookingId={route.params.bookingId} rentalId={route.params.rentalId} onNavigate={navigateTo} />;
       case 'notifications':
         return <NotificationsPage key={user?.id} />;
       case 'login':

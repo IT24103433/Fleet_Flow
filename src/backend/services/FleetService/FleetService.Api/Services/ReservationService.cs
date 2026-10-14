@@ -63,6 +63,26 @@ public sealed class ReservationService(FleetDbContext db,IVehicleService vehicle
   vehicle.Status=VehicleStatus.InUse;vehicle.Mileage=command.Odometer;vehicle.UpdatedAt=DateTime.UtcNow;
   await db.SaveChangesAsync(ct);if(tx!=null)await tx.CommitAsync(ct);return new(row.BookingId,command.RentalId,true);
  }
+ public async Task<RentalCompletionAcknowledgement> CompleteAsync(RentalCompletionCommand command,CancellationToken ct=default)
+ {
+  if(command.RentalId==Guid.Empty||command.Odometer<0||command.ReturnedAt.Kind!=DateTimeKind.Utc)throw new ValidationException("Valid rental, mileage and UTC return time are required.");
+  var vehicleId=await db.VehicleReservations.AsNoTracking().Where(r=>r.BookingId==command.BookingId).Select(r=>(Guid?)r.VehicleId).SingleOrDefaultAsync(ct);
+  if(vehicleId==null)throw new NotFoundException("Reservation was not found.");
+  await using var tx=await VehicleWriteTransaction.BeginAsync(db,vehicleId.Value,ct);
+  var row=await db.VehicleReservations.SingleAsync(r=>r.BookingId==command.BookingId,ct);var at=RentalPeriod.Utc(command.ReturnedAt);
+  if(row.ReturnedAt!=null)
+  {
+   if(row.HeldRentalId!=command.RentalId||row.ReturnOdometer!=command.Odometer||row.ReturnedAt!=at)throw new DuplicateException("Return command differs from the saved handover.");
+   return new(row.BookingId,command.RentalId,true);
+  }
+  var vehicle=await db.Vehicles.SingleAsync(v=>v.Id==row.VehicleId,ct);
+  if(!row.IsHeld||row.Released||row.HeldRentalId!=command.RentalId)throw new DuplicateException("Only this vehicle's active rental can record return.");
+  if(row.PickupAt==null||at<row.PickupAt||command.Odometer<row.PickupOdometer||command.Odometer<vehicle.Mileage)throw new ValidationException("Return mileage and time cannot precede pickup or the vehicle's recorded mileage.");
+  row.IsHeld=false;row.Released=true;row.ReleasedAt=at;row.ReturnedAt=at;row.ReturnOdometer=command.Odometer;
+  vehicle.Mileage=command.Odometer;vehicle.UpdatedAt=DateTime.UtcNow;
+  vehicle.Status=await db.MaintenanceRecords.AnyAsync(r=>r.VehicleId==row.VehicleId&&(r.Status==MaintenanceStatus.SCHEDULED||r.Status==MaintenanceStatus.IN_PROGRESS),ct)?VehicleStatus.Maintenance:VehicleStatus.Available;
+  await db.SaveChangesAsync(ct);if(tx!=null)await tx.CommitAsync(ct);return new(row.BookingId,command.RentalId,true);
+ }
  public async Task<bool> AvailableAsync(Guid vehicleId,DateTime start,DateTime end,CancellationToken ct=default)
  {
   start=RentalPeriod.Utc(start);end=RentalPeriod.Utc(end);

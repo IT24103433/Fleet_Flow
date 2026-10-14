@@ -1,0 +1,65 @@
+{
+  "stories": [
+    "S4-02",
+    "S4-03"
+  ],
+  "backend": {
+    "skipped": 0.0,
+    "passed": 575.0,
+    "total": 575.0
+  },
+  "frontend": {
+    "skipped": 0,
+    "productionBuild": "passed",
+    "finalFocused": 12,
+    "passed": 144,
+    "lint": "passed"
+  },
+  "bundle": {
+    "definition": "Entry plus recursively static imports, uncompressed; lazy routes reported separately.",
+    "entryBytes": 308893,
+    "budgetBytes": 350000,
+    "lazy": {
+      "LandingPage": {
+        "ownBytes": 60218,
+        "additionalStaticClosureBytes": 141968
+      },
+      "NotificationDeliveryPage": {
+        "ownBytes": 10708,
+        "additionalStaticClosureBytes": 15833
+      },
+      "RentalQueuePage": {
+        "ownBytes": 4583,
+        "additionalStaticClosureBytes": 8753
+      },
+      "RentalRecordPage": {
+        "ownBytes": 20055,
+        "additionalStaticClosureBytes": 95484
+      }
+    },
+    "passes": true
+  },
+  "desktop": {
+    "dedicatedMobileTabletReview": false,
+    "timeline": "review/s4-return-timeline-1440.jpg",
+    "record": "review/s4-return-record-1440.jpg",
+    "overflow": false,
+    "height": 900,
+    "width": 1440
+  },
+  "isolatedRehearsal": {
+    "vehicleStatus": "Available",
+    "completedNotifications": 1,
+    "finalAmount": 9500.0,
+    "repeatRejected": 409,
+    "state": "Completed",
+    "timelineItems": 5,
+    "vehicleMileage": 5500,
+    "originalAmount": 9000.0,
+    "bookingStatus": "Completed",
+    "legacyBookings": 4
+  },
+  "cleanup": true,
+  "workingDatabaseMigration": false,
+  "azureChanges": false
+}

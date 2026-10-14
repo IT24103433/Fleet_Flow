@@ -24,6 +24,7 @@ public sealed class BookingRecoveryTests
    await using var db=fixture.Fleet();var ack=await new ReservationService(db,new VehicleService(db)).ReleaseAsync(id,ct)??throw new BookingRequestException(404,"Reservation missing.");
    if(loseRelease&&!releaseLost){releaseLost=true;throw new BookingRequestException(503,"Response lost after release commit.");}return ack;
   }
+  public async Task<RentalCompletionAcknowledgement> CompleteAsync(RentalCompletionCommand command,CancellationToken ct){await using var db=fixture.Fleet();try{return await new ReservationService(db,new VehicleService(db)).CompleteAsync(command,ct);}catch(ValidationException ex){throw new BookingRequestException(400,ex.Message);}catch(DuplicateException ex){throw new BookingRequestException(409,ex.Message);}}
   public async Task<RentalHoldAcknowledgement> HoldAsync(RentalHoldCommand command,CancellationToken ct){await using var db=fixture.Fleet();try{return await new ReservationService(db,new VehicleService(db)).HoldAsync(command,ct);}catch(ValidationException ex){throw new BookingRequestException(400,ex.Message);}catch(DuplicateException ex){throw new BookingRequestException(409,ex.Message);}}
   public async Task<VehicleResponse> VehicleAsync(Guid id,CancellationToken ct){await using var db=fixture.Fleet();return await new VehicleService(db).GetVehicleByIdAsync(id)??throw new BookingRequestException(404,"Vehicle missing.");}
   public async Task<bool> AvailableAsync(Guid vehicleId,DateTime start,DateTime end,CancellationToken ct)

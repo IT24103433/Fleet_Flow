@@ -14,7 +14,7 @@ public sealed class PickupCoordinator(RentalDbContext db,IFleetGateway fleet,Tim
   {
    var booking=await db.Bookings.SingleOrDefaultAsync(b=>b.Id==bookingId,ct);if(booking==null)return null;
    var flow=await db.Workflows.SingleAsync(w=>w.Id==bookingId,ct);var existing=await db.Pickups.SingleOrDefaultAsync(p=>p.BookingId==bookingId,ct);
-   if(existing?.State==RentalLifecycleState.Active)throw new BookingRequestException(409,"Vehicle pickup has already been recorded.");
+   if(existing!=null&&existing.State!=RentalLifecycleState.PickupPending)throw new BookingRequestException(409,"Vehicle pickup has already been recorded.");
    if(existing!=null)
    {
     if(flow.Phase!="PickupRequested"||existing.PickupOdometer!=request.Odometer||existing.PickupFuelPercentage!=request.FuelPercentage||existing.PickupCondition!=request.Condition.Trim())
@@ -60,19 +60,22 @@ public sealed class PickupCoordinator(RentalDbContext db,IFleetGateway fleet,Tim
  {
   var record=await db.Pickups.AsNoTracking().SingleOrDefaultAsync(p=>p.Id==id,ct);if(record==null)return null;
   var booking=await db.Bookings.AsNoTracking().SingleOrDefaultAsync(b=>b.Id==record.BookingId&&(!customer.HasValue||b.CustomerId==customer.Value),ct);if(booking==null)return null;
-  var response=BookingCoordinator.Map(booking);response.Vehicle=await fleet.VehicleAsync(booking.VehicleId,ct);response.RentalId=record.Id;response.RentalState=record.State;return Map(record,response);
+  var response=BookingCoordinator.Map(booking);response.Vehicle=await fleet.VehicleAsync(booking.VehicleId,ct);response.RentalId=record.Id;response.RentalState=record.State;var returned=await db.Returns.AsNoTracking().SingleOrDefaultAsync(r=>r.RentalId==id,ct);if(record.State==RentalLifecycleState.Completed)response.FinalRentalAmount=returned?.FinalAmount;return Map(record,response,returned);
  }
  public async Task<RentalQueueResponse> QueueAsync(string state,int page,int pageSize,CancellationToken ct=default)
  {
-  if(state is not ("AwaitingPickup" or "PickupPending" or "Active")||page<1||pageSize is <1 or >100||(long)(page-1)*pageSize>int.MaxValue)throw new BookingRequestException(400,"Invalid rental queue filters.");
-  var query=db.Bookings.AsNoTracking().Where(b=>b.Status==BookingStatus.Confirmed);
-  query=state=="AwaitingPickup"?query.Where(b=>!db.Pickups.Any(p=>p.BookingId==b.Id)&&db.Workflows.Any(w=>w.Id==b.Id&&w.Phase=="Done")):
-   query.Where(b=>db.Pickups.Any(p=>p.BookingId==b.Id&&(state=="Active"?p.State==RentalLifecycleState.Active:p.State==RentalLifecycleState.PickupPending)));
+  if(state is not ("AwaitingPickup" or "PickupPending" or "Active" or "CompletionPending" or "Completed" or "Cancelled")||page<1||pageSize is <1 or >100||(long)(page-1)*pageSize>int.MaxValue)throw new BookingRequestException(400,"Invalid rental queue filters.");
+  var query=db.Bookings.AsNoTracking().Where(b=>state=="Completed"?b.Status==BookingStatus.Completed:state=="Cancelled"?b.Status==BookingStatus.Cancelled:b.Status==BookingStatus.Confirmed);
+  if(state=="AwaitingPickup")query=query.Where(b=>!db.Pickups.Any(p=>p.BookingId==b.Id)&&db.Workflows.Any(w=>w.Id==b.Id&&w.Phase=="Done"));
+  else if(state is not ("Completed" or "Cancelled")){var wanted=Enum.Parse<RentalLifecycleState>(state);query=query.Where(b=>db.Pickups.Any(p=>p.BookingId==b.Id&&p.State==wanted));}
   var count=await query.CountAsync(ct);var rows=await query.OrderBy(b=>b.StartDateTime).ThenBy(b=>b.Id).Skip((page-1)*pageSize).Take(pageSize).ToListAsync(ct);
   var ids=rows.Select(b=>b.Id).ToArray();var pickups=await db.Pickups.AsNoTracking().Where(p=>ids.Contains(p.BookingId)).ToDictionaryAsync(p=>p.BookingId,ct);
+  var rentalIds=pickups.Values.Select(p=>p.Id).ToArray();var returns=await db.Returns.AsNoTracking().Where(r=>rentalIds.Contains(r.RentalId)).ToDictionaryAsync(r=>r.RentalId,ct);
+  var vehicles=new Dictionary<Guid,FleetService.Api.Dtos.VehicleResponse>();
+  foreach(var batch in rows.Select(b=>b.VehicleId).Distinct().Chunk(8)){var values=await Task.WhenAll(batch.Select(async id=>(id,vehicle:await fleet.VehicleAsync(id,ct))));foreach(var value in values)vehicles[value.id]=value.vehicle;}
   var items=new List<RentalQueueItem>();
-  foreach(var b in rows){var booking=BookingCoordinator.Map(b);booking.Vehicle=await fleet.VehicleAsync(b.VehicleId,ct);RentalResponse? record=null;if(pickups.TryGetValue(b.Id,out var p)){booking.RentalId=p.Id;booking.RentalState=p.State;record=Map(p,booking);}items.Add(new(booking,record));}
+  foreach(var b in rows){var booking=BookingCoordinator.Map(b);booking.Vehicle=vehicles[b.VehicleId];RentalResponse? record=null;if(pickups.TryGetValue(b.Id,out var p)){booking.RentalId=p.Id;booking.RentalState=p.State;returns.TryGetValue(p.Id,out var returned);if(p.State==RentalLifecycleState.Completed)booking.FinalRentalAmount=returned?.FinalAmount;record=Map(p,booking,returned);}items.Add(new(booking,record));}
   return new(items,count,page,pageSize,(int)Math.Ceiling(count/(decimal)pageSize));
  }
- private static RentalResponse Map(RentalPickup p,FleetService.Api.Dtos.BookingResponse booking)=>new(p.Id,p.BookingId,p.State,p.PickupAt,p.PickupOdometer,p.PickupFuelPercentage,p.PickupCondition,p.PickedUpByUserId,booking);
+ private static RentalResponse Map(RentalPickup p,FleetService.Api.Dtos.BookingResponse booking,RentalReturn? returned=null)=>new(p.Id,p.BookingId,p.State,p.PickupAt,p.PickupOdometer,p.PickupFuelPercentage,p.PickupCondition,p.PickedUpByUserId,booking){Return=returned==null?null:ReturnCoordinator.Map(returned)};
 }
