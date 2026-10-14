@@ -13,6 +13,8 @@ public class FleetDbContext : DbContext
     public FleetService.Api.Services.RentalRouting? RentalRouting {get;}
     private void GuardLegacyWriter()
     {
+        if(ChangeTracker.Entries<MaintenanceAuditEntry>().Any(e=>e.State is EntityState.Modified or EntityState.Deleted))
+            throw new InvalidOperationException("Maintenance audit entries are append-only.");
         if(RentalRouting?.Remote==true && ChangeTracker.Entries<Booking>().Any(e=>e.State is EntityState.Added or EntityState.Modified or EntityState.Deleted))
             throw new FleetService.Api.Services.RentalUnavailableException();
     }
@@ -26,12 +28,15 @@ public class FleetDbContext : DbContext
     public DbSet<VehicleReservation> VehicleReservations => Set<VehicleReservation>();
     public DbSet<Booking> Bookings => Set<Booking>();
     public DbSet<MaintenanceRecord> MaintenanceRecords => Set<MaintenanceRecord>();
+    public DbSet<MaintenanceAuditEntry> MaintenanceAuditEntries => Set<MaintenanceAuditEntry>();
     public DbSet<Notification> Notifications => Set<Notification>();
     public DbSet<NotificationOutbox> NotificationOutbox => Set<NotificationOutbox>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<MaintenanceAuditEntry>(e=>{e.ToTable("MaintenanceAuditEntries");e.HasKey(a=>a.Id);e.Property(a=>a.Action).HasMaxLength(40);e.Property(a=>a.After).IsRequired();e.HasIndex(a=>new{a.MaintenanceRecordId,a.OccurredAt});e.HasOne<MaintenanceRecord>().WithMany().HasForeignKey(a=>a.MaintenanceRecordId).OnDelete(DeleteBehavior.Restrict);});
+        modelBuilder.Entity<MaintenanceRecord>().Property(r=>r.AssignedStaffName).HasMaxLength(100);
         modelBuilder.Entity<VehicleReservation>(e=> {e.ToTable("VehicleReservations");e.HasKey(r=>r.BookingId);e.Property(r=>r.TotalCost).HasPrecision(18,2);e.HasIndex(r=>r.VehicleId);e.HasOne<Vehicle>().WithMany().HasForeignKey(r=>r.VehicleId).OnDelete(DeleteBehavior.Restrict);});
 
         modelBuilder.Entity<NotificationOutbox>(entity =>

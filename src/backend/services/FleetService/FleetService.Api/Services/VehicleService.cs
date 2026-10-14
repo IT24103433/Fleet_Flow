@@ -545,9 +545,7 @@ public class VehicleService : IVehicleService
             throw new ValidationException("Vehicle status is controlled by its active rental until return.");
         if (request.Status == VehicleStatus.Available)
         {
-            var hasActiveMaintenance = await _dbContext.MaintenanceRecords.AnyAsync(record =>
-                record.VehicleId == id &&
-                (record.Status == MaintenanceStatus.SCHEDULED || record.Status == MaintenanceStatus.IN_PROGRESS));
+            var hasActiveMaintenance = await MaintenanceAvailability.CurrentAsync(_dbContext,id);
 
             if (hasActiveMaintenance)
             {

@@ -55,6 +55,7 @@ public class MaintenanceDashboardResponse
 
 public class CreateMaintenanceRecordRequest
 {
+    public DateTime? PlannedEndDateTime { get; set; }
     [Required(ErrorMessage = "Vehicle ID is required.")]
     public Guid VehicleId { get; set; }
 
@@ -93,6 +94,9 @@ public class UpdateMaintenanceStatusRequest
 
 public class MaintenanceRecordResponse
 {
+    public DateTime? PlannedEndDateTime { get; set; }
+    public Guid? AssignedStaffId { get; set; }
+    public string? AssignedStaffName { get; set; }
     public Guid Id { get; set; }
     public Guid VehicleId { get; set; }
     public Guid CreatedByUserId { get; set; }

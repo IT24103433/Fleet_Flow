@@ -31,6 +31,11 @@ const sendMaintenanceRequest = async (path, token, options = {}) => {
   }
 };
 
+export const getMaintenanceStaff = (token, signal) => sendMaintenanceRequest('/api/maintenance/staff', token, { method: 'GET', signal });
+export const getMaintenanceAudit = (token, id, signal) => sendMaintenanceRequest(`/api/maintenance/records/${id}/audit`, token, { method: 'GET', signal });
+export const assignMaintenance = (token, id, assignedStaffId) => sendMaintenanceRequest(`/api/maintenance/records/${id}/assignment`, token, { method: 'PUT', body: JSON.stringify({ assignedStaffId }) });
+export const rescheduleMaintenance = (token, id, window) => sendMaintenanceRequest(`/api/maintenance/records/${id}/schedule`, token, { method: 'PUT', body: JSON.stringify(window) });
+
 /**
  * Retrieves the live maintenance dashboard data including persisted status counts,
  * attention items, and vehicles currently in maintenance from the Maintenance API.
