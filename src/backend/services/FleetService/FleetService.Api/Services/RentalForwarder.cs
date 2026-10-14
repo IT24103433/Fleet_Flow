@@ -27,15 +27,16 @@ public sealed class RentalForwarder(RentalRouting routing,IHttpClientFactory cli
    return new ContentResult{StatusCode=(int)response.StatusCode,ContentType=response.Content.Headers.ContentType?.ToString()??"application/json",Content=await response.Content.ReadAsStringAsync(ct)};
   }catch(Exception ex)when(ex is HttpRequestException||ex is TaskCanceledException&&!ct.IsCancellationRequested){throw new RentalUnavailableException();}
  }
- private async Task<T> InternalAsync<T>(string path,CancellationToken ct)
+ private async Task<T> InternalAsync<T>(string path,CancellationToken ct,bool export=false)
  {
   if(!await routing.ReadyAsync(db,ct))throw new RentalUnavailableException();
   try{
    using var request=new HttpRequestMessage(HttpMethod.Get,path);request.Headers.Authorization=new AuthenticationHeaderValue("Bearer",await tokens.GetTokenAsync(ct));
-   using var response=await clients.CreateClient("RentalService").SendAsync(request,ct);response.EnsureSuccessStatusCode();
+   using var response=await clients.CreateClient("RentalService").SendAsync(request,ct);if(export && response.StatusCode==System.Net.HttpStatusCode.BadRequest)throw new ArgumentException("Invalid export parameters or too many matching records.");response.EnsureSuccessStatusCode();
    return await response.Content.ReadFromJsonAsync<T>(Json,ct)??throw new RentalUnavailableException();
   }catch(Exception ex)when(ex is HttpRequestException or JsonException or InvalidOperationException||ex is TaskCanceledException&&!ct.IsCancellationRequested){throw new RentalUnavailableException();}
  }
  public Task<BookingReportResponse> ReportAsync(BookingReportQuery query,CancellationToken ct)=>InternalAsync<BookingReportResponse>($"internal/reports/bookings?page={query.Page}&pageSize={query.PageSize}"+(query.Status.HasValue?$"&status={query.Status}":""),ct);
+ public Task<BookingExportResponse> ExportAsync(BookingExportQuery query,CancellationToken ct)=>InternalAsync<BookingExportResponse>("internal/reports/bookings/export"+(query.Status.HasValue?$"?status={query.Status}":""),ct,true);
  public Task<RentalStatisticsResponse> StatisticsAsync(CancellationToken ct)=>InternalAsync<RentalStatisticsResponse>("internal/reports/statistics",ct);
 }

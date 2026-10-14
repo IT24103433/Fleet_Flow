@@ -26,6 +26,25 @@ public class ReportsController(IReportingService reports, ILogger<ReportsControl
     public Task<ActionResult<OperationalStatisticsResponse>> GetOperationalStatistics(CancellationToken ct) =>
         Read(() => reports.GetOperationalStatisticsAsync(ct));
 
+    [HttpGet("bookings/export"), Authorize(Roles = "ADMIN")]
+    public Task<IActionResult> ExportBookings([FromQuery] BookingExportQuery query, CancellationToken ct) =>
+        Export(async () => ReportCsv.Bookings(await reports.GetBookingExportAsync(query, ct)), "fleetflow-bookings.csv");
+
+    [HttpGet("maintenance/export"), Authorize(Roles = "ADMIN,FLEET_MANAGER,MAINTENANCE_STAFF")]
+    public Task<IActionResult> ExportMaintenance(CancellationToken ct) =>
+        Export(async () => ReportCsv.Maintenance(await reports.GetMaintenanceReportAsync(ct)), "fleetflow-maintenance.csv");
+
+    private async Task<IActionResult> Export(Func<Task<byte[]>> read, string filename)
+    {
+        try { return File(await read(), "text/csv; charset=utf-8", filename); }
+        catch (ArgumentException) { return BadRequest(new { message = "Invalid export parameters or more than 10,000 matching rows." }); }
+        catch (Exception ex) when (ex is NpgsqlException or TimeoutException or RentalUnavailableException)
+        {
+            logger.LogWarning(ex, "Report export unavailable.");
+            return Problem(statusCode: 503, title: "The report could not be exported. Please try again.");
+        }
+    }
+
     private async Task<ActionResult<T>> Read<T>(Func<Task<T>> query)
     {
         try { return Ok(await query()); }

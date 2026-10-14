@@ -1,3 +1,4 @@
+import ReportExportButton from './ReportExportButton';
 import { useState } from 'react';
 import useReport from './useReport';
 import { ReportShell, ReportTable } from './ReportComponents';
@@ -10,11 +11,12 @@ export default function BookingReportsPage() {
   const query = new URLSearchParams({ page: String(page), pageSize: '25' });
   if (status) query.set('status', status);
   const report = useReport(`bookings?${query}`);
-  return <ReportShell title="Booking reports" report={report}>
+  return <ReportShell title="Booking reports" report={report} action={<ReportExportButton path={`bookings/export${status ? `?status=${encodeURIComponent(status)}` : ''}`} filename="fleetflow-bookings.csv" disabled={report.loading || !report.data} />}>
     <label className="reports-filter">Booking status <select value={status} onChange={event => { setStatus(event.target.value); setPage(1); }}>
       <option value="">All statuses</option>
       {['Pending', 'Confirmed', 'Cancelled', 'Completed'].map(value => <option key={value} value={value}>{value}</option>)}
     </select></label>
+    <p>CSV exports include every booking matching the selected status, across all pages. Dates use UTC and amounts use LKR.</p>
     {report.data && <>
       <p>{report.data.totalCount.toLocaleString()} matching persisted bookings. Customer identifiers are shown to administrators; personal profile details are not included.</p>
       <ReportTable label="Persisted bookings" rows={report.data.items} rowKey="bookingId" emptyMessage="No bookings match this report." columns={[

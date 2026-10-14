@@ -1,0 +1,102 @@
+{
+  "story": "S4-10",
+  "points": 2,
+  "baselineCommit": "da8f1699e090f8161000ad660e996565ce09e645",
+  "backend": {
+    "passed": 577,
+    "failed": 0,
+    "skipped": 0,
+    "assemblies": {
+      "FleetService.Tests.dll": {
+        "passed": 273,
+        "failed": 0,
+        "total": 273
+      },
+      "IdentityService.Tests.dll": {
+        "passed": 55,
+        "failed": 0,
+        "total": 55
+      },
+      "FleetFlow.VehicleService.Tests.dll": {
+        "passed": 69,
+        "failed": 0,
+        "total": 69
+      },
+      "FleetFlow.IdentityService.Tests.dll": {
+        "passed": 101,
+        "failed": 0,
+        "total": 101
+      },
+      "FleetFlow.ServiceFoundation.Tests.dll": {
+        "passed": 37,
+        "failed": 0,
+        "total": 37
+      },
+      "NotificationService.Tests.dll": {
+        "passed": 19,
+        "failed": 0,
+        "total": 19
+      },
+      "RentalService.Tests.dll": {
+        "passed": 23,
+        "failed": 0,
+        "total": 23
+      }
+    }
+  },
+  "frontend": {
+    "passed": 138,
+    "failed": 0,
+    "skipped": 0,
+    "lint": "passed",
+    "build": "passed"
+  },
+  "bundle": {
+    "definition": "Entry plus recursively static imports, uncompressed; lazy routes reported separately.",
+    "entryBytes": 303332,
+    "budgetBytes": 350000,
+    "lazy": {
+      "LandingPage": {
+        "ownBytes": 131010,
+        "additionalStaticClosureBytes": 142376
+      },
+      "BookingReportsPage": {
+        "ownBytes": 2463,
+        "additionalStaticClosureBytes": 12515
+      },
+      "MaintenanceReportsPage": {
+        "ownBytes": 2830,
+        "additionalStaticClosureBytes": 12882
+      }
+    },
+    "passes": true
+  },
+  "desktop": {
+    "width": 1440,
+    "height": 900,
+    "bookingDownload": "passed",
+    "screenshot": "docs/review/s4-export-bookings-1440.jpg"
+  },
+  "isolatedApis": {
+    "exports": {
+      "bookings": {
+        "rows": 4,
+        "columns": 12,
+        "bytes": 1376,
+        "sha256": "f0720f9e4857792fc212ec7e6dd80b708985c05cba5ecd120b2261c1b3cbb6d0"
+      },
+      "maintenance": {
+        "rows": 2,
+        "columns": 15,
+        "bytes": 728,
+        "sha256": "a934e7d13f8be079b69173755ae6234a9efbf88c00339bc08bbaa4ea5be48da1"
+      }
+    },
+    "migratedBookings": 4,
+    "migratedNotifications": 16,
+    "cleanedUp": true,
+    "workingDataWrites": 0
+  },
+  "migrationRequired": false,
+  "deployed": false
+}

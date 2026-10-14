@@ -17,3 +17,10 @@ public class BookingReportQuery
     [Range(1, 100)] public int PageSize { get; set; } = 25;
     [EnumDataType(typeof(BookingStatus))] public BookingStatus? Status { get; set; }
 }
+
+public record BookingExportResponse(DateTime GeneratedAt, IReadOnlyList<BookingReportRow> Items);
+public sealed class BookingExportQuery
+{
+    public const int MaxRows = 10000;
+    [EnumDataType(typeof(BookingStatus))] public BookingStatus? Status { get; set; }
+}
