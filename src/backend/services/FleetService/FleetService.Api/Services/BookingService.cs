@@ -222,7 +222,7 @@ public class BookingService : IBookingService
             query = query.Where(b => b.Id != excludeBookingId.Value);
         }
 
-        return await query.AnyAsync(b => b.StartDateTime < endUtc && b.EndDateTime > startUtc);
+        return await MaintenanceAvailability.Blocking(_dbContext,vehicleId,startUtc,endUtc).AnyAsync() || await query.AnyAsync(b => b.StartDateTime < endUtc && b.EndDateTime > startUtc);
     }
 
     private static void ValidateRentalPeriod(DateTime startUtc, DateTime endUtc)

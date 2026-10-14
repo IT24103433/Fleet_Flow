@@ -269,7 +269,7 @@ const MaintenanceDashboardPage = ({
         </div>
       </div>
 
-      <MaintenanceWorkOrders token={token} onDataChanged={fetchDashboard} onLocationsLoaded={setHubLocations} />
+      <MaintenanceWorkOrders token={token} canAssign={roles.includes('ADMIN') || roles.includes('FLEET_MANAGER')} onDataChanged={fetchDashboard} onLocationsLoaded={setHubLocations} />
 
       {/* 2. Vehicles Requiring Attention Section */}
       <div className="view-825c2434">

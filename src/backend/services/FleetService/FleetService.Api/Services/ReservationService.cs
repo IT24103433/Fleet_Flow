@@ -23,7 +23,7 @@ public sealed class ReservationService(FleetDbContext db,IVehicleService vehicle
   }
   var vehicle=await vehicles.GetVehicleByIdAsync(command.VehicleId)??throw new NotFoundException("Vehicle was not found.");
   if(vehicle.Status!=VehicleStatus.Available)throw new ValidationException($"Vehicle is currently in '{vehicle.Status}' status and is not available for rental booking.");
-  if(await db.MaintenanceRecords.AnyAsync(r=>r.VehicleId==command.VehicleId&&(r.Status==MaintenanceStatus.SCHEDULED||r.Status==MaintenanceStatus.IN_PROGRESS),ct) ||
+  if(await MaintenanceAvailability.Blocking(db,command.VehicleId,start,end).AnyAsync(ct) ||
    await db.VehicleReservations.AnyAsync(r=>r.VehicleId==command.VehicleId&&!r.Released&&(r.IsHeld || r.StartDateTime<end&&r.EndDateTime>start),ct))
     throw new DuplicateException("The selected vehicle has an overlapping booking or maintenance for the requested timeframe.");
   var row=new VehicleReservation{BookingId=command.BookingId,VehicleId=command.VehicleId,CustomerId=command.CustomerId,StartDateTime=start,EndDateTime=end,
@@ -56,7 +56,7 @@ public sealed class ReservationService(FleetDbContext db,IVehicleService vehicle
   if(row.Released||at<row.StartDateTime||at>=row.EndDateTime)throw new ValidationException("Pickup must be within the confirmed booking period.");
   var vehicle=await db.Vehicles.SingleAsync(v=>v.Id==row.VehicleId,ct);
   if(vehicle.Status!=VehicleStatus.Available||await db.VehicleReservations.AnyAsync(r=>r.VehicleId==row.VehicleId&&r.BookingId!=row.BookingId&&r.IsHeld,ct)||
-   await db.MaintenanceRecords.AnyAsync(r=>r.VehicleId==row.VehicleId&&(r.Status==MaintenanceStatus.SCHEDULED||r.Status==MaintenanceStatus.IN_PROGRESS),ct))
+   await MaintenanceAvailability.Blocking(db,row.VehicleId,at,row.EndDateTime).AnyAsync(ct))
    throw new DuplicateException("Vehicle cannot be handed over while in use or under maintenance.");
   if(command.Odometer<vehicle.Mileage)throw new ValidationException("Pickup odometer cannot be lower than the vehicle's recorded mileage.");
   row.IsHeld=true;row.HeldRentalId=command.RentalId;row.PickupAt=at;row.PickupOdometer=command.Odometer;
@@ -80,7 +80,7 @@ public sealed class ReservationService(FleetDbContext db,IVehicleService vehicle
   if(row.PickupAt==null||at<row.PickupAt||command.Odometer<row.PickupOdometer||command.Odometer<vehicle.Mileage)throw new ValidationException("Return mileage and time cannot precede pickup or the vehicle's recorded mileage.");
   row.IsHeld=false;row.Released=true;row.ReleasedAt=at;row.ReturnedAt=at;row.ReturnOdometer=command.Odometer;
   vehicle.Mileage=command.Odometer;vehicle.UpdatedAt=DateTime.UtcNow;
-  vehicle.Status=await db.MaintenanceRecords.AnyAsync(r=>r.VehicleId==row.VehicleId&&(r.Status==MaintenanceStatus.SCHEDULED||r.Status==MaintenanceStatus.IN_PROGRESS),ct)?VehicleStatus.Maintenance:VehicleStatus.Available;
+  vehicle.Status=await MaintenanceAvailability.CurrentAsync(db,row.VehicleId,ct)?VehicleStatus.Maintenance:VehicleStatus.Available;
   await db.SaveChangesAsync(ct);if(tx!=null)await tx.CommitAsync(ct);return new(row.BookingId,command.RentalId,true);
  }
  public async Task<bool> AvailableAsync(Guid vehicleId,DateTime start,DateTime end,CancellationToken ct=default)
@@ -90,7 +90,7 @@ public sealed class ReservationService(FleetDbContext db,IVehicleService vehicle
   var vehicle=await vehicles.GetVehicleByIdAsync(vehicleId)??throw new NotFoundException("Vehicle was not found.");
   if(vehicle.Status!=VehicleStatus.Available)throw new ValidationException($"Vehicle is currently in '{vehicle.Status}' status and is not available for rental booking.");
   return !await db.VehicleReservations.AnyAsync(r=>r.VehicleId==vehicleId&&!r.Released&&(r.IsHeld || r.StartDateTime<end&&r.EndDateTime>start),ct) &&
-   !await db.MaintenanceRecords.AnyAsync(r=>r.VehicleId==vehicleId&&(r.Status==MaintenanceStatus.SCHEDULED||r.Status==MaintenanceStatus.IN_PROGRESS),ct);
+   !await MaintenanceAvailability.Blocking(db,vehicleId,start,end).AnyAsync(ct);
  }
  private static ReservationAcknowledgement Ack(VehicleReservation row)=>new(row.BookingId,row.Released,row.TotalCost,JsonSerializer.Deserialize<VehicleResponse>(row.VehicleSnapshot)!);
 }

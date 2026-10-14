@@ -120,7 +120,7 @@ public class MaintenanceController : ControllerBase
     {
         try
         {
-            var record = await _maintenanceService.UpdateMaintenanceRecordAsync(id, request, cancellationToken);
+            var record = await _maintenanceService.UpdateMaintenanceRecordAsync(id, GetCurrentUserId(), request, cancellationToken);
             return record == null
                 ? NotFound(new { message = $"Maintenance record with ID '{id}' was not found." })
                 : Ok(record);
@@ -149,10 +149,14 @@ public class MaintenanceController : ControllerBase
 
         try
         {
-            var record = await _maintenanceService.UpdateMaintenanceStatusAsync(id, request.Status.Value, cancellationToken);
+            var record = await _maintenanceService.UpdateMaintenanceStatusAsync(id, GetCurrentUserId(), request.Status.Value, cancellationToken);
             return record == null
                 ? NotFound(new { message = $"Maintenance record with ID '{id}' was not found." })
                 : Ok(record);
+        }
+        catch (DuplicateException ex)
+        {
+            return Conflict(new { message = ex.Message });
         }
         catch (ValidationException ex)
         {

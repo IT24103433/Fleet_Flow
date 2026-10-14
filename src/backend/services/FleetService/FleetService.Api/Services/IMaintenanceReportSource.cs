@@ -20,6 +20,9 @@ public class MaintenanceReportSource(FleetDbContext db) : IMaintenanceReportSour
             .ThenByDescending(record => record.CreatedAt)
             .ToListAsync(ct);
 
+        var audit = await db.MaintenanceAuditEntries.AsNoTracking().OrderBy(a => a.OccurredAt).ThenBy(a => a.Id).ToListAsync(ct);
+        var history = audit.ToLookup(a => a.MaintenanceRecordId);
+
         return new MaintenanceRecordsSnapshot(true, null, records.Select(record =>
             new MaintenanceRecordRow(
                 record.Id,
@@ -30,7 +33,11 @@ public class MaintenanceReportSource(FleetDbContext db) : IMaintenanceReportSour
                 record.ScheduledDateTime,
                 record.CompletedAt,
                 record.Cost,
-                [])).ToList());
+                history[record.Id].Select(entry => {
+                    using var json = System.Text.Json.JsonDocument.Parse(entry.After);
+                    return new MaintenanceHistoryRow(entry.OccurredAt, json.RootElement.GetProperty("Status").GetString() ?? "Not recorded",
+                        $"{entry.Action}; recorded by staff #{entry.ActorId.ToString()[..8]}");
+                }).ToList()) { PlannedEndDateTime = record.PlannedEndDateTime, AssignedStaffId = record.AssignedStaffId, AssignedStaffName = record.AssignedStaffName }).ToList());
     }
 }
 

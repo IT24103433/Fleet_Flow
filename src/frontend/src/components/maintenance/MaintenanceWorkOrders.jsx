@@ -1,5 +1,6 @@
+import MaintenancePlanActions from './MaintenancePlanActions';
 import useConfirmAction from "../common/useConfirmAction";
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Alert from '../Alert';
 import Button from '../common/Button';
 import Modal from '../common/Modal';
@@ -14,14 +15,16 @@ const createDefaultForm = (vehicleId = '') => {
   return {
     vehicleId,
     scheduledDateTime: new Date(scheduled.getTime() - scheduled.getTimezoneOffset() * 60000).toISOString().slice(0, 16),
+    plannedEndDateTime: new Date(scheduled.getTime() + 2 * 3600000 - scheduled.getTimezoneOffset() * 60000).toISOString().slice(0, 16),
     serviceInformation: '',
     details: '',
     cost: '0'
   };
 };
-const formatStatus = status => String(status || '').replaceAll('_', ' ');
+const formatStatus = status => String(status || '').toLowerCase().replaceAll('_', ' ').replace(/\b\w/g, letter => letter.toUpperCase());
 const MaintenanceWorkOrders = ({
   token,
+  canAssign = false,
   onDataChanged,
   onLocationsLoaded
 }) => {
@@ -41,6 +44,7 @@ const MaintenanceWorkOrders = ({
   const [formErrors, setFormErrors] = useState({});
   const [isSaving, setIsSaving] = useState(false);
   const [updatingStatusId, setUpdatingStatusId] = useState(null);
+  const saving = useRef(false);
   const selectedVehicle = useMemo(() => vehicles.find(vehicle => vehicle.id === selectedVehicleId) || null, [vehicles, selectedVehicleId]);
   const schedulableVehicles = useMemo(() => vehicles.filter(vehicle => vehicle.status === 'Available' || vehicle.status === 'Maintenance'), [vehicles]);
   const loadVehicles = useCallback(async () => {
@@ -107,12 +111,13 @@ const MaintenanceWorkOrders = ({
     setFormErrors({});
   };
   const handleSave = async () => {
+    if (saving.current) return;
     const errors = validateMaintenanceRecord(form, {
-      requireSchedule: !editingRecord
+      requireSchedule: !editingRecord, requireEnd: !editingRecord
     });
     setFormErrors(errors);
     if (Object.keys(errors).length > 0) return;
-    setIsSaving(true);
+    saving.current = true; setIsSaving(true);
     setErrorMessage(null);
     const payload = {
       serviceInformation: form.serviceInformation.trim(),
@@ -122,9 +127,10 @@ const MaintenanceWorkOrders = ({
     const result = editingRecord ? await updateMaintenanceRecord(token, editingRecord.id, payload) : await createMaintenanceRecord(token, {
       ...payload,
       vehicleId: form.vehicleId,
-      scheduledDateTime: new Date(form.scheduledDateTime).toISOString()
+      scheduledDateTime: new Date(form.scheduledDateTime).toISOString(),
+      plannedEndDateTime: new Date(form.plannedEndDateTime).toISOString()
     });
-    setIsSaving(false);
+    saving.current = false; setIsSaving(false);
     if (!result.success) {
       const serverErrors = normalizeValidationErrors(result.errors);
       setFormErrors(Object.keys(serverErrors).length > 0 ? serverErrors : {
@@ -196,23 +202,27 @@ const MaintenanceWorkOrders = ({
           {selectedVehicle ? `No maintenance history exists for ${selectedVehicle.licensePlate}.` : 'Select a vehicle to view maintenance history.'}
         </div> : <div className="table-responsive view-aeadbd09">
           <table className="users-table view-37ab52c9">
-            <thead><tr><th>Scheduled</th><th>Status</th><th>Service information</th><th>Cost</th><th className="view-37dd0c2a">Actions</th></tr></thead>
+            <thead><tr><th>Planned window</th><th>Status</th><th>Service information</th><th>Cost</th><th className="view-37dd0c2a">Actions</th></tr></thead>
             <tbody>
               {records.map(record => {
             const transitions = getMaintenanceStatusTransitions(record.status);
             return <tr key={record.id}>
-                    <td>{new Date(record.scheduledDateTime).toLocaleString()}</td>
+                    <td>{new Date(record.scheduledDateTime).toLocaleString()}<div className="view-2bab5824">{record.plannedEndDateTime ? `Until ${new Date(record.plannedEndDateTime).toLocaleString()}` : 'End not recorded · blocks availability'}</div></td>
                     <td><StatusBadge status={record.status} /></td>
                     <td>
-                      <div className="view-3d9df89e">{record.serviceInformation}</div>
+                      <div className="view-3d9df89e">{record.serviceInformation}</div><div className="view-2bab5824">{record.assignedStaffName ? `Assigned to ${record.assignedStaffName}` : 'Unassigned'}</div>
                       {record.details && <div className="view-2bab5824">{record.details}</div>}
                     </td>
                     <td>LKR {Number(record.cost || 0).toLocaleString(undefined, {
                   minimumFractionDigits: 2
                 })}</td>
                     <td className="view-37dd0c2a">
-                      <div className="view-ab805e11">
-                        <Button variant="outline" size="sm" onClick={() => openEditModal(record)}>Edit Details</Button>
+                      <div className="view-ab805e11 maintenance-row-actions">
+                        <Button variant="outline" size="sm" onClick={() => openEditModal(record)}>Edit details</Button>
+                        <MaintenancePlanActions record={record} token={token} canAssign={canAssign} onSaved={async updated => {
+                          setRecords(current => current.map(item => item.id === updated.id ? updated : item));
+                          setSuccessMessage('Maintenance plan updated.'); await loadVehicles(); if (onDataChanged) await onDataChanged();
+                        }} />
                         {transitions.map(status => <Button key={status} variant={status === 'CANCELLED' ? 'outline' : 'secondary'} size="sm" disabled={updatingStatusId === record.id} onClick={() => handleStatusUpdate(record, status)}>
                             {formatStatus(status)}
                           </Button>)}
@@ -224,7 +234,7 @@ const MaintenanceWorkOrders = ({
           </table>
         </div>}
 
-      <Modal isOpen={Boolean(form)} onClose={closeModal} title={editingRecord ? 'Update Maintenance Record' : 'Schedule Vehicle Maintenance'} subtitle={editingRecord ? `Record ${editingRecord.id}` : 'Choose a vehicle, date, and required service.'}>
+      <Modal isOpen={Boolean(form)} onClose={closeModal} title={editingRecord ? 'Update Maintenance Record' : 'Schedule Vehicle Maintenance'} subtitle={editingRecord ? `Record ${editingRecord.id}` : 'Choose a vehicle, planned window and required service.'}>
         {form && <div className="view-01702319">
             {formErrors.submit && <Alert type="error" title="Unable to Save" message={formErrors.submit} />}
             {!editingRecord && <div>
@@ -258,6 +268,7 @@ const MaintenanceWorkOrders = ({
           }} aria-invalid={Boolean(formErrors.scheduledDateTime)} aria-describedby={formErrors.scheduledDateTime ? 'maintenanceScheduledDateTimeError' : undefined} className="view-3cd14f20" />
                 {formErrors.scheduledDateTime && <div id="maintenanceScheduledDateTimeError" className="field-error-message">{formErrors.scheduledDateTime}</div>}
               </div>}
+            {!editingRecord && <div><label htmlFor="maintenancePlannedEnd">Planned end</label><input id="maintenancePlannedEnd" type="datetime-local" value={form.plannedEndDateTime} onChange={event => setForm(previous => ({ ...previous, plannedEndDateTime: event.target.value }))} aria-invalid={Boolean(formErrors.plannedEndDateTime)} aria-describedby={formErrors.plannedEndDateTime ? 'maintenancePlannedEndError' : undefined} className="view-3cd14f20" />{formErrors.plannedEndDateTime && <div id="maintenancePlannedEndError" className="field-error-message">{formErrors.plannedEndDateTime}</div>}</div>}
             <div>
               <label htmlFor="maintenanceServiceInformation">Required service information</label>
               <textarea id="maintenanceServiceInformation" value={form.serviceInformation} onChange={event => {

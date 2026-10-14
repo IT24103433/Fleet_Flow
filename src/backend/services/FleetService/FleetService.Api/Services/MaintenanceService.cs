@@ -7,20 +7,21 @@ using FleetService.Api.Messaging.Events;
 
 namespace FleetService.Api.Services;
 
-public class MaintenanceService : IMaintenanceService
+public partial class MaintenanceService : IMaintenanceService
 {
     private readonly FleetDbContext _dbContext;
     private readonly INotificationEventDispatcher? _notifications;
     private readonly ILogger<MaintenanceService>? _logger;
+    private readonly IMaintenanceStaffDirectory? _staff;
 
     public MaintenanceService(
         FleetDbContext dbContext,
         INotificationEventDispatcher? notifications = null,
-        ILogger<MaintenanceService>? logger = null)
+        ILogger<MaintenanceService>? logger = null, IMaintenanceStaffDirectory? staff = null)
     {
         _dbContext = dbContext;
         _notifications = notifications;
-        _logger = logger;
+        _logger = logger; _staff = staff;
     }
 
     public async Task<MaintenanceDashboardResponse> GetMaintenanceDashboardAsync(string? hub = null, CancellationToken cancellationToken = default)
@@ -191,23 +192,8 @@ public class MaintenanceService : IMaintenanceService
             throw new Exceptions.ValidationException($"Vehicle in '{vehicle.Status}' status cannot be scheduled for maintenance.");
         }
 
-        var hasActiveRecord = await _dbContext.MaintenanceRecords.AnyAsync(
-            record => record.VehicleId == vehicle.Id &&
-                      (record.Status == MaintenanceStatus.SCHEDULED || record.Status == MaintenanceStatus.IN_PROGRESS),
-            cancellationToken);
-        if (hasActiveRecord)
-        {
-            throw new Exceptions.DuplicateException("This vehicle already has an active maintenance record.");
-        }
-
-        var now = DateTime.UtcNow;
-        if (_dbContext.RentalRouting?.Remote == true
-            ? await _dbContext.VehicleReservations.AnyAsync(r=>r.VehicleId==vehicle.Id && !r.Released && (r.IsHeld || r.EndDateTime>now),cancellationToken)
-            : await _dbContext.Bookings.AnyAsync(booking => booking.VehicleId == vehicle.Id &&
-                (booking.Status == BookingStatus.Pending || booking.Status == BookingStatus.Confirmed) && booking.EndDateTime > now,cancellationToken))
-        {
-            throw new Exceptions.DuplicateException("Cannot schedule maintenance while this vehicle has an active or future rental booking.");
-        }
+        var plannedEnd = request.PlannedEndDateTime.HasValue ? NormalizeUtc(request.PlannedEndDateTime.Value) : (DateTime?)null;
+        await CheckWindow(vehicle.Id, scheduledUtc, plannedEnd, null, cancellationToken);
 
         var record = new MaintenanceRecord
         {
@@ -216,6 +202,7 @@ public class MaintenanceService : IMaintenanceService
             Vehicle = vehicle,
             CreatedByUserId = createdByUserId,
             ScheduledDateTime = scheduledUtc,
+            PlannedEndDateTime = plannedEnd,
             ServiceInformation = request.ServiceInformation.Trim(),
             Details = NormalizeOptionalText(request.Details),
             Cost = request.Cost,
@@ -223,9 +210,10 @@ public class MaintenanceService : IMaintenanceService
             CreatedAt = DateTime.UtcNow
         };
 
-        vehicle.Status = VehicleStatus.Maintenance;
+        if (!plannedEnd.HasValue) vehicle.Status = VehicleStatus.Maintenance;
         vehicle.UpdatedAt = DateTime.UtcNow;
         _dbContext.MaintenanceRecords.Add(record);
+        Audit(record, createdByUserId, "Created", null);
         var domainEvent = new MaintenanceScheduledEvent
         {
             EventId = Guid.NewGuid(),
@@ -280,10 +268,9 @@ public class MaintenanceService : IMaintenanceService
         return records.Select(MapRecord).ToList();
     }
 
-    public async Task<MaintenanceRecordResponse?> UpdateMaintenanceRecordAsync(
-        Guid id,
-        UpdateMaintenanceRecordRequest request,
-        CancellationToken cancellationToken = default)
+    public Task<MaintenanceRecordResponse?> UpdateMaintenanceRecordAsync(Guid id, UpdateMaintenanceRecordRequest request, CancellationToken cancellationToken = default) => UpdateDetails(id, request, Guid.Empty, cancellationToken);
+    private async Task<MaintenanceRecordResponse?> UpdateDetails(
+        Guid id, UpdateMaintenanceRecordRequest request, Guid actor, CancellationToken cancellationToken)
     {
         if (request == null)
         {
@@ -304,20 +291,21 @@ public class MaintenanceService : IMaintenanceService
             return null;
         }
 
+        var before = Snapshot(record);
         record.ServiceInformation = request.ServiceInformation.Trim();
         record.Details = NormalizeOptionalText(request.Details);
         record.Cost = request.Cost;
         record.UpdatedAt = DateTime.UtcNow;
+        Audit(record, actor, "DetailsUpdated", before);
         await _dbContext.SaveChangesAsync(cancellationToken);
         if (transaction != null) await transaction.CommitAsync(cancellationToken);
 
         return MapRecord(record);
     }
 
-    public async Task<MaintenanceRecordResponse?> UpdateMaintenanceStatusAsync(
-        Guid id,
-        MaintenanceStatus status,
-        CancellationToken cancellationToken = default)
+    public Task<MaintenanceRecordResponse?> UpdateMaintenanceStatusAsync(Guid id, MaintenanceStatus status, CancellationToken cancellationToken = default) => UpdateStatus(id, status, Guid.Empty, cancellationToken);
+    private async Task<MaintenanceRecordResponse?> UpdateStatus(
+        Guid id, MaintenanceStatus status, Guid actor, CancellationToken cancellationToken)
     {
         if (!Enum.IsDefined(status))
         {
@@ -342,6 +330,16 @@ public class MaintenanceService : IMaintenanceService
             throw new Exceptions.ValidationException($"Maintenance status cannot transition from '{record.Status}' to '{status}'.");
         }
 
+        if (status == MaintenanceStatus.IN_PROGRESS)
+        {
+            if (record.PlannedEndDateTime.HasValue && (DateTime.UtcNow < record.ScheduledDateTime || DateTime.UtcNow >= record.PlannedEndDateTime))
+                throw new Exceptions.ValidationException("Start work within its planned window, or reschedule it first.");
+            if (record.Vehicle?.Status is VehicleStatus.InUse or VehicleStatus.Retired ||
+                await MaintenanceAvailability.CurrentAsyncExcept(_dbContext, record.VehicleId, record.Id, cancellationToken) ||
+                await _dbContext.VehicleReservations.AnyAsync(r => r.VehicleId == record.VehicleId && r.IsHeld, cancellationToken))
+                throw new Exceptions.DuplicateException("An active rental or retired vehicle cannot start maintenance.");
+        }
+        var before = Snapshot(record);
         record.Status = status;
         record.UpdatedAt = DateTime.UtcNow;
 
@@ -350,27 +348,8 @@ public class MaintenanceService : IMaintenanceService
             record.CompletedAt = DateTime.UtcNow;
         }
 
-        if (record.Vehicle != null)
-        {
-            if (status is MaintenanceStatus.SCHEDULED or MaintenanceStatus.IN_PROGRESS)
-            {
-                record.Vehicle.Status = VehicleStatus.Maintenance;
-                record.Vehicle.UpdatedAt = DateTime.UtcNow;
-            }
-            else
-            {
-                var hasOtherActiveRecord = await _dbContext.MaintenanceRecords.AnyAsync(
-                    item => item.VehicleId == record.VehicleId && item.Id != record.Id &&
-                            (item.Status == MaintenanceStatus.SCHEDULED || item.Status == MaintenanceStatus.IN_PROGRESS),
-                    cancellationToken);
-
-                if (!hasOtherActiveRecord && record.Vehicle.Status == VehicleStatus.Maintenance)
-                {
-                    record.Vehicle.Status = VehicleStatus.Available;
-                    record.Vehicle.UpdatedAt = DateTime.UtcNow;
-                }
-            }
-        }
+        await RefreshVehicle(record, cancellationToken);
+        Audit(record, actor, "StatusChanged", before);
 
         var domainEvent = new MaintenanceStatusChangedEvent
         {
@@ -432,9 +411,9 @@ public class MaintenanceService : IMaintenanceService
             throw new Exceptions.ValidationException("Maintenance service information or details exceed the supported length.");
         }
 
-        if (cost < 0)
+        if (cost < 0 || cost > 100000000 || decimal.Round(cost, 2) != cost)
         {
-            throw new Exceptions.ValidationException("Maintenance cost cannot be negative.");
+            throw new Exceptions.ValidationException("Maintenance cost must be between zero and LKR 100,000,000, with at most two decimal places.");
         }
     }
 
@@ -461,6 +440,7 @@ public class MaintenanceService : IMaintenanceService
             VehicleId = record.VehicleId,
             CreatedByUserId = record.CreatedByUserId,
             ScheduledDateTime = record.ScheduledDateTime,
+            PlannedEndDateTime = record.PlannedEndDateTime, AssignedStaffId = record.AssignedStaffId, AssignedStaffName = record.AssignedStaffName,
             ServiceInformation = record.ServiceInformation,
             Details = record.Details,
             Cost = record.Cost,

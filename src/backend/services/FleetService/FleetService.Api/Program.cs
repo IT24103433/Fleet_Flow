@@ -17,6 +17,9 @@ builder.Services.AddDbContext<FleetDbContext>(options =>
 builder.Services.AddScoped<IVehicleService, VehicleService>();
 builder.Services.AddScoped<IVehicleImageService, VehicleImageService>();
 builder.Services.AddScoped<IMaintenanceService, MaintenanceService>();
+builder.Services.AddHttpClient<IMaintenanceStaffDirectory,MaintenanceStaffDirectory>((sp,http)=>{
+    http.BaseAddress=FleetFlow.ServiceDefaults.ServiceEndpoints.Identity(builder.Configuration,builder.Environment);http.Timeout=TimeSpan.FromSeconds(5);
+}).ConfigurePrimaryHttpMessageHandler(()=>new HttpClientHandler{AllowAutoRedirect=false});
 builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddSingleton(RentalRouting.Read(builder.Configuration,builder.Environment));
 builder.Services.AddScoped<RentalForwarder>();builder.Services.AddScoped<ReservationService>();
@@ -195,6 +198,7 @@ _ = Task.Run(async () =>
                 await NotificationSchema.EnsureAsync(dbContext);
                 await NotificationOutboxSchema.EnsureAsync(dbContext);
                 await ReservationSchema.EnsureAsync(dbContext);
+                await MaintenancePlanningSchema.EnsureAsync(dbContext);
                 readiness.MarkInitialized();
                 Console.WriteLine("[Database] FleetService database initialized and ready.");
             }

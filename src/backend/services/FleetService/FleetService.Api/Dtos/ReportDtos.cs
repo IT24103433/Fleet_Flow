@@ -8,11 +8,16 @@ public record FleetSummaryResponse(DateTime GeneratedAt, VehicleStatusSummary Ve
     int UtilizationEligibleVehicles, int CurrentlyBookedVehicles, decimal? CurrentBookingUtilizationPercent);
 public record MaintenanceVehicleRow(Guid VehicleId, string LicensePlate, string Make, string Model,
     string HubLocation, int Mileage, VehicleStatus Status, DateTime? LastVehicleUpdateAt);
-// Optional transition history remains empty until a persisted transition-audit model is introduced.
+// Legacy records have an empty history; new entries come from persisted immutable audit records.
 public record MaintenanceHistoryRow(DateTime ChangedAt, string Status, string? Details);
 public record MaintenanceRecordRow(Guid MaintenanceId, Guid VehicleId, string? LicensePlate,
     string Activity, string Status, DateTime? ScheduledAt, DateTime? CompletedAt, decimal? Cost,
-    IReadOnlyList<MaintenanceHistoryRow> History);
+    IReadOnlyList<MaintenanceHistoryRow> History)
+{
+    public DateTime? PlannedEndDateTime { get; init; }
+    public Guid? AssignedStaffId { get; init; }
+    public string? AssignedStaffName { get; init; }
+}
 public record MaintenanceRecordsSnapshot(bool Available, string? UnavailableReason,
     IReadOnlyList<MaintenanceRecordRow> Records);
 public record MaintenanceReportResponse(DateTime GeneratedAt, IReadOnlyList<MaintenanceVehicleRow> CurrentVehicles,

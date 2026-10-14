@@ -1,0 +1,79 @@
+{
+  "stories": [
+    "S4-04",
+    "S4-05",
+    "S4-06"
+  ],
+  "points": 8,
+  "baseCommit": "1e508cd44c2a9bdd604d4e8ae14a097eae3cd307",
+  "backend": {
+    "finalLocalRentalAssembly": "Blocked by Windows Application Control (0x800711C7); previous 45 tests passed",
+    "expectedLinuxCiTests": 611,
+    "linuxCi": "pending",
+    "earlierFullPassed": 610,
+    "finalLocalPassed": 566
+  },
+  "frontend": {
+    "skipped": 0,
+    "build": "passed",
+    "focusedNewPassed": 5,
+    "passed": 155,
+    "lint": "passed"
+  },
+  "bundle": {
+    "definition": "Entry plus recursively static imports, uncompressed; lazy routes reported separately.",
+    "entryBytes": 308989,
+    "budgetBytes": 350000,
+    "lazy": {
+      "MaintenanceDashboardPage": {
+        "ownBytes": 41275,
+        "additionalStaticClosureBytes": 52141
+      },
+      "LandingPage": {
+        "ownBytes": 60218,
+        "additionalStaticClosureBytes": 141968
+      },
+      "NotificationDeliveryPage": {
+        "ownBytes": 10708,
+        "additionalStaticClosureBytes": 15833
+      },
+      "RentalQueuePage": {
+        "ownBytes": 4583,
+        "additionalStaticClosureBytes": 8753
+      },
+      "RentalRecordPage": {
+        "ownBytes": 20055,
+        "additionalStaticClosureBytes": 95484
+      }
+    },
+    "passes": true
+  },
+  "desktop": {
+    "horizontalOverflow": false,
+    "height": 900,
+    "width": 1440,
+    "mobileTablet": false
+  },
+  "isolatedRehearsal": {
+    "auditEntries": 3,
+    "plannedEnd": "2026-10-15T05:20:00Z",
+    "reportHistoryEntries": 3,
+    "plannedStart": "2026-10-15T04:20:00Z",
+    "assignedToActualStaff": true,
+    "legacyBookings": 4,
+    "auditActions": [
+      "Created",
+      "Assigned",
+      "Rescheduled"
+    ],
+    "actorsMatchAuthenticatedAdmin": true,
+    "csvStatus": 200,
+    "vehicleStatus": "Available"
+  },
+  "boundaryTouchingBookingConfirmed": true,
+  "overlapRejected": 409,
+  "customerAssignmentRejected": 403,
+  "cleanup": true,
+  "workingDatabaseChanges": false,
+  "azureChanges": false
+}
