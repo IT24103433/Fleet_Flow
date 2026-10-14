@@ -123,12 +123,12 @@ public sealed class RentalFactory(bool active=true):WebApplicationFactory<Rental
   builder.UseSetting("RENTAL_SERVICE_ACTIVE",active.ToString());builder.UseSetting("RENTAL_MIGRATION_ID",Guid.NewGuid().ToString());
   builder.ConfigureServices(services=>{
    foreach(var d in services.Where(d=>d.ServiceType==typeof(RentalDbContext)||d.ServiceType.FullName?.Contains("EntityFrameworkCore")==true||d.ServiceType.FullName?.Contains("Npgsql")==true).ToList())services.Remove(d);
-   services.AddDbContext<RentalDbContext>(o=>o.UseInMemoryDatabase(database));services.RemoveAll<IDatabaseReadiness>();services.AddSingleton<IDatabaseReadiness>(new Ready());services.RemoveAll<IFleetGateway>();services.AddSingleton<IFleetGateway>(Gateway);services.RemoveAll<IHostedService>();
+   services.AddDbContext<RentalDbContext>(o=>o.UseInMemoryDatabase(database));services.RemoveAll<IDatabaseReadiness>();services.AddSingleton<IDatabaseReadiness>(new Ready());services.RemoveAll<IAccountAccessReader>();services.AddSingleton<IAccountAccessReader>(new ContractAccounts());services.RemoveAll<IFleetGateway>();services.AddSingleton<IFleetGateway>(Gateway);services.RemoveAll<IHostedService>();
   });
  }
  public HttpClient Browser(Guid user,string role="CUSTOMER",bool forced=false)
  {
-  var token=new JwtSecurityToken("FleetFlow.IdentityService","FleetFlow.Client",[new("sub",user.ToString()),new(ClaimTypes.Role,role),new("must_change_password",forced.ToString().ToLowerInvariant())],DateTime.UtcNow.AddSeconds(-1),DateTime.UtcNow.AddMinutes(5),new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(UserKey)),SecurityAlgorithms.HmacSha256));
+  var token=new JwtSecurityToken("FleetFlow.IdentityService","FleetFlow.Client",[new("sub",user.ToString()),new("access_version","0"),new(ClaimTypes.Role,role),new("must_change_password",forced.ToString().ToLowerInvariant())],DateTime.UtcNow.AddSeconds(-1),DateTime.UtcNow.AddMinutes(5),new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(UserKey)),SecurityAlgorithms.HmacSha256));
   var client=CreateClient();client.DefaultRequestHeaders.Authorization=new("Bearer",new JwtSecurityTokenHandler().WriteToken(token));return client;
  }
  public HttpClient Internal(string id)
@@ -145,3 +145,6 @@ public sealed class RentalFactory(bool active=true):WebApplicationFactory<Rental
   public Task<bool> AvailableAsync(Guid vehicleId,DateTime start,DateTime end,CancellationToken ct)=>Task.FromResult(Available);
  }
 }
+
+// Synthetic current accounts isolate these existing ownership/role contract tests.
+internal sealed class ContractAccounts : IAccountAccessReader { public Task<AccountAccessState?> ReadAsync(Guid id,CancellationToken ct)=>Task.FromResult<AccountAccessState?>(new(id,0,true,false)); }

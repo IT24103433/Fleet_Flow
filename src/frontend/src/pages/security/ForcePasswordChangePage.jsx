@@ -1,5 +1,5 @@
 import AuthLayout from '../../components/layout/AuthLayout';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import InputField from '../../components/InputField';
 import Alert from '../../components/Alert';
 import Button from '../../components/common/Button';
@@ -11,7 +11,8 @@ const ForcePasswordChangePage = ({
   const {
     token,
     user,
-    updateUser
+    login,
+    logout
   } = useAuth();
   const username = user?.fullName || user?.username || 'User';
   const [formData, setFormData] = useState({
@@ -21,6 +22,7 @@ const ForcePasswordChangePage = ({
   const [errors, setErrors] = useState({});
   const [notice, setNotice] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const submitting = useRef(false);
   const handleInputChange = e => {
     const {
       name,
@@ -39,9 +41,12 @@ const ForcePasswordChangePage = ({
   };
   const handleFormSubmit = async e => {
     e.preventDefault();
+    if (submitting.current) return;
     const newErrors = {};
     if (!formData.newPassword) {
       newErrors.newPassword = 'New password is required.';
+    } else if (formData.newPassword.length > 128) {
+      newErrors.newPassword = 'Password must be no more than 128 characters.';
     } else if (formData.newPassword.length < 8) {
       newErrors.newPassword = 'Password must be at least 8 characters.';
     }
@@ -52,24 +57,19 @@ const ForcePasswordChangePage = ({
       setErrors(newErrors);
       return;
     }
-    setIsLoading(true);
+    submitting.current = true; setIsLoading(true);
     setNotice(null);
     const result = await changePassword(token, formData.newPassword);
-    setIsLoading(false);
+    submitting.current = false; setIsLoading(false);
     if (result.success) {
-      updateUser({
-        mustChangePassword: false
-      });
+      if (!result.data?.token || !result.data?.user) { logout(); return; }
+      login(result.data.token, result.data.user);
       setNotice({
         type: 'success',
         title: 'Password updated',
         message: 'Your new password is saved. Opening your workspace…'
       });
-      setTimeout(() => {
-        if (onComplete) {
-          onComplete();
-        }
-      }, 1200);
+      if (onComplete) onComplete();
     } else {
       setNotice({
         type: 'error',

@@ -1,3 +1,6 @@
+using FleetFlow.Contracts;
+using FleetFlow.ServiceDefaults;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 using System.Linq;
 using Microsoft.AspNetCore.Hosting;
@@ -35,6 +38,8 @@ public class CustomWebApplicationFactory<TEntryPoint> : WebApplicationFactory<TE
                 services.Remove(descriptor);
             }
 
+            services.RemoveAll<IAccountAccessReader>();
+            services.AddSingleton<IAccountAccessReader>(new ContractAccounts());
             services.AddDbContext<FleetDbContext>(options =>
             {
                 options.UseInMemoryDatabase(_databaseName);
@@ -42,3 +47,6 @@ public class CustomWebApplicationFactory<TEntryPoint> : WebApplicationFactory<TE
         });
     }
 }
+
+// Existing role/ownership tests use synthetic active accounts; cross-service tests exercise real Identity.
+internal sealed class ContractAccounts : IAccountAccessReader { public Task<AccountAccessState?> ReadAsync(Guid id, CancellationToken ct) => Task.FromResult<AccountAccessState?>(new(id, 0, true, false)); }

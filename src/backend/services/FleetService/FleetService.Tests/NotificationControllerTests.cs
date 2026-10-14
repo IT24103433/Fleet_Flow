@@ -22,7 +22,7 @@ public class NotificationControllerTests : IClassFixture<CustomWebApplicationFac
 
     private HttpClient Client(Guid userId, string role = "CUSTOMER", bool missingClaim = false)
     {
-        var claims = new List<Claim> { new(ClaimTypes.Role, role) };
+        var claims = new List<Claim> { new("access_version", "0"), new(ClaimTypes.Role, role) };
         if (!missingClaim) claims.Add(new(ClaimTypes.NameIdentifier, userId.ToString()));
         var jwt = new JwtSecurityToken("FleetFlow.IdentityService", "FleetFlow.Client", claims,
             expires: DateTime.UtcNow.AddHours(1), signingCredentials: new SigningCredentials(

@@ -20,6 +20,6 @@ builder.Services.AddHostedService<BookingRecoveryWorker>();builder.Services.Conf
 builder.Services.AddSingleton<IReliableNotificationPublisher,ReliableNotificationPublisher>();
 builder.Services.AddSingleton<NotificationEventDispatcher>();builder.Services.AddSingleton<INotificationEventDispatcher>(sp=>sp.GetRequiredService<NotificationEventDispatcher>());builder.Services.AddHostedService(sp=>sp.GetRequiredService<NotificationEventDispatcher>());
 builder.Services.AddControllers().AddJsonOptions(o=>o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));builder.Services.AddOpenApi();
-var app=builder.Build();app.UseMiddleware<RentalService.Api.Middleware.BookingErrorsMiddleware>();app.MapOpenApi();app.UseSwaggerUI(o=>o.SwaggerEndpoint("/openapi/v1.json","RentalService v1"));
+var app=builder.Build();app.UseMiddleware<FleetFlow.ServiceDefaults.ApiErrorsMiddleware>();app.UseMiddleware<RentalService.Api.Middleware.BookingErrorsMiddleware>();app.MapOpenApi();app.UseSwaggerUI(o=>o.SwaggerEndpoint("/openapi/v1.json","RentalService v1"));
 app.MapServiceFoundation(ServiceScopes.RentalReportsRead,activation.Active,4);app.UseMiddleware<RentalService.Api.Middleware.ForcedPasswordChangeMiddleware>();app.MapControllers();app.Run();
 namespace RentalService.Api{public sealed class RentalApplication{}}

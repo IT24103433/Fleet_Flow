@@ -26,6 +26,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("register")]
+    [RequestSizeLimit(65536)]
     public async Task<ActionResult<UserResponse>> Register([FromBody] RegisterRequest request)
     {
         try
@@ -40,6 +41,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
+    [RequestSizeLimit(65536)]
     public async Task<ActionResult<LoginResponse>> Login([FromBody] LoginRequest request)
     {
         try
@@ -143,6 +145,7 @@ public class AuthController : ControllerBase
 
     [Authorize]
     [HttpPost("change-password")]
+    [RequestSizeLimit(65536)]
     public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
     {
         if (!ModelState.IsValid)
@@ -159,7 +162,8 @@ public class AuthController : ControllerBase
         try
         {
             await _authenticationService.ChangePasswordAsync(userId, request);
-            return Ok(new { message = "Password changed successfully." });
+            var session = User?.HasClaim("must_change_password", "true") == true ? await _authenticationService.RenewSessionAsync(userId) : null;
+            return Ok(new { message = "Password changed successfully.", token = session?.Token, expiration = session?.Expiration, user = session?.User });
         }
         catch (NotFoundException ex)
         {

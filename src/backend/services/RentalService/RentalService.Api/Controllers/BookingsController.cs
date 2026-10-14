@@ -5,7 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RentalService.Api.Services;
 namespace RentalService.Api.Controllers;
-[ApiController][Route("api/bookings")][ServiceFilter(typeof(RentalActivationFilter))]
+[ApiController]
+[RequestSizeLimit(65536)][Route("api/bookings")][ServiceFilter(typeof(RentalActivationFilter))]
 public sealed class BookingsController(BookingCoordinator service,IFleetGateway fleet):ControllerBase
 {
  private Guid UserId=>Guid.TryParse((User.FindFirst(ClaimTypes.NameIdentifier)??User.FindFirst("sub")??User.FindFirst("id")??User.FindFirst(ClaimTypes.Name))?.Value,out var id)?id:Guid.Empty;

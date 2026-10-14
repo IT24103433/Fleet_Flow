@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Modal from '../common/Modal';
 import InputField from '../InputField';
 import Alert from '../Alert';
@@ -18,6 +18,7 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
   const [errors, setErrors] = useState({});
   const [notice, setNotice] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const submitting = useRef(false);
 
   const handleClose = () => {
     if (isLoading) return;
@@ -39,6 +40,7 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    if (submitting.current) return;
     const newErrors = {};
 
     if (!formData.currentPassword) {
@@ -46,6 +48,8 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
     }
     if (!formData.newPassword) {
       newErrors.newPassword = 'New password is required.';
+    } else if (formData.newPassword.length > 128) {
+      newErrors.newPassword = 'Password must be no more than 128 characters.';
     } else if (formData.newPassword.length < 8) {
       newErrors.newPassword = 'Password must be at least 8 characters.';
     } else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).+$/.test(formData.newPassword)) {
@@ -60,12 +64,12 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
       return;
     }
 
-    setIsLoading(true);
+    submitting.current = true; setIsLoading(true);
     setErrors({});
     setNotice(null);
 
     const result = await changePassword(token, formData.newPassword, formData.currentPassword);
-    setIsLoading(false);
+    submitting.current = false; setIsLoading(false);
     if (result.success) {
       setNotice({ type: 'success', title: 'Password updated', message: 'Your new password has been saved. Sign in again to continue.' });
       setFormData({ currentPassword: '', newPassword: '', confirmPassword: '' });

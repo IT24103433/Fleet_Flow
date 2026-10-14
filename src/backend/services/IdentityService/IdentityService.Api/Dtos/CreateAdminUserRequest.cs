@@ -23,6 +23,7 @@ public class CreateAdminUserRequest
 
     [Required(ErrorMessage = "Initial password is required.")]
     [MinLength(8, ErrorMessage = "Initial password must be at least 8 characters long.")]
+    [StringLength(128)]
     public string InitialPassword { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Role is required.")]

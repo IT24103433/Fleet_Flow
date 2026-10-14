@@ -1,3 +1,4 @@
+import { fetchWithSession } from './sessionFetch.js';
 const RENTAL_API_URL = import.meta.env?.VITE_RENTAL_API_URL || import.meta.env?.VITE_FLEET_API_URL || 'http://localhost:5002';
 const isJsonResponse = contentType => /^application\/(?:json|problem\+json)(?:\s*;|\s*$)/i.test(contentType || '');
 
@@ -9,7 +10,7 @@ const getAuthToken = () => {
   }
 };
 
-export function createBookingClient({ baseUrl = RENTAL_API_URL, fetchImpl = (...args) => globalThis.fetch(...args), getToken = getAuthToken,
+export function createBookingClient({ baseUrl = RENTAL_API_URL, fetchImpl = (...args) => fetchWithSession(...args), getToken = getAuthToken,
   newKey = () => crypto.randomUUID() } = {}) {
   const pending = new Map();
   let accountToken;

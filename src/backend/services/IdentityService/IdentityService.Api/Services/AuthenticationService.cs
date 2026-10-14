@@ -95,11 +95,16 @@ public class AuthenticationService : IAuthenticationService
             throw new PortalAccessDeniedException($"Invalid login channel '{request.LoginChannel}'. Allowed channels are 'customer' or 'staff'.");
         }
 
+        return CreateSession(user);
+    }
+
+    private LoginResponse CreateSession(User user)
+    {
         // Retrieve JWT settings
         var jwtSection = _configuration.GetSection("Jwt");
         var issuer = jwtSection["Issuer"];
         var audience = jwtSection["Audience"];
-        var keyStr = jwtSection["Key"] ?? _configuration["Jwt__Key"];
+        var keyStr = jwtSection["Key"] ?? _configuration["Jwt__Key"] ?? _configuration["JWT_SECRET"];
         var expiryInMinutesStr = jwtSection["ExpiryInMinutes"];
 
         if (string.IsNullOrWhiteSpace(keyStr) || Encoding.UTF8.GetByteCount(keyStr) < 32)
@@ -121,7 +126,8 @@ public class AuthenticationService : IAuthenticationService
             new Claim(ClaimTypes.Name, user.Username),
             new Claim(ClaimTypes.Email, user.Email),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim("must_change_password", user.MustChangePassword.ToString().ToLowerInvariant())
+            new Claim("must_change_password", user.MustChangePassword.ToString().ToLowerInvariant()),
+            new Claim("access_version", user.AccessVersion.ToString(System.Globalization.CultureInfo.InvariantCulture))
         };
 
         // Add Role Claims
@@ -164,6 +170,11 @@ public class AuthenticationService : IAuthenticationService
         };
     }
 
+    public async Task<LoginResponse?> RenewSessionAsync(Guid userId)
+    {
+        var user = await _dbContext.Users.AsNoTracking().Include(u => u.Roles).SingleOrDefaultAsync(u => u.Id == userId);
+        return user == null || !user.IsActive || user.MustChangePassword ? null : CreateSession(user);
+    }
     public async Task ChangePasswordAsync(Guid userId, ChangePasswordRequest request)
     {
         if (request == null)
@@ -187,9 +198,16 @@ public class AuthenticationService : IAuthenticationService
             throw new AccountDisabledException("This account has been disabled by an administrator. Please contact support.");
         }
 
+        if (request.NewPassword.Length > 128 || request.CurrentPassword?.Length > 1024)
+            throw new ArgumentException("Password fields exceed the supported length.");
+        if (!user.MustChangePassword && string.IsNullOrEmpty(request.CurrentPassword))
+            throw new ArgumentException("Enter your current password before changing it.");
+        if (!string.IsNullOrEmpty(request.CurrentPassword) && _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.CurrentPassword) == PasswordVerificationResult.Failed)
+            throw new ArgumentException("The current password is incorrect.");
         // Hash new password securely
         user.PasswordHash = _passwordHasher.HashPassword(user, request.NewPassword);
         user.MustChangePassword = false;
+        user.AccessVersion = checked(user.AccessVersion + 1);
 
         await _dbContext.SaveChangesAsync();
     }

@@ -52,6 +52,7 @@ var jwtSection = builder.Configuration.GetSection("Jwt");
 var jwtKey = FleetService.Api.Security.JwtSigningKey.Resolve(builder.Configuration, builder.Environment);
 FleetFlow.ServiceDefaults.ServiceAuthentication.AddInternalServiceAuthentication(builder.Services, builder.Configuration, jwtKey);
 FleetFlow.ServiceDefaults.ServiceAuthentication.AddServiceTokenClient(builder.Services, builder.Configuration, builder.Environment, "fleet-service");
+FleetFlow.ServiceDefaults.AccountAccessRegistration.AddRemoteAccountAccess(builder.Services,builder.Configuration,builder.Environment);
 
 builder.Services.AddAuthentication(options =>
 {
@@ -69,7 +70,9 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = jwtSection["Issuer"],
         ValidAudience = jwtSection["Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
-        ClockSkew = TimeSpan.Zero
+        ClockSkew = TimeSpan.Zero,
+        RequireExpirationTime = true, RequireSignedTokens = true,
+        ValidAlgorithms = [Microsoft.IdentityModel.Tokens.SecurityAlgorithms.HmacSha256]
     };
 });
 
@@ -99,6 +102,7 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+app.UseMiddleware<FleetFlow.ServiceDefaults.ApiErrorsMiddleware>();
 
 var readiness = app.Services.GetRequiredService<FleetReadiness>();
 
@@ -247,6 +251,7 @@ app.UseCors();
 
 app.UseMiddleware<FleetService.Api.Middleware.RentalAvailabilityMiddleware>();
 app.UseAuthentication();
+FleetFlow.ServiceDefaults.AccountAccessRegistration.UseAccountAccess(app);
 app.UseMiddleware<FleetService.Api.Middleware.ForcedPasswordChangeMiddleware>();
 app.UseAuthorization();
 

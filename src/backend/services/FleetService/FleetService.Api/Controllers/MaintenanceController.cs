@@ -8,6 +8,7 @@ using FleetService.Api.Services;
 namespace FleetService.Api.Controllers;
 
 [ApiController]
+[RequestSizeLimit(65536)]
 [Route("api/[controller]")]
 [Authorize(Roles = "FLEET_MANAGER,ADMIN,MAINTENANCE_STAFF")]
 public class MaintenanceController : ControllerBase

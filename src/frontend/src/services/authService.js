@@ -1,3 +1,4 @@
+import { fetchWithSession, isApiJson } from './sessionFetch.js';
 const IDENTITY_API_URL = import.meta.env.VITE_IDENTITY_API_URL || 'http://localhost:5001';
 
 export const registerUser = async (dataOrUsername, email, password) => {
@@ -6,7 +7,7 @@ export const registerUser = async (dataOrUsername, email, password) => {
     : { username: dataOrUsername, email, password };
 
   try {
-    const response = await fetch(`${IDENTITY_API_URL}/api/auth/register`, {
+    const response = await fetchWithSession(`${IDENTITY_API_URL}/api/auth/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -17,7 +18,7 @@ export const registerUser = async (dataOrUsername, email, password) => {
 
     const contentType = response.headers.get("content-type");
     let data = null;
-    if (contentType && contentType.includes("application/json")) {
+    if (contentType && isApiJson(contentType)) {
       data = await response.json();
     }
 
@@ -53,7 +54,7 @@ export const registerUser = async (dataOrUsername, email, password) => {
 
 export const loginUser = async (usernameOrEmail, password, loginChannel = 'customer') => {
   try {
-    const response = await fetch(`${IDENTITY_API_URL}/api/auth/login`, {
+    const response = await fetchWithSession(`${IDENTITY_API_URL}/api/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -64,7 +65,7 @@ export const loginUser = async (usernameOrEmail, password, loginChannel = 'custo
 
     const contentType = response.headers.get("content-type");
     let data = null;
-    if (contentType && contentType.includes("application/json")) {
+    if (contentType && isApiJson(contentType)) {
       data = await response.json();
     }
 
@@ -124,7 +125,7 @@ export const uploadProfilePicture = async (file, token) => {
     const formData = new FormData();
     formData.append('file', file);
 
-    const response = await fetch(`${IDENTITY_API_URL}/api/auth/profile-picture`, {
+    const response = await fetchWithSession(`${IDENTITY_API_URL}/api/auth/profile-picture`, {
       method: 'POST',
       headers,
       body: formData,
@@ -132,7 +133,7 @@ export const uploadProfilePicture = async (file, token) => {
 
     const contentType = response.headers.get("content-type");
     let data = null;
-    if (contentType && contentType.includes("application/json")) {
+    if (contentType && isApiJson(contentType)) {
       data = await response.json();
     }
 
@@ -167,14 +168,14 @@ export const getProfilePicture = async (token) => {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const response = await fetch(`${IDENTITY_API_URL}/api/auth/profile-picture`, {
+    const response = await fetchWithSession(`${IDENTITY_API_URL}/api/auth/profile-picture`, {
       method: 'GET',
       headers,
     });
 
     const contentType = response.headers.get("content-type");
     let data = null;
-    if (contentType && contentType.includes("application/json")) {
+    if (contentType && isApiJson(contentType)) {
       data = await response.json();
     }
 
@@ -209,7 +210,7 @@ export const deleteProfilePicture = async (token) => {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const response = await fetch(`${IDENTITY_API_URL}/api/auth/profile-picture`, {
+    const response = await fetchWithSession(`${IDENTITY_API_URL}/api/auth/profile-picture`, {
       method: 'DELETE',
       headers,
     });
@@ -223,7 +224,7 @@ export const deleteProfilePicture = async (token) => {
 
     const contentType = response.headers.get("content-type");
     let data = null;
-    if (contentType && contentType.includes("application/json")) {
+    if (contentType && isApiJson(contentType)) {
       data = await response.json();
     }
 
@@ -257,7 +258,7 @@ export const changePassword = async (token, newPassword, currentPassword = null)
       payload.currentPassword = currentPassword;
     }
 
-    const response = await fetch(`${IDENTITY_API_URL}/api/auth/change-password`, {
+    const response = await fetchWithSession(`${IDENTITY_API_URL}/api/auth/change-password`, {
       method: 'POST',
       headers,
       body: JSON.stringify(payload),
@@ -266,7 +267,7 @@ export const changePassword = async (token, newPassword, currentPassword = null)
 
     const contentType = response.headers.get("content-type");
     let data = null;
-    if (contentType && contentType.includes("application/json")) {
+    if (contentType && isApiJson(contentType)) {
       data = await response.json();
     }
 

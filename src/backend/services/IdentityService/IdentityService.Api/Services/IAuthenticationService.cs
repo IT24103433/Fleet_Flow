@@ -7,4 +7,5 @@ public interface IAuthenticationService
 {
     Task<LoginResponse> LoginAsync(LoginRequest request);
     Task ChangePasswordAsync(Guid userId, ChangePasswordRequest request);
+    Task<LoginResponse?> RenewSessionAsync(Guid userId) => Task.FromResult<LoginResponse?>(null);
 }

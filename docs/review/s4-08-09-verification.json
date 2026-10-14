@@ -1,0 +1,61 @@
+{
+  "stories": [
+    "S4-08",
+    "S4-09"
+  ],
+  "base": "927c770dd58dfbdc4ff24c76c486e8e06208b71e",
+  "frontend": {
+    "baseline": 155,
+    "passed": 162,
+    "lint": "passed",
+    "build": "passed",
+    "bundle": {
+      "definition": "Entry plus recursively static imports, uncompressed; lazy routes reported separately.",
+      "entryBytes": 309255,
+      "budgetBytes": 350000,
+      "lazy": {
+        "MaintenanceDashboardPage": {
+          "ownBytes": 41275,
+          "additionalStaticClosureBytes": 52168
+        },
+        "LandingPage": {
+          "ownBytes": 60218,
+          "additionalStaticClosureBytes": 141890
+        },
+        "NotificationDeliveryPage": {
+          "ownBytes": 10708,
+          "additionalStaticClosureBytes": 15833
+        },
+        "RentalQueuePage": {
+          "ownBytes": 4583,
+          "additionalStaticClosureBytes": 8791
+        },
+        "RentalRecordPage": {
+          "ownBytes": 20055,
+          "additionalStaticClosureBytes": 95522
+        }
+      },
+      "passes": true
+    }
+  },
+  "backend": {
+    "localSecurityChecks": "passed",
+    "postgresCriticalConcurrency": "passed",
+    "fullLocalSuite": "incomplete: Windows Application Control blocked FleetService.Api.dll (0x800711C7)",
+    "linuxCi": "required before merge"
+  },
+  "desktop": {
+    "viewport": [
+      1440,
+      900
+    ],
+    "forcedPasswordRouting": "passed",
+    "headerLogoutRecovery": "passed",
+    "fonts": "loaded",
+    "horizontalOverflow": false,
+    "scope": "verified disposable Identity clone",
+    "passwordChanges": "programmatic coverage; none submitted in browser",
+    "cleanedUp": true
+  },
+  "deployment": "not performed; S4-12 open"
+}

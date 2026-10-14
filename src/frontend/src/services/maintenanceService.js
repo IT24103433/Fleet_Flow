@@ -1,3 +1,4 @@
+import { fetchWithSession } from './sessionFetch.js';
 const FLEET_API_URL = import.meta.env.VITE_FLEET_API_URL || 'http://localhost:5002';
 const isJsonResponse = contentType => /^application\/(?:json|problem\+json)(?:\s*;|\s*$)/i.test(contentType || '');
 
@@ -8,7 +9,7 @@ const sendMaintenanceRequest = async (path, token, options = {}) => {
       ...(options.body ? { 'Content-Type': 'application/json' } : {}),
       ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
     };
-    const response = await fetch(`${FLEET_API_URL}${path}`, { ...options, headers });
+    const response = await fetchWithSession(`${FLEET_API_URL}${path}`, { ...options, headers });
     const contentType = response.headers.get('content-type');
     const data = isJsonResponse(contentType) ? await response.json() : null;
 
@@ -62,7 +63,7 @@ export const getMaintenanceDashboard = async (token, params = {}) => {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const response = await fetch(url, {
+    const response = await fetchWithSession(url, {
       method: 'GET',
       headers,
     });

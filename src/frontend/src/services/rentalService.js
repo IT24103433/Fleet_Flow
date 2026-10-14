@@ -1,5 +1,6 @@
+import { fetchWithSession } from './sessionFetch.js';
 const baseUrl = import.meta.env?.VITE_RENTAL_API_URL || import.meta.env?.VITE_FLEET_API_URL || 'http://localhost:5002';
-export function createRentalClient({ url = baseUrl, fetchImpl = (...args) => globalThis.fetch(...args),
+export function createRentalClient({ url = baseUrl, fetchImpl = (...args) => fetchWithSession(...args),
   getToken = () => sessionStorage.getItem('token') || localStorage.getItem('token') } = {}) {
   async function request(path, { signal, body } = {}) {
     const token = getToken();
