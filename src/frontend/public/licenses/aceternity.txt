@@ -1,0 +1,28 @@
+FleetFlow component attribution
+
+Current Container Scroll Animation adaptation by Manu Arora.
+Component: https://ui.aceternity.com/components/container-scroll-animation
+Author registry: https://ui.aceternity.com/registry/container-scroll-animation.json
+Rotation, scaling and progress have been ported to GSAP ScrollTrigger for the
+marketing hero. Reduced motion is static; operational controls are stationary.
+Applicable end-product terms below also apply to this adaptation.
+
+Draggable Card interaction adapted from Aceternity UI by Manu Arora.
+Component: https://ui.aceternity.com/components/draggable-card
+Author registry: https://ui.aceternity.com/registry/draggable-card.json
+Applicable licence: https://ui.aceternity.com/licence
+Copyright (c) Aceternity Labs LLC. The author retains ownership.
+
+This application adapts the publicly available component for an end product.
+Its Motion gestures have been ported to GSAP, with container-relative bounds,
+keyboard movement, reduced-motion support, and an explicit reset control.
+
+The Aceternity licence permits ongoing, non-exclusive worldwide use,
+modification and combination in unlimited personal or client end products.
+End products may be freely distributed, licensed or sold. It does not permit
+redistributing component source as a standalone item, selling components or
+derivative templates on marketplaces, or stock-source redistribution.
+Third-party components retain their respective terms. Consult the linked
+licence for the full agreement; this notice does not replace its terms.
+
+This is an application component, not a component library or resale template.

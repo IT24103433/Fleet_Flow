@@ -39,7 +39,7 @@ public class VehicleControllerTests : IClassFixture<CustomWebApplicationFactory<
     {
         var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString()),
+            new Claim("access_version", "0"), new Claim(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString()),
             new Claim(ClaimTypes.Name, username),
             new Claim(ClaimTypes.Email, email),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),

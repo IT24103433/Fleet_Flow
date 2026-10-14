@@ -5,21 +5,48 @@ namespace FleetService.Api.Data;
 
 public class FleetDbContext : DbContext
 {
-    public FleetDbContext(DbContextOptions<FleetDbContext> options) : base(options)
+    public FleetDbContext(DbContextOptions<FleetDbContext> options, FleetService.Api.Services.RentalRouting? rentalRouting = null) : base(options)
     {
+        RentalRouting = rentalRouting;
     }
 
+    public FleetService.Api.Services.RentalRouting? RentalRouting {get;}
+    private void GuardLegacyWriter()
+    {
+        if(ChangeTracker.Entries<MaintenanceAuditEntry>().Any(e=>e.State is EntityState.Modified or EntityState.Deleted))
+            throw new InvalidOperationException("Maintenance audit entries are append-only.");
+        if(RentalRouting?.Remote==true && ChangeTracker.Entries<Booking>().Any(e=>e.State is EntityState.Added or EntityState.Modified or EntityState.Deleted))
+            throw new FleetService.Api.Services.RentalUnavailableException();
+    }
+    public override Task<int> SaveChangesAsync(CancellationToken ct=default){GuardLegacyWriter();return base.SaveChangesAsync(ct);}
+    public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess,CancellationToken ct=default){GuardLegacyWriter();return base.SaveChangesAsync(acceptAllChangesOnSuccess,ct);}
+    public override int SaveChanges(){GuardLegacyWriter();return base.SaveChanges();}
+    public override int SaveChanges(bool acceptAllChangesOnSuccess){GuardLegacyWriter();return base.SaveChanges(acceptAllChangesOnSuccess);}
     public DbSet<Vehicle> Vehicles => Set<Vehicle>();
     public DbSet<VehicleCategory> VehicleCategories => Set<VehicleCategory>();
     public DbSet<VehicleImage> VehicleImages => Set<VehicleImage>();
+    public DbSet<VehicleReservation> VehicleReservations => Set<VehicleReservation>();
     public DbSet<Booking> Bookings => Set<Booking>();
     public DbSet<MaintenanceRecord> MaintenanceRecords => Set<MaintenanceRecord>();
+    public DbSet<MaintenanceAuditEntry> MaintenanceAuditEntries => Set<MaintenanceAuditEntry>();
     public DbSet<Notification> Notifications => Set<Notification>();
+    public DbSet<NotificationOutbox> NotificationOutbox => Set<NotificationOutbox>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<MaintenanceAuditEntry>(e=>{e.ToTable("MaintenanceAuditEntries");e.HasKey(a=>a.Id);e.Property(a=>a.Action).HasMaxLength(40);e.Property(a=>a.After).IsRequired();e.HasIndex(a=>new{a.MaintenanceRecordId,a.OccurredAt});e.HasOne<MaintenanceRecord>().WithMany().HasForeignKey(a=>a.MaintenanceRecordId).OnDelete(DeleteBehavior.Restrict);});
+        modelBuilder.Entity<MaintenanceRecord>().Property(r=>r.AssignedStaffName).HasMaxLength(100);
+        modelBuilder.Entity<VehicleReservation>(e=> {e.ToTable("VehicleReservations");e.HasKey(r=>r.BookingId);e.Property(r=>r.TotalCost).HasPrecision(18,2);e.HasIndex(r=>r.VehicleId);e.HasOne<Vehicle>().WithMany().HasForeignKey(r=>r.VehicleId).OnDelete(DeleteBehavior.Restrict);});
 
+        modelBuilder.Entity<NotificationOutbox>(entity =>
+        {
+            entity.ToTable("NotificationOutbox"); entity.HasKey(e => e.Id);
+            entity.Property(e => e.EventType).HasMaxLength(100).IsRequired();
+            entity.Property(e => e.Payload).IsRequired(); entity.Property(e => e.Status).HasMaxLength(20).IsRequired();
+            entity.Property(e => e.LastErrorCode).HasMaxLength(50);
+            entity.HasIndex(e => new { e.Status, e.NextAttemptAt });
+        });
         modelBuilder.Entity<Notification>(entity =>
         {
             entity.ToTable("Notifications");

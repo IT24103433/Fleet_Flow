@@ -15,10 +15,12 @@ namespace FleetService.Api.Controllers;
 public class BookingsController : ControllerBase
 {
     private readonly IBookingService _bookingService;
+    private readonly RentalForwarder? _forwarder;
 
-    public BookingsController(IBookingService bookingService)
+    public BookingsController(IBookingService bookingService, RentalForwarder? forwarder = null)
     {
         _bookingService = bookingService;
+        _forwarder = forwarder;
     }
 
     [HttpPost]
@@ -30,6 +32,7 @@ public class BookingsController : ControllerBase
     [ProducesResponseType(409)]
     public async Task<ActionResult<BookingResponse>> CreateBooking([FromBody] CreateBookingRequest request)
     {
+        if (_forwarder?.Enabled == true) return await _forwarder.ForwardAsync(Request,"",request);
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
@@ -67,6 +70,7 @@ public class BookingsController : ControllerBase
     [ProducesResponseType(404)]
     public async Task<ActionResult<BookingResponse>> GetById(Guid id)
     {
+        if (_forwarder?.Enabled == true) return await _forwarder.ForwardAsync(Request,$"/{id}");
         var requesterId = GetCurrentUserId();
         if (requesterId == Guid.Empty)
         {
@@ -94,6 +98,7 @@ public class BookingsController : ControllerBase
     [ProducesResponseType(401)]
     public async Task<ActionResult<IEnumerable<BookingResponse>>> GetMyBookings()
     {
+        if (_forwarder?.Enabled == true) return await _forwarder.ForwardAsync(Request,"");
         var customerId = GetCurrentUserId();
         if (customerId == Guid.Empty)
         {
@@ -114,6 +119,7 @@ public class BookingsController : ControllerBase
     [ProducesResponseType(409)]
     public async Task<ActionResult<BookingResponse>> CancelBooking(Guid id)
     {
+        if (_forwarder?.Enabled == true) return await _forwarder.ForwardAsync(Request,$"/{id}/cancel");
         var customerId = GetCurrentUserId();
         if (customerId == Guid.Empty)
         {
@@ -146,6 +152,7 @@ public class BookingsController : ControllerBase
     [ProducesResponseType(400)]
     public async Task<IActionResult> CheckAvailability([FromQuery] Guid vehicleId, [FromQuery] DateTime startDateTime, [FromQuery] DateTime endDateTime)
     {
+        if (_forwarder?.Enabled == true) return await _forwarder.ForwardAsync(Request,"/check-availability"+Request.QueryString);
         if (vehicleId == Guid.Empty || startDateTime == default || endDateTime == default)
         {
             return BadRequest(new { message = "vehicleId, startDateTime, and endDateTime parameters are required." });

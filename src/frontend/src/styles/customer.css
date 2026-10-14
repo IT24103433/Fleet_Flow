@@ -1,0 +1,150 @@
+/* Automotive customer experience. */
+.eyebrow, .landing-eyebrow { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #481575; }
+.automotive-hero { background: #F3F0F8; overflow: hidden; text-align: center; padding: 64px 24px 0; }
+.hero-intro { position: relative; max-width: 820px; margin: auto; z-index: 1; }
+.hero-intro h1 { font-size: clamp(42px, 6vw, 76px); letter-spacing: -.065em; font-weight: 600; line-height: 1.02; margin: 24px 0; }
+.hero-intro h1 span { color: var(--color-primary); }
+.hero-description { max-width: 500px; margin: 0 auto 28px; font-size: 16px; line-height: 1.8; }
+.hero-intro .action-row { justify-content: center; }
+.hero-artwork { position: relative; max-width: 1120px; margin: 48px auto 0; }
+.hero-wordmark { position: absolute; top: 5%; left: 0; width: 100%; font-size: clamp(48px, 11vw, 148px); letter-spacing: -.045em; font-weight: 800; color: #DDD5EF; line-height: 1; }
+.hero-artwork img { position: relative; display: block; width: 100%; height: auto; padding-top: 24px; }
+.hero-art-caption { font-size: 12px; padding: 24px 0; color: #475569; }
+.landing-section { max-width: 1280px; margin: auto; padding: 80px 32px; }
+.landing-section h2 { font-size: clamp(27px, 3vw, 36px); letter-spacing: -.045em; line-height: 1.2; }
+.landing-section .eyebrow { margin-bottom: 16px; }
+.section-heading-row { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 32px; }
+.section-heading-row p:not(.eyebrow) { margin-top: 12px; font-size: 14px; line-height: 1.8; }
+.vehicle-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.vehicle-card { display: flex; flex-direction: column; border: 1px solid var(--color-border); border-radius: var(--radius-md); background: white; overflow: hidden; min-width: 0; }
+.vehicle-card-media { flex: none; aspect-ratio: 1.6; position: relative; background: #F3F0F8; overflow: hidden; }
+.vehicle-card-media img { width: 100%; height: 100%; object-fit: contain; transition: transform 180ms ease; }
+.vehicle-card:hover .vehicle-card-media img { transform: scale(1.03); }
+.vehicle-card-category { position: absolute; left: 16px; top: 16px; font-size: 10px; font-weight: 600; background: white; color: var(--color-text-primary); padding: 5px 10px; border-radius: 4px; }
+.vehicle-photo-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; min-height: 100%; height: 100%; color: #475569; font-size: 12px; padding: 32px; text-align: center; }
+.vehicle-photo-empty svg { width: 48px; height: 48px; }
+.vehicle-card-content { padding: 24px; flex: 1; display: flex; flex-direction: column; }
+.vehicle-card-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.vehicle-card-title h3 { font-size: 19px; }
+.vehicle-card-title > span { font-size: 12px; }
+.vehicle-card-specs { display: flex; gap: 10px; flex-wrap: wrap; font-size: 11px; margin-bottom: 16px; }
+.vehicle-card-specs span + span { border-left: 1px solid var(--color-border); padding-left: 10px; }
+.vehicle-card-content > .status-badge { align-self: flex-start; margin-bottom: 24px; }
+.vehicle-card-bottom { margin-top: auto; border-top: 1px solid var(--color-border); padding-top: 20px; display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+.vehicle-card-bottom strong { font-size: 16px; color: var(--color-text-primary); }
+.state-panel { border: 1px solid var(--color-border); border-radius: var(--radius-md); background: white; padding: 32px; line-height: 1.8; }
+.state-panel h2, .state-panel h3 { margin-bottom: 12px; }
+.state-panel .btn { margin-top: 20px; }
+.booking-guide { background: #111827; color: #cbd5e1; }
+.booking-guide h2, .booking-guide h3 { color: white; }
+.booking-guide .eyebrow { color: #BDB5E9; }
+.guide-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 48px; margin-top: 48px; }
+.guide-number { display: block; color: #BDB5E9; font-size: 12px; margin-bottom: 24px; }
+.guide-grid h3 { font-size: 18px; margin-bottom: 16px; }
+.guide-grid p { font-size: 13px; line-height: 1.9; }
+.benefits-section, .faq-section { display: grid; grid-template-columns: 1fr 1.4fr; gap: 80px; }
+.benefits-list article { border-bottom: 1px solid var(--color-border); padding: 24px 0; }
+.benefits-list article:first-child { padding-top: 0; }
+.benefits-list h3 { font-size: 18px; margin-bottom: 12px; }
+.benefits-list p, .faq-list p { line-height: 1.8; font-size: 14px; }
+.faq-section { border-top: 1px solid var(--color-border); }
+.faq-list details { border-bottom: 1px solid var(--color-border); padding: 20px 0; }
+.faq-list summary { color: var(--color-text-primary); font-weight: 550; cursor: pointer; padding: 8px 0; }
+.faq-list p { margin-top: 12px; }
+.final-cta { background: #F3EFFB; border-top: 1px solid #E4DDF5; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 56px max(32px, calc((100vw - 1216px) / 2)); }
+.final-cta h2 { font-size: 32px; margin: 16px 0; letter-spacing: -.04em; }
+.final-cta p:last-child { font-size: 14px; }
+.catalogue-page { max-width: 1328px; padding: 48px 32px; margin: auto; }
+.catalogue-heading { margin-bottom: 40px; }
+.catalogue-heading h1 { font-size: clamp(30px, 3.5vw, 44px); letter-spacing: -.045em; margin: 16px 0; }
+.catalogue-heading > p:last-child { font-size: 14px; line-height: 1.7; }
+.catalogue-layout { display: grid; grid-template-columns: 248px minmax(0, 1fr); gap: 32px; align-items: start; }
+.catalogue-filters { position: sticky; top: 112px; background: white; border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 24px; }
+.catalogue-filter-fields { display: flex; flex-direction: column; gap: 12px; }
+.filter-heading { margin-bottom: 12px; }
+.filter-heading h2 { font-size: 17px; }
+.filter-heading button { font-size: 12px; }
+.catalogue-filter-fields label { font-size: 12px; font-weight: 550; color: var(--color-text-primary); }
+.catalogue-filter-fields .form-input { width: 100%; margin-bottom: 12px; font-size: 12px; }
+.filter-note { font-size: 11px; line-height: 1.8; border-top: 1px solid var(--color-border); padding-top: 16px; }
+.catalogue-results { min-width: 0; }
+.catalogue-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 24px; font-size: 12px; }
+.catalogue-toolbar > div { display: flex; align-items: center; gap: 12px; }
+.catalogue-toolbar .form-input { width: auto; font-size: 12px; }
+.catalogue-results .vehicle-grid { gap: 16px; }
+.catalogue-results .vehicle-card-content { padding: 20px; }
+.catalogue-pagination { display: flex; align-items: center; justify-content: center; gap: 24px; margin-top: 32px; font-size: 13px; }
+.vehicle-details-container { max-width: 1280px; margin: auto; padding: 40px 32px; }
+.back-link-btn { display: inline-block; font-size: 13px; margin-bottom: 24px; }
+.vehicle-main-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 40px; align-items: start; }
+.hero-image-frame { aspect-ratio: 1.45; background: #F3F0F8; border: 1px solid var(--color-border); border-radius: var(--radius-md); overflow: hidden; }
+.hero-image-frame > img { height: 100%; width: 100%; object-fit: cover; }
+.thumbnail-gallery-strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
+.thumb-btn { padding: 0; background: #F3F0F8; border: 2px solid transparent; border-radius: var(--radius-sm); overflow: hidden; cursor: pointer; min-width: 0; }
+.thumb-btn.active { border-color: var(--color-primary); }
+.thumb-btn > img { display: block; width: 100%; aspect-ratio: 1.5; object-fit: cover; }
+.vehicle-details-note { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--color-border); }
+.vehicle-details-note h2 { font-size: 22px; margin-bottom: 16px; }
+.vehicle-details-note p { font-size: 14px; line-height: 1.8; }
+.summary-card { background: white; padding: 32px; border: 1px solid var(--color-border); border-radius: var(--radius-md); }
+.summary-card h1 { margin: 16px 0; font-size: 32px; letter-spacing: -.04em; }
+.vehicle-year { font-size: 13px; margin-bottom: 20px; }
+.daily-pricing-box { padding: 24px 0; display: flex; flex-direction: column; gap: 8px; }
+.daily-pricing-box strong { color: var(--color-text-primary); font-size: 24px; }
+.daily-pricing-box span, .reservation-note { font-size: 12px; line-height: 1.7; }
+.reservation-note { margin: 16px 0 24px; }
+.vehicle-specifications { margin: 0; font-size: 13px; }
+.vehicle-specifications > div { display: flex; justify-content: space-between; gap: 16px; border-top: 1px solid var(--color-border); padding: 14px 0; }
+.vehicle-specifications dd { margin: 0; color: var(--color-text-primary); text-align: right; }
+.customer-home-container { max-width: 1280px; width: 100%; margin: auto; padding: 48px 32px; }
+.account-heading { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-bottom: 48px; }
+.account-heading h1 { font-size: 32px; margin: 16px 0; letter-spacing: -.045em; }
+.account-heading p { font-size: 14px; }
+.account-heading .eyebrow { font-size: 11px; }
+.home-section { margin-bottom: 56px; }
+.home-section h2 { font-size: 25px; }
+.booking-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.booking-card { border: 1px solid var(--color-border); border-radius: var(--radius-md); background: white; padding: 24px; }
+.booking-card-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 20px; }
+.booking-reference { font-family: var(--font-mono); font-size: 12px; color: #481575; }
+.booking-card > h3 { font-size: 19px; margin-bottom: 8px; }
+.booking-card > p { font-size: 12px; }
+.booking-dates { margin: 24px 0; padding: 16px; background: var(--color-background); border-radius: var(--radius-sm); font-size: 12px; display: flex; flex-direction: column; gap: 16px; }
+.booking-dates dd { margin: 6px 0 0; color: var(--color-text-primary); }
+.booking-card-bottom { display: flex; align-items: center; justify-content: space-between; gap: 12px; border-top: 1px solid var(--color-border); padding-top: 20px; flex-wrap: wrap; }
+.booking-card-bottom span, .booking-card-bottom strong { display: block; font-size: 11px; }
+.booking-card-bottom strong { color: var(--color-text-primary); font-size: 16px; margin-top: 6px; }
+@media (min-width: 768px) and (max-width: 1100px) { .catalogue-results .vehicle-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .booking-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .vehicle-card-content { padding: 20px; } .vehicle-card-bottom strong { font-size: 14px; } }
+@media (max-width: 767px) {
+  .automotive-hero { padding: 40px 20px 0; }
+  .hero-intro h1 { margin: 20px 0; font-size: clamp(40px, 10vw, 62px); }
+  .hero-description { font-size: 14px; line-height: 1.8; }
+  .hero-intro .action-row .btn { flex: 1; }
+  .hero-artwork { margin-top: 32px; }
+  .hero-artwork img { width: 118%; max-width: none; margin-left: -9%; }
+  .hero-art-caption { font-size: 10px; line-height: 1.7; padding: 20px 0; }
+  .landing-section { padding: 48px 20px; }
+  .section-heading-row { align-items: start; flex-direction: column; gap: 20px; }
+  .vehicle-grid, .guide-grid, .benefits-section, .faq-section, .booking-grid, .vehicle-main-grid { grid-template-columns: minmax(0, 1fr); }
+  .guide-grid { gap: 32px; margin-top: 32px; }
+  .guide-number { margin-bottom: 12px; }
+  .benefits-section, .faq-section { gap: 32px; }
+  .final-cta { padding: 40px 24px; flex-direction: column; align-items: start; }
+  .final-cta h2 { font-size: 28px; }
+  .catalogue-page { padding: 32px 20px; }
+  .catalogue-layout { display: block; }
+  .catalogue-toolbar { flex-wrap: wrap; gap: 16px; }
+  .catalogue-toolbar > div { width: 100%; justify-content: space-between; }
+  .catalogue-toolbar .form-input { flex: 1; min-width: 0; max-width: 240px; }
+  .catalogue-filter-fields { min-width: 0; }
+  .catalogue-pagination { gap: 12px; }
+  .vehicle-details-container, .customer-home-container { padding: 32px 20px; }
+  .vehicle-main-grid { gap: 24px; }
+  .summary-card { padding: 24px; }
+  .summary-card h1 { font-size: 28px; }
+  .account-heading { flex-direction: column; align-items: start; margin-bottom: 32px; }
+  .account-heading h1 { font-size: 28px; }
+}
+
+.booking-date-fields > div { min-width: 0; }
+@media (max-width: 560px) { .booking-date-fields { grid-template-columns: minmax(0, 1fr); } .booking-date-fields input { min-width: 0; width: 100%; } }

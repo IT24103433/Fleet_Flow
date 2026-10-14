@@ -1,0 +1,15 @@
+**/bin
+**/obj
+**/node_modules
+**/dist
+**/uploads
+**/Uploads
+.git
+.env
+.env.*
+!.env.example
+TestResults
+artifacts
+**/*.zip
+sources
+ReviewResults

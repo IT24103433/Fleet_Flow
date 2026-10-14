@@ -1,6 +1,7 @@
+import { fetchWithSession, isApiJson } from './sessionFetch.js';
 const FLEET_API_URL = import.meta.env.VITE_FLEET_API_URL || 'http://localhost:5002';
 
-export const getVehicleImages = async (vehicleId, token) => {
+export const getVehicleImages = async (vehicleId, token, signal) => {
   try {
     const headers = {
       'Accept': 'application/json',
@@ -9,14 +10,15 @@ export const getVehicleImages = async (vehicleId, token) => {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const response = await fetch(`${FLEET_API_URL}/api/vehicles/${vehicleId}/images`, {
+    const response = await fetchWithSession(`${FLEET_API_URL}/api/vehicles/${vehicleId}/images`, {
       method: 'GET',
       headers,
+      signal,
     });
 
     const contentType = response.headers.get('content-type');
     let data = null;
-    if (contentType && contentType.includes('application/json')) {
+    if (contentType && isApiJson(contentType)) {
       data = await response.json();
     }
 
@@ -60,7 +62,7 @@ export const uploadVehicleImage = async (vehicleId, file, caption, token) => {
       formData.append('caption', caption.trim());
     }
 
-    const response = await fetch(`${FLEET_API_URL}/api/vehicles/${vehicleId}/images`, {
+    const response = await fetchWithSession(`${FLEET_API_URL}/api/vehicles/${vehicleId}/images`, {
       method: 'POST',
       headers,
       body: formData,
@@ -68,7 +70,7 @@ export const uploadVehicleImage = async (vehicleId, file, caption, token) => {
 
     const contentType = response.headers.get('content-type');
     let data = null;
-    if (contentType && contentType.includes('application/json')) {
+    if (contentType && isApiJson(contentType)) {
       data = await response.json();
     }
 
@@ -118,7 +120,7 @@ export const deleteVehicleImage = async (vehicleId, imageId, token) => {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const response = await fetch(`${FLEET_API_URL}/api/vehicles/${vehicleId}/images/${imageId}`, {
+    const response = await fetchWithSession(`${FLEET_API_URL}/api/vehicles/${vehicleId}/images/${imageId}`, {
       method: 'DELETE',
       headers,
     });
@@ -132,7 +134,7 @@ export const deleteVehicleImage = async (vehicleId, imageId, token) => {
 
     const contentType = response.headers.get('content-type');
     let data = null;
-    if (contentType && contentType.includes('application/json')) {
+    if (contentType && isApiJson(contentType)) {
       data = await response.json();
     }
 
@@ -178,7 +180,7 @@ export const replaceVehicleImage = async (vehicleId, imageId, file, caption, tok
       formData.append('caption', caption.trim());
     }
 
-    const response = await fetch(`${FLEET_API_URL}/api/vehicles/${vehicleId}/images/${imageId}`, {
+    const response = await fetchWithSession(`${FLEET_API_URL}/api/vehicles/${vehicleId}/images/${imageId}`, {
       method: 'PUT',
       headers,
       body: formData,
@@ -186,7 +188,7 @@ export const replaceVehicleImage = async (vehicleId, imageId, file, caption, tok
 
     const contentType = response.headers.get('content-type');
     let data = null;
-    if (contentType && contentType.includes('application/json')) {
+    if (contentType && isApiJson(contentType)) {
       data = await response.json();
     }
 

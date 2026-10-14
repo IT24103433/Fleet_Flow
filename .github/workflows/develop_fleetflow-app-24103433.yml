@@ -1,9 +1,6 @@
 name: Build and deploy ASP.Net Core app to Azure Web App - fleetflow-app-24103433
 
 on:
-  push:
-    branches:
-      - develop
   workflow_dispatch:
 
 jobs:

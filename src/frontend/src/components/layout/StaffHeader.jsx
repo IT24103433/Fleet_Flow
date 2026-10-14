@@ -1,50 +1,44 @@
+import { ListIcon } from "@phosphor-icons/react/dist/csr/List";
+import { SignOutIcon } from '@phosphor-icons/react/dist/csr/SignOut';
+import Button from '../common/Button';
+import AccountPresentation from '../common/AccountPresentation';
 import React from 'react';
 import { useAuth } from '../../context/AuthContext';
-import RoleBadge from '../common/RoleBadge';
-
-const StaffHeader = ({ title = 'Operations Dashboard', onToggleSidebar }) => {
-  const { user, roles } = useAuth();
-  const primaryRole = roles?.[0] || 'FLEET_MANAGER';
-
+import useLogoutConfirmation from '../common/useLogoutConfirmation';
+const StaffHeader = ({
+  title = 'Operations Dashboard',
+  onToggleSidebar,
+  onNavigate,
+  sidebarOpen = false
+}) => {
+  const {
+    user,
+    roles
+  } = useAuth();
+  const { requestLogout, logoutDialog } = useLogoutConfirmation(() => onNavigate('staff-login'));
+  const primaryRole = roles?.[0];
   const todayFormatted = new Intl.DateTimeFormat('en-US', {
     weekday: 'short',
     month: 'short',
     day: 'numeric',
     year: 'numeric'
   }).format(new Date());
-
-  return (
-    <header className="staff-header">
+  return <header className="staff-header">
       <div className="staff-header-left">
-        <button
-          type="button"
-          className="staff-mobile-toggle-btn"
-          onClick={onToggleSidebar}
-          aria-label="Toggle navigation sidebar"
-        >
-          <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" strokeWidth="2" fill="none">
-            <path d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
+        <button type="button" className="staff-mobile-toggle-btn" onClick={onToggleSidebar} aria-label="Toggle navigation sidebar" aria-expanded={sidebarOpen} aria-controls="staff-navigation">
+          <ListIcon width="22" height="22" weight="regular" aria-hidden="true" />
         </button>
         <div className="staff-title-group">
-          <h1 className="staff-header-title">{title}</h1>
+          <p className="staff-header-title"><span>Workspace</span><span aria-hidden="true"> / </span>{title}</p>
           <span className="staff-date-text">{todayFormatted}</span>
         </div>
       </div>
 
       <div className="staff-header-right">
-        <div className="system-health-badge" title="Identity & Fleet Services Connected">
-          <span className="pulse-dot" aria-hidden="true" />
-          <span>System Online</span>
-        </div>
-
-        <div className="staff-header-profile">
-          <RoleBadge role={primaryRole} />
-          <span className="staff-header-user">{user?.username}</span>
-        </div>
+        <AccountPresentation account={user} role={primaryRole} />
+        <Button variant="outline" size="sm" className="header-logout" onClick={requestLogout}><SignOutIcon size={18} weight="regular" aria-hidden="true" />Log out</Button>
       </div>
-    </header>
-  );
+      {logoutDialog}
+    </header>;
 };
-
 export default StaffHeader;

@@ -7,6 +7,9 @@ public class MaintenanceRecord
     public Vehicle? Vehicle { get; set; }
     public Guid CreatedByUserId { get; set; }
     public DateTime ScheduledDateTime { get; set; }
+    public DateTime? PlannedEndDateTime { get; set; }
+    public Guid? AssignedStaffId { get; set; }
+    public string? AssignedStaffName { get; set; }
     public string ServiceInformation { get; set; } = string.Empty;
     public string? Details { get; set; }
     public decimal Cost { get; set; }

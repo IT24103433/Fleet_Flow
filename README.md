@@ -2,13 +2,20 @@
 
 [![FleetFlow CI/CD Pipeline](https://github.com/IT24103433/Fleet_Flow/actions/workflows/ci.yml/badge.svg)](https://github.com/IT24103433/Fleet_Flow/actions/workflows/ci.yml)
 [![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen.svg)]()
-[![Automated Tests](https://img.shields.io/badge/Tests-272%20Passed-success.svg)]()
+[![Automated Tests](https://img.shields.io/badge/Backend%20tests-631%20Passed-success.svg)](docs/s4-11-release-handoff.md#verification)
 [![.NET Version](https://img.shields.io/badge/.NET-10.0-purple.svg)](https://dotnet.microsoft.com/)
 [![Node Version](https://img.shields.io/badge/Node.js-22.x-green.svg)](https://nodejs.org/)
 
 **FleetFlow** is an enterprise-grade, microservice-oriented vehicle fleet management system featuring role-based access control (RBAC), vehicle lifecycle tracking, maintenance scheduling, and real-time Kafka event streaming.
 
 ---
+
+## Sprint 4 development release
+
+Four independent APIs own accounts (Identity, 5001), vehicles/maintenance/availability (Fleet, 5002), bookings/pickup/return/history (Rental, 5003) and notification delivery/inboxes (Notification, 5004). Their databases remain separate on PostgreSQL; authenticated API calls and durable events connect them. S4-01–S4-10 are merged. S4-11 integration/performance and the release handoff are included here; **S4-12 stays open until DevOps deploys and QA verifies the deployed release**.
+
+Start with the [Sprint 4 release handoff](docs/s4-11-release-handoff.md) for configuration, migration order, evidence and rollback limits. Existing environment defaults deliberately retain Legacy ownership until verified imports; setting a new frontend URL alone is not a cutover. Azure deployment workflows are manual-only so a main merge cannot deploy an incomplete subset of the four services. The approved website is preserved.
+
 
 ## Table of Contents
 
@@ -54,7 +61,10 @@ Fleet_Flow/
 │   ├── backend/                  # .NET 10 microservices
 │   │   ├── services/
 │   │   │   ├── IdentityService/  # Authentication, JWT, and RBAC service
-│   │   │   └── FleetService/     # Vehicle catalog, status, and maintenance service
+│   │   │   ├── FleetService/     # Vehicle catalog, status, and maintenance service
+│   │   │   ├── RentalService/    # Bookings, pickup, return and timeline (5003)
+│   │   │   └── NotificationService/ # Inbox, deduplicated delivery and retry (5004)
+│   │   ├── shared/              # Internal contracts and authentication
 │   │   └── FleetFlow.sln         # Backend solution file
 │   └── frontend/                 # React 19 + Vite single page application
 │       ├── src/                  # Components, pages, hooks, state, and API services
@@ -181,7 +191,7 @@ Open your browser at `http://localhost:5173`.
 
 ### 5. Seeding QA & Initial Users
 
-To populate the local database with pre-configured users across all roles (`ADMIN`, `FLEET_MANAGER`, `MAINTENANCE_STAFF`, `CUSTOMER`), run the seed utility:
+Use a fresh disposable QA database before running the explicit seed utility, which may reset test credentials. Identity Development startup creates missing demo accounts and preserves existing passwords, roles and statuses. Production startup seeding requires explicit opt-in. To populate a fresh QA database across all roles (`ADMIN`, `FLEET_MANAGER`, `MAINTENANCE_STAFF`, `CUSTOMER`), run the seed utility:
 ```powershell
 dotnet run --project tools/SeedQaUsers/SeedQaUsers.csproj
 ```
@@ -191,7 +201,7 @@ dotnet run --project tools/SeedQaUsers/SeedQaUsers.csproj
 
 ## Running Automated Tests
 
-The solution contains **272 automated tests** across both backend microservices and the frontend client.
+The final development baseline contains **631 backend tests across seven projects and 162 frontend tests**. See the [release evidence](docs/s4-11-release-handoff.md#verification) for the exact CI run and separate live rehearsal.
 
 ### Backend Tests (xUnit)
 ```powershell
@@ -199,13 +209,18 @@ dotnet test FleetFlow.sln --configuration Release
 ```
 - `FleetFlow.IdentityService.Tests`: 101 tests (Authentication, RBAC, Admin controls)
 - `FleetFlow.VehicleService.Tests`: 69 tests (Inventory, Status transitions, Bookings)
+- `FleetService.Tests`: 280 tests
+- `IdentityService.Tests`: 65 tests
+- `RentalService.Tests`: 45 tests
+- `NotificationService.Tests`: 21 tests
+- `FleetFlow.ServiceFoundation.Tests`: 50 tests
 
 ### Frontend Tests (Node.js Test Runner)
 ```powershell
 cd src/frontend
-npm test -- --run
+npm test
 ```
-- 102 unit & validation tests covering role authorization rules, vehicle editing, and maintenance status workflows.
+- 162 tests covering customer/staff operations, record navigation, image fallbacks, confirmations, maintenance and session security.
 
 ---
 

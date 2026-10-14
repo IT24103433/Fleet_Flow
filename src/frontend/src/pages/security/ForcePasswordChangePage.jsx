@@ -1,82 +1,87 @@
-import React, { useState } from 'react';
+import AuthLayout from '../../components/layout/AuthLayout';
+import React, { useRef, useState } from 'react';
 import InputField from '../../components/InputField';
 import Alert from '../../components/Alert';
 import Button from '../../components/common/Button';
 import { useAuth } from '../../context/AuthContext';
 import { changePassword } from '../../services/authService';
-
-const ForcePasswordChangePage = ({ onComplete }) => {
-  const { token, user, updateUser } = useAuth();
+const ForcePasswordChangePage = ({
+  onComplete
+}) => {
+  const {
+    token,
+    user,
+    login,
+    logout
+  } = useAuth();
   const username = user?.fullName || user?.username || 'User';
-
   const [formData, setFormData] = useState({
     newPassword: '',
-    confirmPassword: '',
+    confirmPassword: ''
   });
-
   const [errors, setErrors] = useState({});
   const [notice, setNotice] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+  const submitting = useRef(false);
+  const handleInputChange = e => {
+    const {
+      name,
+      value
+    } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
     if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: '' }));
+      setErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
     }
   };
-
-  const handleFormSubmit = async (e) => {
+  const handleFormSubmit = async e => {
     e.preventDefault();
+    if (submitting.current) return;
     const newErrors = {};
-
     if (!formData.newPassword) {
       newErrors.newPassword = 'New password is required.';
+    } else if (formData.newPassword.length > 128) {
+      newErrors.newPassword = 'Password must be no more than 128 characters.';
     } else if (formData.newPassword.length < 8) {
       newErrors.newPassword = 'Password must be at least 8 characters.';
     }
     if (formData.newPassword !== formData.confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match.';
     }
-
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
-
-    setIsLoading(true);
+    submitting.current = true; setIsLoading(true);
     setNotice(null);
-
     const result = await changePassword(token, formData.newPassword);
-
-    setIsLoading(false);
-
+    submitting.current = false; setIsLoading(false);
     if (result.success) {
-      updateUser({ mustChangePassword: false });
+      if (!result.data?.token || !result.data?.user) { logout(); return; }
+      login(result.data.token, result.data.user);
       setNotice({
         type: 'success',
-        title: 'Permanent Password Configured',
-        message: 'Security credentials updated successfully. Redirecting to your workspace...',
+        title: 'Password updated',
+        message: 'Your new password is saved. Opening your workspace…'
       });
-      setTimeout(() => {
-        if (onComplete) {
-          onComplete();
-        }
-      }, 1200);
+      if (onComplete) onComplete();
     } else {
       setNotice({
         type: 'error',
         title: 'Password Update Failed',
-        message: result.message || 'Failed to update password. Please try again.',
+        message: result.message || 'Failed to update password. Please try again.'
       });
     }
   };
-
-  return (
-    <div className="auth-page-layout">
+  return <AuthLayout>
       <div className="auth-card">
         <div className="auth-header">
-          <div className="auth-badge-pill" style={{ backgroundColor: 'rgba(245, 158, 11, 0.1)', color: '#B45309', borderColor: 'rgba(245, 158, 11, 0.3)' }}>
+          <div className="auth-badge-pill view-302f0e95">
             Security Requirement
           </div>
           <h2 className="auth-title">Password Update Required</h2>
@@ -88,31 +93,9 @@ const ForcePasswordChangePage = ({ onComplete }) => {
         {notice && <Alert type={notice.type} title={notice.title} message={notice.message} />}
 
         <form onSubmit={handleFormSubmit} noValidate className="auth-form">
-          <InputField
-            label="New Permanent Password"
-            type="password"
-            id="newPassword"
-            name="newPassword"
-            value={formData.newPassword}
-            onChange={handleInputChange}
-            error={errors.newPassword}
-            placeholder="Min 8 characters"
-            required
-            disabled={isLoading}
-          />
+          <InputField label="New password" type="password" id="newPassword" name="newPassword" value={formData.newPassword} onChange={handleInputChange} error={errors.newPassword} placeholder="Min 8 characters" required disabled={isLoading} />
 
-          <InputField
-            label="Confirm New Password"
-            type="password"
-            id="confirmPassword"
-            name="confirmPassword"
-            value={formData.confirmPassword}
-            onChange={handleInputChange}
-            error={errors.confirmPassword}
-            placeholder="Re-enter new password"
-            required
-            disabled={isLoading}
-          />
+          <InputField label="Confirm New Password" type="password" id="confirmPassword" name="confirmPassword" value={formData.confirmPassword} onChange={handleInputChange} error={errors.confirmPassword} placeholder="Re-enter new password" required disabled={isLoading} />
 
           <div className="password-rules-card">
             <span className="rules-title">Password Requirements:</span>
@@ -124,19 +107,11 @@ const ForcePasswordChangePage = ({ onComplete }) => {
             </ul>
           </div>
 
-          <Button
-            type="submit"
-            variant="primary"
-            size="lg"
-            fullWidth
-            isLoading={isLoading}
-          >
+          <Button type="submit" variant="primary" size="lg" fullWidth isLoading={isLoading}>
             Set Password & Access Workspace
           </Button>
         </form>
       </div>
-    </div>
-  );
+    </AuthLayout>;
 };
-
 export default ForcePasswordChangePage;

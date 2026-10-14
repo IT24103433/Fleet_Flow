@@ -11,6 +11,7 @@ internal static class VehicleWriteTransaction
     public static async Task<IDbContextTransaction?> BeginAsync(
         FleetDbContext db, Guid vehicleId, CancellationToken ct = default)
     {
+        if (db.RentalRouting?.Remote == true && !await db.RentalRouting.ReadyAsync(db,ct)) throw new FleetService.Api.Services.RentalUnavailableException();
         // Existing unit tests use EF InMemory; concurrency guarantees are tested on PostgreSQL.
         if (db.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory") return null;
         if (!db.Database.IsNpgsql())

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Modal from './common/Modal';
 import Button from './common/Button';
 import Alert from './Alert';
@@ -6,7 +6,7 @@ import StatusBadge from './common/StatusBadge';
 import { checkVehicleAvailability, createBooking } from '../services/bookingService';
 import { formatPriceNumber } from '../utils/currencyUtils';
 import { normalizeValidationErrors } from '../utils/validationErrorUtils';
-
+import { bookingEstimate } from '../utils/vehiclePresentation';
 const getTomorrowDateStr = (daysAhead = 1, hour = 9) => {
   const date = new Date();
   date.setDate(date.getDate() + daysAhead);
@@ -15,87 +15,85 @@ const getTomorrowDateStr = (daysAhead = 1, hour = 9) => {
   const localISOTime = new Date(date.getTime() - tzOffset).toISOString().slice(0, 16);
   return localISOTime;
 };
-
-const BookingModal = ({ isOpen, onClose, vehicle, onSuccess }) => {
+const BookingModal = ({
+  isOpen,
+  onClose,
+  vehicle,
+  onSuccess,
+  onNavigate
+}) => {
   const [startDateTime, setStartDateTime] = useState(() => getTomorrowDateStr(1, 9));
   const [endDateTime, setEndDateTime] = useState(() => getTomorrowDateStr(4, 9));
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [fieldErrors, setFieldErrors] = useState({});
   const [successBooking, setSuccessBooking] = useState(null);
-
+  const submission = useRef(false);
   if (!vehicle) return null;
-
   const vehicleName = `${vehicle.year} ${vehicle.make} ${vehicle.model}`;
   const categoryName = vehicle.categoryName || vehicle.category || 'Vehicle';
-  const dailyRate = Number(vehicle.dailyRate) || 0;
+  const dailyRate = vehicle.dailyRate;
 
   // Calculate rental duration in days and total price
-  let totalDays = 0;
-  let estimatedCost = 0;
-  if (startDateTime && endDateTime) {
-    const startMs = new Date(startDateTime).getTime();
-    const endMs = new Date(endDateTime).getTime();
-    if (endMs > startMs) {
-      const diffHours = (endMs - startMs) / (1000 * 60 * 60);
-      totalDays = Math.max(1, Math.ceil(diffHours / 24));
-      estimatedCost = totalDays * dailyRate;
-    }
-  }
-
-  const handleSubmit = async (e) => {
+  const {
+    days: totalDays,
+    cost: estimatedCost
+  } = bookingEstimate(startDateTime, endDateTime, dailyRate);
+  const handleSubmit = async e => {
     e.preventDefault();
+    if (submission.current) return;
     setErrorMessage(null);
     setFieldErrors({});
-
     if (!startDateTime || !endDateTime) {
       setErrorMessage('Please specify both Start and End rental date & time.');
       setFieldErrors({
-        ...(!startDateTime ? { startDateTime: 'Start date and time are required.' } : {}),
-        ...(!endDateTime ? { endDateTime: 'End date and time are required.' } : {}),
+        ...(!startDateTime ? {
+          startDateTime: 'Start date and time are required.'
+        } : {}),
+        ...(!endDateTime ? {
+          endDateTime: 'End date and time are required.'
+        } : {})
       });
       return;
     }
-
     const startDateObj = new Date(startDateTime);
     const endDateObj = new Date(endDateTime);
     const now = new Date();
-
-    if (startDateObj < new Date(now.getTime() - 5 * 60000)) {
-      setErrorMessage('Rental start date and time must be in the future.');
-      setFieldErrors({ startDateTime: 'Rental start date and time must be in the future.' });
+    if (!Number.isFinite(startDateObj.getTime()) || !Number.isFinite(endDateObj.getTime()) || estimatedCost == null) {
+      setErrorMessage('Enter valid rental dates and check that a daily rate is recorded.');
       return;
     }
-
+    if (startDateObj <= now) {
+      setErrorMessage('Rental start date and time must be in the future.');
+      setFieldErrors({
+        startDateTime: 'Rental start date and time must be in the future.'
+      });
+      return;
+    }
     if (endDateObj <= startDateObj) {
       setErrorMessage('Rental end date and time must be after the start date and time.');
-      setFieldErrors({ endDateTime: 'Rental end date and time must be after the start date and time.' });
+      setFieldErrors({
+        endDateTime: 'Rental end date and time must be after the start date and time.'
+      });
       return;
     }
-
+    submission.current = true;
     setIsSubmitting(true);
     setSuccessBooking(null);
-
-    const availabilityResult = await checkVehicleAvailability(
-      vehicle.id,
-      startDateObj.toISOString(),
-      endDateObj.toISOString(),
-    );
-
+    const availabilityResult = await checkVehicleAvailability(vehicle.id, startDateObj.toISOString(), endDateObj.toISOString());
     if (!availabilityResult.success || !availabilityResult.isAvailable) {
+      submission.current = false;
       setIsSubmitting(false);
       setErrorMessage(availabilityResult.message || 'The selected vehicle is not available for that rental period.');
       return;
     }
-
     const result = await createBooking({
       vehicleId: vehicle.id,
       startDateTime: startDateObj.toISOString(),
-      endDateTime: endDateObj.toISOString(),
+      endDateTime: endDateObj.toISOString()
     });
-
+    submission.current = false;
     setIsSubmitting(false);
-
     if (result.success && result.data) {
       setSuccessBooking(result.data);
       if (onSuccess) {
@@ -106,8 +104,8 @@ const BookingModal = ({ isOpen, onClose, vehicle, onSuccess }) => {
       setErrorMessage(result.message || 'Failed to complete vehicle reservation.');
     }
   };
-
   const handleModalClose = () => {
+    if (submission.current) return;
     setStartDateTime(getTomorrowDateStr(1, 9));
     setEndDateTime(getTomorrowDateStr(4, 9));
     setIsSubmitting(false);
@@ -116,44 +114,26 @@ const BookingModal = ({ isOpen, onClose, vehicle, onSuccess }) => {
     setFieldErrors({});
     onClose();
   };
-
   const confirmedVehicle = successBooking?.vehicle || vehicle;
-  const confirmedVehicleName = confirmedVehicle
-    ? `${confirmedVehicle.year} ${confirmedVehicle.make} ${confirmedVehicle.model}`
-    : vehicleName;
-
-  return (
-    <Modal
-      isOpen={isOpen}
-      onClose={handleModalClose}
-      title={successBooking ? 'Booking Confirmed' : 'Create Rental Booking'}
-      subtitle={successBooking ? `Reservation #${successBooking.id.substring(0, 8)}` : `Reserve ${vehicleName}`}
-      maxWidth="560px"
-    >
-      {errorMessage && (
-        <div style={{ marginBottom: '16px' }}>
+  const confirmedVehicleName = confirmedVehicle ? `${confirmedVehicle.year} ${confirmedVehicle.make} ${confirmedVehicle.model}` : vehicleName;
+  return <Modal isOpen={isOpen} onClose={handleModalClose} title={successBooking ? 'Booking created' : 'Choose your rental dates'} subtitle={successBooking ? `Reservation #${successBooking.id.substring(0, 8)}` : `Reserve ${vehicleName}`} maxWidth="560px">
+      {errorMessage && <div className="view-4933c088">
           <Alert type="error" title="Booking Validation Failure" message={errorMessage} />
-        </div>
-      )}
+        </div>}
 
-      {successBooking ? (
-        <div className="booking-success-card" style={{ padding: '8px 0' }}>
-          <Alert
-            type="success"
-            title="Rental Reservation Successfully Created!"
-            message={`Your booking for ${confirmedVehicleName} has been confirmed. Confirmation ID: ${successBooking.id}`}
-          />
+      {successBooking ? <div className="booking-success-card view-5788b5cd">
+          <Alert type="success" title="Your booking is saved" message={`Booking #${successBooking.id.slice(0, 8)} for ${confirmedVehicleName}. You can find the details in My bookings.`} />
 
-          <div style={{ marginTop: '20px', background: 'var(--color-bg-secondary, #f8fafc)', borderRadius: '8px', padding: '16px', border: '1px solid var(--color-border, #e2e8f0)' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-              <h4 style={{ margin: 0, fontSize: '15px' }}>{confirmedVehicleName}</h4>
-              <StatusBadge status={successBooking.status || 'Confirmed'} />
+          <div className="view-85da18bc">
+            <div className="view-ab4de765">
+              <h4 className="view-05291f22">{confirmedVehicleName}</h4>
+              <StatusBadge status={successBooking.status} />
             </div>
 
-            <div style={{ fontSize: '13px', color: 'var(--color-text-secondary, #64748b)', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+            <div className="view-73be117d">
               <div>
                 <strong>Booking ID:</strong>
-                <div style={{ fontFamily: 'monospace', fontSize: '12px', wordBreak: 'break-all' }}>{successBooking.id}</div>
+                <div className="view-c33e604a">{successBooking.id}</div>
               </div>
               <div>
                 <strong>Vehicle:</strong>
@@ -167,117 +147,96 @@ const BookingModal = ({ isOpen, onClose, vehicle, onSuccess }) => {
                 <strong>Return Date:</strong>
                 <div>{new Date(successBooking.endDateTime).toLocaleString()}</div>
               </div>
-              <div style={{ gridColumn: 'span 2', paddingTop: '8px', borderTop: '1px dashed #cbd5e1' }}>
-                <strong style={{ fontSize: '14px', color: 'var(--color-text-primary, #0f172a)' }}>Total Reserved: </strong>
-                <span style={{ fontSize: '16px', fontWeight: 'bold', color: 'var(--color-primary, #2563eb)' }}>
+              <div className="view-ffe206a5">
+                <strong className="view-ec48a151">Total Reserved: </strong>
+                <span className="view-6208e615">
                   LKR {formatPriceNumber(successBooking.totalCost)}
                 </span>
               </div>
             </div>
           </div>
 
-          <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end' }}>
+          <div className="view-578fa8e3">
+            {onNavigate && <Button variant="outline" onClick={() => { handleModalClose(); onNavigate('customer-home'); }}>My bookings</Button>}
             <Button variant="primary" onClick={handleModalClose}>
-              Done & Close
+              Done
             </Button>
           </div>
-        </div>
-      ) : (
-        <form onSubmit={handleSubmit}>
+        </div> : <form onSubmit={handleSubmit}>
           {/* Vehicle Summary Header in Modal */}
-          <div style={{ background: 'var(--color-bg-secondary, #f8fafc)', padding: '12px 16px', borderRadius: '8px', marginBottom: '20px', border: '1px solid var(--color-border, #e2e8f0)' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div className="view-d6aef1d2">
+            <div className="view-3490dbc8">
               <div>
-                <span style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.5px', color: 'var(--color-text-muted, #94a3b8)', fontWeight: '600' }}>
+                <span className="view-eee5dd41">
                   {categoryName}
                 </span>
-                <h4 style={{ margin: '2px 0 0', fontSize: '15px' }}>{vehicleName}</h4>
+                <h4 className="view-3970320f">{vehicleName}</h4>
               </div>
-              <div style={{ textAlign: 'right' }}>
-                <span style={{ fontSize: '16px', fontWeight: 'bold', color: 'var(--color-primary, #2563eb)' }}>
+              <div className="view-37dd0c2a">
+                <span className="view-6208e615">
                   LKR {formatPriceNumber(dailyRate)}
                 </span>
-                <span style={{ fontSize: '12px', color: 'var(--color-text-secondary, #64748b)' }}>/day</span>
+                <span className="view-150363c2">/day</span>
               </div>
             </div>
-            <div style={{ fontSize: '12px', color: 'var(--color-text-secondary, #64748b)', marginTop: '6px' }}>
-              Station: {vehicle.hubLocation || vehicle.hub || 'Central Station'} • License: {vehicle.licensePlate || 'N/A'}
+            <div className="view-91b55929">
+              Pickup location: {vehicle.hubLocation || vehicle.hub || 'Not recorded'} • Registration: {vehicle.licensePlate || 'Not recorded'}
             </div>
           </div>
 
           {/* Date Range Inputs */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
+          <div className="view-f514f124 booking-date-fields">
             <div>
-              <label htmlFor="bookingStartDateTime" style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>
-                Start Date & Time <span style={{ color: 'red' }}>*</span>
+              <label htmlFor="bookingStartDateTime" className="view-83e308c1">
+                Pickup date & time <span className="required-indicator">*</span>
               </label>
-              <input
-                id="bookingStartDateTime"
-                type="datetime-local"
-                className={`input-field ${fieldErrors.startDateTime ? 'input-error' : ''}`.trim()}
-                value={startDateTime}
-                onChange={(e) => {
-                  setStartDateTime(e.target.value);
-                  setFieldErrors(current => ({ ...current, startDateTime: undefined }));
-                }}
-                required
-                data-autofocus
-                aria-invalid={Boolean(fieldErrors.startDateTime)}
-                aria-describedby={fieldErrors.startDateTime ? 'bookingStartDateTimeError' : undefined}
-                style={{ width: '100%', padding: '8px 12px', borderRadius: '6px', border: '1px solid #cbd5e1' }}
-              />
+              <input id="bookingStartDateTime" type="datetime-local" className={`input-field ${fieldErrors.startDateTime ? 'input-error' : ''}`.trim() + " view-1ac81575"} value={startDateTime} onChange={e => {
+            setStartDateTime(e.target.value);
+            setFieldErrors(current => ({
+              ...current,
+              startDateTime: undefined
+            }));
+          }} required data-autofocus aria-invalid={Boolean(fieldErrors.startDateTime)} aria-describedby={fieldErrors.startDateTime ? 'bookingStartDateTimeError' : undefined} />
               {fieldErrors.startDateTime && <div id="bookingStartDateTimeError" className="field-error-message">{fieldErrors.startDateTime}</div>}
             </div>
 
             <div>
-              <label htmlFor="bookingEndDateTime" style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>
-                End Date & Time <span style={{ color: 'red' }}>*</span>
+              <label htmlFor="bookingEndDateTime" className="view-83e308c1">
+                Return date & time <span className="required-indicator">*</span>
               </label>
-              <input
-                id="bookingEndDateTime"
-                type="datetime-local"
-                className={`input-field ${fieldErrors.endDateTime ? 'input-error' : ''}`.trim()}
-                value={endDateTime}
-                onChange={(e) => {
-                  setEndDateTime(e.target.value);
-                  setFieldErrors(current => ({ ...current, endDateTime: undefined }));
-                }}
-                required
-                aria-invalid={Boolean(fieldErrors.endDateTime)}
-                aria-describedby={fieldErrors.endDateTime ? 'bookingEndDateTimeError' : undefined}
-                style={{ width: '100%', padding: '8px 12px', borderRadius: '6px', border: '1px solid #cbd5e1' }}
-              />
+              <input id="bookingEndDateTime" type="datetime-local" className={`input-field ${fieldErrors.endDateTime ? 'input-error' : ''}`.trim() + " view-1ac81575"} value={endDateTime} onChange={e => {
+            setEndDateTime(e.target.value);
+            setFieldErrors(current => ({
+              ...current,
+              endDateTime: undefined
+            }));
+          }} required aria-invalid={Boolean(fieldErrors.endDateTime)} aria-describedby={fieldErrors.endDateTime ? 'bookingEndDateTimeError' : undefined} />
               {fieldErrors.endDateTime && <div id="bookingEndDateTimeError" className="field-error-message">{fieldErrors.endDateTime}</div>}
             </div>
           </div>
 
           {/* Pricing & Duration Summary */}
-          {totalDays > 0 && (
-            <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '8px', padding: '12px 16px', marginBottom: '20px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#166534', marginBottom: '4px' }}>
+          {totalDays > 0 && <div className="view-cd1dde64">
+              <div className="view-d7025caa">
                 <span>Rental Duration:</span>
                 <strong>{totalDays} {totalDays === 1 ? 'day' : 'days'}</strong>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '15px', color: '#15803d', fontWeight: 'bold' }}>
+              <div className="view-3d2cb959">
                 <span>Estimated Total Cost:</span>
                 <span>LKR {formatPriceNumber(estimatedCost)}</span>
               </div>
-            </div>
-          )}
+            </div>}
 
           {/* Modal Actions */}
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '24px' }}>
+          <div className="view-84395218">
             <Button type="button" variant="outline" onClick={handleModalClose} disabled={isSubmitting}>
               Cancel
             </Button>
-            <Button type="submit" variant="primary" disabled={isSubmitting || totalDays <= 0}>
-              {isSubmitting ? 'Confirming Booking...' : 'Confirm Rental Booking'}
+            <Button type="submit" variant="primary" disabled={isSubmitting || totalDays <= 0 || estimatedCost == null}>
+              {isSubmitting ? 'Checking & booking…' : 'Book vehicle'}
             </Button>
           </div>
-        </form>
-      )}
-    </Modal>
-  );
+        </form>}
+    </Modal>;
 };
-
 export default BookingModal;

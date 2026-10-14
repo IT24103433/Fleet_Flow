@@ -14,7 +14,7 @@ export const isTerminalMaintenanceStatus = (status) => {
   return normalized === 'COMPLETED' || normalized === 'CANCELLED';
 };
 
-export const validateMaintenanceRecord = (record, { requireSchedule = true } = {}) => {
+export const validateMaintenanceRecord = (record, { requireSchedule = true, requireEnd = false } = {}) => {
   const errors = {};
 
   if (!record?.vehicleId) errors.vehicleId = 'Select a vehicle.';
@@ -28,6 +28,8 @@ export const validateMaintenanceRecord = (record, { requireSchedule = true } = {
     }
   }
 
+  if (requireEnd || record?.plannedEndDateTime) Object.assign(errors, validateMaintenanceWindow(record));
+
   const serviceInformation = String(record?.serviceInformation || '').trim();
   if (serviceInformation.length < 3) {
     errors.serviceInformation = 'Service information must contain at least 3 characters.';
@@ -36,7 +38,16 @@ export const validateMaintenanceRecord = (record, { requireSchedule = true } = {
   }
 
   const cost = Number(record?.cost || 0);
-  if (!Number.isFinite(cost) || cost < 0) errors.cost = 'Cost must be zero or greater.';
+  if (!Number.isFinite(cost) || cost < 0 || cost > 100000000 || !/^\d+(?:\.\d{1,2})?$/.test(String(record?.cost || '0'))) errors.cost = 'Enter a cost from zero to LKR 100,000,000, with at most two decimal places.';
 
   return errors;
 };
+
+export function validateMaintenanceWindow(record) {
+  const start = new Date(record?.scheduledDateTime || '');
+  const end = new Date(record?.plannedEndDateTime || '');
+  const errors = {};
+  if (!Number.isFinite(start.getTime()) || start.getTime() < Date.now() - 5 * 60000) errors.scheduledDateTime = 'Choose a current or future start time.';
+  if (!Number.isFinite(end.getTime()) || !(end > start) || end - start > 365 * 86400000) errors.plannedEndDateTime = 'Choose an end after the start, within 365 days.';
+  return errors;
+}

@@ -464,6 +464,10 @@ public class VehicleService : IVehicleService
             throw new DuplicateException($"A vehicle with license plate '{plate}' already exists.");
         }
 
+        if (_dbContext.RentalRouting?.Remote == true && request.Mileage != vehicle.Mileage &&
+            await _dbContext.VehicleReservations.AnyAsync(r => r.VehicleId == id && r.IsHeld))
+            throw new ValidationException("Mileage cannot be edited while a rental is active. Record it through the vehicle handover workflow.");
+
         vehicle.Vin = vin.ToUpperInvariant();
         vehicle.LicensePlate = plate.ToUpperInvariant();
         vehicle.Make = make;
@@ -537,11 +541,11 @@ public class VehicleService : IVehicleService
             throw new ValidationException("Cannot retire a vehicle that is currently InUse. Active trip or dispatch must be completed first.");
         }
 
+        if (_dbContext.RentalRouting?.Remote==true && await _dbContext.VehicleReservations.AnyAsync(r=>r.VehicleId==id&&r.IsHeld))
+            throw new ValidationException("Vehicle status is controlled by its active rental until return.");
         if (request.Status == VehicleStatus.Available)
         {
-            var hasActiveMaintenance = await _dbContext.MaintenanceRecords.AnyAsync(record =>
-                record.VehicleId == id &&
-                (record.Status == MaintenanceStatus.SCHEDULED || record.Status == MaintenanceStatus.IN_PROGRESS));
+            var hasActiveMaintenance = await MaintenanceAvailability.CurrentAsync(_dbContext,id);
 
             if (hasActiveMaintenance)
             {
@@ -549,6 +553,9 @@ public class VehicleService : IVehicleService
             }
         }
 
+        if (_dbContext.RentalRouting?.Remote==true && request.Status!=VehicleStatus.Available &&
+            await _dbContext.VehicleReservations.AnyAsync(r=>r.VehicleId==id&&!r.Released&&(r.IsHeld||r.EndDateTime>DateTime.UtcNow)))
+            throw new ValidationException("Cannot change vehicle availability while an active or future reservation exists.");
         vehicle.Status = request.Status;
         vehicle.UpdatedAt = DateTime.UtcNow;
 
@@ -601,6 +608,8 @@ public class VehicleService : IVehicleService
             throw new ValidationException("Cannot retire a vehicle that is currently InUse. Active trip or dispatch must be completed first.");
         }
 
+        if (_dbContext.RentalRouting?.Remote==true && await _dbContext.VehicleReservations.AnyAsync(r=>r.VehicleId==id&&!r.Released&&(r.IsHeld||r.EndDateTime>DateTime.UtcNow)))
+            throw new ValidationException("Cannot retire a vehicle while an active or future reservation exists.");
         vehicle.Status = VehicleStatus.Retired;
         vehicle.UpdatedAt = DateTime.UtcNow;
 

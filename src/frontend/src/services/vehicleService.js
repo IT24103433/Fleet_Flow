@@ -1,3 +1,4 @@
+import { fetchWithSession, isApiJson } from './sessionFetch.js';
 const FLEET_API_URL = import.meta.env.VITE_FLEET_API_URL || 'http://localhost:5002';
 
 export const getVehicles = async (params = {}) => {
@@ -42,7 +43,7 @@ export const getVehicles = async (params = {}) => {
     const queryString = query.toString();
     const url = `${FLEET_API_URL}/api/vehicles${queryString ? `?${queryString}` : ''}`;
 
-    const response = await fetch(url, {
+    const response = await fetchWithSession(url, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -51,7 +52,7 @@ export const getVehicles = async (params = {}) => {
 
     const contentType = response.headers.get('content-type');
     let data = null;
-    if (contentType && contentType.includes('application/json')) {
+    if (contentType && isApiJson(contentType)) {
       data = await response.json();
     }
 
@@ -112,14 +113,14 @@ export const getVehicles = async (params = {}) => {
     return {
       success: false,
       status: 0,
-      message: 'The fleet service is currently unreachable. Please check your network and ensure FleetService is running.',
+      message: 'Vehicles are unavailable right now. Check your connection and try again.',
     };
   }
 };
 
 export const getVehicleById = async (id) => {
   try {
-    const response = await fetch(`${FLEET_API_URL}/api/vehicles/${id}`, {
+    const response = await fetchWithSession(`${FLEET_API_URL}/api/vehicles/${id}`, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -128,7 +129,7 @@ export const getVehicleById = async (id) => {
 
     const contentType = response.headers.get('content-type');
     let data = null;
-    if (contentType && contentType.includes('application/json')) {
+    if (contentType && isApiJson(contentType)) {
       data = await response.json();
     }
 
@@ -156,7 +157,7 @@ export const getVehicleById = async (id) => {
 
 export const getCategories = async () => {
   try {
-    const response = await fetch(`${FLEET_API_URL}/api/vehicle-categories`, {
+    const response = await fetchWithSession(`${FLEET_API_URL}/api/vehicle-categories`, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -165,7 +166,7 @@ export const getCategories = async () => {
 
     const contentType = response.headers.get('content-type');
     let data = null;
-    if (contentType && contentType.includes('application/json')) {
+    if (contentType && isApiJson(contentType)) {
       data = await response.json();
     }
 
@@ -202,7 +203,7 @@ export const createVehicle = async (vehicleData, token) => {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const response = await fetch(`${FLEET_API_URL}/api/vehicles`, {
+    const response = await fetchWithSession(`${FLEET_API_URL}/api/vehicles`, {
       method: 'POST',
       headers,
       body: JSON.stringify(vehicleData),
@@ -210,7 +211,7 @@ export const createVehicle = async (vehicleData, token) => {
 
     const contentType = response.headers.get('content-type');
     let data = null;
-    if (contentType && contentType.includes('application/json')) {
+    if (contentType && isApiJson(contentType)) {
       data = await response.json();
     }
 
@@ -263,7 +264,7 @@ export const updateVehicle = async (id, vehicleData, token) => {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const response = await fetch(`${FLEET_API_URL}/api/vehicles/${id}`, {
+    const response = await fetchWithSession(`${FLEET_API_URL}/api/vehicles/${id}`, {
       method: 'PUT',
       headers,
       body: JSON.stringify(vehicleData),
@@ -271,7 +272,7 @@ export const updateVehicle = async (id, vehicleData, token) => {
 
     const contentType = response.headers.get('content-type');
     let data = null;
-    if (contentType && contentType.includes('application/json')) {
+    if (contentType && isApiJson(contentType)) {
       data = await response.json();
     }
 
@@ -326,7 +327,7 @@ export const updateVehicleStatus = async (id, status, token) => {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const response = await fetch(`${FLEET_API_URL}/api/vehicles/${id}/status`, {
+    const response = await fetchWithSession(`${FLEET_API_URL}/api/vehicles/${id}/status`, {
       method: 'PATCH',
       headers,
       body: JSON.stringify({ status }),
@@ -334,7 +335,7 @@ export const updateVehicleStatus = async (id, status, token) => {
 
     const contentType = response.headers.get('content-type');
     let data = null;
-    if (contentType && contentType.includes('application/json')) {
+    if (contentType && isApiJson(contentType)) {
       data = await response.json();
     }
 
@@ -388,14 +389,14 @@ export const retireVehicle = async (id, reason = '', token = null) => {
     }
 
     const query = reason && reason.trim() ? `?reason=${encodeURIComponent(reason.trim())}` : '';
-    const response = await fetch(`${FLEET_API_URL}/api/vehicles/${id}/retire${query}`, {
+    const response = await fetchWithSession(`${FLEET_API_URL}/api/vehicles/${id}/retire${query}`, {
       method: 'POST',
       headers,
     });
 
     const contentType = response.headers.get('content-type');
     let data = null;
-    if (contentType && contentType.includes('application/json')) {
+    if (contentType && isApiJson(contentType)) {
       data = await response.json();
     }
 
@@ -447,14 +448,14 @@ export const reactivateVehicle = async (id, token = null) => {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const response = await fetch(`${FLEET_API_URL}/api/vehicles/${id}/reactivate`, {
+    const response = await fetchWithSession(`${FLEET_API_URL}/api/vehicles/${id}/reactivate`, {
       method: 'POST',
       headers,
     });
 
     const contentType = response.headers.get('content-type');
     let data = null;
-    if (contentType && contentType.includes('application/json')) {
+    if (contentType && isApiJson(contentType)) {
       data = await response.json();
     }
 

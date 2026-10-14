@@ -3,11 +3,11 @@ import Button from '../../components/common/Button';
 import EmptyState from '../../components/common/EmptyState';
 import './Reports.css';
 
-export function ReportShell({ title, report, children }) {
+export function ReportShell({ title, report, children, action }) {
   return (
     <section className="reports-page" aria-label={title}>
       <div className="reports-heading"><div><h1>{title}</h1><p>Latest available persisted FleetFlow data.</p></div>
-        <Button variant="outline" onClick={report.refresh} disabled={report.loading}>Refresh</Button>
+        <div className="reports-heading-actions"><Button variant="outline" onClick={report.refresh} disabled={report.loading}>Refresh</Button>{action}</div>
       </div>
       {report.loading && <div className="reports-loading" role="status"><span className="spinner" aria-hidden="true" /> Loading report…</div>}
       {report.error && <Alert type="error" title="Unable to Load Report" message={report.error} />}

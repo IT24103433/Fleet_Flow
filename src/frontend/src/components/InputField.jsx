@@ -11,7 +11,9 @@ const InputField = ({
   required = false,
   disabled = false,
   placeholder = '',
+  autoComplete,
 }) => {
+  const completion = autoComplete ?? ({ fullName: 'name', username: 'username', usernameOrEmail: 'username', email: 'email', phoneNumber: 'tel', address: 'street-address', password: 'current-password', currentPassword: 'current-password', newPassword: 'new-password', confirmPassword: 'new-password' })[name];
   return (
     <div className="form-group">
       <label htmlFor={id} className="form-label">
@@ -25,6 +27,8 @@ const InputField = ({
         onChange={onChange}
         disabled={disabled}
         placeholder={placeholder}
+        autoComplete={completion}
+        aria-required={required}
         aria-invalid={!!error}
         aria-describedby={error ? `${id}-error` : undefined}
         className={`form-input ${error ? 'input-error' : ''}`}

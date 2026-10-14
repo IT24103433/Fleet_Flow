@@ -1,3 +1,4 @@
+import { fetchWithSession, isApiJson } from './sessionFetch.js';
 const IDENTITY_API_URL = import.meta.env.VITE_IDENTITY_API_URL || 'http://localhost:5001';
 
 export const createAdminUser = async (userData, token) => {
@@ -11,7 +12,7 @@ export const createAdminUser = async (userData, token) => {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const response = await fetch(`${IDENTITY_API_URL}/api/admin/users`, {
+    const response = await fetchWithSession(`${IDENTITY_API_URL}/api/admin/users`, {
       method: 'POST',
       headers,
       body: JSON.stringify(userData),
@@ -19,7 +20,7 @@ export const createAdminUser = async (userData, token) => {
 
     const contentType = response.headers.get('content-type');
     let data = null;
-    if (contentType && contentType.includes('application/json')) {
+    if (contentType && isApiJson(contentType)) {
       data = await response.json();
     }
 
@@ -71,14 +72,14 @@ export const getAdminUsers = async (token) => {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const response = await fetch(`${IDENTITY_API_URL}/api/admin/users`, {
+    const response = await fetchWithSession(`${IDENTITY_API_URL}/api/admin/users`, {
       method: 'GET',
       headers,
     });
 
     const contentType = response.headers.get('content-type');
     let data = null;
-    if (contentType && contentType.includes('application/json')) {
+    if (contentType && isApiJson(contentType)) {
       data = await response.json();
     }
 
@@ -115,7 +116,7 @@ export const updateAdminUser = async (id, userData, token) => {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const response = await fetch(`${IDENTITY_API_URL}/api/admin/users/${id}`, {
+    const response = await fetchWithSession(`${IDENTITY_API_URL}/api/admin/users/${id}`, {
       method: 'PUT',
       headers,
       body: JSON.stringify(userData),
@@ -123,7 +124,7 @@ export const updateAdminUser = async (id, userData, token) => {
 
     const contentType = response.headers.get('content-type');
     let data = null;
-    if (contentType && contentType.includes('application/json')) {
+    if (contentType && isApiJson(contentType)) {
       data = await response.json();
     }
 
@@ -177,7 +178,7 @@ export const deleteAdminUser = async (id, token) => {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const response = await fetch(`${IDENTITY_API_URL}/api/admin/users/${id}`, {
+    const response = await fetchWithSession(`${IDENTITY_API_URL}/api/admin/users/${id}`, {
       method: 'DELETE',
       headers,
     });
@@ -191,7 +192,7 @@ export const deleteAdminUser = async (id, token) => {
 
     const contentType = response.headers.get('content-type');
     let data = null;
-    if (contentType && contentType.includes('application/json')) {
+    if (contentType && isApiJson(contentType)) {
       data = await response.json();
     }
 
@@ -235,7 +236,7 @@ export const updateUserStatus = async (id, isActive, token) => {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const response = await fetch(`${IDENTITY_API_URL}/api/admin/users/${id}/status`, {
+    const response = await fetchWithSession(`${IDENTITY_API_URL}/api/admin/users/${id}/status`, {
       method: 'PATCH',
       headers,
       body: JSON.stringify({ isActive }),
@@ -243,7 +244,7 @@ export const updateUserStatus = async (id, isActive, token) => {
 
     const contentType = response.headers.get('content-type');
     let data = null;
-    if (contentType && contentType.includes('application/json')) {
+    if (contentType && isApiJson(contentType)) {
       data = await response.json();
     }
 
@@ -295,7 +296,7 @@ export const resetUserPassword = async (id, payload, token) => {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const response = await fetch(`${IDENTITY_API_URL}/api/admin/users/${id}/reset-password`, {
+    const response = await fetchWithSession(`${IDENTITY_API_URL}/api/admin/users/${id}/reset-password`, {
       method: 'POST',
       headers,
       body: JSON.stringify(payload || {}),
@@ -303,7 +304,7 @@ export const resetUserPassword = async (id, payload, token) => {
 
     const contentType = response.headers.get('content-type');
     let data = null;
-    if (contentType && contentType.includes('application/json')) {
+    if (contentType && isApiJson(contentType)) {
       data = await response.json();
     }
 
@@ -356,7 +357,7 @@ export const forceUserPasswordChange = async (id, mustChangePassword, token) => 
       headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const response = await fetch(`${IDENTITY_API_URL}/api/admin/users/${id}/force-password-change`, {
+    const response = await fetchWithSession(`${IDENTITY_API_URL}/api/admin/users/${id}/force-password-change`, {
       method: 'POST',
       headers,
       body: JSON.stringify({ mustChangePassword: !!mustChangePassword }),
@@ -364,7 +365,7 @@ export const forceUserPasswordChange = async (id, mustChangePassword, token) => 
 
     const contentType = response.headers.get('content-type');
     let data = null;
-    if (contentType && contentType.includes('application/json')) {
+    if (contentType && isApiJson(contentType)) {
       data = await response.json();
     }
 

@@ -47,3 +47,6 @@ Desktop.ini
 # Uploaded Assets
 [Uu]ploads/
 wwwroot/uploads/
+
+# Private disposable rehearsal configuration, credentials, exports and database dumps
+/ReviewResults/

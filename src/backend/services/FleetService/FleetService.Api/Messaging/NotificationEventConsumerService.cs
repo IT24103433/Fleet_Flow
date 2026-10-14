@@ -12,6 +12,8 @@ public class NotificationEventConsumerService(IServiceScopeFactory scopes, IOpti
     {
         var settings = options.Value;
         if (!settings.Enabled) return;
+        using (var scope = scopes.CreateScope())
+            if (scope.ServiceProvider.GetRequiredService<NotificationRouting>().Remote) return;
         await Task.Yield();
         // Reconnect after initialization/consumer failures without stopping the API host.
         while (!stoppingToken.IsCancellationRequested)
@@ -34,7 +36,7 @@ public class NotificationEventConsumerService(IServiceScopeFactory scopes, IOpti
                         try
                         {
                             var domainEvent = NotificationEventProcessor.Deserialize(result.Message.Value);
-                            var expectedTopic = domainEvent is BookingCreatedEvent or BookingCancelledEvent
+                            var expectedTopic = domainEvent is RentalCompletedEvent or RentalStartedEvent or BookingCreatedEvent or BookingCancelledEvent
                                 ? settings.BookingEventsTopic : settings.MaintenanceEventsTopic;
                             if (result.Topic != expectedTopic) throw new ArgumentException("Event received on the wrong domain topic.");
                             using var scope = scopes.CreateScope();

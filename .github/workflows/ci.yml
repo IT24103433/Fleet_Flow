@@ -55,6 +55,21 @@ jobs:
       - name: Publish FleetService Artifacts
         run: dotnet publish src/backend/services/FleetService/FleetService.Api/FleetService.Api.csproj --configuration Release --no-restore --output ./artifacts/fleet-service
 
+      - name: Publish RentalService Artifacts
+        run: dotnet publish src/backend/services/RentalService/RentalService.Api/RentalService.Api.csproj --configuration Release --no-restore --output ./artifacts/rental-service
+
+      - name: Publish NotificationService Artifacts
+        run: dotnet publish src/backend/services/NotificationService/NotificationService.Api/NotificationService.Api.csproj --configuration Release --no-restore --output ./artifacts/notification-service
+
+      - name: Publish Guarded Database Tool
+        run: dotnet publish tools/ServiceDatabaseTool/ServiceDatabaseTool.csproj --configuration Release --no-restore --output ./artifacts/database-tool
+
+      - name: Publish Notification Migration Tool
+        run: dotnet publish tools/NotificationMigration/NotificationMigration.csproj --configuration Release --no-restore --output ./artifacts/notification-migration
+
+      - name: Publish Rental Migration Tool
+        run: dotnet publish tools/RentalMigration/RentalMigration.csproj --configuration Release --no-restore --output ./artifacts/rental-migration
+
       - name: Upload Backend Service Artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -70,6 +85,40 @@ jobs:
     name: "Backend : Automated Tests"
     runs-on: ubuntu-latest
     needs: backend-build
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: foundation_ci_only
+          POSTGRES_DB: fleetflow_hardening_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d fleetflow_hardening_ci"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+      kafka:
+        image: apache/kafka:3.7.0
+        env:
+          KAFKA_NODE_ID: '1'
+          KAFKA_PROCESS_ROLES: broker,controller
+          KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+          KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+          KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+          KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+          KAFKA_CONTROLLER_QUORUM_VOTERS: 1@localhost:9093
+          KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: '1'
+          KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: '1'
+          KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: '1'
+          KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: '0'
+        ports:
+          - 9092:9092
+        options: >-
+          --health-cmd "/opt/kafka/bin/kafka-broker-api-versions.sh --bootstrap-server localhost:9092"
+          --health-interval 5s --health-timeout 10s --health-retries 12
+    env:
+      FLEET_TEST_KAFKA: 127.0.0.1:9092
+      FLEET_TEST_POSTGRES: Host=localhost;Port=5432;Database=fleetflow_hardening_ci;Username=postgres;Password=foundation_ci_only
     steps:
       - name: Checkout Source Code
         uses: actions/checkout@v4
@@ -93,7 +142,7 @@ jobs:
       - name: Run Backend Tests with TRX Logger
         run: |
           mkdir -p TestResults
-          dotnet test FleetFlow.sln --configuration Release --logger "trx;LogFileName=backend-test-results.trx" --results-directory ./TestResults
+          dotnet test FleetFlow.sln --configuration Release --logger "trx" --results-directory ./TestResults
 
       - name: Upload Test Results Report (TRX)
         if: always()
@@ -153,7 +202,7 @@ jobs:
 
       - name: Run Frontend Tests
         working-directory: src/frontend
-        run: npm test -- --run
+        run: npm test
 
   # =========================================================================
   # STAGE 5: FRONTEND BUILD
@@ -181,6 +230,16 @@ jobs:
       - name: Build Vite Production Assets
         working-directory: src/frontend
         run: npm run build
+
+      - name: Enforce Entry JavaScript Budget
+        run: node tools/Check-FrontendBundle.mjs --output artifacts/frontend-bundle-budget.json
+
+      - name: Upload Frontend Bundle Evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-bundle-budget
+          path: artifacts/frontend-bundle-budget.json
+          retention-days: 14
 
       - name: Upload Frontend Production Artifact
         uses: actions/upload-artifact@v4

@@ -1,3 +1,6 @@
+import { ArrowLeftIcon } from "@phosphor-icons/react/dist/csr/ArrowLeft";
+import AccountAvatar from '../../components/common/AccountAvatar';
+import { accountName } from '../../utils/accountPresentation';
 import React, { useState } from 'react';
 import RoleBadge from '../../components/common/RoleBadge';
 import Button from '../../components/common/Button';
@@ -5,22 +8,15 @@ import Modal from '../../components/common/Modal';
 import Alert from '../../components/Alert';
 import { useAuth } from '../../context/AuthContext';
 import { deleteAdminUser, updateUserStatus, resetUserPassword, forceUserPasswordChange } from '../../services/adminUserService';
-
-const AdminUserDetailsPage = ({ selectedUser, onNavigate }) => {
-  const { token, user: currentAuthUser } = useAuth();
-  const [user, setUser] = useState(
-    selectedUser || {
-      id: 'u-1',
-      username: 'admin_sarah',
-      email: 'sarah.admin@fleetflow.io',
-      role: 'ADMIN',
-      status: 'ACTIVE',
-      isActive: true,
-      createdAt: '2026-08-15',
-      lastLogin: '2026-09-01',
-    }
-  );
-
+const AdminUserDetailsPage = ({
+  selectedUser,
+  onNavigate
+}) => {
+  const {
+    token,
+    user: currentAuthUser
+  } = useAuth();
+  const [user, setUser] = useState(selectedUser || null);
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
   const [forceChangeToggle, setForceChangeToggle] = useState(true);
   const [isResetting, setIsResetting] = useState(false);
@@ -44,36 +40,31 @@ const AdminUserDetailsPage = ({ selectedUser, onNavigate }) => {
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
   const [statusError, setStatusError] = useState(null);
-
-  const isUserActive = user.isActive ?? (user.status === 'ACTIVE');
-
+  if (!user) return <div className="record-empty"><h1>Choose an account to continue</h1><Button onClick={() => onNavigate('admin-users')}>Return to user directory</Button></div>;
+  const isUserActive = user.isActive ?? user.status === 'ACTIVE';
   const handleExecuteStatusToggle = async () => {
     if (!user?.id) return;
-
     setIsUpdatingStatus(true);
     setStatusError(null);
-
     const targetActive = !isUserActive;
     const res = await updateUserStatus(user.id, targetActive, token);
     setIsUpdatingStatus(false);
-
     if (res.success) {
-      setUser((prev) => ({
+      setUser(prev => ({
         ...prev,
         isActive: targetActive,
-        status: targetActive ? 'ACTIVE' : 'DISABLED',
+        status: targetActive ? 'ACTIVE' : 'DISABLED'
       }));
       setNotice({
         type: 'success',
         title: targetActive ? 'Account Re-enabled' : 'Account Disabled',
-        message: `Account for ${user.username} has been successfully ${targetActive ? 're-enabled' : 'disabled'}.`,
+        message: `Account for ${user.username} has been successfully ${targetActive ? 're-enabled' : 'disabled'}.`
       });
       setIsStatusModalOpen(false);
     } else {
       setStatusError(res.message || `Failed to ${targetActive ? 'enable' : 'disable'} user account.`);
     }
   };
-
   const handleOpenReset = () => {
     setIsResetModalOpen(true);
     setForceChangeToggle(true);
@@ -82,7 +73,6 @@ const AdminUserDetailsPage = ({ selectedUser, onNavigate }) => {
     setCopiedNotice(false);
     setIsResetting(false);
   };
-
   const handleCloseReset = () => {
     if (isResetting) return;
     setIsResetModalOpen(false);
@@ -90,93 +80,80 @@ const AdminUserDetailsPage = ({ selectedUser, onNavigate }) => {
     setResetSuccessData(null);
     setCopiedNotice(false);
   };
-
-  const handleExecuteReset = async (e) => {
+  const handleExecuteReset = async e => {
     e.preventDefault();
     if (!user?.id) return;
     setIsResetting(true);
     setResetNotice(null);
     setCopiedNotice(false);
-
     const res = await resetUserPassword(user.id, {
-      forcePasswordChange: forceChangeToggle,
+      forcePasswordChange: forceChangeToggle
     }, token);
-
     setIsResetting(false);
     if (res.success) {
       setResetSuccessData(res.data);
       setResetNotice({
         type: 'success',
         title: 'Temporary Credential Generated',
-        message: res.data.message || `Password reset successfully for @${user.username}.`,
+        message: res.data.message || `Password reset successfully for @${user.username}.`
       });
     } else {
       setResetNotice({
         type: 'error',
         title: 'Password Reset Failed',
-        message: res.message || 'An error occurred while resetting the user password.',
+        message: res.message || 'An error occurred while resetting the user password.'
       });
     }
   };
-
   const handleOpenForceModal = () => {
     setIsForceModalOpen(true);
     setForceError(null);
   };
-
   const handleCloseForceModal = () => {
     if (isSubmittingForce) return;
     setIsForceModalOpen(false);
     setForceError(null);
   };
-
-  const handleExecuteForceChange = async (targetValue) => {
+  const handleExecuteForceChange = async targetValue => {
     if (!user?.id) return;
     setIsSubmittingForce(true);
     setForceError(null);
-
     const res = await forceUserPasswordChange(user.id, targetValue, token);
     setIsSubmittingForce(false);
-
     if (res.success) {
-      setUser((prev) => ({ ...prev, mustChangePassword: targetValue }));
+      setUser(prev => ({
+        ...prev,
+        mustChangePassword: targetValue
+      }));
       setNotice({
         type: 'success',
         title: targetValue ? 'Password Change Enforced' : 'Requirement Cleared',
-        message: targetValue
-          ? `User @${user.username} will be required to change their password on next login.`
-          : `Password change requirement cleared for @${user.username}.`,
+        message: targetValue ? `User @${user.username} will be required to change their password on next login.` : `Password change requirement cleared for @${user.username}.`
       });
       setIsForceModalOpen(false);
     } else {
       setForceError(res.message || 'Failed to update password change requirement.');
     }
   };
-
   const handleOpenDelete = () => {
     setIsDeleteModalOpen(true);
     setDeleteConfirmText('');
     setDeleteError(null);
   };
-
   const handleCloseDelete = () => {
     if (isDeleting) return;
     setIsDeleteModalOpen(false);
     setDeleteConfirmText('');
     setDeleteError(null);
   };
-
-  const handleExecuteDelete = async (e) => {
+  const handleExecuteDelete = async e => {
     e.preventDefault();
     if (deleteConfirmText !== 'DELETE') return;
     if (!user?.id) return;
-
     setIsDeleting(true);
     setDeleteError(null);
-
     const res = await deleteAdminUser(user.id, token);
     setIsDeleting(false);
-
     if (res.success) {
       setIsDeleteModalOpen(false);
       onNavigate('admin-users');
@@ -184,45 +161,36 @@ const AdminUserDetailsPage = ({ selectedUser, onNavigate }) => {
       setDeleteError(res.message || 'Failed to delete user account.');
     }
   };
-
-
-  return (
-    <div className="admin-user-details-container">
+  return <div className="admin-user-details-container">
       {/* Header */}
       <div className="admin-page-header">
         <div>
           <button type="button" className="back-link-btn" onClick={() => onNavigate('admin-users')}>
-            ← Back to User Directory
+            <ArrowLeftIcon size={18} weight="regular" aria-hidden="true" /> Back to User Directory
           </button>
-          <h1 className="admin-page-title">User Account Inspection: {user.username}</h1>
+          <h1 className="admin-page-title">Account details: {user.username}</h1>
           <p className="admin-page-subtitle">
-            Inspect security claims, assigned roles, and administrative options.
+            Review this account’s details, role, and access controls.
           </p>
         </div>
 
         <div className="admin-header-actions">
-          <Button variant="primary" onClick={() => onNavigate('admin-edit-user')}>
+          <Button variant="primary" onClick={() => onNavigate('admin-edit-user', {
+          user
+        })}>
             Edit User
           </Button>
-          {isUserActive ? (
-            <Button
-              variant="outline"
-              style={{ borderColor: 'rgba(245, 158, 11, 0.6)', color: '#B45309' }}
-              onClick={() => { setIsStatusModalOpen(true); setStatusError(null); }}
-              disabled={currentAuthUser && (currentAuthUser.id === user.id || currentAuthUser.userId === user.id || currentAuthUser.username === user.username)}
-              title={currentAuthUser && (currentAuthUser.id === user.id || currentAuthUser.userId === user.id || currentAuthUser.username === user.username) ? "You cannot disable your own account" : "Disable User Account"}
-            >
+          {isUserActive ? <Button variant="outline" onClick={() => {
+          setIsStatusModalOpen(true);
+          setStatusError(null);
+        }} disabled={currentAuthUser && (currentAuthUser.id === user.id || currentAuthUser.userId === user.id || currentAuthUser.username === user.username)} title={currentAuthUser && (currentAuthUser.id === user.id || currentAuthUser.userId === user.id || currentAuthUser.username === user.username) ? "You cannot disable your own account" : "Disable User Account"} className="view-a5d6917c">
               Disable Account
-            </Button>
-          ) : (
-            <Button
-              variant="outline"
-              style={{ borderColor: 'rgba(34, 197, 94, 0.6)', color: '#15803D' }}
-              onClick={() => { setIsStatusModalOpen(true); setStatusError(null); }}
-            >
+            </Button> : <Button variant="outline" onClick={() => {
+          setIsStatusModalOpen(true);
+          setStatusError(null);
+        }} className="view-6e44f0b0">
               Enable Account
-            </Button>
-          )}
+            </Button>}
           <Button variant="danger" onClick={handleOpenDelete}>
             Delete User
           </Button>
@@ -249,13 +217,11 @@ const AdminUserDetailsPage = ({ selectedUser, onNavigate }) => {
           </div>
 
           <div className="details-avatar-row">
-            <div className="details-avatar-circle">
-              {user.username.charAt(0).toUpperCase()}
-            </div>
+            <AccountAvatar account={user} className="account-avatar-large" />
             <div>
-              <h2 className="details-username">{user.username}</h2>
+              <h2 className="details-username">{accountName(user)}</h2>
               <p className="details-email">{user.email}</p>
-              <div style={{ marginTop: '6px' }}>
+              <div className="view-70ae72af">
                 <RoleBadge role={user.role} />
               </div>
             </div>
@@ -274,19 +240,17 @@ const AdminUserDetailsPage = ({ selectedUser, onNavigate }) => {
               <span className="info-label">Address</span>
               <span className="info-value">{user.address || '—'}</span>
             </div>
-            {user.role === 'CUSTOMER' && (
-              <div className="info-row">
+            {user.role === 'CUSTOMER' && <div className="info-row">
                 <span className="info-label">Driving License</span>
                 <span className="info-value">{user.drivingLicenseNumber || '—'}</span>
-              </div>
-            )}
+              </div>}
             <div className="info-row">
               <span className="info-label">Account Identifier</span>
               <span className="info-value font-mono">{user.id}</span>
             </div>
             <div className="info-row">
-              <span className="info-label">Provisioned Date</span>
-              <span className="info-value">{user.createdAt ? (user.createdAt.includes('T') ? user.createdAt.split('T')[0] : user.createdAt) : '—'}</span>
+              <span className="info-label">Created on</span>
+              <span className="info-value">{user.createdAt ? user.createdAt.includes('T') ? user.createdAt.split('T')[0] : user.createdAt : '—'}</span>
             </div>
             <div className="info-row">
               <span className="info-label">Last Active Session</span>
@@ -324,41 +288,22 @@ const AdminUserDetailsPage = ({ selectedUser, onNavigate }) => {
             <div className="claim-item">
               <span className="claim-key">Password Change Status</span>
               <span className="claim-value">
-                {user.mustChangePassword ? (
-                  <span
-                    style={{
-                      backgroundColor: '#FEF3C7',
-                      color: '#92400E',
-                      border: '1px solid #FCD34D',
-                      padding: '2px 8px',
-                      borderRadius: '4px',
-                      fontSize: '11px',
-                      fontWeight: 700,
-                      textTransform: 'uppercase'
-                    }}
-                  >
+                {user.mustChangePassword ? <span className="view-66dacdb1">
                     Required on Next Login
-                  </span>
-                ) : (
-                  <span style={{ color: 'var(--color-text-secondary)', fontSize: '13px' }}>
+                  </span> : <span className="view-ba866d16">
                     Normal (Not Required)
-                  </span>
-                )}
+                  </span>}
               </span>
             </div>
           </div>
 
           <div className="admin-actions-box">
             <h4>Security Administration</h4>
-            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '8px' }}>
+            <div className="view-63ab39d7">
               <Button variant="primary" size="sm" onClick={() => onNavigate('admin-edit-user')}>
                 Edit User Account
               </Button>
-              <Button
-                variant={user.mustChangePassword ? "outline" : "warning"}
-                size="sm"
-                onClick={handleOpenForceModal}
-              >
+              <Button variant={user.mustChangePassword ? "outline" : "warning"} size="sm" onClick={handleOpenForceModal}>
                 {user.mustChangePassword ? "Clear Change Req" : "Force Password Change"}
               </Button>
               <Button variant="danger" size="sm" onClick={handleOpenDelete}>
@@ -373,33 +318,21 @@ const AdminUserDetailsPage = ({ selectedUser, onNavigate }) => {
       </div>
 
       {/* Password Reset Modal */}
-      <Modal
-        isOpen={isResetModalOpen}
-        onClose={handleCloseReset}
-        title="Admin Reset Password"
-        subtitle={`Generate a secure temporary credential for @${user.username}`}
-      >
+      <Modal isOpen={isResetModalOpen} onClose={handleCloseReset} title="Admin Reset Password" subtitle={`Generate a secure temporary credential for @${user.username}`}>
         {resetNotice && <Alert type={resetNotice.type} title={resetNotice.title} message={resetNotice.message} />}
 
-        {!resetSuccessData ? (
-          <form onSubmit={handleExecuteReset}>
-            <div style={{ marginBottom: '1.25rem' }}>
-              <p style={{ color: 'var(--color-text-secondary, #64748b)', fontSize: '0.875rem', lineHeight: 1.5, marginBottom: '0.75rem' }}>
+        {!resetSuccessData ? <form onSubmit={handleExecuteReset}>
+            <div className="view-014b93e7">
+              <p className="view-e1ff96cb">
                 Resetting password for <strong>{user.fullName || user.username}</strong> (<code>{user.email}</code>).
               </p>
-              <p style={{ color: 'var(--color-text-secondary, #64748b)', fontSize: '0.875rem', lineHeight: 1.5 }}>
-                A cryptographically secure temporary password will be generated. The existing password will be immediately invalidated and replaced without exposing or disclosing any prior credentials.
+              <p className="view-464cf24b">
+                Resetting the password replaces the current password with a temporary one. Share it securely with the account holder.
               </p>
             </div>
 
-            <div className="checkbox-field-row" style={{ marginBottom: '1.5rem' }}>
-              <input
-                type="checkbox"
-                id="forcePasswordChangeDetails"
-                checked={forceChangeToggle}
-                onChange={(e) => setForceChangeToggle(e.target.checked)}
-                disabled={isResetting}
-              />
+            <div className="checkbox-field-row view-002dc26c">
+              <input type="checkbox" id="forcePasswordChangeDetails" checked={forceChangeToggle} onChange={e => setForceChangeToggle(e.target.checked)} disabled={isResetting} />
               <label htmlFor="forcePasswordChangeDetails">
                 <strong>Force password change on next login</strong>
                 <span>User will be required to configure a new personal password immediately upon next authentication.</span>
@@ -414,105 +347,62 @@ const AdminUserDetailsPage = ({ selectedUser, onNavigate }) => {
                 Generate & Reset Password
               </Button>
             </div>
-          </form>
-        ) : (
-          <div>
-            <div className="temp-password-box" style={{ margin: '1rem 0' }}>
+          </form> : <div>
+            <div className="temp-password-box view-a9799837">
               <span className="temp-label">Generated Temporary Password:</span>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.5rem' }}>
-                <code className="temp-code" style={{ flex: 1, wordBreak: 'break-all', fontSize: '1.1rem', letterSpacing: '0.05em' }}>
+              <div className="view-b8cbced6">
+                <code className="temp-code view-7e6fb287">
                   {resetSuccessData.temporaryPassword}
                 </code>
-                <Button
-                  variant="outline"
-                  type="button"
-                  onClick={() => {
-                    navigator.clipboard.writeText(resetSuccessData.temporaryPassword);
-                    setCopiedNotice(true);
-                    setTimeout(() => setCopiedNotice(false), 2500);
-                  }}
-                >
-                  {copiedNotice ? '✓ Copied' : 'Copy'}
+                <Button variant="outline" type="button" onClick={() => {
+              navigator.clipboard.writeText(resetSuccessData.temporaryPassword);
+              setCopiedNotice(true);
+              setTimeout(() => setCopiedNotice(false), 2500);
+            }}>
+                  {copiedNotice ? 'Copied' : 'Copy'}
                 </Button>
               </div>
-              <p className="temp-desc" style={{ marginTop: '0.75rem', fontSize: '0.825rem' }}>
+              <p className="temp-desc view-87fe899d">
                 Provide this temporary password securely to the user.
                 {resetSuccessData.mustChangePassword ? ' They must configure a new password upon login.' : ''}
                 <br />
-                <strong style={{ color: 'var(--color-danger, #ef4444)' }}>
+                <strong className="view-003f95a0">
                   Warning: This credential will never be displayed again.
                 </strong>
               </p>
             </div>
 
-            <div className="modal-actions-row" style={{ justifyContent: 'flex-end' }}>
+            <div className="modal-actions-row view-d5fbe829">
               <Button variant="primary" type="button" onClick={handleCloseReset}>
                 Done
               </Button>
             </div>
-          </div>
-        )}
+          </div>}
       </Modal>
 
       {/* Permanent Delete User Confirmation Modal */}
-      <Modal
-        isOpen={isDeleteModalOpen}
-        onClose={handleCloseDelete}
-        title="Delete User Account"
-        subtitle={`Permanent account deletion for @${user.username}`}
-      >
-        {deleteError && (
-          <Alert
-            type="error"
-            title="Deletion Failed"
-            message={deleteError}
-          />
-        )}
+      <Modal isOpen={isDeleteModalOpen} onClose={handleCloseDelete} title="Delete User Account" subtitle={`Permanent account deletion for @${user.username}`}>
+        {deleteError && <Alert type="error" title="Deletion Failed" message={deleteError} />}
 
         <form onSubmit={handleExecuteDelete}>
-          <div style={{ marginBottom: '1.25rem' }}>
-            <p style={{ color: 'var(--color-danger, #DC2626)', fontWeight: 600, fontSize: '0.95rem', marginBottom: '0.5rem' }}>
+          <div className="view-014b93e7">
+            <p className="view-3dddf789">
               Warning: This action is permanent and cannot be undone.
             </p>
-            <p style={{ color: 'var(--color-text-secondary, #64748b)', fontSize: '0.875rem', lineHeight: 1.5, marginBottom: '1rem' }}>
+            <p className="view-307c54b6">
               User account <strong>{user.username}</strong> ({user.email}) will be permanently deleted from the database.
             </p>
-            <label
-              htmlFor="detailsDeleteConfirmInput"
-              style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: '0.375rem' }}
-            >
+            <label htmlFor="detailsDeleteConfirmInput" className="view-e49e0bdb">
               Type <strong>DELETE</strong> to confirm.
             </label>
-            <input
-              type="text"
-              id="detailsDeleteConfirmInput"
-              value={deleteConfirmText}
-              onChange={(e) => setDeleteConfirmText(e.target.value)}
-              placeholder="Type DELETE"
-              required
-              disabled={isDeleting}
-              autoComplete="off"
-              style={{
-                width: '100%',
-                padding: '0.5rem 0.75rem',
-                border: '1px solid var(--color-border, #cbd5e1)',
-                borderRadius: 'var(--radius-sm, 4px)',
-                fontFamily: 'monospace',
-                fontSize: '0.95rem'
-              }}
-            />
+            <input type="text" id="detailsDeleteConfirmInput" value={deleteConfirmText} onChange={e => setDeleteConfirmText(e.target.value)} placeholder="Type DELETE" required disabled={isDeleting} autoComplete="off" className="view-1c52fdfc" />
           </div>
 
           <div className="modal-actions-row">
             <Button variant="outline" onClick={handleCloseDelete} disabled={isDeleting}>
               Cancel
             </Button>
-            <Button
-              type="submit"
-              variant="danger"
-              disabled={deleteConfirmText !== 'DELETE' || isDeleting}
-              isLoading={isDeleting}
-            >
+            <Button type="submit" variant="danger" disabled={deleteConfirmText !== 'DELETE' || isDeleting} isLoading={isDeleting}>
               Permanently Delete User
             </Button>
           </div>
@@ -520,102 +410,62 @@ const AdminUserDetailsPage = ({ selectedUser, onNavigate }) => {
       </Modal>
 
       {/* Account Status (Enable/Disable) Confirmation Modal */}
-      <Modal
-        isOpen={isStatusModalOpen}
-        onClose={() => { if (!isUpdatingStatus) setIsStatusModalOpen(false); }}
-        title={isUserActive ? "Disable User Account" : "Re-enable User Account"}
-        subtitle={`Control system access for ${user.username} without deleting history.`}
-      >
-        {statusError && (
-          <Alert type="error" title="Status Change Error" message={statusError} />
-        )}
+      <Modal isOpen={isStatusModalOpen} onClose={() => {
+      if (!isUpdatingStatus) setIsStatusModalOpen(false);
+    }} title={isUserActive ? "Disable User Account" : "Re-enable User Account"} subtitle={`Control system access for ${user.username} without deleting history.`}>
+        {statusError && <Alert type="error" title="Status Change Error" message={statusError} />}
 
-        <div style={{ marginBottom: '1.25rem', fontSize: '13px', color: 'var(--color-text-secondary, #64748b)', lineHeight: '1.5' }}>
-          {isUserActive ? (
-            <p>
+        <div className="view-b1d83fd0">
+          {isUserActive ? <p>
               Are you sure you want to <strong>disable</strong> the account for <strong>{user.username}</strong>?
               They will be <strong>blocked from authenticating</strong> or accessing protected services. All records, roles, and historical data remain preserved.
-            </p>
-          ) : (
-            <p>
+            </p> : <p>
               Are you sure you want to <strong>re-enable</strong> the account for <strong>{user.username}</strong>?
               They will regain the ability to log in and access protected FleetFlow services.
-            </p>
-          )}
+            </p>}
         </div>
 
         <div className="modal-actions-row">
-          <Button
-            variant="outline"
-            onClick={() => setIsStatusModalOpen(false)}
-            disabled={isUpdatingStatus}
-          >
+          <Button variant="outline" onClick={() => setIsStatusModalOpen(false)} disabled={isUpdatingStatus}>
             Cancel
           </Button>
-          <Button
-            variant={isUserActive ? "danger" : "primary"}
-            onClick={handleExecuteStatusToggle}
-            disabled={isUpdatingStatus}
-            isLoading={isUpdatingStatus}
-          >
-            {isUpdatingStatus
-              ? 'Updating...'
-              : isUserActive
-              ? 'Confirm Disable'
-              : 'Confirm Enable'}
+          <Button variant={isUserActive ? "danger" : "primary"} onClick={handleExecuteStatusToggle} disabled={isUpdatingStatus} isLoading={isUpdatingStatus}>
+            {isUpdatingStatus ? 'Updating...' : isUserActive ? 'Confirm Disable' : 'Confirm Enable'}
           </Button>
         </div>
       </Modal>
 
       {/* Force Password Change Modal */}
-      <Modal
-        isOpen={isForceModalOpen}
-        onClose={handleCloseForceModal}
-        title={user.mustChangePassword ? "Clear Password Change Requirement" : "Require Password Change on Next Login"}
-        subtitle={`Administrative credential policy enforcement for @${user.username}`}
-      >
-        {forceError && (
-          <Alert type="error" title="Configuration Error" message={forceError} />
-        )}
+      <Modal isOpen={isForceModalOpen} onClose={handleCloseForceModal} title={user.mustChangePassword ? "Clear Password Change Requirement" : "Require Password Change on Next Login"} subtitle={`Administrative credential policy enforcement for @${user.username}`}>
+        {forceError && <Alert type="error" title="Configuration Error" message={forceError} />}
 
-        <div style={{ marginBottom: '1.25rem', fontSize: '13px', color: 'var(--color-text-secondary, #64748b)', lineHeight: '1.5' }}>
-          {user.mustChangePassword ? (
-            <div>
-              <p style={{ marginBottom: '0.75rem' }}>
+        <div className="view-b1d83fd0">
+          {user.mustChangePassword ? <div>
+              <p className="view-413d04d4">
                 User <strong>@{user.username}</strong> ({user.email}) is currently <strong>flagged to change their password</strong> upon authentication.
               </p>
               <p>
                 Would you like to <strong>clear this requirement</strong>? The user will be able to log in normally with their current credentials without being redirected to the password change flow.
               </p>
-            </div>
-          ) : (
-            <div>
-              <p style={{ marginBottom: '0.75rem' }}>
+            </div> : <div>
+              <p className="view-413d04d4">
                 Flagging <strong>@{user.username}</strong> ({user.email}) will <strong>force them to configure a new password</strong> immediately upon their next login.
               </p>
-              <p style={{ marginBottom: '0.75rem' }}>
+              <p className="view-413d04d4">
                 Their current password remains valid for initial sign-in, but access to all protected application features (fleet reservations, workspace consoles, user profiles) will remain strictly blocked until the new password is saved.
               </p>
-            </div>
-          )}
+            </div>}
         </div>
 
         <div className="modal-actions-row">
           <Button variant="outline" onClick={handleCloseForceModal} disabled={isSubmittingForce}>
             Cancel
           </Button>
-          <Button
-            variant={user.mustChangePassword ? "outline" : "primary"}
-            onClick={() => handleExecuteForceChange(!user.mustChangePassword)}
-            disabled={isSubmittingForce}
-            isLoading={isSubmittingForce}
-          >
+          <Button variant={user.mustChangePassword ? "outline" : "primary"} onClick={() => handleExecuteForceChange(!user.mustChangePassword)} disabled={isSubmittingForce} isLoading={isSubmittingForce}>
             {user.mustChangePassword ? "Confirm Clear Requirement" : "Enforce Password Change"}
           </Button>
         </div>
       </Modal>
-    </div>
-  );
+    </div>;
 };
-
 export default AdminUserDetailsPage;

@@ -79,3 +79,24 @@ test('modal safely closes when the opener has been removed', async () => {
   await act(async () => root.unmount());
   assert.equal(document.querySelector('[role="dialog"]'), null);
 });
+
+test('modal keeps keyboard focus inside its dialog and skips disabled actions', async () => {
+  const root = createRoot(document.getElementById('root'));
+  try {
+    await act(async () => root.render(React.createElement(Modal, { isOpen: true, onClose() {}, title: 'Keyboard test' },
+      React.createElement('button', { id: 'enabled' }, 'Save'),
+      React.createElement('button', { disabled: true }, 'Unavailable'))));
+    await flushFocus();
+    const first = document.querySelector('[aria-label="Close dialog"]');
+    const last = document.getElementById('enabled');
+    last.focus();
+    const forward = new window.KeyboardEvent('keydown', { key: 'Tab', cancelable: true });
+    window.dispatchEvent(forward);
+    assert.equal(forward.defaultPrevented, true);
+    assert.equal(document.activeElement, first);
+    window.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, cancelable: true }));
+    assert.equal(document.activeElement, last);
+  } finally {
+    await act(async () => root.unmount());
+  }
+});

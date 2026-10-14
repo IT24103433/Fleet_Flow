@@ -4,8 +4,11 @@ using Microsoft.AspNetCore.Identity;
 using IdentityService.Api.Entities;
 using IdentityService.Api.Middleware;
 using IdentityService.Api.Services;
+using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddScoped<FleetFlow.ServiceDefaults.IAccountAccessReader, IdentityService.Api.Services.AccountAccessReader>();
 
 // Add services to the container.
 builder.Services.AddDbContext<IdentityDbContext>(options =>
@@ -25,6 +28,14 @@ builder.Services.AddHostedService<IdentityService.Api.Messaging.UserEventConsume
 // Configure JWT Authentication
 var jwtSection = builder.Configuration.GetSection("Jwt");
 var jwtKey = IdentityService.Api.Security.JwtSigningKey.Resolve(builder.Configuration, builder.Environment);
+FleetFlow.ServiceDefaults.ServiceAuthentication.AddInternalServiceAuthentication(builder.Services, builder.Configuration, jwtKey);
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.AddPolicy("service-token", context => RateLimitPartition.GetFixedWindowLimiter(
+        context.Connection.RemoteIpAddress?.ToString() ?? "unknown", _ => new FixedWindowRateLimiterOptions
+        { PermitLimit = 60, Window = TimeSpan.FromMinutes(1), QueueLimit = 0, AutoReplenishment = true }));
+});
 
 builder.Services.AddAuthentication(options =>
 {
@@ -42,7 +53,9 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = jwtSection["Issuer"],
         ValidAudience = jwtSection["Audience"],
         IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(jwtKey)),
-        ClockSkew = TimeSpan.Zero
+        ClockSkew = TimeSpan.Zero,
+        RequireExpirationTime = true, RequireSignedTokens = true,
+        ValidAlgorithms = [Microsoft.IdentityModel.Tokens.SecurityAlgorithms.HmacSha256]
     };
 });
 
@@ -66,9 +79,9 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+app.UseMiddleware<FleetFlow.ServiceDefaults.ApiErrorsMiddleware>();
 
 var isDbReady = false;
-string? dbInitError = null;
 
 // Non-blocking background database initialization and seeding
 _ = Task.Run(async () =>
@@ -79,6 +92,7 @@ _ = Task.Run(async () =>
         {
             var dbContext = scope.ServiceProvider.GetRequiredService<IdentityDbContext>();
             await dbContext.Database.EnsureCreatedAsync();
+            await dbContext.Database.ExecuteSqlRawAsync("ALTER TABLE \"Users\" ADD COLUMN IF NOT EXISTS \"AccessVersion\" bigint NOT NULL DEFAULT 0");
 
             // Idempotent Role Seeding
             var defaultRoles = new[] { "CUSTOMER", "FLEET_MANAGER", "MAINTENANCE_STAFF", "ADMIN" };
@@ -114,75 +128,25 @@ _ = Task.Run(async () =>
                     ALTER TABLE ""Users"" ADD COLUMN IF NOT EXISTS ""MustChangePassword"" boolean NOT NULL DEFAULT FALSE;
                 ");
 
-                // Idempotent QA User Seeding for Development & Cloud
-                var passwordHasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher<User>>();
-                var seedPassword = builder.Configuration["QA_SEED_PASSWORD"] ?? "Password@123";
-
-                var qaAccounts = new (string Username, string Email, string Role)[]
+                // Seed new local demo accounts only; never overwrite existing credentials or roles.
+                if (builder.Environment.IsDevelopment() || builder.Configuration.GetValue<bool>("QA_SEED_ENABLED"))
                 {
-                    ("admin", "admin@fleetflow.io", "ADMIN"),
-                    ("manager", "manager@fleetflow.io", "FLEET_MANAGER"),
-                    ("worker", "worker@fleetflow.io", "MAINTENANCE_STAFF"),
-                    ("customer", "customer@fleetflow.io", "CUSTOMER")
-                };
-
-                bool usersAdded = false;
-                foreach (var (username, email, roleName) in qaAccounts)
-                {
-                    var existingUser = await dbContext.Users
-                        .Include(u => u.Roles)
-                        .FirstOrDefaultAsync(u => u.Username.ToLower() == username.ToLower() || u.Email.ToLower() == email.ToLower());
-
-                    var role = await dbContext.Roles.FirstOrDefaultAsync(r => r.Name.ToUpper() == roleName.ToUpper());
-                    if (role == null) continue;
-
-                    if (existingUser == null)
-                    {
-                        var isCustomer = roleName == "CUSTOMER";
-                        var newUser = new User
-                        {
-                            Id = Guid.NewGuid(),
-                            FullName = isCustomer ? "Customer User" : $"{roleName.Replace("_", " ")} User",
-                            Username = username,
-                            Email = email,
-                            PhoneNumber = isCustomer ? "+1-555-0100" : "+1-555-0199",
-                            Address = isCustomer ? "100 FleetFlow Operations Center" : "FleetFlow HQ",
-                            DrivingLicenseNumber = isCustomer ? "DL-QA-10001" : "DL-STAFF-001",
-                            CreatedAt = DateTime.UtcNow
-                        };
-                        newUser.PasswordHash = passwordHasher.HashPassword(newUser, seedPassword);
-                        newUser.Roles.Add(role);
-                        dbContext.Users.Add(newUser);
-                        usersAdded = true;
-                    }
-                    else
-                    {
-                        existingUser.PasswordHash = passwordHasher.HashPassword(existingUser, seedPassword);
-                        if (!existingUser.Roles.Any(r => r.Name.ToUpper() == roleName.ToUpper()))
-                        {
-                            existingUser.Roles.Add(role);
-                        }
-                        usersAdded = true;
-                    }
-                }
-
-                if (usersAdded)
-                {
-                    await dbContext.SaveChangesAsync();
+                    var seedPassword = builder.Configuration["QA_SEED_PASSWORD"];
+                    if (string.IsNullOrWhiteSpace(seedPassword) && !builder.Environment.IsDevelopment())
+                        throw new InvalidOperationException("Explicit QA seeding requires a configured password.");
+                    await QaAccountSeeder.SeedAsync(dbContext, scope.ServiceProvider.GetRequiredService<IPasswordHasher<User>>(), seedPassword ?? "Password@123");
                 }
                 isDbReady = true;
                 Console.WriteLine("[Database] IdentityService database initialized and ready.");
             }
             catch (Exception ex)
             {
-                dbInitError = ex.Message;
                 Console.WriteLine($"[Startup Warning] Column check/seeding: {ex.Message}");
             }
         }
     }
     catch (Exception ex)
     {
-        dbInitError = ex.Message;
         Console.WriteLine($"[Startup Warning] Database initialization deferred: {ex.Message}");
     }
 });
@@ -215,10 +179,14 @@ app.UseStaticFiles(new StaticFileOptions
     RequestPath = "/uploads"
 });
 
+app.UseRouting();
 app.UseCors();
+app.UseRateLimiter();
 
 
+app.UseMiddleware<IdentityService.Api.Middleware.AccountChangeConcurrencyMiddleware>();
 app.UseAuthentication();
+FleetFlow.ServiceDefaults.AccountAccessRegistration.UseAccountAccess(app);
 app.UseAuthorization();
 
 // Intercept and block access to protected application resources when user is flagged to change password
@@ -227,21 +195,29 @@ app.UseMiddleware<ForcedPasswordChangeMiddleware>();
 app.MapControllers();
 
 app.MapGet("/", () => Results.Redirect("/swagger"));
+app.MapGet("/health/live", () => Results.Ok(new { status = "Alive" })).AllowAnonymous();
+app.MapGet("/health/ready", async (IdentityDbContext dbContext) =>
+{
+    try
+    {
+        var ready = isDbReady && await dbContext.Database.CanConnectAsync();
+        return Results.Json(new { status = ready ? "Ready" : "NotReady", ready }, statusCode: ready ? 200 : 503);
+    }
+    catch (Exception)
+    {
+        return Results.Json(new { status = "NotReady", ready = false }, statusCode: 503);
+    }
+}).AllowAnonymous();
 
 app.MapGet("/health", async (IdentityDbContext dbContext) =>
 {
     try
     {
-        var canConnect = await dbContext.Database.CanConnectAsync();
-        return canConnect 
-            ? Results.Ok(new { status = "Healthy", database = "Connected", ready = isDbReady, error = dbInitError })
-            : Results.Problem("Database connection failed");
+        var ready = isDbReady && await dbContext.Database.CanConnectAsync();
+        return Results.Json(new { status = ready ? "Healthy" : "NotReady", ready }, statusCode: ready ? 200 : 503);
     }
-    catch (Exception ex)
-    {
-        return Results.Problem($"Database connection failed: {ex.Message}");
-    }
-});
+    catch (Exception) { return Results.Json(new { status = "NotReady", ready = false }, statusCode: 503); }
+}).AllowAnonymous();
 
 app.Run();
 
@@ -275,3 +251,5 @@ static string GetDatabaseConnectionString(IConfiguration configuration)
     var sslMode = requiresSsl ? ";Ssl Mode=Require;Trust Server Certificate=true" : "";
     return $"Host={host};Port={port};Database={dbName};Username={user};Password={password}{sslMode};Timeout=10;Command Timeout=30;";
 }
+
+namespace IdentityService.Api { public sealed class IdentityApplication { } }

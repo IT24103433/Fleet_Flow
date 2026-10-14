@@ -148,7 +148,7 @@ public class MaintenanceControllerTests : IClassFixture<CustomWebApplicationFact
     {
         var claims = new[]
         {
-            new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
+            new Claim("access_version", "0"), new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
             new Claim(ClaimTypes.Name, $"maintenance-{role.ToLowerInvariant()}"),
             new Claim(ClaimTypes.Role, role)
         };

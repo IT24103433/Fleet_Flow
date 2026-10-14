@@ -15,5 +15,8 @@ public class BookingResponse
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
 
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)] public Guid? RentalId {get;set;}
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)] public FleetFlow.Contracts.RentalLifecycleState? RentalState {get;set;}
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)] public decimal? FinalRentalAmount {get;set;}
     public VehicleResponse? Vehicle { get; set; }
 }

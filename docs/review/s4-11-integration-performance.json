@@ -1,0 +1,173 @@
+{
+  "environment": {
+    "project": "fleetflow-s411-15e1aa7aae57",
+    "baseCommit": "9a12658611cff0346cd98674224c8194b2387026",
+    "schemaVersion": 4,
+    "freshDisposableDatabases": true,
+    "verifiedRestores": true,
+    "image": "fleetflow-s4-review:9a12658",
+    "host": {
+      "cpus": "20",
+      "memoryBytes": "16468807680",
+      "os": "linux"
+    },
+    "importedBookings": 0,
+    "importedNotifications": 0,
+    "imageManifestDigest": "sha256:4106911c9c9ba7cfc4a0cbb74cfde7b3db8aad098ba3a5a578580d1509de19e1",
+    "clientNodeVersion": "24.21.0"
+  },
+  "checks": [
+    {
+      "name": "Four independently running APIs expose readiness and OpenAPI",
+      "passed": true
+    },
+    {
+      "name": "Booking is durable, LKR estimate is correct, duplicates and overlaps are guarded",
+      "passed": true
+    },
+    {
+      "name": "Pickup roles and booked-time rules are enforced",
+      "passed": true
+    },
+    {
+      "name": "Active rental prevents cancellation and return preserves estimate and timeline",
+      "passed": true
+    },
+    {
+      "name": "Customer ownership, queue access and report permissions remain restricted",
+      "passed": true
+    },
+    {
+      "name": "Planned maintenance, staff assignment and immutable activity are integrated",
+      "passed": true
+    },
+    {
+      "name": "Notification outage preserves successful bookings and recovers durable delivery",
+      "passed": true
+    },
+    {
+      "name": "Duplicate notification events are deduplicated and read state is maintained",
+      "passed": true
+    },
+    {
+      "name": "Password changes revoke every service and forced renewal returns a usable fresh session",
+      "passed": true
+    },
+    {
+      "name": "Identity outage fails closed; restart preserves changed QA credentials",
+      "passed": true
+    }
+  ],
+  "performance": [
+    {
+      "name": "public fleet reads",
+      "requests": 100,
+      "concurrency": 5,
+      "errors": 0,
+      "p50Ms": 3.47,
+      "p95Ms": 8.92,
+      "maxMs": 53.88,
+      "elapsedMs": 120,
+      "requestsPerSecond": 833.21
+    },
+    {
+      "name": "protected Rental booking reads (Identity + Fleet calls)",
+      "requests": 50,
+      "concurrency": 5,
+      "errors": 0,
+      "p50Ms": 8.4,
+      "p95Ms": 23.16,
+      "maxMs": 26.79,
+      "elapsedMs": 108,
+      "requestsPerSecond": 464.1
+    },
+    {
+      "name": "protected Fleet report composition (Identity + Rental calls)",
+      "requests": 30,
+      "concurrency": 3,
+      "errors": 0,
+      "p50Ms": 12.67,
+      "p95Ms": 14.51,
+      "maxMs": 14.73,
+      "elapsedMs": 126,
+      "requestsPerSecond": 237.2
+    },
+    {
+      "name": "durable bookings, distinct non-overlapping windows",
+      "requests": 10,
+      "concurrency": 2,
+      "errors": 0,
+      "p50Ms": 18.21,
+      "p95Ms": 43.19,
+      "maxMs": 43.19,
+      "elapsedMs": 119,
+      "requestsPerSecond": 83.87
+    }
+  ],
+  "performanceDatasetBefore": {
+    "vehicles": 1,
+    "customerBookings": 4,
+    "maintenanceRecords": 1
+  },
+  "success": true,
+  "completedAt": "2026-10-14T06:45:51.945Z",
+  "dataset": {
+    "vehicles": 1,
+    "customerBookings": 14,
+    "maintenanceRecords": 1,
+    "images": 0,
+    "photoFallback": "Existing frontend regression coverage; no photograph invented."
+  },
+  "cleanup": {
+    "credentialsRemoved": true,
+    "ownedStackRemoved": true,
+    "successful": true,
+    "workingStackTouched": false
+  },
+  "frontend": {
+    "definition": "Entry plus recursively static imports, uncompressed; lazy routes reported separately.",
+    "entryBytes": 309255,
+    "budgetBytes": 350000,
+    "lazy": {
+      "LandingPage": {
+        "ownBytes": 60218,
+        "additionalStaticClosureBytes": 141890
+      },
+      "RentalQueuePage": {
+        "ownBytes": 4583,
+        "additionalStaticClosureBytes": 8791
+      },
+      "RentalRecordPage": {
+        "ownBytes": 20055,
+        "additionalStaticClosureBytes": 95522
+      },
+      "MaintenanceDashboardPage": {
+        "ownBytes": 41275,
+        "additionalStaticClosureBytes": 52168
+      },
+      "NotificationDeliveryPage": {
+        "ownBytes": 10708,
+        "additionalStaticClosureBytes": 15833
+      }
+    },
+    "passes": true,
+    "testsPassed": 162,
+    "lint": "passed",
+    "productionBuild": "passed"
+  },
+  "backendRegression": {
+    "pr": 41,
+    "run": 38520375874,
+    "passed": 631,
+    "failed": 0,
+    "skipped": 0,
+    "s4_11FinalCi": "required before merge"
+  },
+  "limitations": [
+    "Fresh small synthetic dataset; historical migration preservation is covered by earlier rehearsals and regression tests.",
+    "Warm subsecond bursts, not sustained throughput/capacity or production SLOs.",
+    "Kafka disabled for this HTTP rehearsal; real-broker outage/restart/deduplication tests run in Linux CI.",
+    "No new desktop screen or motion changed; prior 1440x900 story evidence retained.",
+    "No Azure deployment; S4-12 open."
+  ]
+}

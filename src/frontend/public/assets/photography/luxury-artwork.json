@@ -1,0 +1,54 @@
+{
+  "kind": "Original AI-generated campaign artwork, not a vehicle listing photograph",
+  "tool": "Built-in image_gen",
+  "originalDimensions": {
+    "width": 1672,
+    "height": 940
+  },
+  "originalSha256": "48b639f998f15a9ff9402bea917a08758c3fe71afb73d49455428485326b4ed5",
+  "prompt": "Use case: ads-marketing. Create a photorealistic cinematic luxury automotive campaign image for FleetFlow website hero, wide landscape 16:9 composition. A sculptural graphite-black ultra-luxury grand touring coupe, long low hood, elegant muscular proportions, exquisite polished alloy wheels, restrained LED headlights, three-quarter front view from a low camera. Whole car visible, spanning central/right composition with generous dark negative space left and above for website text. Realistic studio photography quality, exceptional reflections, dark charcoal seamless architectural studio, subtle violet rim lighting and a broad soft ivory overhead light. Foreground dark polished concrete, quiet premium editorial mood like a high-end luxury car campaign. No people, no logos, no visible brand badges, no text, no watermarks, no neon sci-fi effects. This is original marketing artwork, not a rental listing photo.",
+  "files": [
+    {
+      "path": "luxury-coupe-hero-960.webp",
+      "bytes": 42788,
+      "width": 960,
+      "height": 540,
+      "sha256": "f734d88e1a2e6e476373f852ff2d71da7df8c0b7ac7a30f9db830c1491d45179"
+    },
+    {
+      "path": "luxury-coupe-hero-960.avif",
+      "bytes": 21450,
+      "width": 960,
+      "height": 540,
+      "sha256": "ff14dbb2e75ca12f9d9404c55ba4f707def69b70346cc9d0a3b491d765dd1acc"
+    },
+    {
+      "path": "luxury-coupe-hero-1440.webp",
+      "bytes": 79614,
+      "width": 1440,
+      "height": 810,
+      "sha256": "3474b3afce85d9d261e959d167f66f357630c472c56ed8ca4e02c4a9051664b7"
+    },
+    {
+      "path": "luxury-coupe-hero-1440.avif",
+      "bytes": 39981,
+      "width": 1440,
+      "height": 810,
+      "sha256": "4811f31171f5df89c027b91c6874c20941d69de2750f32da7279202b62ee7973"
+    },
+    {
+      "path": "luxury-coupe-hero-1920.webp",
+      "bytes": 110140,
+      "width": 1920,
+      "height": 1080,
+      "sha256": "d01a321939dbf17325ae93312d6d18c6f7756736bc5091b7ce85ac6d87a95ad0"
+    },
+    {
+      "path": "luxury-coupe-hero-1920.avif",
+      "bytes": 55484,
+      "width": 1920,
+      "height": 1080,
+      "sha256": "90be45999a5b8035120433aa3919cd142e1c73f0b743d9be4c2ba0e557c5dd40"
+    }
+  ]
+}

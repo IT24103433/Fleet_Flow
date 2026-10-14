@@ -1,0 +1,106 @@
+{
+  "baselineCommit": "dc7e6ba9d3f3d0e7b7a2cc2bb600381391aeb233",
+  "branch": "feat/s4-service-foundation",
+  "backend": {
+    "existingTestsPreserved": 466,
+    "newFoundationTests": 36,
+    "passed": 502,
+    "failed": 0,
+    "skipped": 0,
+    "reports": [
+      {
+        "assembly": [
+          "FleetFlow.ServiceFoundation.Tests.dll"
+        ],
+        "passed": 36,
+        "failed": 0,
+        "notExecuted": 0,
+        "reportSha256": "5a094afeba0db33d85bb106b5dd21f0cfdf3ba73dcd2abbed76c788e7ae76277"
+      },
+      {
+        "assembly": [
+          "IdentityService.Tests.dll"
+        ],
+        "passed": 55,
+        "failed": 0,
+        "notExecuted": 0,
+        "reportSha256": "30ca59d3f8e3e9e56babe4ce5d67acc3e902cebb0c35f93faccc43e6a969eb8b"
+      },
+      {
+        "assembly": [
+          "FleetFlow.IdentityService.Tests.dll"
+        ],
+        "passed": 101,
+        "failed": 0,
+        "notExecuted": 0,
+        "reportSha256": "adb8c067328ba26f4532c4ee98b76851846ed28c7b3b72ca5e966ca018a15ae8"
+      },
+      {
+        "assembly": [
+          "FleetService.Tests.dll"
+        ],
+        "passed": 241,
+        "failed": 0,
+        "notExecuted": 0,
+        "reportSha256": "b3c297f306886975f501b225e1b100e8769c24650cffb1beb8656655a0c692dc"
+      },
+      {
+        "assembly": [
+          "FleetFlow.VehicleService.Tests.dll"
+        ],
+        "passed": 69,
+        "failed": 0,
+        "notExecuted": 0,
+        "reportSha256": "c47b9f4edc7903ced51201f1e8a73ee3e4172cd9a5c5f9ad78b2317302abcaba"
+      }
+    ]
+  },
+  "artifacts": [
+    {
+      "service": "IdentityService",
+      "dllSha256": "5b053df2cab3a509b88836ae24695e56335d35571ae673950fe28a0cb2fb7df1"
+    },
+    {
+      "service": "FleetService",
+      "dllSha256": "af7eedada4eff3a3ff6b16d73dfc4844845d6bea0b4724c427edf6f5d5b04bdb"
+    },
+    {
+      "service": "RentalService",
+      "dllSha256": "170588067567c8560b17d7e6309b9f6658c367e0e2027f9bdf80ce5ba01c67ef"
+    },
+    {
+      "service": "NotificationService",
+      "dllSha256": "2ae7e0697b84cb6b841f9fe827a6e2cae17bbc1da6110a55df852ae04327fd87"
+    }
+  ],
+  "publishedHosts": [
+    {
+      "openApi": 200,
+      "live": 200,
+      "unavailableDatabaseReady": 503,
+      "anonymousMetadata": 401,
+      "dllSha256": "170588067567C8560B17D7E6309B9F6658C367E0E2027F9BDF80CE5BA01C67EF",
+      "port": 15003,
+      "service": "RentalService"
+    },
+    {
+      "openApi": 200,
+      "live": 200,
+      "unavailableDatabaseReady": 503,
+      "anonymousMetadata": 401,
+      "dllSha256": "2AE7E0697B84CB6B841F9FE827A6E2CAE17BBC1DA6110A55DF852AE04327FD87",
+      "port": 15004,
+      "service": "NotificationService"
+    }
+  ],
+  "composeConfig": "passed",
+  "dockerBuildDefinitionCheck": "passed, no warnings; no image build or deployment performed",
+  "powershellSyntax": "passed",
+  "frontend": "No frontend source changes; prior accepted 126 tests retained; CI reruns frontend checks",
+  "workingDatabases": "No working database changes; disposable PostgreSQL test databases removed",
+  "limitations": [
+    "New hosts are foundation only; business extraction remains pending.",
+    "Three nullable warnings in unchanged legacy Identity test files.",
+    "No production deployment or migration cutover performed."
+  ]
+}

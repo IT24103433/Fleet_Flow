@@ -17,7 +17,20 @@ builder.Services.AddDbContext<FleetDbContext>(options =>
 builder.Services.AddScoped<IVehicleService, VehicleService>();
 builder.Services.AddScoped<IVehicleImageService, VehicleImageService>();
 builder.Services.AddScoped<IMaintenanceService, MaintenanceService>();
+builder.Services.AddHttpClient<IMaintenanceStaffDirectory,MaintenanceStaffDirectory>((sp,http)=>{
+    http.BaseAddress=FleetFlow.ServiceDefaults.ServiceEndpoints.Identity(builder.Configuration,builder.Environment);http.Timeout=TimeSpan.FromSeconds(5);
+}).ConfigurePrimaryHttpMessageHandler(()=>new HttpClientHandler{AllowAutoRedirect=false});
 builder.Services.AddScoped<IBookingService, BookingService>();
+builder.Services.AddSingleton(RentalRouting.Read(builder.Configuration,builder.Environment));
+builder.Services.AddScoped<RentalForwarder>();builder.Services.AddScoped<ReservationService>();
+builder.Services.AddHttpClient("RentalService",(sp,c)=>{c.BaseAddress=sp.GetRequiredService<RentalRouting>().BaseUrl;c.Timeout=TimeSpan.FromSeconds(5);})
+.ConfigurePrimaryHttpMessageHandler(()=>new HttpClientHandler{AllowAutoRedirect=false});
+builder.Services.AddSingleton(NotificationRouting.Read(builder.Configuration,builder.Environment));
+builder.Services.AddScoped<NotificationForwarder>();
+builder.Services.AddHttpClient("NotificationService",(sp,client)=>
+{ client.BaseAddress=sp.GetRequiredService<NotificationRouting>().BaseUrl;client.Timeout=TimeSpan.FromSeconds(5); })
+.ConfigurePrimaryHttpMessageHandler(()=>new HttpClientHandler{AllowAutoRedirect=false});
+builder.Services.AddSingleton<IReliableNotificationPublisher,ReliableNotificationPublisher>();
 builder.Services.AddScoped<NotificationService>();
 builder.Services.AddScoped<NotificationEventProcessor>();
 builder.Services.AddScoped<IReportingService, ReportingService>();
@@ -37,6 +50,9 @@ builder.Services.AddHostedService<NotificationEventConsumerService>();
 // Configure JWT Authentication
 var jwtSection = builder.Configuration.GetSection("Jwt");
 var jwtKey = FleetService.Api.Security.JwtSigningKey.Resolve(builder.Configuration, builder.Environment);
+FleetFlow.ServiceDefaults.ServiceAuthentication.AddInternalServiceAuthentication(builder.Services, builder.Configuration, jwtKey);
+FleetFlow.ServiceDefaults.ServiceAuthentication.AddServiceTokenClient(builder.Services, builder.Configuration, builder.Environment, "fleet-service");
+FleetFlow.ServiceDefaults.AccountAccessRegistration.AddRemoteAccountAccess(builder.Services,builder.Configuration,builder.Environment);
 
 builder.Services.AddAuthentication(options =>
 {
@@ -54,7 +70,9 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = jwtSection["Issuer"],
         ValidAudience = jwtSection["Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
-        ClockSkew = TimeSpan.Zero
+        ClockSkew = TimeSpan.Zero,
+        RequireExpirationTime = true, RequireSignedTokens = true,
+        ValidAlgorithms = [Microsoft.IdentityModel.Tokens.SecurityAlgorithms.HmacSha256]
     };
 });
 
@@ -84,6 +102,7 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+app.UseMiddleware<FleetFlow.ServiceDefaults.ApiErrorsMiddleware>();
 
 var readiness = app.Services.GetRequiredService<FleetReadiness>();
 
@@ -181,6 +200,9 @@ _ = Task.Run(async () =>
                     CREATE INDEX IF NOT EXISTS ""IX_MaintenanceRecords_ScheduledDateTime"" ON ""MaintenanceRecords"" (""ScheduledDateTime"");
                 ");
                 await NotificationSchema.EnsureAsync(dbContext);
+                await NotificationOutboxSchema.EnsureAsync(dbContext);
+                await ReservationSchema.EnsureAsync(dbContext);
+                await MaintenancePlanningSchema.EnsureAsync(dbContext);
                 readiness.MarkInitialized();
                 Console.WriteLine("[Database] FleetService database initialized and ready.");
             }
@@ -227,7 +249,9 @@ app.UseRouting();
 app.UseCors();
 
 
+app.UseMiddleware<FleetService.Api.Middleware.RentalAvailabilityMiddleware>();
 app.UseAuthentication();
+FleetFlow.ServiceDefaults.AccountAccessRegistration.UseAccountAccess(app);
 app.UseMiddleware<FleetService.Api.Middleware.ForcedPasswordChangeMiddleware>();
 app.UseAuthorization();
 
@@ -238,6 +262,10 @@ app.MapGet("/", () => Results.Redirect("/swagger"));
 app.MapGet("/health", (FleetDbContext dbContext, FleetReadiness state, ILogger<FleetReadiness> logger, CancellationToken ct) =>
     state.CheckAsync(dbContext, logger, ct)).AllowAnonymous();
 app.MapGet("/health/live", () => Results.Ok(new { status = "Alive" })).AllowAnonymous();
+app.MapGet("/health/ready", (FleetDbContext dbContext, FleetReadiness state, ILogger<FleetReadiness> logger, CancellationToken ct) =>
+    state.CheckAsync(dbContext, logger, ct)).AllowAnonymous();
+app.MapGet("/internal/service", () => new FleetFlow.Contracts.ServiceInformation("FleetService", "fleetflow_fleet", 0, true))
+    .RequireAuthorization(FleetFlow.Contracts.ServiceScopes.FleetRead);
 
 app.Run();
 
