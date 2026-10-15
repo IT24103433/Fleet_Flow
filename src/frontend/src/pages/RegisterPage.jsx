@@ -1,3 +1,4 @@
+import useOnboardingConfig from '../components/onboarding/useOnboardingConfig';
 import { CheckCircleIcon } from "@phosphor-icons/react/dist/csr/CheckCircle";
 import AuthLayout from '../components/layout/AuthLayout';
 import React, { useState } from 'react';
@@ -6,7 +7,7 @@ import Alert from '../components/Alert';
 import Button from '../components/common/Button';
 import { validateRegister } from '../validation/registerValidation';
 import { registerUser } from '../services/authService';
-const RegisterPage = ({
+const LegacyRegisterPage = ({
   onNavigateToLogin
 }) => {
   const [formData, setFormData] = useState({
@@ -188,4 +189,10 @@ const RegisterPage = ({
       </div>
     </AuthLayout>;
 };
-export default RegisterPage;
+const VerifiedRegisterPage = React.lazy(() => import('./onboarding/VerifiedRegisterPage'));
+export default function RegisterPage(props) {
+  const config = useOnboardingConfig();
+  if (config.loading) return <AuthLayout><div className="auth-card" role="status">Loading signup…</div></AuthLayout>;
+  if (config.error) return <AuthLayout><div className="auth-card"><p role="alert">{config.error}</p></div></AuthLayout>;
+  return config.enabled ? <React.Suspense fallback={<p role="status">Loading signup…</p>}><VerifiedRegisterPage {...props} config={config} /></React.Suspense> : <LegacyRegisterPage {...props} />;
+}

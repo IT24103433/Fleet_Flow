@@ -7,6 +7,7 @@ import { checkVehicleAvailability, createBooking } from '../services/bookingServ
 import { formatPriceNumber } from '../utils/currencyUtils';
 import { normalizeValidationErrors } from '../utils/validationErrorUtils';
 import { bookingEstimate } from '../utils/vehiclePresentation';
+import { onboardingRequest } from '../services/onboardingService';
 const getTomorrowDateStr = (daysAhead = 1, hour = 9) => {
   const date = new Date();
   date.setDate(date.getDate() + daysAhead);
@@ -22,8 +23,10 @@ const BookingModal = ({
   onSuccess,
   onNavigate
 }) => {
-  const [startDateTime, setStartDateTime] = useState(() => getTomorrowDateStr(1, 9));
-  const [endDateTime, setEndDateTime] = useState(() => getTomorrowDateStr(4, 9));
+  const savedIntent = (() => { try { const draft = JSON.parse(sessionStorage.getItem('fleetflow:booking-intent') || 'null'); return draft?.vehicleId === vehicle?.id ? draft : null; } catch { return null; } })();
+  const [startDateTime, setStartDateTime] = useState(() => savedIntent?.startDateTime || getTomorrowDateStr(1, 9));
+  const [endDateTime, setEndDateTime] = useState(() => savedIntent?.endDateTime || getTomorrowDateStr(4, 9));
+  const [verificationRequired, setVerificationRequired] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [fieldErrors, setFieldErrors] = useState({});
@@ -80,6 +83,17 @@ const BookingModal = ({
     submission.current = true;
     setIsSubmitting(true);
     setSuccessBooking(null);
+    try {
+      const policy = await onboardingRequest('config', { anonymous: true });
+      if (policy?.enabled) {
+        const eligibility = await onboardingRequest(`eligibility?returnAt=${encodeURIComponent(endDateObj.toISOString())}`);
+        if (!eligibility.eligible) {
+          sessionStorage.setItem('fleetflow:booking-intent', JSON.stringify({ vehicleId: vehicle.id, startDateTime, endDateTime }));
+          setVerificationRequired(true); setErrorMessage(eligibility.reason || 'Complete driver verification before booking.');
+          submission.current = false; setIsSubmitting(false); return;
+        }
+      }
+    } catch (error) { submission.current = false; setIsSubmitting(false); setErrorMessage(error.message); return; }
     const availabilityResult = await checkVehicleAvailability(vehicle.id, startDateObj.toISOString(), endDateObj.toISOString());
     if (!availabilityResult.success || !availabilityResult.isAvailable) {
       submission.current = false;
@@ -96,6 +110,7 @@ const BookingModal = ({
     setIsSubmitting(false);
     if (result.success && result.data) {
       setSuccessBooking(result.data);
+      sessionStorage.removeItem('fleetflow:booking-intent');
       if (onSuccess) {
         onSuccess(result.data);
       }
@@ -117,6 +132,7 @@ const BookingModal = ({
   const confirmedVehicle = successBooking?.vehicle || vehicle;
   const confirmedVehicleName = confirmedVehicle ? `${confirmedVehicle.year} ${confirmedVehicle.make} ${confirmedVehicle.model}` : vehicleName;
   return <Modal isOpen={isOpen} onClose={handleModalClose} title={successBooking ? 'Booking created' : 'Choose your rental dates'} subtitle={successBooking ? `Reservation #${successBooking.id.substring(0, 8)}` : `Reserve ${vehicleName}`} maxWidth="560px">
+      {verificationRequired && <div className="action-row"><Button onClick={() => { onClose(); if (onNavigate) onNavigate('customer-profile'); else window.location.hash = '#/customer-profile?section=driving'; }}>Complete driver verification</Button></div>}
       {errorMessage && <div className="view-4933c088">
           <Alert type="error" title="Booking Validation Failure" message={errorMessage} />
         </div>}

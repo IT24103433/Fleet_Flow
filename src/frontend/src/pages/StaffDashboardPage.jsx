@@ -10,13 +10,14 @@ export function FleetSnapshot({
   data,
   loading,
   error,
-  onRefresh
+  onRefresh,
+  compact = false
 }) {
   const metrics = [['Total vehicles', 'totalVehicles'], ['Available', 'available'], ['In use', 'inUse'], ['In maintenance', 'undergoingMaintenance']];
   return <section className="workspace-snapshot" aria-labelledby="snapshot-title">
     <div className="dashboard-section-header"><h3 id="snapshot-title">Fleet at a glance</h3><Button variant="outline" size="sm" onClick={onRefresh} disabled={loading}>Refresh</Button></div>
     {loading ? <p role="status">Loading fleet overview…</p> : error ? <Alert type="error" message={error} /> : <>
-      <div className="metrics-grid">{metrics.map(([label, key]) => <div className="stat-card" key={key}><span className="stat-label">{label}</span><strong className="workspace-metric">{typeof data?.statusCounts?.[key] === 'number' ? data.statusCounts[key].toLocaleString() : 'Unavailable'}</strong></div>)}</div>
+      {!compact && <div className="metrics-grid">{metrics.map(([label, key]) => <div className="stat-card" key={key}><span className="stat-label">{label}</span><strong className="workspace-metric">{typeof data?.statusCounts?.[key] === 'number' ? data.statusCounts[key].toLocaleString() : 'Unavailable'}</strong></div>)}</div>}
       {data?.statusCounts?.totalVehicles === 0 && <p className="workspace-empty">No vehicles have been added yet.</p>}
       <FleetDistribution counts={data?.statusCounts} />
     </>}

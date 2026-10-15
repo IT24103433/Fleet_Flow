@@ -7,11 +7,13 @@ import Modal from '../../components/common/Modal';
 import EmptyState from '../../components/common/EmptyState';
 import { BentoGrid, BentoCard } from '../../components/common/BentoGrid';
 import { deliverySources } from '../../services/notificationOutboxService';
+import useOnboardingConfig from '../../components/onboarding/useOnboardingConfig';
 import './NotificationDeliveryPage.css';
 const formatDate = value => value ? new Date(value).toLocaleString() : '—';
 const eventLabel = value => ({ RentalCompletedEvent: 'Rental completed', RentalStartedEvent: 'Rental started', BookingCreatedEvent: 'Booking created', BookingCancelledEvent: 'Booking cancelled',
   MaintenanceScheduledEvent: 'Maintenance scheduled', MaintenanceStatusChangedEvent: 'Maintenance updated' })[value] || value;
 export default function NotificationDeliveryPage() {
+  const onboardingConfig = useOnboardingConfig();
   const [rows, setRows] = useState([]);
   const [status, setStatus] = useState('');
   const [source, setSource] = useState(deliverySources[0].value);
@@ -47,8 +49,9 @@ export default function NotificationDeliveryPage() {
   const metrics = [['Awaiting delivery', rows.filter(row => ['Pending', 'Retry'].includes(row.status)).length],
     ['Needs review', rows.filter(row => row.status === 'Failed').length], ['Delivered', rows.filter(row => row.status === 'Delivered').length]];
   return <section className="delivery-workspace" aria-labelledby="delivery-title">
-    <div className="account-heading"><div><h1 id="delivery-title">Notification delivery</h1>
-      <p>Review queued events, inspect delivery failures and safely retry an eligible event.</p></div>
+    <div className="account-heading"><div><h1 id="delivery-title">Service event delivery</h1>
+      <p>Track saved booking and maintenance events between services and the in-app inbox.</p>
+      {onboardingConfig.enabled && <p className="report-help">For customer email messages, <a href="#/admin-account-security?view=emails">open email delivery</a>.</p>}</div>
       <Button variant="outline" onClick={() => refresh(true)} disabled={loading || submitting}>
         <ArrowsClockwiseIcon size={18} weight="regular" aria-hidden="true" /> Refresh</Button></div>
     <Alert type="error" message={error} /><Alert type="success" message={success} />

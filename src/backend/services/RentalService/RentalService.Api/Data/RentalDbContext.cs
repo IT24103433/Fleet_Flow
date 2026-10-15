@@ -29,6 +29,13 @@ public sealed class BookingWorkflow
  public int? FailureStatus {get;set;}
  public string? FailureMessage {get;set;}
 }
+public sealed class AccountBookingGuard
+{
+ public Guid CustomerId {get;set;}
+ public Guid OperationId {get;set;}
+ public string State {get;set;}="Frozen";
+ public DateTime CreatedAt {get;set;}=DateTime.UtcNow;
+}
 public sealed class RentalDbContext(DbContextOptions<RentalDbContext> options):DbContext(options)
 {
  public DbSet<RentalReturn> Returns=>Set<RentalReturn>();
@@ -37,8 +44,10 @@ public sealed class RentalDbContext(DbContextOptions<RentalDbContext> options):D
  public DbSet<RentalBooking> Bookings=>Set<RentalBooking>();
  public DbSet<BookingWorkflow> Workflows=>Set<BookingWorkflow>();
  public DbSet<NotificationOutbox> NotificationOutbox=>Set<NotificationOutbox>();
+ public DbSet<AccountBookingGuard> AccountGuards=>Set<AccountBookingGuard>();
  protected override void OnModelCreating(ModelBuilder model)
  {
+  model.Entity<AccountBookingGuard>(e=>{e.ToTable("AccountBookingGuards");e.HasKey(x=>x.CustomerId);});
   model.Entity<RentalReturn>(e=>{e.ToTable("RentalReturns");e.HasKey(r=>r.RentalId);e.Property(r=>r.Condition).HasMaxLength(2000);e.Property(r=>r.ExtraChargeReason).HasMaxLength(500);e.Property(r=>r.ExtraCharges).HasPrecision(18,2);e.Property(r=>r.FinalAmount).HasPrecision(18,2);e.HasOne<RentalPickup>().WithOne().HasForeignKey<RentalReturn>(r=>r.RentalId).OnDelete(DeleteBehavior.Restrict);});
   model.Entity<RentalLifecycleEvent>(e=>{e.ToTable("RentalLifecycleEvents");e.HasKey(r=>new{r.BookingId,r.Kind});e.Property(r=>r.Kind).HasMaxLength(40);e.HasOne<RentalBooking>().WithMany().HasForeignKey(r=>r.BookingId).OnDelete(DeleteBehavior.Restrict);});
   model.Entity<RentalPickup>(e=>{e.ToTable("RentalPickups");e.HasKey(p=>p.Id);e.HasIndex(p=>p.BookingId).IsUnique();e.Property(p=>p.State).HasConversion<string>();e.Property(p=>p.PickupCondition).HasMaxLength(2000);e.HasOne<RentalBooking>().WithMany().HasForeignKey(p=>p.BookingId).OnDelete(DeleteBehavior.Restrict);});

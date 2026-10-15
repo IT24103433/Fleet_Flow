@@ -15,6 +15,7 @@ import useAuraMotion from '../components/aura/useAuraMotion';
 import { useAuth } from '../context/AuthContext';
 import { getRoleDefaultView } from '../utils/roleUtils';
 import { getVehicles } from '../services/vehicleService';
+import SupportEnquiryForm from '../components/onboarding/SupportEnquiryForm';
 
 const steps = [
   { title: 'Choose your vehicle.', copy: 'Compare seating, transmission, fuel type, and daily rates.', Icon: CarProfileIcon },
@@ -54,6 +55,7 @@ export default function LandingPage({ onNavigate }) {
     </section>
     <section className="landing-section aura-benefits" aria-labelledby="benefits-title"><div><p className="eyebrow">Clarity at every step</p><h2 id="benefits-title">Less searching.<br />More certainty.</h2></div><div className="aura-benefit-rows"><article><span className="aura-feature-icon"><CarProfileIcon size={26} weight="regular" aria-hidden="true" /></span><div><h3>Compare the details</h3><p>Vehicle specifications and LKR daily rates, together in one place.</p></div></article><article><span className="aura-feature-icon"><CalendarDotsIcon size={26} weight="regular" aria-hidden="true" /></span><div><h3>Check your dates</h3><p>Review the estimated cost and availability before you submit.</p></div></article><article><span className="aura-feature-icon"><TicketIcon size={26} weight="regular" aria-hidden="true" /></span><div><h3>Manage your bookings</h3><p>Your reference, dates, and status stay together in your account.</p></div></article></div></section>
     <section className="landing-section faq-section" aria-labelledby="faq-title"><div><p className="eyebrow">Before your next drive</p><h2 id="faq-title">A few useful<br />answers.</h2></div><div className="faq-list"><details><summary>How do I book a vehicle?</summary><p>Choose a vehicle from the catalogue, select pickup and return dates, and sign in to submit your booking. We check availability for that vehicle and rental period.</p></details><details><summary>How is the rental estimate calculated?</summary><p>The estimate uses the vehicle’s daily rate and billable rental days. A partial day counts as a full day. Review the estimate before you submit.</p></details><details><summary>Can I cancel my booking?</summary><p>Pending and confirmed bookings can be cancelled from My bookings. Cancelled reservations remain in your history.</p></details></div></section>
+    <SupportEnquiryForm />
     <section className="final-cta cinematic-final"><div><h2>Ready for your<br />next journey?</h2><p>Start with the vehicle. Keep the details in view.</p></div><Button size="lg" onClick={() => onNavigate('browse')}>Explore the fleet <ArrowRightIcon size={20} weight="regular" aria-hidden="true" /></Button></section>
   </div>;
 }

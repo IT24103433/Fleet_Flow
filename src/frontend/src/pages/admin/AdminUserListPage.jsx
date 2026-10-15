@@ -8,6 +8,7 @@ import Modal from '../../components/common/Modal';
 import Alert from '../../components/Alert';
 import { useAuth } from '../../context/AuthContext';
 import { getAdminUsers, deleteAdminUser, updateUserStatus, resetUserPassword, forceUserPasswordChange } from '../../services/adminUserService';
+import useOnboardingConfig from '../../components/onboarding/useOnboardingConfig';
 const AdminUserListPage = ({
   onNavigate,
   onSelectUser
@@ -17,6 +18,7 @@ const AdminUserListPage = ({
     user: currentAuthUser
   } = useAuth();
   const [users, setUsers] = useState([]);
+  const onboardingConfig = useOnboardingConfig();
   const [isLoading, setIsLoading] = useState(true);
   const [fetchError, setFetchError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -322,9 +324,9 @@ const AdminUserListPage = ({
                             <button type="button" className="btn-table-action warning" onClick={e => handleOpenReset(u, e)} title="Reset User Password">
                               Reset Password
                             </button>
-                            <button type="button" className="btn-table-action danger" onClick={e => handleOpenDelete(u, e)} title="Permanently Delete User Account">
+                            {!onboardingConfig.enabled && <button type="button" className="btn-table-action danger" onClick={e => handleOpenDelete(u, e)} title="Permanently Delete User Account">
                               Delete
-                            </button>
+                            </button>}
                           </div>
                       </td>
                     </tr>;

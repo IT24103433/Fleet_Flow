@@ -20,15 +20,18 @@ public class AuthenticationService : IAuthenticationService
     private readonly IdentityDbContext _dbContext;
     private readonly IPasswordHasher<User> _passwordHasher;
     private readonly IConfiguration _configuration;
+    private readonly IdentityService.Api.Onboarding.IdentityVault? _onboardingVault;
 
     public AuthenticationService(
         IdentityDbContext dbContext,
         IPasswordHasher<User> passwordHasher,
-        IConfiguration configuration)
+        IConfiguration configuration,
+        IdentityService.Api.Onboarding.IdentityVault? onboardingVault = null)
     {
         _dbContext = dbContext;
         _passwordHasher = passwordHasher;
         _configuration = configuration;
+        _onboardingVault = onboardingVault;
     }
 
     public async Task<LoginResponse> LoginAsync(LoginRequest request)
@@ -55,13 +58,13 @@ public class AuthenticationService : IAuthenticationService
             throw new InvalidCredentialsException();
         }
 
-        if (!user.IsActive)
+        if (!user.IsActive || user.DeletedAt != null)
         {
             throw new AccountDisabledException("This account has been disabled by an administrator. Please contact support.");
         }
 
         // Verify password
-        var verificationResult = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
+        var verificationResult = user.HasLocalPassword ? _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password) : PasswordVerificationResult.Failed;
         if (verificationResult == PasswordVerificationResult.Failed)
         {
             throw new InvalidCredentialsException();
@@ -98,7 +101,7 @@ public class AuthenticationService : IAuthenticationService
         return CreateSession(user);
     }
 
-    private LoginResponse CreateSession(User user)
+    public LoginResponse CreateSession(User user)
     {
         // Retrieve JWT settings
         var jwtSection = _configuration.GetSection("Jwt");
@@ -173,7 +176,7 @@ public class AuthenticationService : IAuthenticationService
     public async Task<LoginResponse?> RenewSessionAsync(Guid userId)
     {
         var user = await _dbContext.Users.AsNoTracking().Include(u => u.Roles).SingleOrDefaultAsync(u => u.Id == userId);
-        return user == null || !user.IsActive || user.MustChangePassword ? null : CreateSession(user);
+        return user == null || !user.IsActive || user.DeletedAt!=null || user.MustChangePassword ? null : CreateSession(user);
     }
     public async Task ChangePasswordAsync(Guid userId, ChangePasswordRequest request)
     {
@@ -197,6 +200,8 @@ public class AuthenticationService : IAuthenticationService
         {
             throw new AccountDisabledException("This account has been disabled by an administrator. Please contact support.");
         }
+        if(user.DeletedAt!=null)throw new AccountDisabledException("This account is in the deletion recycle bin.");
+        if(!user.HasLocalPassword&&!user.MustChangePassword)throw new ArgumentException("Google-only accounts set a local password through verified email recovery.");
 
         if (request.NewPassword.Length > 128 || request.CurrentPassword?.Length > 1024)
             throw new ArgumentException("Password fields exceed the supported length.");
@@ -206,9 +211,15 @@ public class AuthenticationService : IAuthenticationService
             throw new ArgumentException("The current password is incorrect.");
         // Hash new password securely
         user.PasswordHash = _passwordHasher.HashPassword(user, request.NewPassword);
+        user.HasLocalPassword = true;
         user.MustChangePassword = false;
         user.AccessVersion = checked(user.AccessVersion + 1);
 
+        if(_onboardingVault?.Enabled==true)
+        {
+            var email=new FleetFlow.Contracts.TransactionalEmail(Guid.NewGuid(),user.Id,user.Email,"Security","Your FleetFlow password changed","Your password was changed and previous sessions were revoked. If you did not make this change, use account recovery or contact FleetFlow.");
+            _dbContext.Operations.Add(new(){Id=email.EventId,UserId=user.Id,Kind="Email",State="Queued",Ciphertext=_onboardingVault.Encrypt(email,"email"),NextAttemptAt=DateTime.UtcNow});
+        }
         await _dbContext.SaveChangesAsync();
     }
 }

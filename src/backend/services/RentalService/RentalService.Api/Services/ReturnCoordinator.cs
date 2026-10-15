@@ -71,7 +71,7 @@ public sealed class ReturnCoordinator(RentalDbContext db, IFleetGateway fleet, T
             flow.Phase = "Done"; flow.FailureStatus = null; flow.FailureMessage = null;
             db.LifecycleEvents.Add(new() { BookingId = bookingId, Kind = "Completed", OccurredAt = confirmedAt, ActorId = saved.CompletedByUserId });
             db.NotificationOutbox.Add(NotificationOutbox.From(new RentalCompletedEvent { EventId = Guid.NewGuid(), OccurredAt = confirmedAt,
-                RentalId = pickup.Id, BookingId = bookingId, VehicleId = booking.VehicleId, CustomerId = booking.CustomerId }));
+                RentalId = pickup.Id, BookingId = bookingId, VehicleId = booking.VehicleId, CustomerId = booking.CustomerId, FinalRentalAmount = saved.FinalAmount }));
             await db.SaveChangesAsync(ct); if (tx != null) await tx.CommitAsync(ct);
         }
         catch (BookingRequestException ex)

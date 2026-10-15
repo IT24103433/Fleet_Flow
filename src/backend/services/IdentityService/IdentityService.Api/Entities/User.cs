@@ -13,6 +13,11 @@ public class User
     public string? ProfileImageUrl { get; set; }
     public bool IsActive { get; set; } = true;
     public long AccessVersion { get; set; }
+    public string EmailVerificationMethod { get; set; } = "Unverified";
+    public bool NeedsInitialEmailOtp { get; set; }
+    public bool EmailSecondStepEnabled { get; set; }
+    public bool HasLocalPassword { get; set; } = true;
+    public DateTime? DeletedAt { get; set; }
     public bool MustChangePassword { get; set; } = false;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

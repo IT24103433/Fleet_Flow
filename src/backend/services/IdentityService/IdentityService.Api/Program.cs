@@ -17,6 +17,26 @@ builder.Services.AddDbContext<IdentityDbContext>(options =>
 builder.Services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<IRegistrationService, RegistrationService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<AuthenticationService>();
+builder.Services.AddSingleton<IdentityService.Api.Onboarding.IdentityVault>();
+builder.Services.AddScoped<IdentityService.Api.Onboarding.OnboardingService>();
+builder.Services.AddScoped<IdentityService.Api.Onboarding.DriverVerificationService>();
+builder.Services.AddScoped<IdentityService.Api.Onboarding.GoogleTokenReader>();
+builder.Services.AddScoped<IdentityService.Api.Onboarding.GoogleAuthentication>();
+builder.Services.AddHttpClient("GoogleKeys",client=>client.Timeout=TimeSpan.FromSeconds(5)).ConfigurePrimaryHttpMessageHandler(()=>new HttpClientHandler{AllowAutoRedirect=false});
+if (builder.Configuration.GetValue<bool>("ONBOARDING_ENABLED"))
+{
+    new IdentityService.Api.Onboarding.IdentityVault(builder.Configuration).Validate();
+    IdentityService.Api.Onboarding.OnboardingConfiguration.Validate(builder.Configuration,builder.Environment);
+    FleetFlow.ServiceDefaults.ServiceAuthentication.AddServiceTokenClient(builder.Services,builder.Configuration,builder.Environment,"identity-service");
+    var endpoint=FleetFlow.ServiceDefaults.InternalEndpoint.Read(builder.Configuration["INTERNAL_NOTIFICATION_URL"]??"http://127.0.0.1:5004/","notification-service",builder.Environment);
+    builder.Services.AddHttpClient("OnboardingNotification",client=>{client.BaseAddress=endpoint;client.Timeout=TimeSpan.FromSeconds(5);}).ConfigurePrimaryHttpMessageHandler(()=>new HttpClientHandler{AllowAutoRedirect=false});
+    builder.Services.AddHostedService<IdentityService.Api.Onboarding.IdentityEmailWorker>();
+    var rentalEndpoint=FleetFlow.ServiceDefaults.InternalEndpoint.Read(builder.Configuration["INTERNAL_RENTAL_URL"]??"http://127.0.0.1:5003/","rental-service",builder.Environment);
+    builder.Services.AddHttpClient("OnboardingRental",client=>{client.BaseAddress=rentalEndpoint;client.Timeout=TimeSpan.FromSeconds(5);}).ConfigurePrimaryHttpMessageHandler(()=>new HttpClientHandler{AllowAutoRedirect=false});
+    builder.Services.AddScoped<IdentityService.Api.Onboarding.AccountLifecycleGateway>();
+    builder.Services.AddHostedService<IdentityService.Api.Onboarding.AccountLifecycleWorker>();
+}
 builder.Services.AddScoped<IAdminUserService, AdminUserService>();
 builder.Services.AddScoped<IProfileImageService, ProfileImageService>();
 
@@ -32,6 +52,9 @@ FleetFlow.ServiceDefaults.ServiceAuthentication.AddInternalServiceAuthentication
 builder.Services.AddRateLimiter(options =>
 {
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.AddPolicy("onboarding", context => RateLimitPartition.GetFixedWindowLimiter(
+        context.Connection.RemoteIpAddress?.ToString() ?? "unknown", _ => new FixedWindowRateLimiterOptions
+        { PermitLimit = 60, Window = TimeSpan.FromMinutes(1), QueueLimit = 0, AutoReplenishment = true }));
     options.AddPolicy("service-token", context => RateLimitPartition.GetFixedWindowLimiter(
         context.Connection.RemoteIpAddress?.ToString() ?? "unknown", _ => new FixedWindowRateLimiterOptions
         { PermitLimit = 60, Window = TimeSpan.FromMinutes(1), QueueLimit = 0, AutoReplenishment = true }));
@@ -92,6 +115,7 @@ _ = Task.Run(async () =>
         {
             var dbContext = scope.ServiceProvider.GetRequiredService<IdentityDbContext>();
             await dbContext.Database.EnsureCreatedAsync();
+            await IdentityService.Api.Onboarding.OnboardingSchema.EnsureAsync(dbContext,scope.ServiceProvider.GetRequiredService<IdentityService.Api.Onboarding.IdentityVault>());
             await dbContext.Database.ExecuteSqlRawAsync("ALTER TABLE \"Users\" ADD COLUMN IF NOT EXISTS \"AccessVersion\" bigint NOT NULL DEFAULT 0");
 
             // Idempotent Role Seeding

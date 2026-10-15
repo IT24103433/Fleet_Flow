@@ -12,6 +12,7 @@ const InputField = ({
   disabled = false,
   placeholder = '',
   autoComplete,
+  descriptionId,
 }) => {
   const completion = autoComplete ?? ({ fullName: 'name', username: 'username', usernameOrEmail: 'username', email: 'email', phoneNumber: 'tel', address: 'street-address', password: 'current-password', currentPassword: 'current-password', newPassword: 'new-password', confirmPassword: 'new-password' })[name];
   return (
@@ -30,7 +31,7 @@ const InputField = ({
         autoComplete={completion}
         aria-required={required}
         aria-invalid={!!error}
-        aria-describedby={error ? `${id}-error` : undefined}
+        aria-describedby={[error ? `${id}-error` : '', descriptionId].filter(Boolean).join(' ') || undefined}
         className={`form-input ${error ? 'input-error' : ''}`}
       />
       {error && (

@@ -4,3 +4,5 @@
 @import './styles/layout.css';
 @import './styles/customer.css';
 @import './styles/aura.css';
+@import './styles/review.css';
+.auth-story.auth-story-operations{background:#201b25;color:#faf8f4}.auth-story-operations .eyebrow,.auth-story-operations .auth-story-note{color:#bdb5e9}.auth-story-operations>p{color:#d2cbd8}.auth-story-operations h2{color:#fff}.auth-story-journey .customer-journey-art,.auth-story-operations .staff-operations-art{animation:auth-art-entrance .7s ease-out both}@keyframes auth-art-entrance{from{opacity:.35;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}@media(prefers-reduced-motion:reduce){.auth-story-journey .customer-journey-art,.auth-story-operations .staff-operations-art{animation:none;opacity:1;transform:none}}

@@ -1,3 +1,7 @@
+import OtpStep from '../components/onboarding/OtpStep';
+import PasswordRecovery from '../components/onboarding/PasswordRecovery';
+import useOnboardingConfig from '../components/onboarding/useOnboardingConfig';
+import '../onboarding.css';
 import { ArrowLeftIcon } from "@phosphor-icons/react/dist/csr/ArrowLeft";
 import { LockKeyIcon } from "@phosphor-icons/react/dist/csr/LockKey";
 import AuthLayout from '../components/layout/AuthLayout';
@@ -37,6 +41,9 @@ const StaffLoginPage = ({
   const {
     login
   } = useAuth();
+  const [challenge, setChallenge] = useState(null);
+  const [recovering, setRecovering] = useState(false);
+  const onboardingConfig = useOnboardingConfig();
   const [formData, setFormData] = useState({
     usernameOrEmail: '',
     password: ''
@@ -79,6 +86,7 @@ const StaffLoginPage = ({
     setIsLoading(true);
     const result = await loginUser(formData.usernameOrEmail, formData.password, 'staff');
     setIsLoading(false);
+    if (result.success && result.data?.challengeId) { setChallenge(result.data); return; }
     if (result.success) {
       const userRoles = extractRoles(result.data.token);
       const hasStaffPrivilege = userRoles.some(r => STAFF_ALLOWED_ROLES.includes(r));
@@ -106,6 +114,8 @@ const StaffLoginPage = ({
       }
     }
   };
+  if (challenge) return <AuthLayout staff><div className="auth-card"><OtpStep challenge={challenge} onCancel={() => setChallenge(null)} onVerified={result => { login(result.token, result.user); onLoginSuccess?.(result.token, result.user); }} /></div></AuthLayout>;
+  if (recovering) return <AuthLayout staff><div className="auth-card"><PasswordRecovery onBack={() => setRecovering(false)} /></div></AuthLayout>;
   return <AuthLayout staff>
       <div className="auth-card staff-card">
         <div className="auth-header">
@@ -129,7 +139,7 @@ const StaffLoginPage = ({
           </div>}
 
         <form onSubmit={handleFormSubmit} noValidate className="auth-form">
-          <InputField label="Staff Username or Work Email" id="usernameOrEmail" name="usernameOrEmail" value={formData.usernameOrEmail} onChange={handleInputChange} error={errors.usernameOrEmail} placeholder="e.g. manager_dan or staff@fleetflow.internal" required disabled={isLoading} />
+          <InputField label="Staff Username or Work Email" id="usernameOrEmail" name="usernameOrEmail" value={formData.usernameOrEmail} onChange={handleInputChange} error={errors.usernameOrEmail} placeholder="Enter your user name" required disabled={isLoading} />
 
           <InputField label="Password" type="password" id="password" name="password" value={formData.password} onChange={handleInputChange} error={errors.password} placeholder="Enter your password" required disabled={isLoading} />
 
@@ -144,6 +154,7 @@ const StaffLoginPage = ({
           </div>
 
           <div className="auth-footer-links">
+            {onboardingConfig.enabled && <button type="button" className="inline-link-btn" onClick={() => setRecovering(true)} disabled={isLoading}>Forgot your password?</button>}
             <button type="button" className="inline-link-btn" onClick={onNavigateToCustomerLogin} disabled={isLoading}>
               <ArrowLeftIcon size={18} weight="regular" aria-hidden="true" /> Return to Customer Portal
             </button>
