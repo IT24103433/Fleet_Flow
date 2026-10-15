@@ -1,0 +1,154 @@
+{
+  "reviewDate": "2026-10-15",
+  "scope": "Local verification snapshot before PR publication; no merge or deployment",
+  "sourceBase": "4f5d21dc212c99d69dce4c7dba4267c9507ad25d",
+  "uncommittedFeatureChanges": true,
+  "frontend": {
+    "testsPassed": 175,
+    "testsFailed": 0,
+    "lint": "passed",
+    "productionBuild": "passed",
+    "bundle": {
+      "definition": "Entry plus recursively static imports, uncompressed; lazy routes reported separately.",
+      "entryBytes": 322202,
+      "budgetBytes": 350000,
+      "lazy": {
+        "LandingPage": {
+          "ownBytes": 63448,
+          "additionalStaticClosureBytes": 145273
+        },
+        "RentalQueuePage": {
+          "ownBytes": 4617,
+          "additionalStaticClosureBytes": 8835
+        },
+        "RentalRecordPage": {
+          "ownBytes": 20088,
+          "additionalStaticClosureBytes": 93433
+        },
+        "MaintenanceDashboardPage": {
+          "ownBytes": 41232,
+          "additionalStaticClosureBytes": 49110
+        },
+        "NotificationDeliveryPage": {
+          "ownBytes": 11042,
+          "additionalStaticClosureBytes": 13960
+        }
+      },
+      "passes": true
+    }
+  },
+  "backend": {
+    "passingTestsAcrossSuites": 669,
+    "suites": {
+      "FleetFlow.IdentityService.Tests": 134,
+      "FleetFlow.VehicleService.Tests": 69,
+      "FleetFlow.ServiceFoundation.Tests": 50,
+      "FleetService.Tests": 280,
+      "IdentityService.Tests": 65,
+      "NotificationService.Tests": 24,
+      "RentalService.Tests": 47
+    },
+    "evidence": "Changed Identity suite: 134 passed. Changed Notification suite: 24 passed, including real Kafka after repairing the disposable relay startup. The other five suites reuse the earlier verified milestone and focused results because their code was unchanged. This is a combined 669-test set, not one 669-test invocation.",
+    "nativeWindowsExecution": "Not used for backend tests; official Linux .NET SDK Docker runner used."
+  },
+  "live": {
+    "checksPassed": 18,
+    "checks": [
+      "Fixture admin login",
+      "Fixture customer login",
+      "Fixture other login",
+      "Unsubmitted driver is ineligible",
+      "Direct API rejects unapproved new booking",
+      "Draft saved",
+      "Private DL upload",
+      "Private NIC upload",
+      "Other customer cannot read document",
+      "Application submitted",
+      "Administrator approval",
+      "Approved customer booking",
+      "Restricted lifecycle service authentication",
+      "Future booking blocks deletion freeze",
+      "Existing cancellation preserved",
+      "Resolved customer can be frozen",
+      "Frozen customer cannot create booking",
+      "Matching restoration releases freeze"
+    ],
+    "syntheticAccountsAndDocuments": true,
+    "readiness": [
+      {
+        "port": 5011,
+        "status": 200
+      },
+      {
+        "port": 5012,
+        "status": 200
+      },
+      {
+        "port": 5013,
+        "status": 200
+      },
+      {
+        "port": 5014,
+        "status": 200
+      },
+      {
+        "port": 5174,
+        "status": 200
+      }
+    ],
+    "administratorApiChecks": {
+      "customerEmailWorkspace": 403,
+      "customerVerificationDirectory": 403,
+      "emailWorkspaceCount": 14,
+      "emailWorkspacePages": 1,
+      "allLocalServicesReady": true
+    }
+  },
+  "design": {
+    "viewport": "1440 x 900",
+    "screenshots": "Full-page customer views and desktop viewport clips; viewport override reset after review.",
+    "reviewed": [
+      "Customer signup and Google alignment",
+      "Distinct staff sign-in",
+      "Customer account overview/details/security navigation",
+      "Administrator dashboard, contextual email approval and delivery",
+      "Fleet, booking and maintenance reports"
+    ],
+    "horizontalOverflow": false,
+    "customerAccountDuplicateElementIds": 0,
+    "stationaryOperationalControls": true,
+    "mobileAndTablet": "Intentionally not reviewed or optimised",
+    "reducedMotion": "GSAP/CSS media guards and static fallback coverage; operating-system settings were not changed."
+  },
+  "manualAcceptance": {
+    "googleSignIn": "Earlier integration confirmed; revised existing/new Google paths need fresh manual provider acceptance",
+    "realEmailOtpSignup": "Pending user mailbox receipt and completion after local allowlist fix",
+    "securityAndDeletionMailboxFlows": "Pending user acceptance with selected inboxes",
+    "deployment": "Not performed; S4-12 remains open",
+    "googleOnlySecurity": "Automated linked-subject, single-use grant and OTP/password tests pass; real Google confirmation requires user acceptance."
+  },
+  "protections": {
+    "earlier5173Environment": "Preserved",
+    "sourceDatabaseWrites": false,
+    "deployedResourcesChanged": false,
+    "privateCredentialScan": {
+      "candidateTextFiles": 557,
+      "findings": 0
+    },
+    "privateEnvironmentAndFixtureCredentials": "Git-ignored, not part of handoff",
+    "preRevisionSourceBackup": {
+      "archive": "Z:\\Programs\\FleetFlowCaches\\FrontendBackups\\onboarding-before-review-20261015-070354.zip",
+      "sha256": "8AEA48421F2CF9A7838E34DBC3FE6127423F1714A4BB28C899A6833AC042582F",
+      "files": 656,
+      "verified": true,
+      "secretsIncluded": false
+    }
+  },
+  "remainingOperationalRequirements": [
+    "Production SMTP and Google origins must be configured and tested",
+    "Persistent private document storage and retained encryption keys",
+    "Restricted finite retention and deletion-ledger reconciliation for backups/Kafka/support records",
+    "Actual deployed regression acceptance before closing S4-12"
+  ],
+  "ownerAcceptance": "Owner accepted the updated local version and authorised a develop pull request on 2026-10-15; individual deployed provider/mailbox cases still require verification."
+}

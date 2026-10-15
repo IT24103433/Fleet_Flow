@@ -6,6 +6,7 @@ import Button from '../../components/common/Button';
 import RoleBadge from '../../components/common/RoleBadge';
 import { useAuth } from '../../context/AuthContext';
 import { updateAdminUser } from '../../services/adminUserService';
+import useOnboardingConfig from '../../components/onboarding/useOnboardingConfig';
 const ROLE_DESCRIPTIONS = {
   CUSTOMER: 'Browse vehicles and manage personal bookings and account details.',
   FLEET_MANAGER: 'Manage vehicle details, pricing, status, and maintenance.',
@@ -17,6 +18,7 @@ const AdminEditUserPage = ({
   onNavigate,
   onUserUpdated
 }) => {
+  const onboardingConfig = useOnboardingConfig();
   const {
     token
   } = useAuth();
@@ -158,7 +160,8 @@ const AdminEditUserPage = ({
           <div className="form-two-col">
             <InputField label="Username" id="username" name="username" value={formData.username} onChange={handleInputChange} error={errors.username} placeholder="e.g. jdoe" required disabled={isLoading} />
 
-            <InputField label="Email Address" type="email" id="email" name="email" value={formData.email} onChange={handleInputChange} error={errors.email} placeholder="e.g. user@fleetflow.io" required disabled={isLoading} />
+            <InputField label="Email Address" type="email" id="email" name="email" value={formData.email} onChange={handleInputChange} error={errors.email} placeholder="e.g. user@fleetflow.io" required disabled={isLoading || onboardingConfig.enabled} />
+            {onboardingConfig.enabled && <p className="form-help">The account owner changes their email through verified account settings.</p>}
           </div>
 
           <div className="form-two-col">

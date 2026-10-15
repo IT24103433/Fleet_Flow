@@ -14,21 +14,25 @@ public class AuthController : ControllerBase
     private readonly IRegistrationService _registrationService;
     private readonly IAuthenticationService _authenticationService;
     private readonly IProfileImageService _profileImageService;
+    private readonly IdentityService.Api.Onboarding.OnboardingService? _onboarding;
 
     public AuthController(
         IRegistrationService registrationService,
         IAuthenticationService authenticationService,
-        IProfileImageService? profileImageService = null)
+        IProfileImageService? profileImageService = null,
+        IdentityService.Api.Onboarding.OnboardingService? onboarding = null)
     {
         _registrationService = registrationService;
         _authenticationService = authenticationService;
         _profileImageService = profileImageService!;
+        _onboarding = onboarding;
     }
 
     [HttpPost("register")]
     [RequestSizeLimit(65536)]
     public async Task<ActionResult<UserResponse>> Register([FromBody] RegisterRequest request)
     {
+        if (_onboarding?.Enabled == true) return Conflict(new { message = "Use verified signup to create an account. Email verification is required." });
         try
         {
             var response = await _registrationService.RegisterAsync(request);
@@ -46,12 +50,17 @@ public class AuthController : ControllerBase
     {
         try
         {
+            if (_onboarding?.Enabled == true) return Ok(await _onboarding.Login(request));
             var response = await _authenticationService.LoginAsync(request);
             return Ok(response);
         }
         catch (InvalidCredentialsException ex)
         {
             return Unauthorized(new { message = ex.Message });
+        }
+        catch (IdentityService.Api.Onboarding.OnboardingException ex)
+        {
+            return StatusCode(ex.Status, new { message = ex.Message });
         }
         catch (AccountDisabledException ex)
         {
@@ -61,12 +70,9 @@ public class AuthController : ControllerBase
         {
             return StatusCode(403, new { message = ex.Message });
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return StatusCode(500, new { 
-                message = "Authentication service error: " + (ex.InnerException?.Message ?? ex.Message),
-                detail = ex.ToString()
-            });
+            return StatusCode(500, new { message = "Sign-in is temporarily unavailable. Please try again." });
         }
     }
 

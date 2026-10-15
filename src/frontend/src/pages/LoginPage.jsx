@@ -1,3 +1,9 @@
+import OtpStep from '../components/onboarding/OtpStep';
+import '../onboarding.css';
+import useOnboardingConfig from '../components/onboarding/useOnboardingConfig';
+import GoogleButton from '../components/onboarding/GoogleButton';
+import GoogleSignupCompletion from '../components/onboarding/GoogleSignupCompletion';
+import PasswordRecovery from '../components/onboarding/PasswordRecovery';
 import { ArrowRightIcon } from "@phosphor-icons/react/dist/csr/ArrowRight";
 import AuthLayout from '../components/layout/AuthLayout';
 import React, { useState } from 'react';
@@ -15,6 +21,10 @@ const LoginPage = ({
   const {
     login
   } = useAuth();
+  const [challenge, setChallenge] = useState(null);
+  const [googleProfile, setGoogleProfile] = useState(null);
+  const [recovering, setRecovering] = useState(false);
+  const onboardingConfig = useOnboardingConfig();
   const [formData, setFormData] = useState({
     usernameOrEmail: '',
     password: ''
@@ -56,6 +66,7 @@ const LoginPage = ({
     setIsLoading(true);
     const result = await loginUser(formData.usernameOrEmail, formData.password, 'customer');
     setIsLoading(false);
+    if (result.success && result.data?.challengeId) { setChallenge(result.data); return; }
     if (result.success) {
       login(result.data.token, result.data.user);
       if (onLoginSuccess) {
@@ -76,6 +87,10 @@ const LoginPage = ({
       }
     }
   };
+  const googleComplete = result => { if (result.authenticationStatus === 'ProfileRequired') setGoogleProfile(result); else if (result.challengeId) { setGoogleProfile(null); setChallenge(result); } else if (result.token) { login(result.token, result.user); onLoginSuccess?.(result.token, result.user); } };
+  if (googleProfile) return <AuthLayout><GoogleSignupCompletion request={googleProfile} onComplete={googleComplete} onCancel={() => setGoogleProfile(null)} /></AuthLayout>;
+  if (challenge) return <AuthLayout><div className="auth-card"><OtpStep challenge={challenge} onCancel={() => setChallenge(null)} onVerified={result => { login(result.token, result.user); onLoginSuccess?.(result.token, result.user); }} /></div></AuthLayout>;
+  if (recovering) return <AuthLayout><div className="auth-card"><PasswordRecovery onBack={() => setRecovering(false)} /></div></AuthLayout>;
   return <AuthLayout>
       <div className="auth-card">
         <div className="auth-header">
@@ -85,9 +100,10 @@ const LoginPage = ({
         </div>
 
         <Alert type="error" message={globalError} />
+        {onboardingConfig.enabled && onboardingConfig.googleClientId && <div className="auth-provider-section"><GoogleButton clientId={onboardingConfig.googleClientId} onComplete={googleComplete} /><p className="auth-divider"><span>or sign in with email</span></p></div>}
 
         <form onSubmit={handleFormSubmit} noValidate className="auth-form">
-          <InputField label="Username or Email" id="usernameOrEmail" name="usernameOrEmail" value={formData.usernameOrEmail} onChange={handleInputChange} error={errors.usernameOrEmail} placeholder="e.g. alex@example.com or alex_drive" required disabled={isLoading} />
+          <InputField label="Username or Email" id="usernameOrEmail" name="usernameOrEmail" value={formData.usernameOrEmail} onChange={handleInputChange} error={errors.usernameOrEmail} placeholder="Enter your user name" required disabled={isLoading} />
 
           <InputField label="Password" type="password" id="password" name="password" value={formData.password} onChange={handleInputChange} error={errors.password} placeholder="Enter your account password" required disabled={isLoading} />
 
@@ -96,6 +112,7 @@ const LoginPage = ({
           </Button>
 
           <div className="auth-footer-links">
+            {onboardingConfig.enabled && <button type="button" className="inline-link-btn" onClick={() => setRecovering(true)} disabled={isLoading}>Forgot your password?</button>}
             <p className="auth-switch-text">
               Don't have an account?{' '}
               <button type="button" className="inline-link-btn" onClick={onNavigateToRegister} disabled={isLoading}>

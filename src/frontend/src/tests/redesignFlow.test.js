@@ -180,6 +180,7 @@ test('booking prevents duplicate requests, handles availability and conflict fai
   const requests = [];
   globalThis.fetch = (url, options) => {
     requests.push({ url, options });
+    if (String(url).includes('/api/onboarding/config')) return Promise.resolve(response({ enabled: false }));
     if (String(url).includes('check-availability')) return mode === 'pending' ? new Promise(resolve => { resolveAvailability = resolve; }) : Promise.resolve(response({ isAvailable: true }));
     return Promise.resolve(mode === 'conflict' ? response({ message: 'The vehicle was just booked. Choose other dates.' }, 409) : response({ id: accountId, vehicleId, status: 'Pending', startDateTime: new Date(Date.now() + 86400000).toISOString(), endDateTime: new Date(Date.now() + 4 * 86400000).toISOString(), totalCost: 30000 }, 201));
   };
@@ -188,7 +189,8 @@ test('booking prevents duplicate requests, handles availability and conflict fai
   try {
     await act(async () => root.render(React.createElement(BookingModal, { isOpen: true, onClose() {}, vehicle })));
     await act(async () => { submit(); submit(); });
-    assert.equal(requests.length, 1, 'Repeated submit must issue one availability request');
+    assert.equal(requests.filter(request => String(request.url).includes('check-availability')).length, 1, 'Repeated submit must issue one availability request');
+    assert.equal(requests.filter(request => String(request.url).includes('/api/onboarding/config')).length, 1, 'Repeated submit must issue one verification configuration request');
     assert.equal(document.querySelector('[type="submit"]').disabled, true);
     await act(async () => resolveAvailability(response({ isAvailable: false })));
     assert.equal(requests.some(request => request.options.method === 'POST'), false);

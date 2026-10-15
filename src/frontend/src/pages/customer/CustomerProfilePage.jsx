@@ -1,3 +1,5 @@
+import useOnboardingConfig from '../../components/onboarding/useOnboardingConfig';
+import AccountPanel from '../../components/onboarding/AccountPanel';
 import { CameraIcon } from "@phosphor-icons/react/dist/csr/Camera";
 import { LockKeyIcon } from "@phosphor-icons/react/dist/csr/LockKey";
 import { ShieldCheckIcon } from "@phosphor-icons/react/dist/csr/ShieldCheck";
@@ -21,6 +23,7 @@ const CustomerProfilePage = () => {
     token,
     updateUser
   } = useAuth();
+  const onboardingConfig = useOnboardingConfig();
   const primaryRole = roles?.[0];
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
@@ -129,22 +132,20 @@ const CustomerProfilePage = () => {
         </div>
 
         <div className="profile-header-actions">
-          <Button variant="outline" onClick={() => setIsPasswordModalOpen(true)}>
-            Change Password
-          </Button>
+          <Button variant="outline" disabled={onboardingConfig.loading || Boolean(onboardingConfig.error)} onClick={() => onboardingConfig.enabled ? window.location.assign(`${window.location.hash.split('?')[0]}?section=security`) : setIsPasswordModalOpen(true)}>{onboardingConfig.loading ? 'Opening security…' : onboardingConfig.error ? 'Security unavailable' : onboardingConfig.enabled ? 'Manage security' : 'Change Password'}</Button>
         </div>
       </div>
 
       {/* Two Column Profile Data Grid */}
-      <div className="profile-sections-grid">
+      {!onboardingConfig.loading && !onboardingConfig.error && !onboardingConfig.enabled && <div className="profile-sections-grid">
         {/* Personal Details Panel */}
         <div className="profile-card-panel">
           <div className="panel-header-strip">
             <h3 className="panel-heading">Personal Information</h3>
-            <span className="read-only-badge">Read only</span>
+            <span className="read-only-badge">Profile summary</span>
           </div>
 
-          <p className="profile-details-note">These are your saved account details. Contact information editing is not available yet.</p>
+          <p className="profile-details-note">These are your saved account details. Use the account settings below when editing is enabled for this environment.</p>
           <div className="info-fields-list">
             <div className="info-row">
               <span className="info-label">Full Name</span>
@@ -216,7 +217,7 @@ const CustomerProfilePage = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div>}
 
       {/* Change Password Modal */}
       <ChangePasswordModal isOpen={isPasswordModalOpen} onClose={() => setIsPasswordModalOpen(false)} />
@@ -255,6 +256,7 @@ const CustomerProfilePage = () => {
           </div>
         </div>
       </Modal>
+      <AccountPanel customer={true} />
     </div>;
 };
 export default CustomerProfilePage;

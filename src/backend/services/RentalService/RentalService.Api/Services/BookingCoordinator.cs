@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using RentalService.Api.Data;
 namespace RentalService.Api.Services;
-public sealed class BookingCoordinator(RentalDbContext db,IFleetGateway fleet,PickupCoordinator? pickups=null,ReturnCoordinator? returns=null)
+public sealed class BookingCoordinator(RentalDbContext db,IFleetGateway fleet,PickupCoordinator? pickups=null,ReturnCoordinator? returns=null,DriverEligibilityClient? eligibility=null)
 {
  public async Task<BookingResponse> CreateAsync(Guid customer,CreateBookingRequest request,Guid requestKey,CancellationToken ct=default)
  {
@@ -18,7 +18,11 @@ public sealed class BookingCoordinator(RentalDbContext db,IFleetGateway fleet,Pi
   var workflow=await db.Workflows.AsNoTracking().SingleOrDefaultAsync(w=>w.CustomerId==customer&&w.RequestKey==key,ct);
   if(workflow==null)
   {
+   await using var creation=db.Database.IsNpgsql()?await db.Database.BeginTransactionAsync(ct):null;
+   if(db.Database.IsNpgsql())await db.Database.ExecuteSqlInterpolatedAsync($"SELECT pg_advisory_xact_lock(hashtextextended({customer.ToString()},0))",ct);
+   if(eligibility?.Enabled==true&&await db.AccountGuards.AnyAsync(x=>x.CustomerId==customer&&x.State!="Released",ct))throw new BookingRequestException(409,"Your account has a pending deletion request and cannot create new bookings.");
    if(RentalPeriod.Error(start,end) is {} error)throw new BookingRequestException(400,error);
+   if(eligibility!=null)await eligibility.Check(customer,end,ct);
    workflow=new(){Id=Guid.NewGuid(),CustomerId=customer,RequestKey=key,VehicleId=request.VehicleId,StartDateTime=start,EndDateTime=end,CreatedAt=DateTime.UtcNow,NextAttemptAt=DateTime.UtcNow};
    if(db.Database.IsNpgsql())
    {
@@ -30,6 +34,7 @@ public sealed class BookingCoordinator(RentalDbContext db,IFleetGateway fleet,Pi
     workflow=await db.Workflows.AsNoTracking().SingleAsync(w=>w.CustomerId==customer&&w.RequestKey==key,ct);
    }
    else{db.Workflows.Add(workflow);await db.SaveChangesAsync(ct);db.ChangeTracker.Clear();}
+   if(creation!=null)await creation.CommitAsync(ct);
   }
   if(workflow.VehicleId!=request.VehicleId||workflow.StartDateTime!=start||workflow.EndDateTime!=end)throw new BookingRequestException(409,"Idempotency key was already used for different booking details.");
   await ResumeAsync(workflow.Id,ct);

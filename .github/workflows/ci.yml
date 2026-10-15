@@ -230,6 +230,11 @@ jobs:
       - name: Build Vite Production Assets
         working-directory: src/frontend
         run: npm run build
+        env:
+          VITE_IDENTITY_API_URL: ${{ vars.VITE_IDENTITY_API_URL || 'https://fleetflow-identity-api.azurewebsites.net' }}
+          VITE_FLEET_API_URL: ${{ vars.VITE_FLEET_API_URL || 'https://fleetflow-fleet-api.azurewebsites.net' }}
+          VITE_RENTAL_API_URL: ${{ vars.VITE_RENTAL_API_URL || 'https://fleetflow-rental-api.azurewebsites.net' }}
+          VITE_NOTIFICATION_API_URL: ${{ vars.VITE_NOTIFICATION_API_URL || 'https://fleetflow-notification-api.azurewebsites.net' }}
 
       - name: Enforce Entry JavaScript Budget
         run: node tools/Check-FrontendBundle.mjs --output artifacts/frontend-bundle-budget.json

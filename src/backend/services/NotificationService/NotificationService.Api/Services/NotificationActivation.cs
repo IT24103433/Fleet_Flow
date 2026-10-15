@@ -14,7 +14,7 @@ public sealed record NotificationActivation(bool Active,Guid MigrationId)
         return new(active,id);
     }
 }
-public sealed class NotificationReadiness(OwnedDatabase database,NotificationActivation activation):IDatabaseReadiness
+public sealed class NotificationReadiness(OwnedDatabase database,NotificationActivation activation,IConfiguration? configuration=null):IDatabaseReadiness
 {
     public async Task<bool> IsReadyAsync(CancellationToken ct)
     {
@@ -24,7 +24,13 @@ public sealed class NotificationReadiness(OwnedDatabase database,NotificationAct
             await using var db=new NpgsqlConnection(database.ConnectionString);await db.OpenAsync(ct);
             await using var command=new NpgsqlCommand("SELECT EXISTS(SELECT 1 FROM \"__FleetFlowServiceSchema\" s, \"NotificationMigrationReceipts\" m WHERE s.version=2 AND s.service_name='NotificationService' AND m.\"Id\"=@id AND m.\"Verified\"=true)",db);
             command.Parameters.AddWithValue("id",activation.MigrationId);
-            return (bool)(await command.ExecuteScalarAsync(ct))!;
+            if(!(bool)(await command.ExecuteScalarAsync(ct))!)return false;
+            if(configuration?.GetValue<bool>("EMAIL_ENABLED")==true)
+            {
+                await using var emailSchema=new NpgsqlCommand("SELECT EXISTS(SELECT 1 FROM information_schema.columns WHERE table_schema='public' AND table_name='EmailJobs' AND column_name='RecipientHint')",db);
+                return (bool)(await emailSchema.ExecuteScalarAsync(ct))!;
+            }
+            return true;
         }
         catch(Exception ex)when(ex is NpgsqlException or InvalidOperationException or TimeoutException){return false;}
     }
