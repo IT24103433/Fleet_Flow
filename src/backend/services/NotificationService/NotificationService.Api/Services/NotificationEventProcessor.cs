@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using NotificationService.Api.Data;
 namespace NotificationService.Api.Services;
 public sealed class NotificationEventConflictException:Exception;
-public sealed class NotificationEventProcessor(NotificationDbContext db)
+public sealed class NotificationEventProcessor(NotificationDbContext db,NotificationService.Api.Email.EmailVault? emailVault=null,IConfiguration? configuration=null)
 {
     public async Task<bool> ProcessAsync(NotificationDomainEvent domainEvent,CancellationToken ct=default)
     {
@@ -52,6 +52,15 @@ public sealed class NotificationEventProcessor(NotificationDbContext db)
                     """,ct);
             else db.Notifications.Add(new(){Id=id,EventId=item.EventId,TargetUserId=item.TargetUserId,Category=item.Category,
                 Title=item.Title,Message=item.Message,RelatedEntityId=item.RelatedEntityId,VehicleId=item.VehicleId,CreatedAt=item.CreatedAt});
+            if(emailVault?.Enabled==true)
+            {
+                var stableBytes=SHA256.HashData(Encoding.UTF8.GetBytes($"email:{item.EventId}:{item.TargetUserId}"));var emailId=new Guid(stableBytes.AsSpan(0,16));
+                var root=configuration?["FRONTEND_PUBLIC_URL"]?.TrimEnd('/');
+                var action=string.IsNullOrEmpty(root)?null:root+"/#/"+(item.Category=="Maintenance"?"maintenance-dashboard":"customer-home");
+                var summary=item.Message;
+                if(domainEvent is RentalCompletedEvent returned&&returned.FinalRentalAmount.HasValue)summary+=$"\nFinal rental amount: LKR {returned.FinalRentalAmount.Value.ToString("N2",System.Globalization.CultureInfo.InvariantCulture)}. This is a rental summary, not a payment receipt.";
+                await new NotificationService.Api.Email.EmailStore(db,emailVault).Enqueue(new(emailId,item.TargetUserId,"",item.Category,item.Title,summary,action));
+            }
         }
         if(transaction is not null)await transaction.CommitAsync(ct);else await db.SaveChangesAsync(ct);
         return true;

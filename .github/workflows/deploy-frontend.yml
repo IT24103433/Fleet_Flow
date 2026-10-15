@@ -17,13 +17,13 @@ jobs:
   # =========================================================================
   build:
     name: "Frontend : Build & Package"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: '22.x'
           cache: 'npm'
@@ -36,6 +36,11 @@ jobs:
       - name: Build React App
         run: npm run build
         working-directory: src/frontend
+        env:
+          VITE_IDENTITY_API_URL: ${{ vars.VITE_IDENTITY_API_URL || 'https://fleetflow-identity-api.azurewebsites.net' }}
+          VITE_FLEET_API_URL: ${{ vars.VITE_FLEET_API_URL || 'https://fleetflow-fleet-api.azurewebsites.net' }}
+          VITE_RENTAL_API_URL: ${{ vars.VITE_RENTAL_API_URL || 'https://fleetflow-rental-api.azurewebsites.net' }}
+          VITE_NOTIFICATION_API_URL: ${{ vars.VITE_NOTIFICATION_API_URL || 'https://fleetflow-notification-api.azurewebsites.net' }}
 
       - name: Prepare Server Files
         run: |
@@ -44,7 +49,7 @@ jobs:
         working-directory: src/frontend
 
       - name: Upload frontend deployment package
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: frontend-deploy-package
           path: src/frontend/dist
@@ -56,11 +61,11 @@ jobs:
   # =========================================================================
   deploy:
     name: "Frontend : Deploy to Azure"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: build
     steps:
       - name: Download frontend package
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: frontend-deploy-package
           path: ./dist

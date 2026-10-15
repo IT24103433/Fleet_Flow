@@ -8,6 +8,7 @@ import Modal from '../../components/common/Modal';
 import Alert from '../../components/Alert';
 import { useAuth } from '../../context/AuthContext';
 import { deleteAdminUser, updateUserStatus, resetUserPassword, forceUserPasswordChange } from '../../services/adminUserService';
+import useOnboardingConfig from '../../components/onboarding/useOnboardingConfig';
 const AdminUserDetailsPage = ({
   selectedUser,
   onNavigate
@@ -17,6 +18,7 @@ const AdminUserDetailsPage = ({
     user: currentAuthUser
   } = useAuth();
   const [user, setUser] = useState(selectedUser || null);
+  const onboardingConfig = useOnboardingConfig();
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
   const [forceChangeToggle, setForceChangeToggle] = useState(true);
   const [isResetting, setIsResetting] = useState(false);
@@ -191,9 +193,9 @@ const AdminUserDetailsPage = ({
         }} className="view-6e44f0b0">
               Enable Account
             </Button>}
-          <Button variant="danger" onClick={handleOpenDelete}>
+          {!onboardingConfig.enabled && <Button variant="danger" onClick={handleOpenDelete}>
             Delete User
-          </Button>
+          </Button>}
           <Button variant="outline" onClick={handleOpenReset}>
             Reset Password
           </Button>
@@ -306,9 +308,9 @@ const AdminUserDetailsPage = ({
               <Button variant={user.mustChangePassword ? "outline" : "warning"} size="sm" onClick={handleOpenForceModal}>
                 {user.mustChangePassword ? "Clear Change Req" : "Force Password Change"}
               </Button>
-              <Button variant="danger" size="sm" onClick={handleOpenDelete}>
+              {!onboardingConfig.enabled && <Button variant="danger" size="sm" onClick={handleOpenDelete}>
                 Delete User Account
-              </Button>
+              </Button>}
               <Button variant="outline" size="sm" onClick={handleOpenReset}>
                 Issue Temporary Password
               </Button>

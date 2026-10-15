@@ -11,10 +11,23 @@ public class IdentityDbContext : DbContext
 
     public DbSet<User> Users => Set<User>();
     public DbSet<Role> Roles => Set<Role>();
+    public DbSet<IdentityService.Api.Onboarding.IdentityOperation> Operations => Set<IdentityService.Api.Onboarding.IdentityOperation>();
+    public DbSet<IdentityService.Api.Onboarding.DocumentClaim> DocumentClaims => Set<IdentityService.Api.Onboarding.DocumentClaim>();
+    public DbSet<IdentityService.Api.Onboarding.ExternalAccount> ExternalAccounts => Set<IdentityService.Api.Onboarding.ExternalAccount>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<IdentityService.Api.Onboarding.IdentityOperation>(e => {
+            e.ToTable("IdentityOperations");e.HasKey(x=>x.Id);e.Property(x=>x.Version).IsConcurrencyToken();
+            e.HasIndex(x=>new{x.UserId,x.Kind});e.HasIndex(x=>new{x.Kind,x.State,x.NextAttemptAt});
+        });
+        modelBuilder.Entity<IdentityService.Api.Onboarding.DocumentClaim>(e => {
+            e.ToTable("DocumentClaims");e.HasKey(x=>x.Id);e.HasIndex(x=>new{x.Kind,x.Fingerprint}).IsUnique();
+        });
+        modelBuilder.Entity<IdentityService.Api.Onboarding.ExternalAccount>(e => {
+            e.ToTable("ExternalAccounts");e.HasKey(x=>x.Id);e.HasIndex(x=>new{x.Provider,x.Subject}).IsUnique();
+        });
 
         modelBuilder.Entity<User>(entity =>
         {

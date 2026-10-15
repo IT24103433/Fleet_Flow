@@ -269,6 +269,10 @@ The Continuous Integration pipeline (`.github/workflows/ci.yml`) is architected 
 
 ---
 
+## Verified onboarding extension (pending local acceptance)
+
+The separate onboarding change includes email verification, customer Google authentication, private driver review, profile/security changes, support and customer account lifecycle. See the [manual review guide](docs/onboarding-manual-review.md), [local results](docs/onboarding-review-results.json) and [configuration/deployment handoff](docs/verified-onboarding-handoff.md). It is not included in a deployed release until reviewed, merged and configured separately. Historical checklist counts below describe their earlier baseline.
+
 ## Pre-Presentation Verification Checklist
 
 To guarantee seamless evaluations and presentations, follow this verification checklist:

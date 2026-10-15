@@ -14,6 +14,8 @@ import React from 'react';
 import { useAuth } from '../../context/AuthContext';
 import NotificationNavButton from '../NotificationNavButton';
 import { canViewReport } from '../../utils/reportPermissions';
+import useOnboardingConfig from '../onboarding/useOnboardingConfig';
+import { ShieldCheckIcon } from '@phosphor-icons/react/dist/csr/ShieldCheck';
 const StaffSidebar = ({
   currentView,
   onNavigate,
@@ -25,6 +27,7 @@ const StaffSidebar = ({
     roles
   } = useAuth();
   const primaryRole = roles?.[0];
+  const onboardingConfig = useOnboardingConfig();
   const isAdmin = roles?.some(role => String(role).toUpperCase() === 'ADMIN');
   const userRoles = roles || [];
   const canAddVehicle = userRoles.some(r => ['FLEET_MANAGER', 'ADMIN'].includes(String(r).toUpperCase()));
@@ -83,10 +86,12 @@ const StaffSidebar = ({
               {!sidebarCollapsed && <span className="nav-item-label">Create User</span>}
             </button>
         <button type="button" className={`staff-nav-item ${currentView === 'admin-notification-delivery' ? 'active' : ''}`}
-          onClick={() => onNavigate('admin-notification-delivery')} title="Notification delivery" aria-label="Notification delivery">
+          onClick={() => onNavigate('admin-notification-delivery')} title="Service event delivery" aria-label="Service event delivery">
           <ChartBarIcon className="nav-item-icon" weight="regular" aria-hidden="true" />
-          {!sidebarCollapsed && <span className="nav-item-label">Notification delivery</span>}
+          {!sidebarCollapsed && <span className="nav-item-label">Service event delivery</span>}
         </button>
+        {onboardingConfig.enabled && <button type="button" className={`staff-nav-item ${currentView === 'admin-driver-reviews' ? 'active' : ''}`} onClick={() => onNavigate('admin-driver-reviews')} aria-label="Driver verification" title="Driver verification"><ShieldCheckIcon className="nav-item-icon" weight="regular" aria-hidden="true" />{!sidebarCollapsed && <span className="nav-item-label">Driver verification</span>}</button>}
+        {onboardingConfig.enabled && <button type="button" className={`staff-nav-item ${currentView === 'admin-account-security' ? 'active' : ''}`} onClick={() => onNavigate('admin-account-security')} aria-label="Account administration" title="Account administration"><KeyIcon className="nav-item-icon" weight="regular" aria-hidden="true" />{!sidebarCollapsed && <span className="nav-item-label">Account administration</span>}</button>}
           </>}
 
         <div className="nav-section-label">{!sidebarCollapsed && 'REPORTS'}</div>

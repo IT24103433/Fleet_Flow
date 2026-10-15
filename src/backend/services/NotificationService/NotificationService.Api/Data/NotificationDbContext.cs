@@ -22,8 +22,10 @@ public sealed class NotificationDbContext(DbContextOptions<NotificationDbContext
     public DbSet<InboxNotification> Notifications=>Set<InboxNotification>();
     public DbSet<NotificationReceipt> Receipts=>Set<NotificationReceipt>();
     public DbSet<RejectedNotificationEvent> RejectedEvents=>Set<RejectedNotificationEvent>();
+    public DbSet<NotificationService.Api.Email.EmailJob> EmailJobs=>Set<NotificationService.Api.Email.EmailJob>();
     protected override void OnModelCreating(ModelBuilder model)
     {
+        model.Entity<NotificationService.Api.Email.EmailJob>(e=>{e.ToTable("EmailJobs");e.HasKey(x=>x.Id);e.Property(x=>x.State).IsConcurrencyToken();e.HasIndex(x=>new{x.State,x.NextAttemptAt});});
         model.Entity<InboxNotification>(e=>
         {
             e.ToTable("Notifications");e.HasKey(n=>n.Id);

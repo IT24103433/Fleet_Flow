@@ -1,5 +1,7 @@
 # FleetFlow — Sprint 4 Development and DevOps Handoff
 
+> Pending local extension: verified onboarding, Google authentication, private driver review, email delivery and account lifecycle are documented in [verified-onboarding-handoff.md](verified-onboarding-handoff.md). They require separate manual acceptance and compatible deployment configuration; they are not implied to be present in this Sprint 4 snapshot.
+
 Prepared on **14 October 2026** for the teammate responsible for Azure deployment.
 
 Repository: [IT24103433/Fleet_Flow](https://github.com/IT24103433/Fleet_Flow). Development work is merged into `develop`; production deployment and deployed QA are still pending.

@@ -1544,7 +1544,8 @@ public class AdminUserManagementTests
         var badRequestResult = result.Result as BadRequestObjectResult;
         badRequestResult.Should().NotBeNull();
         badRequestResult!.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
-        badRequestResult.Value.ToString().Should().Contain("cannot disable their own account");
+        var errorBody = Assert.IsAssignableFrom<object>(badRequestResult.Value);
+        errorBody.ToString().Should().Contain("cannot disable their own account");
 
         var userInDb = await dbContext.Users.FindAsync(adminId);
         userInDb!.IsActive.Should().BeTrue();
@@ -1587,7 +1588,8 @@ public class AdminUserManagementTests
         var badRequestResult = result.Result as BadRequestObjectResult;
         badRequestResult.Should().NotBeNull();
         badRequestResult!.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
-        badRequestResult.Value.ToString().Should().Contain("last remaining active ADMIN");
+        var errorBody = Assert.IsAssignableFrom<object>(badRequestResult.Value);
+        errorBody.ToString().Should().Contain("last remaining active ADMIN");
 
         var adminInDb = await dbContext.Users.FindAsync(loneAdmin.Id);
         adminInDb!.IsActive.Should().BeTrue();

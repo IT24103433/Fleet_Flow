@@ -51,7 +51,7 @@ public class RbacControllerTests
     public void TC_RBAC_05_UnauthenticatedRequest_ReturnsUnauthorized()
     {
         // Arrange
-        string authHeader = null;
+        string? authHeader = null;
 
         // Assert
         authHeader.Should().BeNull();

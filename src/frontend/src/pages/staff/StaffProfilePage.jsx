@@ -1,3 +1,5 @@
+import useOnboardingConfig from '../../components/onboarding/useOnboardingConfig';
+import AccountPanel from '../../components/onboarding/AccountPanel';
 import { CameraIcon } from "@phosphor-icons/react/dist/csr/Camera";
 import { UploadSimpleIcon } from "@phosphor-icons/react/dist/csr/UploadSimple";
 import { UserCircleIcon } from "@phosphor-icons/react/dist/csr/UserCircle";
@@ -20,6 +22,7 @@ const StaffProfilePage = () => {
     token,
     updateUser
   } = useAuth();
+  const onboardingConfig = useOnboardingConfig();
   const primaryRole = roles?.[0];
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
@@ -127,19 +130,17 @@ const StaffProfilePage = () => {
         </div>
 
         <div className="staff-hero-actions">
-          <Button variant="outline" onClick={() => setIsPasswordModalOpen(true)}>
-            Change Password
-          </Button>
+          <Button variant="outline" disabled={onboardingConfig.loading || Boolean(onboardingConfig.error)} onClick={() => onboardingConfig.enabled ? window.location.assign(`${window.location.hash.split('?')[0]}?section=security`) : setIsPasswordModalOpen(true)}>{onboardingConfig.loading ? 'Opening security…' : onboardingConfig.error ? 'Security unavailable' : onboardingConfig.enabled ? 'Manage security' : 'Change Password'}</Button>
         </div>
       </div>
 
       {/* Grid of Profile Sections */}
-      <div className="staff-sections-grid">
+      {!onboardingConfig.loading && !onboardingConfig.error && !onboardingConfig.enabled && <div className="staff-sections-grid">
         {/* System & Identity Details (Read Only) */}
         <div className="staff-panel-card">
           <div className="panel-header-strip">
             <h3 className="panel-heading">Account details</h3>
-            <span className="read-only-badge">Read only</span>
+            <span className="read-only-badge">Account summary</span>
           </div>
 
           <div className="info-fields-list">
@@ -172,10 +173,10 @@ const StaffProfilePage = () => {
         <div className="staff-panel-card">
           <div className="panel-header-strip">
             <h3 className="panel-heading">Contact information</h3>
-            <span className="read-only-badge">Read only</span>
+            <span className="read-only-badge">Account summary</span>
           </div>
 
-          <p className="profile-details-note">These are your saved account details. Contact information editing is not available yet.</p>
+          <p className="profile-details-note">These are your saved account details. Use the account settings below when editing is enabled for this environment.</p>
           <div className="info-fields-list">
             <div className="info-row">
               <span className="info-label">Work Direct Line</span>
@@ -191,7 +192,7 @@ const StaffProfilePage = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div>}
 
       {/* Change Password Modal */}
       <ChangePasswordModal isOpen={isPasswordModalOpen} onClose={() => setIsPasswordModalOpen(false)} />
@@ -230,6 +231,7 @@ const StaffProfilePage = () => {
           </div>
         </div>
       </Modal>
+      <AccountPanel customer={false} />
     </div>;
 };
 export default StaffProfilePage;

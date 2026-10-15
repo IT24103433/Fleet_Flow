@@ -41,6 +41,8 @@ const MaintenanceDashboardPage = React.lazy(() => import('./pages/maintenance/Ma
 // Security Pages
 import ForcePasswordChangePage from './pages/security/ForcePasswordChangePage';
 import './App.css';
+const DriverReviewsPage = React.lazy(() => import('./pages/onboarding/DriverReviewsPage'));
+const AccountAdministrationPage = React.lazy(() => import('./pages/onboarding/AccountAdministrationPage'));
 const NotificationDeliveryPage = React.lazy(() => import('./pages/admin/NotificationDeliveryPage'));
 const NotificationsPage = React.lazy(() => import('./pages/NotificationsPage'));
 import { REPORT_VIEWS, canViewReport } from './utils/reportPermissions';
@@ -48,7 +50,7 @@ const FleetPerformancePage = React.lazy(() => import('./pages/reports/FleetPerfo
 const BookingReportsPage = React.lazy(() => import('./pages/reports/BookingReportsPage'));
 const MaintenanceReportsPage = React.lazy(() => import('./pages/reports/MaintenanceReportsPage'));
 const STAFF_ROLES = ['FLEET_MANAGER', 'MAINTENANCE_STAFF', 'ADMIN'];
-const STAFF_VIEWS = ['rental-queue', 'staff-rental-record', ...REPORT_VIEWS, 'staff-dashboard', 'staff-notifications', 'admin-dashboard', 'admin-notification-delivery', 'admin-users', 'admin-create-user', 'admin-edit-user', 'admin-user-details', 'staff-profile', 'manage-fleet', 'maintenance-dashboard', 'add-vehicle', 'edit-vehicle', 'staff-vehicle-details', 'vehicle-images'];
+const STAFF_VIEWS = ['admin-account-security', 'admin-driver-reviews', 'rental-queue', 'staff-rental-record', ...REPORT_VIEWS, 'staff-dashboard', 'staff-notifications', 'admin-dashboard', 'admin-notification-delivery', 'admin-users', 'admin-create-user', 'admin-edit-user', 'admin-user-details', 'staff-profile', 'manage-fleet', 'maintenance-dashboard', 'add-vehicle', 'edit-vehicle', 'staff-vehicle-details', 'vehicle-images'];
 const CUSTOMER_ONLY_VIEWS = ['rental-record', 'customer-home', 'customer-profile', 'notifications'];
 function AppContent() {
   const {
@@ -177,7 +179,7 @@ function AppContent() {
       activeView = 'customer-home';
     } else if (isStaffUser && REPORT_VIEWS.includes(currentView) && !canViewReport(currentView, userRoles)) {
       activeView = 'staff-dashboard';
-    } else if (isStaffUser && ['admin-dashboard', 'admin-notification-delivery', 'admin-users', 'admin-create-user', 'admin-edit-user', 'admin-user-details'].includes(currentView) && !isAdminUser) {
+    } else if (isStaffUser && ['admin-account-security', 'admin-driver-reviews', 'admin-dashboard', 'admin-notification-delivery', 'admin-users', 'admin-create-user', 'admin-edit-user', 'admin-user-details'].includes(currentView) && !isAdminUser) {
       activeView = 'staff-dashboard';
     } else if (isStaffUser && ['rental-queue', 'staff-rental-record'].includes(currentView) && !canAddVehicle) {
       activeView = 'staff-dashboard';
@@ -264,6 +266,10 @@ function AppContent() {
           return <React.Suspense fallback={<p role="status">Loading report…</p>}><MaintenanceReportsPage key={user?.id} /></React.Suspense>;
         case 'admin-dashboard':
           return <AdminDashboardPage onNavigate={navigateTo} />;
+        case 'admin-driver-reviews':
+          return <DriverReviewsPage />;
+        case 'admin-account-security':
+          return <AccountAdministrationPage />;
         case 'admin-users':
           return <AdminUserListPage onNavigate={navigateTo} onSelectUser={selectUser} />;
         case 'admin-create-user':
@@ -309,6 +315,10 @@ function AppContent() {
           return 'Maintenance Reports';
         case 'admin-dashboard':
           return 'Administrator Workspace';
+        case 'admin-driver-reviews':
+          return 'Driver verification';
+        case 'admin-account-security':
+          return 'Account administration';
         case 'admin-users':
           return 'User directory';
         case 'admin-create-user':

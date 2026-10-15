@@ -26,8 +26,9 @@ public static class ServiceScopes
     public static readonly IReadOnlyDictionary<string, string[]> ClientGrants =
         new Dictionary<string, string[]>(StringComparer.Ordinal)
         {
-            ["rental-service"] = [FleetRead, ReservationWrite, IdentityAccessRead, NotificationDeliver],
+            ["rental-service"] = [FleetRead, ReservationWrite, IdentityAccessRead, NotificationDeliver, OnboardingScopes.DriverEligibility],
             ["fleet-service"] = [RentalReportsRead, IdentityAccessRead, IdentityStaffRead, NotificationDeliver],
-            ["notification-service"] = [IdentityAccessRead, NotificationOperations]
+            ["notification-service"] = [IdentityAccessRead, NotificationOperations, OnboardingScopes.ContactRead],
+            ["identity-service"] = [OnboardingScopes.EmailEnqueue, OnboardingScopes.AccountObligations, OnboardingScopes.RentalLifecycle, OnboardingScopes.NotificationLifecycle]
         };
 }

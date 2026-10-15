@@ -16,6 +16,8 @@ public class AdminUserService : IAdminUserService
     private readonly IPasswordHasher<User> _passwordHasher;
     private readonly IKafkaProducerService? _kafkaProducer;
     private readonly KafkaSettings _kafkaSettings;
+    private readonly IConfiguration? _configuration;
+    private readonly IdentityService.Api.Onboarding.OnboardingService? _onboarding;
 
     private static readonly HashSet<string> AllowedRoles = new(StringComparer.OrdinalIgnoreCase)
     {
@@ -29,12 +31,16 @@ public class AdminUserService : IAdminUserService
         IdentityDbContext dbContext,
         IPasswordHasher<User> passwordHasher,
         IKafkaProducerService? kafkaProducer = null,
-        IOptions<KafkaSettings>? kafkaSettings = null)
+        IOptions<KafkaSettings>? kafkaSettings = null,
+        IConfiguration? configuration = null,
+        IdentityService.Api.Onboarding.OnboardingService? onboarding = null)
     {
         _dbContext = dbContext;
         _passwordHasher = passwordHasher;
         _kafkaProducer = kafkaProducer;
         _kafkaSettings = kafkaSettings?.Value ?? new KafkaSettings();
+        _configuration = configuration;
+        _onboarding = onboarding;
     }
 
     public async Task<AdminUserResponse> CreateUserAsync(CreateAdminUserRequest request)
@@ -171,12 +177,16 @@ public class AdminUserService : IAdminUserService
             Address = address,
             DrivingLicenseNumber = drivingLicenseNumber,
             CreatedAt = DateTime.UtcNow
+            ,NeedsInitialEmailOtp = _configuration?.GetValue<bool>("ONBOARDING_ENABLED") == true
         };
 
         user.PasswordHash = _passwordHasher.HashPassword(user, request.InitialPassword);
         user.Roles.Add(role);
 
         _dbContext.Users.Add(user);
+        if(_onboarding?.Enabled==true)_onboarding.QueueEmail(new(Guid.NewGuid(),user.Id,user.Email,"AccountCreated","Your FleetFlow account is ready",
+            "An administrator created your FleetFlow account. Use the credentials provided separately to sign in and verify your email. Never send passwords or verification codes by email.",
+            ActionUrl:_onboarding.Frontend(normalizedRole=="CUSTOMER"?"#/login":"#/staff-login")));
         await _dbContext.SaveChangesAsync();
 
         if (_kafkaProducer != null)
@@ -230,6 +240,11 @@ public class AdminUserService : IAdminUserService
         if (user == null)
         {
             throw new NotFoundException($"User with ID '{id}' was not found.");
+        }
+        if(_configuration?.GetValue<bool>("ONBOARDING_ENABLED")==true)
+        {
+            if(user.DeletedAt!=null)throw new InvalidOperationException("Use the recycle bin to restore this account before editing it.");
+            if(!string.Equals(user.Email,request.Email?.Trim(),StringComparison.OrdinalIgnoreCase))throw new InvalidOperationException("Email changes require the account owner's reauthentication and new-address verification.");
         }
 
         if (string.IsNullOrWhiteSpace(request.Username))
@@ -413,6 +428,7 @@ public class AdminUserService : IAdminUserService
 
     public async Task DeleteUserAsync(Guid id, Guid currentUserId)
     {
+        if(_configuration?.GetValue<bool>("ONBOARDING_ENABLED")==true)throw new InvalidOperationException("Permanent account deletion is disabled. Customers use verified deletion and the thirty-day recycle bin; staff accounts can be disabled.");
         await using var transaction = await IdentityService.Api.Data.AccountWriteTransaction.BeginAsync(_dbContext);
         var user = await _dbContext.Users
             .Include(u => u.Roles)
@@ -462,6 +478,7 @@ public class AdminUserService : IAdminUserService
         {
             throw new NotFoundException($"User with ID '{id}' was not found.");
         }
+        if(user.DeletedAt!=null)throw new InvalidOperationException("Use the audited recycle-bin restoration workflow for this account.");
 
         // Self-disable protection: Admin cannot disable their own account
         if (!isActive && currentUserId != Guid.Empty && currentUserId == id)
@@ -527,6 +544,7 @@ public class AdminUserService : IAdminUserService
     public async Task<List<AdminUserResponse>> GetUsersAsync()
     {
         var users = await _dbContext.Users
+            .Where(u=>u.DeletedAt==null)
             .Include(u => u.Roles)
             .OrderByDescending(u => u.CreatedAt)
             .ToListAsync();

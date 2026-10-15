@@ -25,18 +25,18 @@ jobs:
   # =========================================================================
   backend-build:
     name: "Backend : Build & Package"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout Source Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup .NET SDK 10.0
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '10.0.x'
 
       - name: Cache NuGet Packages
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.nuget/packages
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/*.props') }}
@@ -71,7 +71,7 @@ jobs:
         run: dotnet publish tools/RentalMigration/RentalMigration.csproj --configuration Release --no-restore --output ./artifacts/rental-migration
 
       - name: Upload Backend Service Artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: backend-binaries
           path: ./artifacts
@@ -83,7 +83,7 @@ jobs:
   # =========================================================================
   backend-test:
     name: "Backend : Automated Tests"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: backend-build
     services:
       postgres:
@@ -121,15 +121,15 @@ jobs:
       FLEET_TEST_POSTGRES: Host=localhost;Port=5432;Database=fleetflow_hardening_ci;Username=postgres;Password=foundation_ci_only
     steps:
       - name: Checkout Source Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup .NET SDK 10.0
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '10.0.x'
 
       - name: Cache NuGet Packages
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.nuget/packages
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/*.props') }}
@@ -146,7 +146,7 @@ jobs:
 
       - name: Upload Test Results Report (TRX)
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: backend-test-results
           path: ./TestResults
@@ -158,13 +158,13 @@ jobs:
   # =========================================================================
   frontend-lint:
     name: "Frontend : Lint & Code Quality"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout Source Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node.js 22.x
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: '22.x'
           cache: 'npm'
@@ -184,13 +184,13 @@ jobs:
   # =========================================================================
   frontend-test:
     name: "Frontend : Automated Tests"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout Source Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node.js 22.x
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: '22.x'
           cache: 'npm'
@@ -210,14 +210,14 @@ jobs:
   # =========================================================================
   frontend-build:
     name: "Frontend : Production Build"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [frontend-lint, frontend-test]
     steps:
       - name: Checkout Source Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node.js 22.x
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: '22.x'
           cache: 'npm'
@@ -230,19 +230,24 @@ jobs:
       - name: Build Vite Production Assets
         working-directory: src/frontend
         run: npm run build
+        env:
+          VITE_IDENTITY_API_URL: ${{ vars.VITE_IDENTITY_API_URL || 'https://fleetflow-identity-api.azurewebsites.net' }}
+          VITE_FLEET_API_URL: ${{ vars.VITE_FLEET_API_URL || 'https://fleetflow-fleet-api.azurewebsites.net' }}
+          VITE_RENTAL_API_URL: ${{ vars.VITE_RENTAL_API_URL || 'https://fleetflow-rental-api.azurewebsites.net' }}
+          VITE_NOTIFICATION_API_URL: ${{ vars.VITE_NOTIFICATION_API_URL || 'https://fleetflow-notification-api.azurewebsites.net' }}
 
       - name: Enforce Entry JavaScript Budget
         run: node tools/Check-FrontendBundle.mjs --output artifacts/frontend-bundle-budget.json
 
       - name: Upload Frontend Bundle Evidence
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: frontend-bundle-budget
           path: artifacts/frontend-bundle-budget.json
           retention-days: 14
 
       - name: Upload Frontend Production Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: frontend-dist
           path: src/frontend/dist
@@ -254,7 +259,7 @@ jobs:
   # =========================================================================
   ci-quality-gate:
     name: "CI : Quality Gate Validation"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [backend-build, backend-test, frontend-lint, frontend-test, frontend-build]
     steps:
       - name: Verification Summary

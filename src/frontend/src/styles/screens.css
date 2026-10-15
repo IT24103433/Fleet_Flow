@@ -47,7 +47,19 @@
 
 .auth-footer-links {
   margin-top: var(--space-6);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  column-gap: 24px;
+  row-gap: 12px;
   text-align: center;
+}
+
+.auth-footer-links > .inline-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .auth-switch-text {
