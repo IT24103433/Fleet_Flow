@@ -7,6 +7,9 @@ permissions:
   contents: read
   id-token: write
 
+env:
+  AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+
 jobs:
   # =========================================================================
   # STAGE 1: BUILD & PACKAGE
@@ -63,7 +66,7 @@ jobs:
           path: ./dist
 
       - name: Azure Login via OIDC
-        if: ${{ secrets.AZURE_CLIENT_ID != '' }}
+        if: env.AZURE_CLIENT_ID != ''
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
