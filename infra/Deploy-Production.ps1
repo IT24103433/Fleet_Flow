@@ -46,6 +46,20 @@ function Test-ServiceReady([string]$name, [string]$probeUrl, [int]$maxRetries = 
     throw "$name failed health check probe after $($maxRetries * 5) seconds."
 }
 
+function New-LinuxZip([string]$sourceDir, [string]$destinationZip) {
+    if (Test-Path $destinationZip) { Remove-Item $destinationZip -Force }
+    $resolvedDir = (Get-Item $sourceDir).FullName.TrimEnd('\')
+    Add-Type -AssemblyName System.IO.Compression
+    Add-Type -AssemblyName System.IO.Compression.FileSystem
+    $archive = [System.IO.Compression.ZipFile]::Open($destinationZip, [System.IO.Compression.ZipArchiveMode]::Create)
+    $files = Get-ChildItem -Path $resolvedDir -Recurse -File
+    foreach ($file in $files) {
+        $relativePath = $file.FullName.Substring($resolvedDir.Length + 1).Replace('\', '/')
+        [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($archive, $file.FullName, $relativePath, [System.IO.Compression.CompressionLevel]::Optimal) | Out-Null
+    }
+    $archive.Dispose()
+}
+
 $RootDir = (Get-Item $PSScriptRoot).Parent.FullName
 $ArtifactsDir = Join-Path $RootDir "artifacts\publish"
 if (Test-Path $ArtifactsDir) {
@@ -127,21 +141,21 @@ if (-not $SkipFrontend) {
         $env:VITE_RENTAL_API_URL = "https://fleetflow-rental-api.azurewebsites.net"
         $env:VITE_NOTIFICATION_API_URL = "https://fleetflow-notification-api.azurewebsites.net"
 
-        & npm run build
+        cmd /c "npm run build"
         if ($LASTEXITCODE -ne 0) { throw "Frontend build failed." }
 
         Copy-Item -Path "server.js" -Destination "dist\server.js" -Force
         Copy-Item -Path "package.deploy.json" -Destination "dist\package.json" -Force
 
         $frontendZip = Join-Path $ArtifactsDir "frontend-app.zip"
-        Compress-Archive -Path "dist\*" -DestinationPath $frontendZip -Force
+        New-LinuxZip -sourceDir "dist" -destinationZip $frontendZip
     }
     finally {
         Pop-Location
     }
 
     Write-Host "Deploying to Azure Web App 'fleetflow-frontend'..." -ForegroundColor Cyan
-    & az webapp deploy --resource-group $ResourceGroup --name "fleetflow-frontend" --src-path $frontendZip --type zip --async true --track-status false --output none
+    & az webapp deploy --resource-group $ResourceGroup --name "fleetflow-frontend" --src-path $frontendZip --type zip --clean true --async true --track-status false --output none
     if ($LASTEXITCODE -ne 0) { throw "Frontend deployment failed." }
 
     Test-ServiceReady -name "Frontend" -probeUrl "https://fleetflow-frontend.azurewebsites.net"
