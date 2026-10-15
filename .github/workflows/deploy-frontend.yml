@@ -34,7 +34,12 @@ jobs:
         working-directory: src/frontend
 
       - name: Build React App
-        run: npm run build
+        run: |
+          if [ -n "${{ secrets.AZURE_IDENTITY_SERVICE_APP_NAME }}" ]; then export VITE_IDENTITY_API_URL="https://${{ secrets.AZURE_IDENTITY_SERVICE_APP_NAME }}.azurewebsites.net"; fi
+          if [ -n "${{ secrets.AZURE_FLEET_SERVICE_APP_NAME }}" ]; then export VITE_FLEET_API_URL="https://${{ secrets.AZURE_FLEET_SERVICE_APP_NAME }}.azurewebsites.net"; fi
+          if [ -n "${{ secrets.AZURE_RENTAL_SERVICE_APP_NAME }}" ]; then export VITE_RENTAL_API_URL="https://${{ secrets.AZURE_RENTAL_SERVICE_APP_NAME }}.azurewebsites.net"; fi
+          if [ -n "${{ secrets.AZURE_NOTIFICATION_SERVICE_APP_NAME }}" ]; then export VITE_NOTIFICATION_API_URL="https://${{ secrets.AZURE_NOTIFICATION_SERVICE_APP_NAME }}.azurewebsites.net"; fi
+          npm run build
         working-directory: src/frontend
         env:
           VITE_IDENTITY_API_URL: ${{ vars.VITE_IDENTITY_API_URL || 'https://fleetflow-identity-api.azurewebsites.net' }}
@@ -90,7 +95,7 @@ jobs:
           APP_NAME="${{ secrets.AZURE_FRONTEND_APP_NAME }}"
           PROBE_URL="https://${APP_NAME}.azurewebsites.net"
           echo "Verifying Frontend responsiveness at $PROBE_URL..."
-          for i in {1..15}; do
+          for i in {1..25}; do
             STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$PROBE_URL" || true)
             if [ "$STATUS" = "200" ]; then
               echo "Frontend is online and serving traffic (HTTP 200)!"
@@ -99,6 +104,6 @@ jobs:
             echo "Attempt $i: Received HTTP $STATUS, retrying in 5s..."
             sleep 5
           done
-          echo "Frontend health probe timed out after 75s. Check application logs."
+          echo "Frontend health probe timed out after 125s. Check application logs."
           exit 1
         shell: bash

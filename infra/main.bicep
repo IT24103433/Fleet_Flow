@@ -168,6 +168,9 @@ resource identityApp 'Microsoft.Web/sites@2023-01-01' = {
       linuxFxVersion: 'DOTNETCORE|9.0'
       alwaysOn: true
       healthCheckPath: '/health/ready'
+      http20Enabled: true
+      minTlsVersion: '1.2'
+      ftpsState: 'Disabled'
       appSettings: [
         { name: 'ASPNETCORE_ENVIRONMENT', value: 'Production' }
         { name: 'ConnectionStrings__DefaultConnection', value: authConnStr }
@@ -197,6 +200,9 @@ resource fleetApp 'Microsoft.Web/sites@2023-01-01' = {
       linuxFxVersion: 'DOTNETCORE|9.0'
       alwaysOn: true
       healthCheckPath: '/health/ready'
+      http20Enabled: true
+      minTlsVersion: '1.2'
+      ftpsState: 'Disabled'
       appSettings: [
         { name: 'ASPNETCORE_ENVIRONMENT', value: 'Production' }
         { name: 'ConnectionStrings__DefaultConnection', value: fleetConnStr }
@@ -229,6 +235,9 @@ resource rentalApp 'Microsoft.Web/sites@2023-01-01' = {
       linuxFxVersion: 'DOTNETCORE|9.0'
       alwaysOn: true
       healthCheckPath: '/health/ready'
+      http20Enabled: true
+      minTlsVersion: '1.2'
+      ftpsState: 'Disabled'
       appSettings: [
         { name: 'ASPNETCORE_ENVIRONMENT', value: 'Production' }
         { name: 'ConnectionStrings__DefaultConnection', value: rentalConnStr }
@@ -261,6 +270,9 @@ resource notificationApp 'Microsoft.Web/sites@2023-01-01' = {
       linuxFxVersion: 'DOTNETCORE|9.0'
       alwaysOn: true
       healthCheckPath: '/health/ready'
+      http20Enabled: true
+      minTlsVersion: '1.2'
+      ftpsState: 'Disabled'
       appSettings: [
         { name: 'ASPNETCORE_ENVIRONMENT', value: 'Production' }
         { name: 'ConnectionStrings__DefaultConnection', value: notificationConnStr }
@@ -287,6 +299,9 @@ resource frontendApp 'Microsoft.Web/sites@2023-01-01' = {
     siteConfig: {
       linuxFxVersion: 'NODE|22-lts'
       appCommandLine: 'node server.js'
+      http20Enabled: true
+      minTlsVersion: '1.2'
+      ftpsState: 'Disabled'
       appSettings: [
         { name: 'NODE_ENV', value: 'production' }
         { name: 'PORT', value: '8080' }

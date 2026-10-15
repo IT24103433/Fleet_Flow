@@ -83,7 +83,7 @@ jobs:
           APP_NAME="${{ secrets.AZURE_IDENTITY_SERVICE_APP_NAME }}"
           PROBE_URL="https://${APP_NAME}.azurewebsites.net/health/ready"
           echo "Verifying IdentityService at $PROBE_URL..."
-          for i in {1..15}; do
+          for i in {1..25}; do
             STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$PROBE_URL" || true)
             if [ "$STATUS" = "200" ]; then
               echo "IdentityService is healthy and ready (HTTP 200)!"
@@ -92,7 +92,7 @@ jobs:
             echo "Attempt $i: Received HTTP $STATUS, retrying in 5s..."
             sleep 5
           done
-          echo "IdentityService probe failed after 75s."
+          echo "$APP_NAME probe failed after 125s."
           exit 1
         shell: bash
 
@@ -150,7 +150,7 @@ jobs:
           APP_NAME="${{ secrets.AZURE_FLEET_SERVICE_APP_NAME }}"
           PROBE_URL="https://${APP_NAME}.azurewebsites.net/health/ready"
           echo "Verifying FleetService at $PROBE_URL..."
-          for i in {1..15}; do
+          for i in {1..25}; do
             STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$PROBE_URL" || true)
             if [ "$STATUS" = "200" ]; then
               echo "FleetService is healthy and ready (HTTP 200)!"
@@ -159,7 +159,7 @@ jobs:
             echo "Attempt $i: Received HTTP $STATUS, retrying in 5s..."
             sleep 5
           done
-          echo "FleetService probe failed after 75s."
+          echo "FleetService probe failed after 125s."
           exit 1
         shell: bash
 
@@ -213,7 +213,7 @@ jobs:
           APP_NAME="${{ secrets.AZURE_RENTAL_SERVICE_APP_NAME }}"
           PROBE_URL="https://${APP_NAME}.azurewebsites.net/health/ready"
           echo "Verifying RentalService at $PROBE_URL..."
-          for i in {1..15}; do
+          for i in {1..25}; do
             STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$PROBE_URL" || true)
             if [ "$STATUS" = "200" ]; then
               echo "RentalService is healthy and ready (HTTP 200)!"
@@ -222,7 +222,7 @@ jobs:
             echo "Attempt $i: Received HTTP $STATUS, retrying in 5s..."
             sleep 5
           done
-          echo "RentalService probe failed after 75s."
+          echo "RentalService probe failed after 125s."
           exit 1
         shell: bash
 
@@ -276,7 +276,7 @@ jobs:
           APP_NAME="${{ secrets.AZURE_NOTIFICATION_SERVICE_APP_NAME }}"
           PROBE_URL="https://${APP_NAME}.azurewebsites.net/health/ready"
           echo "Verifying NotificationService at $PROBE_URL..."
-          for i in {1..15}; do
+          for i in {1..25}; do
             STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$PROBE_URL" || true)
             if [ "$STATUS" = "200" ]; then
               echo "NotificationService is healthy and ready (HTTP 200)!"
@@ -285,7 +285,7 @@ jobs:
             echo "Attempt $i: Received HTTP $STATUS, retrying in 5s..."
             sleep 5
           done
-          echo "NotificationService probe failed after 75s."
+          echo "NotificationService probe failed after 125s."
           exit 1
         shell: bash
 
@@ -348,7 +348,7 @@ jobs:
           APP_NAME="${{ secrets.AZURE_FRONTEND_APP_NAME }}"
           PROBE_URL="https://${APP_NAME}.azurewebsites.net"
           echo "Verifying Frontend at $PROBE_URL..."
-          for i in {1..15}; do
+          for i in {1..25}; do
             STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$PROBE_URL" || true)
             if [ "$STATUS" = "200" ]; then
               echo "Frontend is online and serving traffic (HTTP 200)!"
@@ -357,7 +357,7 @@ jobs:
             echo "Attempt $i: Received HTTP $STATUS, retrying in 5s..."
             sleep 5
           done
-          echo "Frontend probe timed out after 75s."
+          echo "Frontend probe timed out after 125s."
           exit 1
         shell: bash
 

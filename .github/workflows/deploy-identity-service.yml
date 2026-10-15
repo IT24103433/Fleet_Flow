@@ -92,7 +92,7 @@ jobs:
           APP_NAME="${{ secrets.AZURE_IDENTITY_SERVICE_APP_NAME }}"
           PROBE_URL="https://${APP_NAME}.azurewebsites.net/health/ready"
           echo "Verifying IdentityService readiness at $PROBE_URL..."
-          for i in {1..15}; do
+          for i in {1..25}; do
             STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$PROBE_URL" || true)
             if [ "$STATUS" = "200" ]; then
               echo "IdentityService is healthy and ready (HTTP 200)!"
@@ -101,6 +101,6 @@ jobs:
             echo "Attempt $i: Received HTTP $STATUS, retrying in 5s..."
             sleep 5
           done
-          echo "IdentityService readiness probe timed out after 75s. Check application logs."
+          echo "IdentityService readiness probe timed out after 125s. Check application logs."
           exit 1
         shell: bash
