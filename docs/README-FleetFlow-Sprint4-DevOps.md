@@ -130,14 +130,14 @@ The Azure owner should first inventory the subscription, resource group, region,
 
 Provide four independently deployed API apps, one frontend host, four owned databases, persistent upload storage, reachable Kafka and monitoring. Resource sizing must follow the actual subscription and measured load; the local rehearsal does not prove the old B1 plan is sufficient. If using App Service for background workers, configure an appropriate plan and Always On so outbox/recovery/consumer processes continue running.
 
-**Repository gaps the DevOps owner must resolve before rollout:**
+**Repository gaps resolved for Sprint 4 rollout:**
 
-- `infra/main.bicep` is a legacy two-API/two-database template with `.NET 8` settings. It does not provision the complete four-service topology or Kafka.
-- `infra/deploy.ps1` provisions the legacy topology and prints publishing profiles. Do not run it unchanged or share its credential output.
-- The legacy develop, Identity, Fleet and frontend deployment workflows are **manual-only**. Ordinary CI stays automatic. A merge into `main` does not deploy the completed release. Add/adapt a coordinated deployment workflow for all four APIs and the correctly configured frontend.
-- Prefer GitHub/Azure OIDC for deployment identity, with approved repository environments and scoped Azure permissions. See [Microsoft's GitHub Actions deployment guidance](https://learn.microsoft.com/en-us/azure/app-service/deploy-github-actions?tabs=openid).
+- `infra/main.bicep` has been modernized to provision all four microservice App Services (`fleetflow-identity-api`, `fleetflow-fleet-api`, `fleetflow-rental-api`, `fleetflow-notification-api`), the `fleetflow-frontend`, four owned PostgreSQL databases (`fleetflow_auth`, `fleetflow_fleet`, `fleetflow_rental`, `fleetflow_notifications`), Azure Key Vault, and an Event Hubs namespace with Kafka topics.
+- `infra/deploy.ps1` has been updated to provision the modernized Bicep template and automatically generate GitHub Actions OIDC federated credentials via `-ConfigureGitHubOidc`.
+- Added the master coordinated deployment orchestrator workflow `.github/workflows/deploy-orchestrator.yml`, ensuring sequential phased releases (`Identity` $\rightarrow$ `Fleet`/`Rental`/`Notification` in parallel $\rightarrow$ `Frontend`) with automated smoke test gates.
+- Updated all individual `deploy-*.yml` workflows with GitHub OIDC support (`azure/login@v2`) and automated post-deployment readiness probing against `/health/ready`.
+- Added SASL/TLS protocol configuration support (`SecurityProtocol`, `SaslMechanism`, `SaslUsername`, `SaslPassword`) to all backend microservices, enabling native Azure Event Hubs (Kafka protocol) connectivity.
 - Verify trusted reverse-proxy/HTTPS forwarding. The non-Development token broker checks `Request.IsHttps`; public HTTPS alone is insufficient if the application sees an untrusted HTTP scheme behind TLS termination. Confirm this before activating internal service calls; do not weaken the HTTPS requirement.
-- Kafka clients currently expose broker/topic/group settings but not SASL/security-protocol settings. Do not assume Azure Event Hubs or a managed SASL/TLS endpoint is a drop-in replacement. Choose compatible private infrastructure, or separately implement and test the provider's required client configuration. Do not expose a plaintext broker publicly.
 
 For custom App Service containers, persist uploads through a configured persistent mount rather than the container's writable layer. Set upload roots to that mount, ensure the non-root container user can write there, and verify photographs survive replacement/restart. See [Microsoft's container storage guidance](https://learn.microsoft.com/en-us/azure/app-service/configure-custom-container?pivots=container-linux&tabs=debian).
 

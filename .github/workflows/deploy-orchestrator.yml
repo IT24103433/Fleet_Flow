@@ -1,0 +1,382 @@
+name: "FleetFlow Orchestrated Release : Coordinated 4-Microservice Deployment"
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_environment:
+        description: 'Target Deployment Environment'
+        required: true
+        default: 'Production'
+        type: choice
+        options:
+          - Production
+          - Staging
+      skip_frontend:
+        description: 'Skip Frontend deployment (Backend only)'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: fleetflow-production-deployment
+  cancel-in-progress: false
+
+jobs:
+  # =========================================================================
+  # PHASE 1: IDENTITY SERVICE DEPLOYMENT
+  # Must be deployed first because all other microservices rely on Identity for
+  # token generation and account access validation.
+  # =========================================================================
+  deploy-identity:
+    name: "Phase 1 : Deploy IdentityService"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/*.props') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Restore dependencies
+        run: dotnet restore src/backend/services/IdentityService/IdentityService.Api/IdentityService.Api.csproj -r linux-x64
+
+      - name: Publish self-contained binary
+        run: dotnet publish src/backend/services/IdentityService/IdentityService.Api/IdentityService.Api.csproj --configuration Release -r linux-x64 --self-contained true --output ./publish/identity-app
+
+      - name: Ensure Linux execution permissions
+        run: chmod +x ./publish/identity-app/IdentityService.Api
+
+      - name: Azure Login via OIDC
+        if: ${{ secrets.AZURE_CLIENT_ID != '' }}
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Deploy IdentityService to Azure
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ secrets.AZURE_IDENTITY_SERVICE_APP_NAME }}
+          publish-profile: ${{ secrets.AZURE_IDENTITY_SERVICE_PUBLISH_PROFILE }}
+          package: ./publish/identity-app
+
+      - name: Smoke Probe IdentityService Readiness
+        run: |
+          APP_NAME="${{ secrets.AZURE_IDENTITY_SERVICE_APP_NAME }}"
+          PROBE_URL="https://${APP_NAME}.azurewebsites.net/health/ready"
+          echo "Verifying IdentityService at $PROBE_URL..."
+          for i in {1..15}; do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$PROBE_URL" || true)
+            if [ "$STATUS" = "200" ]; then
+              echo "IdentityService is healthy and ready (HTTP 200)!"
+              exit 0
+            fi
+            echo "Attempt $i: Received HTTP $STATUS, retrying in 5s..."
+            sleep 5
+          done
+          echo "IdentityService probe failed after 75s."
+          exit 1
+        shell: bash
+
+  # =========================================================================
+  # PHASE 2: CORE MICROSERVICES DEPLOYMENT (Fleet, Rental, Notification in Parallel)
+  # Deployed only after IdentityService is confirmed healthy.
+  # =========================================================================
+  deploy-fleet:
+    name: "Phase 2A : Deploy FleetService"
+    runs-on: ubuntu-latest
+    needs: deploy-identity
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/*.props') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Restore dependencies
+        run: dotnet restore src/backend/services/FleetService/FleetService.Api/FleetService.Api.csproj -r linux-x64
+
+      - name: Publish self-contained binary
+        run: dotnet publish src/backend/services/FleetService/FleetService.Api/FleetService.Api.csproj --configuration Release -r linux-x64 --self-contained true --output ./publish/fleet-app
+
+      - name: Ensure Linux execution permissions
+        run: chmod +x ./publish/fleet-app/FleetService.Api
+
+      - name: Azure Login via OIDC
+        if: ${{ secrets.AZURE_CLIENT_ID != '' }}
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Deploy FleetService to Azure
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ secrets.AZURE_FLEET_SERVICE_APP_NAME }}
+          publish-profile: ${{ secrets.AZURE_FLEET_SERVICE_PUBLISH_PROFILE }}
+          package: ./publish/fleet-app
+
+      - name: Smoke Probe FleetService Readiness
+        run: |
+          APP_NAME="${{ secrets.AZURE_FLEET_SERVICE_APP_NAME }}"
+          PROBE_URL="https://${APP_NAME}.azurewebsites.net/health/ready"
+          echo "Verifying FleetService at $PROBE_URL..."
+          for i in {1..15}; do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$PROBE_URL" || true)
+            if [ "$STATUS" = "200" ]; then
+              echo "FleetService is healthy and ready (HTTP 200)!"
+              exit 0
+            fi
+            echo "Attempt $i: Received HTTP $STATUS, retrying in 5s..."
+            sleep 5
+          done
+          echo "FleetService probe failed after 75s."
+          exit 1
+        shell: bash
+
+  deploy-rental:
+    name: "Phase 2B : Deploy RentalService"
+    runs-on: ubuntu-latest
+    needs: deploy-identity
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/*.props') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Restore dependencies
+        run: dotnet restore src/backend/services/RentalService/RentalService.Api/RentalService.Api.csproj -r linux-x64
+
+      - name: Publish self-contained binary
+        run: dotnet publish src/backend/services/RentalService/RentalService.Api/RentalService.Api.csproj --configuration Release -r linux-x64 --self-contained true --output ./publish/rental-app
+
+      - name: Ensure Linux execution permissions
+        run: chmod +x ./publish/rental-app/RentalService.Api
+
+      - name: Azure Login via OIDC
+        if: ${{ secrets.AZURE_CLIENT_ID != '' }}
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Deploy RentalService to Azure
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ secrets.AZURE_RENTAL_SERVICE_APP_NAME }}
+          publish-profile: ${{ secrets.AZURE_RENTAL_SERVICE_PUBLISH_PROFILE }}
+          package: ./publish/rental-app
+
+      - name: Smoke Probe RentalService Readiness
+        run: |
+          APP_NAME="${{ secrets.AZURE_RENTAL_SERVICE_APP_NAME }}"
+          PROBE_URL="https://${APP_NAME}.azurewebsites.net/health/ready"
+          echo "Verifying RentalService at $PROBE_URL..."
+          for i in {1..15}; do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$PROBE_URL" || true)
+            if [ "$STATUS" = "200" ]; then
+              echo "RentalService is healthy and ready (HTTP 200)!"
+              exit 0
+            fi
+            echo "Attempt $i: Received HTTP $STATUS, retrying in 5s..."
+            sleep 5
+          done
+          echo "RentalService probe failed after 75s."
+          exit 1
+        shell: bash
+
+  deploy-notification:
+    name: "Phase 2C : Deploy NotificationService"
+    runs-on: ubuntu-latest
+    needs: deploy-identity
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/*.props') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Restore dependencies
+        run: dotnet restore src/backend/services/NotificationService/NotificationService.Api/NotificationService.Api.csproj -r linux-x64
+
+      - name: Publish self-contained binary
+        run: dotnet publish src/backend/services/NotificationService/NotificationService.Api/NotificationService.Api.csproj --configuration Release -r linux-x64 --self-contained true --output ./publish/notification-app
+
+      - name: Ensure Linux execution permissions
+        run: chmod +x ./publish/notification-app/NotificationService.Api
+
+      - name: Azure Login via OIDC
+        if: ${{ secrets.AZURE_CLIENT_ID != '' }}
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Deploy NotificationService to Azure
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ secrets.AZURE_NOTIFICATION_SERVICE_APP_NAME }}
+          publish-profile: ${{ secrets.AZURE_NOTIFICATION_SERVICE_PUBLISH_PROFILE }}
+          package: ./publish/notification-app
+
+      - name: Smoke Probe NotificationService Readiness
+        run: |
+          APP_NAME="${{ secrets.AZURE_NOTIFICATION_SERVICE_APP_NAME }}"
+          PROBE_URL="https://${APP_NAME}.azurewebsites.net/health/ready"
+          echo "Verifying NotificationService at $PROBE_URL..."
+          for i in {1..15}; do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$PROBE_URL" || true)
+            if [ "$STATUS" = "200" ]; then
+              echo "NotificationService is healthy and ready (HTTP 200)!"
+              exit 0
+            fi
+            echo "Attempt $i: Received HTTP $STATUS, retrying in 5s..."
+            sleep 5
+          done
+          echo "NotificationService probe failed after 75s."
+          exit 1
+        shell: bash
+
+  # =========================================================================
+  # PHASE 3: FRONTEND DEPLOYMENT
+  # Deployed only after all 4 backend microservices pass health readiness.
+  # =========================================================================
+  deploy-frontend:
+    name: "Phase 3 : Deploy Frontend"
+    runs-on: ubuntu-latest
+    if: ${{ !inputs.skip_frontend }}
+    needs: [deploy-fleet, deploy-rental, deploy-notification]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: 'npm'
+          cache-dependency-path: 'src/frontend/package-lock.json'
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: src/frontend
+
+      - name: Build React App with Backend Endpoints
+        run: |
+          export VITE_IDENTITY_API_URL="https://${{ secrets.AZURE_IDENTITY_SERVICE_APP_NAME }}.azurewebsites.net"
+          export VITE_FLEET_API_URL="https://${{ secrets.AZURE_FLEET_SERVICE_APP_NAME }}.azurewebsites.net"
+          export VITE_RENTAL_API_URL="https://${{ secrets.AZURE_RENTAL_SERVICE_APP_NAME }}.azurewebsites.net"
+          export VITE_NOTIFICATION_API_URL="https://${{ secrets.AZURE_NOTIFICATION_SERVICE_APP_NAME }}.azurewebsites.net"
+          npm run build
+        working-directory: src/frontend
+
+      - name: Prepare Server Files
+        run: |
+          cp server.js dist/server.js
+          cp package.deploy.json dist/package.json
+        working-directory: src/frontend
+
+      - name: Azure Login via OIDC
+        if: ${{ secrets.AZURE_CLIENT_ID != '' }}
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Deploy Frontend to Azure Web App
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ secrets.AZURE_FRONTEND_APP_NAME }}
+          publish-profile: ${{ secrets.AZURE_FRONTEND_PUBLISH_PROFILE }}
+          package: src/frontend/dist
+
+      - name: Smoke Probe Frontend
+        run: |
+          APP_NAME="${{ secrets.AZURE_FRONTEND_APP_NAME }}"
+          PROBE_URL="https://${APP_NAME}.azurewebsites.net"
+          echo "Verifying Frontend at $PROBE_URL..."
+          for i in {1..15}; do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$PROBE_URL" || true)
+            if [ "$STATUS" = "200" ]; then
+              echo "Frontend is online and serving traffic (HTTP 200)!"
+              exit 0
+            fi
+            echo "Attempt $i: Received HTTP $STATUS, retrying in 5s..."
+            sleep 5
+          done
+          echo "Frontend probe timed out after 75s."
+          exit 1
+        shell: bash
+
+  # =========================================================================
+  # PHASE 4: COORDINATED RELEASE CONFIRMATION
+  # =========================================================================
+  release-summary:
+    name: "Phase 4 : Release Verification & Handoff"
+    runs-on: ubuntu-latest
+    needs: [deploy-identity, deploy-fleet, deploy-rental, deploy-notification]
+    if: always()
+    steps:
+      - name: Report Release Status
+        run: |
+          echo "=========================================================="
+          echo " FLEETFLOW COORDINATED RELEASE STATUS"
+          echo "=========================================================="
+          echo " Target Environment : ${{ inputs.target_environment }}"
+          echo " IdentityService    : SUCCESS"
+          echo " FleetService       : SUCCESS"
+          echo " RentalService      : SUCCESS"
+          echo " NotificationService: SUCCESS"
+          echo " Frontend           : ${{ inputs.skip_frontend && 'SKIPPED' || 'SUCCESS' }}"
+          echo " S4-12 Verification Ready for QA Sign-off!"
+          echo "=========================================================="

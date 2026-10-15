@@ -26,12 +26,14 @@ public class NotificationKafkaConsumer(IServiceScopeFactory scopes, IOptions<Kaf
                 using (var readinessScope=scopes.CreateScope())
                     if (!await readinessScope.ServiceProvider.GetRequiredService<IDatabaseReadiness>().IsReadyAsync(stoppingToken))
                     { await Task.Delay(2000,stoppingToken); continue; }
-                using var consumer = new ConsumerBuilder<string, string>(new ConsumerConfig
+                var consumerConfig = new ConsumerConfig
                 {
                     BootstrapServers = settings.BootstrapServers, GroupId = settings.NotificationConsumerGroupId,
                     AutoOffsetReset = AutoOffsetReset.Earliest, EnableAutoCommit = false,
                     EnableAutoOffsetStore = false, AllowAutoCreateTopics = false, SocketTimeoutMs = 5000, SessionTimeoutMs = 10000
-                }).Build();
+                };
+                settings.ApplyClientConfig(consumerConfig);
+                using var consumer = new ConsumerBuilder<string, string>(consumerConfig).Build();
                 consumer.Subscribe(new[] { settings.BookingEventsTopic, settings.MaintenanceEventsTopic });
                 try
                 {

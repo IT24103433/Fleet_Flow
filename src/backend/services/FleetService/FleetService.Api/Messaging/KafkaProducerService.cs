@@ -40,6 +40,7 @@ public class KafkaProducerService : IKafkaProducerService, IDisposable
                 MessageTimeoutMs = 5000,
                 SocketTimeoutMs = 5000
             };
+            _settings.ApplyClientConfig(config);
 
             return new ProducerBuilder<string, string>(config).Build();
         }
