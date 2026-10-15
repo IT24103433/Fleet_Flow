@@ -70,7 +70,7 @@ if (-not $SkipBackend) {
     Compress-Archive -Path "$identityOut\*" -DestinationPath $identityZip -Force
 
     Write-Host "Deploying to Azure Web App 'fleetflow-identity-api'..." -ForegroundColor Cyan
-    & az webapp deploy --resource-group $ResourceGroup --name "fleetflow-identity-api" --src-path $identityZip --type zip --async true --output none
+    & az webapp deploy --resource-group $ResourceGroup --name "fleetflow-identity-api" --src-path $identityZip --type zip --async true --track-status false --output none
     if ($LASTEXITCODE -ne 0) { throw "IdentityService deployment failed." }
 
     Test-ServiceReady -name "IdentityService" -probeUrl "https://fleetflow-identity-api.azurewebsites.net/health/ready"
@@ -85,7 +85,7 @@ if (-not $SkipBackend) {
     & dotnet publish $fleetProj -c Release -r linux-x64 --self-contained true -o $fleetOut
     if ($LASTEXITCODE -ne 0) { throw "FleetService publish failed." }
     Compress-Archive -Path "$fleetOut\*" -DestinationPath $fleetZip -Force
-    & az webapp deploy --resource-group $ResourceGroup --name "fleetflow-fleet-api" --src-path $fleetZip --type zip --async true --output none
+    & az webapp deploy --resource-group $ResourceGroup --name "fleetflow-fleet-api" --src-path $fleetZip --type zip --async true --track-status false --output none
     if ($LASTEXITCODE -ne 0) { throw "FleetService deployment failed." }
 
     Write-Step "Phase 2B : Publishing and Deploying RentalService"
@@ -95,7 +95,7 @@ if (-not $SkipBackend) {
     & dotnet publish $rentalProj -c Release -r linux-x64 --self-contained true -o $rentalOut
     if ($LASTEXITCODE -ne 0) { throw "RentalService publish failed." }
     Compress-Archive -Path "$rentalOut\*" -DestinationPath $rentalZip -Force
-    & az webapp deploy --resource-group $ResourceGroup --name "fleetflow-rental-api" --src-path $rentalZip --type zip --async true --output none
+    & az webapp deploy --resource-group $ResourceGroup --name "fleetflow-rental-api" --src-path $rentalZip --type zip --async true --track-status false --output none
     if ($LASTEXITCODE -ne 0) { throw "RentalService deployment failed." }
 
     Write-Step "Phase 2C : Publishing and Deploying NotificationService"
@@ -105,7 +105,7 @@ if (-not $SkipBackend) {
     & dotnet publish $notifProj -c Release -r linux-x64 --self-contained true -o $notifOut
     if ($LASTEXITCODE -ne 0) { throw "NotificationService publish failed." }
     Compress-Archive -Path "$notifOut\*" -DestinationPath $notifZip -Force
-    & az webapp deploy --resource-group $ResourceGroup --name "fleetflow-notification-api" --src-path $notifZip --type zip --async true --output none
+    & az webapp deploy --resource-group $ResourceGroup --name "fleetflow-notification-api" --src-path $notifZip --type zip --async true --track-status false --output none
     if ($LASTEXITCODE -ne 0) { throw "NotificationService deployment failed." }
 
     Test-ServiceReady -name "FleetService" -probeUrl "https://fleetflow-fleet-api.azurewebsites.net/health/ready"
@@ -141,7 +141,7 @@ if (-not $SkipFrontend) {
     }
 
     Write-Host "Deploying to Azure Web App 'fleetflow-frontend'..." -ForegroundColor Cyan
-    & az webapp deploy --resource-group $ResourceGroup --name "fleetflow-frontend" --src-path $frontendZip --type zip --async true --output none
+    & az webapp deploy --resource-group $ResourceGroup --name "fleetflow-frontend" --src-path $frontendZip --type zip --async true --track-status false --output none
     if ($LASTEXITCODE -ne 0) { throw "Frontend deployment failed." }
 
     Test-ServiceReady -name "Frontend" -probeUrl "https://fleetflow-frontend.azurewebsites.net"
