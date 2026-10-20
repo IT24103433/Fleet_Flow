@@ -8,6 +8,7 @@ on:
       - 'feat/**'
       - 'bugfix/**'
       - 'qa/**'
+      - 'test/**'
   pull_request:
     branches:
       - main
@@ -152,6 +153,31 @@ jobs:
           path: ./TestResults
           retention-days: 14
 
+  # SE3112: Sanjeevsaran's focused unit/mocking contribution. No database/broker services.
+  ase-unit:
+    name: "ASE : Unit Tests & Coverage"
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v5
+      - name: Setup .NET SDK 10.0
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
+      - name: Verify Evidence Acceptance Rules
+        run: python3 -B -m unittest discover -s tools/testing -p test_summary.py -v
+      - name: Run Focused xUnit and Moq Suites
+        shell: pwsh
+        run: ./tools/testing/Run-Unit.ps1 -PythonExecutable python3 -ResultsDirectory artifacts/ase-unit
+      - name: Publish Unit and Coverage Evidence
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: ase-unit-evidence
+          path: artifacts/ase-unit/
+          if-no-files-found: error
+          retention-days: 30
+
   # =========================================================================
   # STAGE 3: FRONTEND LINT
   # Enforces static code quality and syntax rules
@@ -260,7 +286,7 @@ jobs:
   ci-quality-gate:
     name: "CI : Quality Gate Validation"
     runs-on: ubuntu-24.04
-    needs: [backend-build, backend-test, frontend-lint, frontend-test, frontend-build]
+    needs: [backend-build, backend-test, ase-unit, frontend-lint, frontend-test, frontend-build]
     steps:
       - name: Verification Summary
         run: |
@@ -268,6 +294,7 @@ jobs:
           echo " ALL QUALITY GATES PASSED SUCCESSFULLY!"
           echo " - Backend Build & Publish    : SUCCESS"
           echo " - Backend Unit Tests (xUnit) : SUCCESS"
+          echo " - ASE Unit + Coverage        : SUCCESS"
           echo " - Frontend Lint (ESLint)     : SUCCESS"
           echo " - Frontend Tests (Node test) : SUCCESS"
           echo " - Frontend Production Build  : SUCCESS"
