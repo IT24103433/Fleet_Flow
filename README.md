@@ -19,6 +19,8 @@ Start with the [Sprint 4 release handoff](docs/s4-11-release-handoff.md) for con
 
 ## Table of Contents
 
+**SE3112 assessment:** [Group testing ownership and automation](docs/testing/README.md), [Sanjeevsaran's unit-testing implementation](docs/testing/unit.md), and [live demo / VIVA guide](docs/testing/unit-demo.md).
+
 - [Repository Structure](#repository-structure)
 - [Prerequisites](#prerequisites)
 - [Unified Build & Verification Script](#unified-build--verification-script)

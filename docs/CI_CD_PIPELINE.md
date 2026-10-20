@@ -49,9 +49,28 @@ flowchart TD
 | **`frontend-test`** | `npm test`<br>160+ client unit tests | Console report / TAP | **Client-side State / Logic / Validation Error**.<br>Flags client regression without waiting for bundle compilation. |
 | **`frontend-build`** | `npm run build`<br>Vite production bundler | `frontend-dist`<br>(Production static bundle) | **Vite Bundle Error / Asset Resolution Failure**.<br>Only runs after linting and tests pass. |
 | **`ci-quality-gate`** | Aggregation barrier | Pipeline badge green status | **Overall Quality Assurance Gate**.<br>Guarantees all sub-systems are verified before deployment. |
-| **`deploy-*`** | Isolated `build` and `deploy` jobs | Azure App Service deployment | **Environment / Credential / Cloud Configuration Failure**.<br>Isolated from code logic issues. |
+| **`deploy-*`** | Isolated `build`, `deploy`, and `smoke-probe` jobs | Azure App Service deployment | **Environment / Credential / Cloud Warmup Failure**.<br>Includes automated `/health/ready` smoke probe with retries. |
+| **`deploy-orchestrator`** | Master phased coordinator (`Identity` $\rightarrow$ `Fleet` + `Rental` + `Notification` $\rightarrow$ `Frontend`) | End-to-end synchronized release | **Release Order / Inter-Service Dependency Failure**.<br>Prevents race conditions by verifying upstream service readiness first. |
 
 ---
+
+## 3. Deployment Security & Cloud Readiness
+
+### 1. Passwordless Authentication via GitHub OIDC
+The CD workflows and orchestrator support GitHub OpenID Connect (OIDC) via `azure/login@v2` with automated fallback to publish profiles:
+- Set `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, and `AZURE_SUBSCRIPTION_ID` in GitHub Actions Secrets.
+- Eliminates static XML credentials and grants scoped RBAC permissions.
+
+### 2. Automated Post-Deployment Smoke Probing
+Deployment stages now include automated readiness polling:
+- Pings `https://<service-name>.azurewebsites.net/health/ready` up to 15 times (75s window).
+- Guarantees cold-start database connection pool warmup before completing the job.
+- Fails the pipeline immediately if an unhandled startup crash occurs.
+
+### 3. Cloud Kafka & Azure Event Hubs (SASL/TLS)
+All microservices (`IdentityService`, `FleetService`, `RentalService`, `NotificationService`) support cloud-managed Kafka endpoints:
+- Set `Kafka__SecurityProtocol=SaslSsl` and `Kafka__SaslMechanism=Plain`.
+- Provide `Kafka__SaslUsername=$ConnectionString` and `Kafka__SaslPassword=<EventHubsConnectionString>` to connect directly to Azure Event Hubs.
 
 ## 3. Best Practices & Pipeline Health Governance
 

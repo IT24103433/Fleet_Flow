@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="utf-8"?>
+<coverage line-rate="0.9571" branch-rate="0.9615" version="1.9" timestamp="1792485083" lines-covered="67" lines-valid="70" branches-covered="50" branches-valid="52">
+  <sources />
+  <packages>
+    <package name="FleetService.Api" line-rate="0.9571" branch-rate="0.9615" complexity="64">
+      <classes>
+        <class name="FleetService.Api.Services.MaintenanceStaffDirectory" filename="/work/src/backend/services/FleetService/FleetService.Api/Services/MaintenanceStaffDirectory.cs" line-rate="1" branch-rate="1" complexity="1">
+          <methods>
+            <method name=".ctor" signature="(System.Net.Http.HttpClient,FleetFlow.ServiceDefaults.IServiceTokenProvider)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="13" hits="23" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="13" hits="23" branch="False" />
+          </lines>
+        </class>
+        <class name="FleetService.Api.Services.MaintenanceStaffDirectory/&lt;&gt;c" filename="/work/src/backend/services/FleetService/FleetService.Api/Services/MaintenanceStaffDirectory.cs" line-rate="1" branch-rate="1" complexity="2">
+          <methods>
+            <method name="&lt;ListAsync&gt;b__4_0" signature="(FleetFlow.Contracts.MaintenanceStaffAccount)" line-rate="1" branch-rate="1" complexity="2">
+              <lines>
+                <line number="32" hits="2019" branch="True" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="16" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="32" hits="2019" branch="True" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="16" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+          </lines>
+        </class>
+        <class name="FleetService.Api.Services.MaintenanceStaffDirectory/&lt;GetAsync&gt;d__5" filename="/work/src/backend/services/FleetService/FleetService.Api/Services/MaintenanceStaffDirectory.cs" line-rate="1" branch-rate="1" complexity="6">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="1" branch-rate="1" complexity="6">
+              <lines>
+                <line number="37" hits="15" branch="False" />
+                <line number="38" hits="6" branch="True" condition-coverage="100% (6/6)">
+                  <conditions>
+                    <condition number="171" type="jump" coverage="100%" />
+                    <condition number="190" type="jump" coverage="100%" />
+                    <condition number="203" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="39" hits="2" branch="False" />
+                <line number="40" hits="2" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="37" hits="15" branch="False" />
+            <line number="38" hits="6" branch="True" condition-coverage="100% (6/6)">
+              <conditions>
+                <condition number="171" type="jump" coverage="100%" />
+                <condition number="190" type="jump" coverage="100%" />
+                <condition number="203" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="39" hits="2" branch="False" />
+            <line number="40" hits="2" branch="False" />
+          </lines>
+        </class>
+        <class name="FleetService.Api.Services.MaintenanceStaffDirectory/&lt;ListAsync&gt;d__4" filename="/work/src/backend/services/FleetService/FleetService.Api/Services/MaintenanceStaffDirectory.cs" line-rate="1" branch-rate="1" complexity="8">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="1" branch-rate="1" complexity="8">
+              <lines>
+                <line number="31" hits="8" branch="True" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="127" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="33" hits="3" branch="False" />
+                <line number="34" hits="3" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="31" hits="8" branch="True" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="127" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="33" hits="3" branch="False" />
+            <line number="34" hits="3" branch="False" />
+          </lines>
+        </class>
+        <class name="FleetService.Api.Services.MaintenanceStaffDirectory/&lt;Send&gt;d__3`1" filename="/work/src/backend/services/FleetService/FleetService.Api/Services/MaintenanceStaffDirectory.cs" line-rate="1" branch-rate="1" complexity="6">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="1" branch-rate="1" complexity="6">
+              <lines>
+                <line number="19" hits="23" branch="False" />
+                <line number="20" hits="23" branch="False" />
+                <line number="21" hits="22" branch="False" />
+                <line number="22" hits="22" branch="True" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="358" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="23" hits="23" branch="True" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="384" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="24" hits="13" branch="True" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="515" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="26" hits="11" branch="False" />
+                <line number="27" hits="4" branch="False" />
+                <line number="28" hits="12" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="19" hits="23" branch="False" />
+            <line number="20" hits="23" branch="False" />
+            <line number="21" hits="22" branch="False" />
+            <line number="22" hits="22" branch="True" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="358" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="23" hits="23" branch="True" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="384" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="24" hits="13" branch="True" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="515" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="26" hits="11" branch="False" />
+            <line number="27" hits="4" branch="False" />
+            <line number="28" hits="12" branch="False" />
+          </lines>
+        </class>
+        <class name="FleetService.Api.Services.ReportCsv" filename="/work/src/backend/services/FleetService/FleetService.Api/Services/ReportCsv.cs" line-rate="1" branch-rate="0.9333" complexity="32">
+          <methods>
+            <method name="Bookings" signature="(FleetService.Api.Dtos.BookingExportResponse)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="9" hits="2" branch="False" />
+                <line number="10" hits="2" branch="False" />
+                <line number="11" hits="2" branch="False" />
+                <line number="12" hits="3" branch="False" />
+                <line number="13" hits="3" branch="False" />
+              </lines>
+            </method>
+            <method name="Maintenance" signature="(FleetService.Api.Dtos.MaintenanceReportResponse)" line-rate="1" branch-rate="1" complexity="4">
+              <lines>
+                <line number="17" hits="8" branch="True" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="11" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="18" hits="4" branch="True" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="60" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="19" hits="2" branch="False" />
+                <line number="20" hits="20001" branch="False" />
+                <line number="21" hits="20001" branch="False" />
+                <line number="22" hits="20001" branch="False" />
+                <line number="23" hits="2" branch="False" />
+                <line number="24" hits="2" branch="False" />
+                <line number="25" hits="2" branch="False" />
+                <line number="26" hits="2" branch="False" />
+                <line number="27" hits="2" branch="False" />
+                <line number="28" hits="2" branch="False" />
+              </lines>
+            </method>
+            <method name="Encode" signature="(System.String[],System.Collections.Generic.IEnumerable`1&lt;System.Object[]&gt;)" line-rate="1" branch-rate="1" complexity="2">
+              <lines>
+                <line number="33" hits="29" branch="False" />
+                <line number="35" hits="29" branch="False" />
+                <line number="36" hits="60133" branch="True" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="55" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="37" hits="29" branch="False" />
+              </lines>
+            </method>
+            <method name="Cell" signature="(System.Object)" line-rate="1" branch-rate="0.9166" complexity="24">
+              <lines>
+                <line number="42" hits="300113" branch="True" condition-coverage="100% (6/6)">
+                  <conditions>
+                    <condition number="1" type="jump" coverage="100%" />
+                    <condition number="9" type="jump" coverage="100%" />
+                    <condition number="28" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="43" hits="119998" branch="False" />
+                <line number="44" hits="5" branch="True" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="47" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="45" hits="60007" branch="True" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="100" type="jump" coverage="50%" />
+                  </conditions>
+                </line>
+                <line number="46" hits="120103" branch="True" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="118" type="jump" coverage="50%" />
+                  </conditions>
+                </line>
+                <line number="47" hits="300113" branch="False" />
+                <line number="48" hits="300113" branch="True" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="135" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="50" hits="240211" branch="True" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="6" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="53" hits="120116" branch="True" condition-coverage="100% (8/8)">
+                  <conditions>
+                    <condition number="193" type="jump" coverage="100%" />
+                    <condition number="203" type="jump" coverage="100%" />
+                    <condition number="213" type="jump" coverage="100%" />
+                    <condition number="223" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="55" hits="300113" branch="False" />
+              </lines>
+            </method>
+            <method name="&lt;Encode&gt;g__Line|2_0" signature="(System.Collections.Generic.IEnumerable`1&lt;System.Object&gt;,FleetService.Api.Services.ReportCsv/&lt;&gt;c__DisplayClass2_0&amp;)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="34" hits="20054" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="9" hits="2" branch="False" />
+            <line number="10" hits="2" branch="False" />
+            <line number="11" hits="2" branch="False" />
+            <line number="12" hits="3" branch="False" />
+            <line number="13" hits="3" branch="False" />
+            <line number="17" hits="8" branch="True" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="11" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="18" hits="4" branch="True" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="60" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="19" hits="2" branch="False" />
+            <line number="20" hits="20001" branch="False" />
+            <line number="21" hits="20001" branch="False" />
+            <line number="22" hits="20001" branch="False" />
+            <line number="23" hits="2" branch="False" />
+            <line number="24" hits="2" branch="False" />
+            <line number="25" hits="2" branch="False" />
+            <line number="26" hits="2" branch="False" />
+            <line number="27" hits="2" branch="False" />
+            <line number="28" hits="2" branch="False" />
+            <line number="33" hits="29" branch="False" />
+            <line number="35" hits="29" branch="False" />
+            <line number="36" hits="60133" branch="True" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="55" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="37" hits="29" branch="False" />
+            <line number="42" hits="300113" branch="True" condition-coverage="100% (6/6)">
+              <conditions>
+                <condition number="1" type="jump" coverage="100%" />
+                <condition number="9" type="jump" coverage="100%" />
+                <condition number="28" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="43" hits="119998" branch="False" />
+            <line number="44" hits="5" branch="True" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="47" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="45" hits="60007" branch="True" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="100" type="jump" coverage="50%" />
+              </conditions>
+            </line>
+            <line number="46" hits="120103" branch="True" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="118" type="jump" coverage="50%" />
+              </conditions>
+            </line>
+            <line number="47" hits="300113" branch="False" />
+            <line number="48" hits="300113" branch="True" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="135" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="50" hits="240211" branch="True" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="6" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="53" hits="120116" branch="True" condition-coverage="100% (8/8)">
+              <conditions>
+                <condition number="193" type="jump" coverage="100%" />
+                <condition number="203" type="jump" coverage="100%" />
+                <condition number="213" type="jump" coverage="100%" />
+                <condition number="223" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="55" hits="300113" branch="False" />
+            <line number="34" hits="20054" branch="False" />
+          </lines>
+        </class>
+        <class name="FleetService.Api.Controllers.ReportsController" filename="/work/src/backend/services/FleetService/FleetService.Api/Controllers/ReportsController.cs" line-rate="0.7142000000000001" branch-rate="1" complexity="7">
+          <methods>
+            <method name="GetFleetSummary" signature="(System.Threading.CancellationToken)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="15" hits="4" branch="False" />
+              </lines>
+            </method>
+            <method name="GetBookings" signature="(FleetService.Api.Dtos.BookingReportQuery,System.Threading.CancellationToken)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="19" hits="6" branch="False" />
+              </lines>
+            </method>
+            <method name="GetMaintenance" signature="(System.Threading.CancellationToken)" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="23" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="GetOperationalStatistics" signature="(System.Threading.CancellationToken)" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="27" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="ExportBookings" signature="(FleetService.Api.Dtos.BookingExportQuery,System.Threading.CancellationToken)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="31" hits="2" branch="False" />
+              </lines>
+            </method>
+            <method name="ExportMaintenance" signature="(System.Threading.CancellationToken)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="35" hits="2" branch="False" />
+              </lines>
+            </method>
+            <method name=".ctor" signature="(FleetService.Api.Services.IReportingService,Microsoft.Extensions.Logging.ILogger`1&lt;FleetService.Api.Controllers.ReportsController&gt;)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="11" hits="7" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="15" hits="4" branch="False" />
+            <line number="19" hits="6" branch="False" />
+            <line number="23" hits="0" branch="False" />
+            <line number="27" hits="0" branch="False" />
+            <line number="31" hits="2" branch="False" />
+            <line number="35" hits="2" branch="False" />
+            <line number="11" hits="7" branch="False" />
+          </lines>
+        </class>
+        <class name="FleetService.Api.Controllers.ReportsController/&lt;Export&gt;d__9" filename="/work/src/backend/services/FleetService/FleetService.Api/Controllers/ReportsController.cs" line-rate="0.8332999999999999" branch-rate="1" complexity="1">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="0.8332999999999999" branch-rate="1" complexity="1">
+              <lines>
+                <line number="39" hits="2" branch="False" />
+                <line number="40" hits="0" branch="False" />
+                <line number="41" hits="1" branch="False" />
+                <line number="43" hits="1" branch="False" />
+                <line number="44" hits="1" branch="False" />
+                <line number="46" hits="2" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="39" hits="2" branch="False" />
+            <line number="40" hits="0" branch="False" />
+            <line number="41" hits="1" branch="False" />
+            <line number="43" hits="1" branch="False" />
+            <line number="44" hits="1" branch="False" />
+            <line number="46" hits="2" branch="False" />
+          </lines>
+        </class>
+        <class name="FleetService.Api.Controllers.ReportsController/&lt;Read&gt;d__10`1" filename="/work/src/backend/services/FleetService/FleetService.Api/Controllers/ReportsController.cs" line-rate="1" branch-rate="1" complexity="1">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="50" hits="5" branch="False" />
+                <line number="51" hits="2" branch="False" />
+                <line number="52" hits="3" branch="False" />
+                <line number="54" hits="2" branch="False" />
+                <line number="55" hits="2" branch="False" />
+                <line number="56" hits="2" branch="False" />
+                <line number="58" hits="4" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="50" hits="5" branch="False" />
+            <line number="51" hits="2" branch="False" />
+            <line number="52" hits="3" branch="False" />
+            <line number="54" hits="2" branch="False" />
+            <line number="55" hits="2" branch="False" />
+            <line number="56" hits="2" branch="False" />
+            <line number="58" hits="4" branch="False" />
+          </lines>
+        </class>
+      </classes>
+    </package>
+  </packages>
+</coverage>

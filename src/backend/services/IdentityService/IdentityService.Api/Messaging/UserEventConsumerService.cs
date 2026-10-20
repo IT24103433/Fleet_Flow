@@ -39,6 +39,7 @@ public class UserEventConsumerService : BackgroundService
             SocketTimeoutMs = 5000,
             SessionTimeoutMs = 10000
         };
+        _settings.ApplyClientConfig(config);
 
         try
         {

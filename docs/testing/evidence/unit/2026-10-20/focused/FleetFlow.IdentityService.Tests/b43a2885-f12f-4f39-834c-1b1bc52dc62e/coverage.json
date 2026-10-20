@@ -1,0 +1,1415 @@
+{
+  "IdentityService.Api.dll": {
+    "/work/src/backend/services/IdentityService/IdentityService.Api/Services/AuthenticationService.cs": {
+      "IdentityService.Api.Services.AuthenticationService": {
+        "IdentityService.Api.Dtos.LoginResponse IdentityService.Api.Services.AuthenticationService::CreateSession(IdentityService.Api.Entities.User)": {
+          "Lines": {
+            "107": 12,
+            "108": 12,
+            "109": 12,
+            "110": 12,
+            "111": 12,
+            "113": 12,
+            "115": 5,
+            "118": 7,
+            "120": 3,
+            "123": 7,
+            "126": 7,
+            "127": 7,
+            "128": 7,
+            "129": 7,
+            "130": 7,
+            "131": 7,
+            "132": 7,
+            "133": 7,
+            "134": 7,
+            "137": 28,
+            "139": 7,
+            "142": 7,
+            "143": 7,
+            "145": 7,
+            "146": 7,
+            "147": 7,
+            "148": 7,
+            "149": 7,
+            "150": 7,
+            "151": 7,
+            "153": 7,
+            "155": 7,
+            "156": 7,
+            "157": 7,
+            "158": 7,
+            "159": 7,
+            "160": 7,
+            "161": 7,
+            "162": 7,
+            "163": 7,
+            "164": 7,
+            "165": 7,
+            "166": 7,
+            "167": 7,
+            "168": 7,
+            "169": 7,
+            "170": 7,
+            "171": 7,
+            "172": 7,
+            "173": 7
+          },
+          "Branches": [
+            {
+              "Line": 110,
+              "Offset": 53,
+              "EndOffset": 55,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 1
+            },
+            {
+              "Line": 110,
+              "Offset": 73,
+              "EndOffset": 75,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 1
+            },
+            {
+              "Line": 110,
+              "Offset": 53,
+              "EndOffset": 92,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 12
+            },
+            {
+              "Line": 110,
+              "Offset": 73,
+              "EndOffset": 92,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 12
+            },
+            {
+              "Line": 113,
+              "Offset": 112,
+              "EndOffset": 114,
+              "Path": 0,
+              "Ordinal": 4,
+              "Hits": 9
+            },
+            {
+              "Line": 113,
+              "Offset": 112,
+              "EndOffset": 129,
+              "Path": 1,
+              "Ordinal": 5,
+              "Hits": 5
+            },
+            {
+              "Line": 113,
+              "Offset": 127,
+              "EndOffset": 129,
+              "Path": 0,
+              "Ordinal": 6,
+              "Hits": 5
+            },
+            {
+              "Line": 113,
+              "Offset": 127,
+              "EndOffset": 140,
+              "Path": 1,
+              "Ordinal": 7,
+              "Hits": 7
+            },
+            {
+              "Line": 118,
+              "Offset": 149,
+              "EndOffset": 151,
+              "Path": 0,
+              "Ordinal": 8,
+              "Hits": 3
+            },
+            {
+              "Line": 118,
+              "Offset": 149,
+              "EndOffset": 162,
+              "Path": 1,
+              "Ordinal": 9,
+              "Hits": 7
+            },
+            {
+              "Line": 137,
+              "Offset": 431,
+              "EndOffset": 391,
+              "Path": 1,
+              "Ordinal": 11,
+              "Hits": 7
+            },
+            {
+              "Line": 137,
+              "Offset": 431,
+              "EndOffset": 433,
+              "Path": 0,
+              "Ordinal": 10,
+              "Hits": 7
+            }
+          ]
+        },
+        "System.Void IdentityService.Api.Services.AuthenticationService::.ctor(IdentityService.Api.Data.IdentityDbContext,Microsoft.AspNetCore.Identity.IPasswordHasher`1<IdentityService.Api.Entities.User>,Microsoft.Extensions.Configuration.IConfiguration,IdentityService.Api.Onboarding.IdentityVault)": {
+          "Lines": {
+            "25": 12,
+            "26": 12,
+            "27": 12,
+            "28": 12,
+            "29": 12,
+            "31": 12,
+            "32": 12,
+            "33": 12,
+            "34": 12,
+            "35": 12
+          },
+          "Branches": []
+        }
+      },
+      "IdentityService.Api.Services.AuthenticationService/<>c": {
+        "System.String IdentityService.Api.Services.AuthenticationService/<>c::<LoginAsync>b__5_0(IdentityService.Api.Entities.Role)": {
+          "Lines": {
+            "75": 0
+          },
+          "Branches": []
+        }
+      },
+      "IdentityService.Api.Services.AuthenticationService/<>c__DisplayClass5_0": {
+        "System.Boolean IdentityService.Api.Services.AuthenticationService/<>c__DisplayClass5_0::<LoginAsync>b__1(System.String)": {
+          "Lines": {
+            "81": 0
+          },
+          "Branches": []
+        },
+        "System.Boolean IdentityService.Api.Services.AuthenticationService/<>c__DisplayClass5_0::<LoginAsync>b__2(System.String)": {
+          "Lines": {
+            "90": 0
+          },
+          "Branches": []
+        }
+      },
+      "IdentityService.Api.Services.AuthenticationService/<ChangePasswordAsync>d__8": {
+        "System.Void IdentityService.Api.Services.AuthenticationService/<ChangePasswordAsync>d__8::MoveNext()": {
+          "Lines": {
+            "183": 0,
+            "185": 0,
+            "188": 0,
+            "190": 0,
+            "193": 0,
+            "194": 0,
+            "196": 0,
+            "199": 0,
+            "201": 0,
+            "203": 0,
+            "204": 0,
+            "206": 0,
+            "207": 0,
+            "208": 0,
+            "209": 0,
+            "210": 0,
+            "211": 0,
+            "213": 0,
+            "214": 0,
+            "215": 0,
+            "216": 0,
+            "218": 0,
+            "220": 0,
+            "221": 0,
+            "223": 0,
+            "224": 0
+          },
+          "Branches": [
+            {
+              "Line": 183,
+              "Offset": 61,
+              "EndOffset": 63,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 183,
+              "Offset": 61,
+              "EndOffset": 74,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            },
+            {
+              "Line": 188,
+              "Offset": 90,
+              "EndOffset": 92,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 0
+            },
+            {
+              "Line": 188,
+              "Offset": 90,
+              "EndOffset": 111,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 0
+            },
+            {
+              "Line": 188,
+              "Offset": 109,
+              "EndOffset": 111,
+              "Path": 0,
+              "Ordinal": 4,
+              "Hits": 0
+            },
+            {
+              "Line": 188,
+              "Offset": 109,
+              "EndOffset": 127,
+              "Path": 1,
+              "Ordinal": 5,
+              "Hits": 0
+            },
+            {
+              "Line": 194,
+              "Offset": 362,
+              "EndOffset": 364,
+              "Path": 0,
+              "Ordinal": 6,
+              "Hits": 0
+            },
+            {
+              "Line": 194,
+              "Offset": 362,
+              "EndOffset": 429,
+              "Path": 1,
+              "Ordinal": 7,
+              "Hits": 0
+            },
+            {
+              "Line": 199,
+              "Offset": 435,
+              "EndOffset": 437,
+              "Path": 0,
+              "Ordinal": 8,
+              "Hits": 0
+            },
+            {
+              "Line": 199,
+              "Offset": 435,
+              "EndOffset": 448,
+              "Path": 1,
+              "Ordinal": 9,
+              "Hits": 0
+            },
+            {
+              "Line": 203,
+              "Offset": 463,
+              "EndOffset": 465,
+              "Path": 0,
+              "Ordinal": 10,
+              "Hits": 0
+            },
+            {
+              "Line": 203,
+              "Offset": 463,
+              "EndOffset": 476,
+              "Path": 1,
+              "Ordinal": 11,
+              "Hits": 0
+            },
+            {
+              "Line": 204,
+              "Offset": 482,
+              "EndOffset": 484,
+              "Path": 0,
+              "Ordinal": 12,
+              "Hits": 0
+            },
+            {
+              "Line": 204,
+              "Offset": 490,
+              "EndOffset": 492,
+              "Path": 0,
+              "Ordinal": 14,
+              "Hits": 0
+            },
+            {
+              "Line": 204,
+              "Offset": 482,
+              "EndOffset": 503,
+              "Path": 1,
+              "Ordinal": 13,
+              "Hits": 0
+            },
+            {
+              "Line": 204,
+              "Offset": 490,
+              "EndOffset": 503,
+              "Path": 1,
+              "Ordinal": 15,
+              "Hits": 0
+            },
+            {
+              "Line": 206,
+              "Offset": 524,
+              "EndOffset": 526,
+              "Path": 0,
+              "Ordinal": 16,
+              "Hits": 0
+            },
+            {
+              "Line": 206,
+              "Offset": 538,
+              "EndOffset": 540,
+              "Path": 0,
+              "Ordinal": 18,
+              "Hits": 0
+            },
+            {
+              "Line": 206,
+              "Offset": 538,
+              "EndOffset": 544,
+              "Path": 1,
+              "Ordinal": 19,
+              "Hits": 0
+            },
+            {
+              "Line": 206,
+              "Offset": 524,
+              "EndOffset": 558,
+              "Path": 1,
+              "Ordinal": 17,
+              "Hits": 0
+            },
+            {
+              "Line": 206,
+              "Offset": 556,
+              "EndOffset": 558,
+              "Path": 0,
+              "Ordinal": 20,
+              "Hits": 0
+            },
+            {
+              "Line": 206,
+              "Offset": 556,
+              "EndOffset": 569,
+              "Path": 1,
+              "Ordinal": 21,
+              "Hits": 0
+            },
+            {
+              "Line": 208,
+              "Offset": 575,
+              "EndOffset": 577,
+              "Path": 0,
+              "Ordinal": 22,
+              "Hits": 0
+            },
+            {
+              "Line": 208,
+              "Offset": 593,
+              "EndOffset": 595,
+              "Path": 0,
+              "Ordinal": 24,
+              "Hits": 0
+            },
+            {
+              "Line": 208,
+              "Offset": 575,
+              "EndOffset": 606,
+              "Path": 1,
+              "Ordinal": 23,
+              "Hits": 0
+            },
+            {
+              "Line": 208,
+              "Offset": 593,
+              "EndOffset": 606,
+              "Path": 1,
+              "Ordinal": 25,
+              "Hits": 0
+            },
+            {
+              "Line": 210,
+              "Offset": 622,
+              "EndOffset": 624,
+              "Path": 0,
+              "Ordinal": 26,
+              "Hits": 0
+            },
+            {
+              "Line": 210,
+              "Offset": 653,
+              "EndOffset": 655,
+              "Path": 0,
+              "Ordinal": 28,
+              "Hits": 0
+            },
+            {
+              "Line": 210,
+              "Offset": 622,
+              "EndOffset": 666,
+              "Path": 1,
+              "Ordinal": 27,
+              "Hits": 0
+            },
+            {
+              "Line": 210,
+              "Offset": 653,
+              "EndOffset": 666,
+              "Path": 1,
+              "Ordinal": 29,
+              "Hits": 0
+            },
+            {
+              "Line": 218,
+              "Offset": 731,
+              "EndOffset": 733,
+              "Path": 0,
+              "Ordinal": 30,
+              "Hits": 0
+            },
+            {
+              "Line": 218,
+              "Offset": 731,
+              "EndOffset": 737,
+              "Path": 1,
+              "Ordinal": 31,
+              "Hits": 0
+            },
+            {
+              "Line": 218,
+              "Offset": 742,
+              "EndOffset": 747,
+              "Path": 0,
+              "Ordinal": 32,
+              "Hits": 0
+            },
+            {
+              "Line": 218,
+              "Offset": 742,
+              "EndOffset": 917,
+              "Path": 1,
+              "Ordinal": 33,
+              "Hits": 0
+            }
+          ]
+        }
+      },
+      "IdentityService.Api.Services.AuthenticationService/<LoginAsync>d__5": {
+        "System.Void IdentityService.Api.Services.AuthenticationService/<LoginAsync>d__5::MoveNext()": {
+          "Lines": {
+            "39": 0,
+            "41": 0,
+            "44": 0,
+            "45": 0,
+            "47": 0,
+            "51": 0,
+            "52": 0,
+            "53": 0,
+            "54": 0,
+            "56": 0,
+            "58": 0,
+            "61": 0,
+            "63": 0,
+            "67": 0,
+            "68": 0,
+            "70": 0,
+            "74": 0,
+            "76": 0,
+            "78": 0,
+            "83": 0,
+            "84": 0,
+            "87": 0,
+            "92": 0,
+            "93": 0,
+            "98": 0,
+            "101": 0,
+            "102": 0
+          },
+          "Branches": [
+            {
+              "Line": 39,
+              "Offset": 37,
+              "EndOffset": 39,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 39,
+              "Offset": 37,
+              "EndOffset": 50,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            },
+            {
+              "Line": 44,
+              "Offset": 68,
+              "EndOffset": 70,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 0
+            },
+            {
+              "Line": 44,
+              "Offset": 68,
+              "EndOffset": 74,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 0
+            },
+            {
+              "Line": 45,
+              "Offset": 100,
+              "EndOffset": 102,
+              "Path": 0,
+              "Ordinal": 4,
+              "Hits": 0
+            },
+            {
+              "Line": 45,
+              "Offset": 100,
+              "EndOffset": 108,
+              "Path": 1,
+              "Ordinal": 5,
+              "Hits": 0
+            },
+            {
+              "Line": 56,
+              "Offset": 562,
+              "EndOffset": 564,
+              "Path": 0,
+              "Ordinal": 6,
+              "Hits": 0
+            },
+            {
+              "Line": 56,
+              "Offset": 562,
+              "EndOffset": 570,
+              "Path": 1,
+              "Ordinal": 7,
+              "Hits": 0
+            },
+            {
+              "Line": 61,
+              "Offset": 576,
+              "EndOffset": 578,
+              "Path": 0,
+              "Ordinal": 8,
+              "Hits": 0
+            },
+            {
+              "Line": 61,
+              "Offset": 576,
+              "EndOffset": 595,
+              "Path": 1,
+              "Ordinal": 9,
+              "Hits": 0
+            },
+            {
+              "Line": 61,
+              "Offset": 593,
+              "EndOffset": 595,
+              "Path": 0,
+              "Ordinal": 10,
+              "Hits": 0
+            },
+            {
+              "Line": 61,
+              "Offset": 593,
+              "EndOffset": 606,
+              "Path": 1,
+              "Ordinal": 11,
+              "Hits": 0
+            },
+            {
+              "Line": 67,
+              "Offset": 612,
+              "EndOffset": 614,
+              "Path": 0,
+              "Ordinal": 12,
+              "Hits": 0
+            },
+            {
+              "Line": 67,
+              "Offset": 612,
+              "EndOffset": 617,
+              "Path": 1,
+              "Ordinal": 13,
+              "Hits": 0
+            },
+            {
+              "Line": 68,
+              "Offset": 650,
+              "EndOffset": 652,
+              "Path": 0,
+              "Ordinal": 14,
+              "Hits": 0
+            },
+            {
+              "Line": 68,
+              "Offset": 650,
+              "EndOffset": 658,
+              "Path": 1,
+              "Ordinal": 15,
+              "Hits": 0
+            },
+            {
+              "Line": 74,
+              "Offset": 670,
+              "EndOffset": 672,
+              "Path": 0,
+              "Ordinal": 16,
+              "Hits": 0
+            },
+            {
+              "Line": 74,
+              "Offset": 670,
+              "EndOffset": 676,
+              "Path": 1,
+              "Ordinal": 17,
+              "Hits": 0
+            },
+            {
+              "Line": 74,
+              "Offset": 687,
+              "EndOffset": 689,
+              "Path": 0,
+              "Ordinal": 18,
+              "Hits": 0
+            },
+            {
+              "Line": 74,
+              "Offset": 687,
+              "EndOffset": 695,
+              "Path": 1,
+              "Ordinal": 19,
+              "Hits": 0
+            },
+            {
+              "Line": 78,
+              "Offset": 810,
+              "EndOffset": 812,
+              "Path": 0,
+              "Ordinal": 20,
+              "Hits": 0
+            },
+            {
+              "Line": 81,
+              "Offset": 824,
+              "EndOffset": 826,
+              "Path": 0,
+              "Ordinal": 22,
+              "Hits": 0
+            },
+            {
+              "Line": 81,
+              "Offset": 824,
+              "EndOffset": 852,
+              "Path": 1,
+              "Ordinal": 23,
+              "Hits": 0
+            },
+            {
+              "Line": 81,
+              "Offset": 850,
+              "EndOffset": 852,
+              "Path": 0,
+              "Ordinal": 24,
+              "Hits": 0
+            },
+            {
+              "Line": 78,
+              "Offset": 810,
+              "EndOffset": 863,
+              "Path": 1,
+              "Ordinal": 21,
+              "Hits": 0
+            },
+            {
+              "Line": 87,
+              "Offset": 875,
+              "EndOffset": 877,
+              "Path": 0,
+              "Ordinal": 26,
+              "Hits": 0
+            },
+            {
+              "Line": 90,
+              "Offset": 901,
+              "EndOffset": 903,
+              "Path": 0,
+              "Ordinal": 28,
+              "Hits": 0
+            },
+            {
+              "Line": 87,
+              "Offset": 875,
+              "EndOffset": 914,
+              "Path": 1,
+              "Ordinal": 27,
+              "Hits": 0
+            },
+            {
+              "Line": 81,
+              "Offset": 850,
+              "EndOffset": 946,
+              "Path": 1,
+              "Ordinal": 25,
+              "Hits": 0
+            },
+            {
+              "Line": 90,
+              "Offset": 901,
+              "EndOffset": 946,
+              "Path": 1,
+              "Ordinal": 29,
+              "Hits": 0
+            }
+          ]
+        }
+      },
+      "IdentityService.Api.Services.AuthenticationService/<RenewSessionAsync>d__7": {
+        "System.Void IdentityService.Api.Services.AuthenticationService/<RenewSessionAsync>d__7::MoveNext()": {
+          "Lines": {
+            "178": 0,
+            "179": 0,
+            "180": 0
+          },
+          "Branches": [
+            {
+              "Line": 179,
+              "Offset": 342,
+              "EndOffset": 344,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 179,
+              "Offset": 351,
+              "EndOffset": 353,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 0
+            },
+            {
+              "Line": 179,
+              "Offset": 369,
+              "EndOffset": 371,
+              "Path": 0,
+              "Ordinal": 4,
+              "Hits": 0
+            },
+            {
+              "Line": 179,
+              "Offset": 378,
+              "EndOffset": 380,
+              "Path": 0,
+              "Ordinal": 6,
+              "Hits": 0
+            },
+            {
+              "Line": 179,
+              "Offset": 342,
+              "EndOffset": 390,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            },
+            {
+              "Line": 179,
+              "Offset": 351,
+              "EndOffset": 390,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 0
+            },
+            {
+              "Line": 179,
+              "Offset": 369,
+              "EndOffset": 390,
+              "Path": 1,
+              "Ordinal": 5,
+              "Hits": 0
+            },
+            {
+              "Line": 179,
+              "Offset": 378,
+              "EndOffset": 390,
+              "Path": 1,
+              "Ordinal": 7,
+              "Hits": 0
+            }
+          ]
+        }
+      }
+    },
+    "/work/src/backend/services/IdentityService/IdentityService.Api/Controllers/AuthController.cs": {
+      "IdentityService.Api.Controllers.AuthController": {
+        "System.Void IdentityService.Api.Controllers.AuthController::.ctor(IdentityService.Api.Services.IRegistrationService,IdentityService.Api.Services.IAuthenticationService,IdentityService.Api.Services.IProfileImageService,IdentityService.Api.Onboarding.OnboardingService)": {
+          "Lines": {
+            "19": 18,
+            "20": 18,
+            "21": 18,
+            "22": 18,
+            "23": 18,
+            "25": 18,
+            "26": 18,
+            "27": 18,
+            "28": 18,
+            "29": 18
+          },
+          "Branches": []
+        }
+      },
+      "IdentityService.Api.Controllers.AuthController/<ChangePassword>d__10": {
+        "System.Void IdentityService.Api.Controllers.AuthController/<ChangePassword>d__10::MoveNext()": {
+          "Lines": {
+            "157": 9,
+            "159": 1,
+            "162": 8,
+            "163": 8,
+            "165": 3,
+            "170": 5,
+            "171": 2,
+            "172": 2,
+            "174": 1,
+            "176": 1,
+            "178": 1,
+            "180": 1,
+            "182": 1,
+            "184": 1,
+            "186": 9
+          },
+          "Branches": [
+            {
+              "Line": 157,
+              "Offset": 29,
+              "EndOffset": 31,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 1
+            },
+            {
+              "Line": 157,
+              "Offset": 29,
+              "EndOffset": 49,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 8
+            },
+            {
+              "Line": 162,
+              "Offset": 56,
+              "EndOffset": 58,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 0
+            },
+            {
+              "Line": 162,
+              "Offset": 56,
+              "EndOffset": 62,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 8
+            },
+            {
+              "Line": 162,
+              "Offset": 73,
+              "EndOffset": 75,
+              "Path": 0,
+              "Ordinal": 4,
+              "Hits": 1
+            },
+            {
+              "Line": 162,
+              "Offset": 73,
+              "EndOffset": 79,
+              "Path": 1,
+              "Ordinal": 5,
+              "Hits": 7
+            },
+            {
+              "Line": 163,
+              "Offset": 91,
+              "EndOffset": 93,
+              "Path": 0,
+              "Ordinal": 6,
+              "Hits": 6
+            },
+            {
+              "Line": 163,
+              "Offset": 91,
+              "EndOffset": 107,
+              "Path": 1,
+              "Ordinal": 7,
+              "Hits": 3
+            },
+            {
+              "Line": 163,
+              "Offset": 105,
+              "EndOffset": 107,
+              "Path": 0,
+              "Ordinal": 8,
+              "Hits": 3
+            },
+            {
+              "Line": 163,
+              "Offset": 105,
+              "EndOffset": 129,
+              "Path": 1,
+              "Ordinal": 9,
+              "Hits": 5
+            },
+            {
+              "Line": 171,
+              "Offset": 258,
+              "EndOffset": 260,
+              "Path": 0,
+              "Ordinal": 10,
+              "Hits": 0
+            },
+            {
+              "Line": 171,
+              "Offset": 258,
+              "EndOffset": 264,
+              "Path": 1,
+              "Ordinal": 11,
+              "Hits": 2
+            },
+            {
+              "Line": 171,
+              "Offset": 279,
+              "EndOffset": 281,
+              "Path": 0,
+              "Ordinal": 12,
+              "Hits": 1
+            },
+            {
+              "Line": 171,
+              "Offset": 279,
+              "EndOffset": 394,
+              "Path": 1,
+              "Ordinal": 13,
+              "Hits": 1
+            },
+            {
+              "Line": 172,
+              "Offset": 409,
+              "EndOffset": 411,
+              "Path": 0,
+              "Ordinal": 14,
+              "Hits": 1
+            },
+            {
+              "Line": 172,
+              "Offset": 409,
+              "EndOffset": 414,
+              "Path": 1,
+              "Ordinal": 15,
+              "Hits": 1
+            },
+            {
+              "Line": 172,
+              "Offset": 423,
+              "EndOffset": 425,
+              "Path": 0,
+              "Ordinal": 16,
+              "Hits": 1
+            },
+            {
+              "Line": 172,
+              "Offset": 423,
+              "EndOffset": 437,
+              "Path": 1,
+              "Ordinal": 17,
+              "Hits": 1
+            },
+            {
+              "Line": 172,
+              "Offset": 451,
+              "EndOffset": 453,
+              "Path": 0,
+              "Ordinal": 18,
+              "Hits": 1
+            },
+            {
+              "Line": 172,
+              "Offset": 451,
+              "EndOffset": 456,
+              "Path": 1,
+              "Ordinal": 19,
+              "Hits": 1
+            }
+          ]
+        }
+      },
+      "IdentityService.Api.Controllers.AuthController/<DeleteProfilePicture>d__9": {
+        "System.Void IdentityService.Api.Controllers.AuthController/<DeleteProfilePicture>d__9::MoveNext()": {
+          "Lines": {
+            "135": 3,
+            "136": 3,
+            "138": 3,
+            "143": 0,
+            "144": 0,
+            "146": 0,
+            "148": 0,
+            "150": 3
+          },
+          "Branches": [
+            {
+              "Line": 135,
+              "Offset": 24,
+              "EndOffset": 26,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 135,
+              "Offset": 24,
+              "EndOffset": 30,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 3
+            },
+            {
+              "Line": 135,
+              "Offset": 41,
+              "EndOffset": 43,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 1
+            },
+            {
+              "Line": 135,
+              "Offset": 41,
+              "EndOffset": 47,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 2
+            },
+            {
+              "Line": 136,
+              "Offset": 59,
+              "EndOffset": 61,
+              "Path": 0,
+              "Ordinal": 4,
+              "Hits": 1
+            },
+            {
+              "Line": 136,
+              "Offset": 59,
+              "EndOffset": 71,
+              "Path": 1,
+              "Ordinal": 5,
+              "Hits": 3
+            },
+            {
+              "Line": 136,
+              "Offset": 69,
+              "EndOffset": 71,
+              "Path": 0,
+              "Ordinal": 6,
+              "Hits": 3
+            },
+            {
+              "Line": 136,
+              "Offset": 69,
+              "EndOffset": 93,
+              "Path": 1,
+              "Ordinal": 7,
+              "Hits": 0
+            }
+          ]
+        }
+      },
+      "IdentityService.Api.Controllers.AuthController/<GetProfilePicture>d__8": {
+        "System.Void IdentityService.Api.Controllers.AuthController/<GetProfilePicture>d__8::MoveNext()": {
+          "Lines": {
+            "114": 3,
+            "115": 3,
+            "117": 3,
+            "122": 0,
+            "123": 0,
+            "125": 0,
+            "127": 0,
+            "129": 3
+          },
+          "Branches": [
+            {
+              "Line": 114,
+              "Offset": 24,
+              "EndOffset": 26,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 114,
+              "Offset": 24,
+              "EndOffset": 30,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 3
+            },
+            {
+              "Line": 114,
+              "Offset": 41,
+              "EndOffset": 43,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 1
+            },
+            {
+              "Line": 114,
+              "Offset": 41,
+              "EndOffset": 47,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 2
+            },
+            {
+              "Line": 115,
+              "Offset": 59,
+              "EndOffset": 61,
+              "Path": 0,
+              "Ordinal": 4,
+              "Hits": 1
+            },
+            {
+              "Line": 115,
+              "Offset": 59,
+              "EndOffset": 71,
+              "Path": 1,
+              "Ordinal": 5,
+              "Hits": 3
+            },
+            {
+              "Line": 115,
+              "Offset": 69,
+              "EndOffset": 71,
+              "Path": 0,
+              "Ordinal": 6,
+              "Hits": 3
+            },
+            {
+              "Line": 115,
+              "Offset": 69,
+              "EndOffset": 93,
+              "Path": 1,
+              "Ordinal": 7,
+              "Hits": 0
+            }
+          ]
+        }
+      },
+      "IdentityService.Api.Controllers.AuthController/<Login>d__6": {
+        "System.Void IdentityService.Api.Controllers.AuthController/<Login>d__6::MoveNext()": {
+          "Lines": {
+            "53": 6,
+            "54": 6,
+            "55": 2,
+            "57": 1,
+            "59": 1,
+            "61": 0,
+            "63": 0,
+            "65": 1,
+            "67": 1,
+            "69": 1,
+            "71": 1,
+            "73": 1,
+            "75": 1,
+            "77": 6
+          },
+          "Branches": [
+            {
+              "Line": 53,
+              "Offset": 36,
+              "EndOffset": 38,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 6
+            },
+            {
+              "Line": 53,
+              "Offset": 36,
+              "EndOffset": 42,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            },
+            {
+              "Line": 53,
+              "Offset": 47,
+              "EndOffset": 49,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 0
+            },
+            {
+              "Line": 53,
+              "Offset": 47,
+              "EndOffset": 175,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 6
+            }
+          ]
+        }
+      },
+      "IdentityService.Api.Controllers.AuthController/<Register>d__5": {
+        "System.Void IdentityService.Api.Controllers.AuthController/<Register>d__5::MoveNext()": {
+          "Lines": {
+            "35": 1,
+            "38": 1,
+            "39": 0,
+            "41": 1,
+            "43": 1,
+            "45": 1
+          },
+          "Branches": [
+            {
+              "Line": 35,
+              "Offset": 24,
+              "EndOffset": 26,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 1
+            },
+            {
+              "Line": 35,
+              "Offset": 24,
+              "EndOffset": 30,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            },
+            {
+              "Line": 35,
+              "Offset": 35,
+              "EndOffset": 37,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 0
+            },
+            {
+              "Line": 35,
+              "Offset": 35,
+              "EndOffset": 64,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 1
+            }
+          ]
+        }
+      },
+      "IdentityService.Api.Controllers.AuthController/<UploadProfilePicture>d__7": {
+        "System.Void IdentityService.Api.Controllers.AuthController/<UploadProfilePicture>d__7::MoveNext()": {
+          "Lines": {
+            "84": 5,
+            "86": 1,
+            "89": 4,
+            "90": 4,
+            "92": 3,
+            "97": 1,
+            "98": 1,
+            "100": 0,
+            "102": 0,
+            "104": 0,
+            "106": 0,
+            "108": 5
+          },
+          "Branches": [
+            {
+              "Line": 84,
+              "Offset": 23,
+              "EndOffset": 25,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 1
+            },
+            {
+              "Line": 84,
+              "Offset": 23,
+              "EndOffset": 47,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 4
+            },
+            {
+              "Line": 89,
+              "Offset": 54,
+              "EndOffset": 56,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 0
+            },
+            {
+              "Line": 89,
+              "Offset": 54,
+              "EndOffset": 60,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 4
+            },
+            {
+              "Line": 89,
+              "Offset": 71,
+              "EndOffset": 73,
+              "Path": 0,
+              "Ordinal": 4,
+              "Hits": 1
+            },
+            {
+              "Line": 89,
+              "Offset": 71,
+              "EndOffset": 77,
+              "Path": 1,
+              "Ordinal": 5,
+              "Hits": 3
+            },
+            {
+              "Line": 90,
+              "Offset": 89,
+              "EndOffset": 91,
+              "Path": 0,
+              "Ordinal": 6,
+              "Hits": 2
+            },
+            {
+              "Line": 90,
+              "Offset": 89,
+              "EndOffset": 101,
+              "Path": 1,
+              "Ordinal": 7,
+              "Hits": 3
+            },
+            {
+              "Line": 90,
+              "Offset": 99,
+              "EndOffset": 101,
+              "Path": 0,
+              "Ordinal": 8,
+              "Hits": 3
+            },
+            {
+              "Line": 90,
+              "Offset": 99,
+              "EndOffset": 123,
+              "Path": 1,
+              "Ordinal": 9,
+              "Hits": 1
+            }
+          ]
+        }
+      }
+    }
+  }
+}

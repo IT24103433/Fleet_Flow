@@ -1,0 +1,898 @@
+<?xml version="1.0" encoding="utf-8"?>
+<coverage line-rate="0.6145" branch-rate="0.3985" version="1.9" timestamp="1792485074" lines-covered="118" lines-valid="192" branches-covered="55" branches-valid="138">
+  <sources />
+  <packages>
+    <package name="IdentityService.Api" line-rate="0.6145" branch-rate="0.3985" complexity="143">
+      <classes>
+        <class name="IdentityService.Api.Services.AuthenticationService" filename="/work/src/backend/services/IdentityService/IdentityService.Api/Services/AuthenticationService.cs" line-rate="1" branch-rate="1" complexity="13">
+          <methods>
+            <method name="CreateSession" signature="(IdentityService.Api.Entities.User)" line-rate="1" branch-rate="1" complexity="12">
+              <lines>
+                <line number="107" hits="12" branch="False" />
+                <line number="108" hits="12" branch="False" />
+                <line number="109" hits="12" branch="False" />
+                <line number="110" hits="12" branch="True" condition-coverage="100% (4/4)">
+                  <conditions>
+                    <condition number="53" type="jump" coverage="100%" />
+                    <condition number="73" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="111" hits="12" branch="False" />
+                <line number="113" hits="12" branch="True" condition-coverage="100% (4/4)">
+                  <conditions>
+                    <condition number="112" type="jump" coverage="100%" />
+                    <condition number="127" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="115" hits="5" branch="False" />
+                <line number="118" hits="7" branch="True" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="149" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="120" hits="3" branch="False" />
+                <line number="123" hits="7" branch="False" />
+                <line number="126" hits="7" branch="False" />
+                <line number="127" hits="7" branch="False" />
+                <line number="128" hits="7" branch="False" />
+                <line number="129" hits="7" branch="False" />
+                <line number="130" hits="7" branch="False" />
+                <line number="131" hits="7" branch="False" />
+                <line number="132" hits="7" branch="False" />
+                <line number="133" hits="7" branch="False" />
+                <line number="134" hits="7" branch="False" />
+                <line number="137" hits="28" branch="True" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="431" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="139" hits="7" branch="False" />
+                <line number="142" hits="7" branch="False" />
+                <line number="143" hits="7" branch="False" />
+                <line number="145" hits="7" branch="False" />
+                <line number="146" hits="7" branch="False" />
+                <line number="147" hits="7" branch="False" />
+                <line number="148" hits="7" branch="False" />
+                <line number="149" hits="7" branch="False" />
+                <line number="150" hits="7" branch="False" />
+                <line number="151" hits="7" branch="False" />
+                <line number="153" hits="7" branch="False" />
+                <line number="155" hits="7" branch="False" />
+                <line number="156" hits="7" branch="False" />
+                <line number="157" hits="7" branch="False" />
+                <line number="158" hits="7" branch="False" />
+                <line number="159" hits="7" branch="False" />
+                <line number="160" hits="7" branch="False" />
+                <line number="161" hits="7" branch="False" />
+                <line number="162" hits="7" branch="False" />
+                <line number="163" hits="7" branch="False" />
+                <line number="164" hits="7" branch="False" />
+                <line number="165" hits="7" branch="False" />
+                <line number="166" hits="7" branch="False" />
+                <line number="167" hits="7" branch="False" />
+                <line number="168" hits="7" branch="False" />
+                <line number="169" hits="7" branch="False" />
+                <line number="170" hits="7" branch="False" />
+                <line number="171" hits="7" branch="False" />
+                <line number="172" hits="7" branch="False" />
+                <line number="173" hits="7" branch="False" />
+              </lines>
+            </method>
+            <method name=".ctor" signature="(IdentityService.Api.Data.IdentityDbContext,Microsoft.AspNetCore.Identity.IPasswordHasher`1&lt;IdentityService.Api.Entities.User&gt;,Microsoft.Extensions.Configuration.IConfiguration,IdentityService.Api.Onboarding.IdentityVault)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="25" hits="12" branch="False" />
+                <line number="26" hits="12" branch="False" />
+                <line number="27" hits="12" branch="False" />
+                <line number="28" hits="12" branch="False" />
+                <line number="29" hits="12" branch="False" />
+                <line number="31" hits="12" branch="False" />
+                <line number="32" hits="12" branch="False" />
+                <line number="33" hits="12" branch="False" />
+                <line number="34" hits="12" branch="False" />
+                <line number="35" hits="12" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="107" hits="12" branch="False" />
+            <line number="108" hits="12" branch="False" />
+            <line number="109" hits="12" branch="False" />
+            <line number="110" hits="12" branch="True" condition-coverage="100% (4/4)">
+              <conditions>
+                <condition number="53" type="jump" coverage="100%" />
+                <condition number="73" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="111" hits="12" branch="False" />
+            <line number="113" hits="12" branch="True" condition-coverage="100% (4/4)">
+              <conditions>
+                <condition number="112" type="jump" coverage="100%" />
+                <condition number="127" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="115" hits="5" branch="False" />
+            <line number="118" hits="7" branch="True" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="149" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="120" hits="3" branch="False" />
+            <line number="123" hits="7" branch="False" />
+            <line number="126" hits="7" branch="False" />
+            <line number="127" hits="7" branch="False" />
+            <line number="128" hits="7" branch="False" />
+            <line number="129" hits="7" branch="False" />
+            <line number="130" hits="7" branch="False" />
+            <line number="131" hits="7" branch="False" />
+            <line number="132" hits="7" branch="False" />
+            <line number="133" hits="7" branch="False" />
+            <line number="134" hits="7" branch="False" />
+            <line number="137" hits="28" branch="True" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="431" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="139" hits="7" branch="False" />
+            <line number="142" hits="7" branch="False" />
+            <line number="143" hits="7" branch="False" />
+            <line number="145" hits="7" branch="False" />
+            <line number="146" hits="7" branch="False" />
+            <line number="147" hits="7" branch="False" />
+            <line number="148" hits="7" branch="False" />
+            <line number="149" hits="7" branch="False" />
+            <line number="150" hits="7" branch="False" />
+            <line number="151" hits="7" branch="False" />
+            <line number="153" hits="7" branch="False" />
+            <line number="155" hits="7" branch="False" />
+            <line number="156" hits="7" branch="False" />
+            <line number="157" hits="7" branch="False" />
+            <line number="158" hits="7" branch="False" />
+            <line number="159" hits="7" branch="False" />
+            <line number="160" hits="7" branch="False" />
+            <line number="161" hits="7" branch="False" />
+            <line number="162" hits="7" branch="False" />
+            <line number="163" hits="7" branch="False" />
+            <line number="164" hits="7" branch="False" />
+            <line number="165" hits="7" branch="False" />
+            <line number="166" hits="7" branch="False" />
+            <line number="167" hits="7" branch="False" />
+            <line number="168" hits="7" branch="False" />
+            <line number="169" hits="7" branch="False" />
+            <line number="170" hits="7" branch="False" />
+            <line number="171" hits="7" branch="False" />
+            <line number="172" hits="7" branch="False" />
+            <line number="173" hits="7" branch="False" />
+            <line number="25" hits="12" branch="False" />
+            <line number="26" hits="12" branch="False" />
+            <line number="27" hits="12" branch="False" />
+            <line number="28" hits="12" branch="False" />
+            <line number="29" hits="12" branch="False" />
+            <line number="31" hits="12" branch="False" />
+            <line number="32" hits="12" branch="False" />
+            <line number="33" hits="12" branch="False" />
+            <line number="34" hits="12" branch="False" />
+            <line number="35" hits="12" branch="False" />
+          </lines>
+        </class>
+        <class name="IdentityService.Api.Services.AuthenticationService/&lt;&gt;c" filename="/work/src/backend/services/IdentityService/IdentityService.Api/Services/AuthenticationService.cs" line-rate="0" branch-rate="1" complexity="1">
+          <methods>
+            <method name="&lt;LoginAsync&gt;b__5_0" signature="(IdentityService.Api.Entities.Role)" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="75" hits="0" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="75" hits="0" branch="False" />
+          </lines>
+        </class>
+        <class name="IdentityService.Api.Services.AuthenticationService/&lt;&gt;c__DisplayClass5_0" filename="/work/src/backend/services/IdentityService/IdentityService.Api/Services/AuthenticationService.cs" line-rate="0" branch-rate="1" complexity="2">
+          <methods>
+            <method name="&lt;LoginAsync&gt;b__1" signature="(System.String)" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="81" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="&lt;LoginAsync&gt;b__2" signature="(System.String)" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="90" hits="0" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="81" hits="0" branch="False" />
+            <line number="90" hits="0" branch="False" />
+          </lines>
+        </class>
+        <class name="IdentityService.Api.Services.AuthenticationService/&lt;ChangePasswordAsync&gt;d__8" filename="/work/src/backend/services/IdentityService/IdentityService.Api/Services/AuthenticationService.cs" line-rate="0" branch-rate="0" complexity="34">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="0" branch-rate="0" complexity="34">
+              <lines>
+                <line number="183" hits="0" branch="True" condition-coverage="0% (0/2)">
+                  <conditions>
+                    <condition number="61" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+                <line number="185" hits="0" branch="False" />
+                <line number="188" hits="0" branch="True" condition-coverage="0% (0/4)">
+                  <conditions>
+                    <condition number="90" type="jump" coverage="0%" />
+                    <condition number="109" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+                <line number="190" hits="0" branch="False" />
+                <line number="193" hits="0" branch="False" />
+                <line number="194" hits="0" branch="True" condition-coverage="0% (0/2)">
+                  <conditions>
+                    <condition number="362" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+                <line number="196" hits="0" branch="False" />
+                <line number="199" hits="0" branch="True" condition-coverage="0% (0/2)">
+                  <conditions>
+                    <condition number="435" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+                <line number="201" hits="0" branch="False" />
+                <line number="203" hits="0" branch="True" condition-coverage="0% (0/2)">
+                  <conditions>
+                    <condition number="463" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+                <line number="204" hits="0" branch="True" condition-coverage="0% (0/4)">
+                  <conditions>
+                    <condition number="482" type="jump" coverage="0%" />
+                    <condition number="490" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+                <line number="206" hits="0" branch="True" condition-coverage="0% (0/6)">
+                  <conditions>
+                    <condition number="524" type="jump" coverage="0%" />
+                    <condition number="538" type="jump" coverage="0%" />
+                    <condition number="556" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+                <line number="207" hits="0" branch="False" />
+                <line number="208" hits="0" branch="True" condition-coverage="0% (0/4)">
+                  <conditions>
+                    <condition number="575" type="jump" coverage="0%" />
+                    <condition number="593" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+                <line number="209" hits="0" branch="False" />
+                <line number="210" hits="0" branch="True" condition-coverage="0% (0/4)">
+                  <conditions>
+                    <condition number="622" type="jump" coverage="0%" />
+                    <condition number="653" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+                <line number="211" hits="0" branch="False" />
+                <line number="213" hits="0" branch="False" />
+                <line number="214" hits="0" branch="False" />
+                <line number="215" hits="0" branch="False" />
+                <line number="216" hits="0" branch="False" />
+                <line number="218" hits="0" branch="True" condition-coverage="0% (0/4)">
+                  <conditions>
+                    <condition number="731" type="jump" coverage="0%" />
+                    <condition number="742" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+                <line number="220" hits="0" branch="False" />
+                <line number="221" hits="0" branch="False" />
+                <line number="223" hits="0" branch="False" />
+                <line number="224" hits="0" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="183" hits="0" branch="True" condition-coverage="0% (0/2)">
+              <conditions>
+                <condition number="61" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+            <line number="185" hits="0" branch="False" />
+            <line number="188" hits="0" branch="True" condition-coverage="0% (0/4)">
+              <conditions>
+                <condition number="90" type="jump" coverage="0%" />
+                <condition number="109" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+            <line number="190" hits="0" branch="False" />
+            <line number="193" hits="0" branch="False" />
+            <line number="194" hits="0" branch="True" condition-coverage="0% (0/2)">
+              <conditions>
+                <condition number="362" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+            <line number="196" hits="0" branch="False" />
+            <line number="199" hits="0" branch="True" condition-coverage="0% (0/2)">
+              <conditions>
+                <condition number="435" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+            <line number="201" hits="0" branch="False" />
+            <line number="203" hits="0" branch="True" condition-coverage="0% (0/2)">
+              <conditions>
+                <condition number="463" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+            <line number="204" hits="0" branch="True" condition-coverage="0% (0/4)">
+              <conditions>
+                <condition number="482" type="jump" coverage="0%" />
+                <condition number="490" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+            <line number="206" hits="0" branch="True" condition-coverage="0% (0/6)">
+              <conditions>
+                <condition number="524" type="jump" coverage="0%" />
+                <condition number="538" type="jump" coverage="0%" />
+                <condition number="556" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+            <line number="207" hits="0" branch="False" />
+            <line number="208" hits="0" branch="True" condition-coverage="0% (0/4)">
+              <conditions>
+                <condition number="575" type="jump" coverage="0%" />
+                <condition number="593" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+            <line number="209" hits="0" branch="False" />
+            <line number="210" hits="0" branch="True" condition-coverage="0% (0/4)">
+              <conditions>
+                <condition number="622" type="jump" coverage="0%" />
+                <condition number="653" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+            <line number="211" hits="0" branch="False" />
+            <line number="213" hits="0" branch="False" />
+            <line number="214" hits="0" branch="False" />
+            <line number="215" hits="0" branch="False" />
+            <line number="216" hits="0" branch="False" />
+            <line number="218" hits="0" branch="True" condition-coverage="0% (0/4)">
+              <conditions>
+                <condition number="731" type="jump" coverage="0%" />
+                <condition number="742" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+            <line number="220" hits="0" branch="False" />
+            <line number="221" hits="0" branch="False" />
+            <line number="223" hits="0" branch="False" />
+            <line number="224" hits="0" branch="False" />
+          </lines>
+        </class>
+        <class name="IdentityService.Api.Services.AuthenticationService/&lt;LoginAsync&gt;d__5" filename="/work/src/backend/services/IdentityService/IdentityService.Api/Services/AuthenticationService.cs" line-rate="0" branch-rate="0" complexity="30">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="0" branch-rate="0" complexity="30">
+              <lines>
+                <line number="39" hits="0" branch="True" condition-coverage="0% (0/2)">
+                  <conditions>
+                    <condition number="37" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+                <line number="41" hits="0" branch="False" />
+                <line number="44" hits="0" branch="True" condition-coverage="0% (0/2)">
+                  <conditions>
+                    <condition number="68" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+                <line number="45" hits="0" branch="True" condition-coverage="0% (0/2)">
+                  <conditions>
+                    <condition number="100" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+                <line number="47" hits="0" branch="False" />
+                <line number="51" hits="0" branch="False" />
+                <line number="52" hits="0" branch="False" />
+                <line number="53" hits="0" branch="False" />
+                <line number="54" hits="0" branch="False" />
+                <line number="56" hits="0" branch="True" condition-coverage="0% (0/2)">
+                  <conditions>
+                    <condition number="562" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+                <line number="58" hits="0" branch="False" />
+                <line number="61" hits="0" branch="True" condition-coverage="0% (0/4)">
+                  <conditions>
+                    <condition number="576" type="jump" coverage="0%" />
+                    <condition number="593" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+                <line number="63" hits="0" branch="False" />
+                <line number="67" hits="0" branch="True" condition-coverage="0% (0/2)">
+                  <conditions>
+                    <condition number="612" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+                <line number="68" hits="0" branch="True" condition-coverage="0% (0/2)">
+                  <conditions>
+                    <condition number="650" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+                <line number="70" hits="0" branch="False" />
+                <line number="74" hits="0" branch="True" condition-coverage="0% (0/4)">
+                  <conditions>
+                    <condition number="670" type="jump" coverage="0%" />
+                    <condition number="687" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+                <line number="76" hits="0" branch="False" />
+                <line number="78" hits="0" branch="True" condition-coverage="0% (0/2)">
+                  <conditions>
+                    <condition number="810" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+                <line number="83" hits="0" branch="False" />
+                <line number="84" hits="0" branch="False" />
+                <line number="87" hits="0" branch="True" condition-coverage="0% (0/2)">
+                  <conditions>
+                    <condition number="875" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+                <line number="92" hits="0" branch="False" />
+                <line number="93" hits="0" branch="False" />
+                <line number="98" hits="0" branch="False" />
+                <line number="101" hits="0" branch="False" />
+                <line number="102" hits="0" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="39" hits="0" branch="True" condition-coverage="0% (0/2)">
+              <conditions>
+                <condition number="37" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+            <line number="41" hits="0" branch="False" />
+            <line number="44" hits="0" branch="True" condition-coverage="0% (0/2)">
+              <conditions>
+                <condition number="68" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+            <line number="45" hits="0" branch="True" condition-coverage="0% (0/2)">
+              <conditions>
+                <condition number="100" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+            <line number="47" hits="0" branch="False" />
+            <line number="51" hits="0" branch="False" />
+            <line number="52" hits="0" branch="False" />
+            <line number="53" hits="0" branch="False" />
+            <line number="54" hits="0" branch="False" />
+            <line number="56" hits="0" branch="True" condition-coverage="0% (0/2)">
+              <conditions>
+                <condition number="562" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+            <line number="58" hits="0" branch="False" />
+            <line number="61" hits="0" branch="True" condition-coverage="0% (0/4)">
+              <conditions>
+                <condition number="576" type="jump" coverage="0%" />
+                <condition number="593" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+            <line number="63" hits="0" branch="False" />
+            <line number="67" hits="0" branch="True" condition-coverage="0% (0/2)">
+              <conditions>
+                <condition number="612" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+            <line number="68" hits="0" branch="True" condition-coverage="0% (0/2)">
+              <conditions>
+                <condition number="650" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+            <line number="70" hits="0" branch="False" />
+            <line number="74" hits="0" branch="True" condition-coverage="0% (0/4)">
+              <conditions>
+                <condition number="670" type="jump" coverage="0%" />
+                <condition number="687" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+            <line number="76" hits="0" branch="False" />
+            <line number="78" hits="0" branch="True" condition-coverage="0% (0/2)">
+              <conditions>
+                <condition number="810" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+            <line number="83" hits="0" branch="False" />
+            <line number="84" hits="0" branch="False" />
+            <line number="87" hits="0" branch="True" condition-coverage="0% (0/2)">
+              <conditions>
+                <condition number="875" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+            <line number="92" hits="0" branch="False" />
+            <line number="93" hits="0" branch="False" />
+            <line number="98" hits="0" branch="False" />
+            <line number="101" hits="0" branch="False" />
+            <line number="102" hits="0" branch="False" />
+          </lines>
+        </class>
+        <class name="IdentityService.Api.Services.AuthenticationService/&lt;RenewSessionAsync&gt;d__7" filename="/work/src/backend/services/IdentityService/IdentityService.Api/Services/AuthenticationService.cs" line-rate="0" branch-rate="0" complexity="8">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="0" branch-rate="0" complexity="8">
+              <lines>
+                <line number="178" hits="0" branch="False" />
+                <line number="179" hits="0" branch="True" condition-coverage="0% (0/8)">
+                  <conditions>
+                    <condition number="342" type="jump" coverage="0%" />
+                    <condition number="351" type="jump" coverage="0%" />
+                    <condition number="369" type="jump" coverage="0%" />
+                    <condition number="378" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+                <line number="180" hits="0" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="178" hits="0" branch="False" />
+            <line number="179" hits="0" branch="True" condition-coverage="0% (0/8)">
+              <conditions>
+                <condition number="342" type="jump" coverage="0%" />
+                <condition number="351" type="jump" coverage="0%" />
+                <condition number="369" type="jump" coverage="0%" />
+                <condition number="378" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+            <line number="180" hits="0" branch="False" />
+          </lines>
+        </class>
+        <class name="IdentityService.Api.Controllers.AuthController" filename="/work/src/backend/services/IdentityService/IdentityService.Api/Controllers/AuthController.cs" line-rate="1" branch-rate="1" complexity="1">
+          <methods>
+            <method name=".ctor" signature="(IdentityService.Api.Services.IRegistrationService,IdentityService.Api.Services.IAuthenticationService,IdentityService.Api.Services.IProfileImageService,IdentityService.Api.Onboarding.OnboardingService)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="19" hits="18" branch="False" />
+                <line number="20" hits="18" branch="False" />
+                <line number="21" hits="18" branch="False" />
+                <line number="22" hits="18" branch="False" />
+                <line number="23" hits="18" branch="False" />
+                <line number="25" hits="18" branch="False" />
+                <line number="26" hits="18" branch="False" />
+                <line number="27" hits="18" branch="False" />
+                <line number="28" hits="18" branch="False" />
+                <line number="29" hits="18" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="19" hits="18" branch="False" />
+            <line number="20" hits="18" branch="False" />
+            <line number="21" hits="18" branch="False" />
+            <line number="22" hits="18" branch="False" />
+            <line number="23" hits="18" branch="False" />
+            <line number="25" hits="18" branch="False" />
+            <line number="26" hits="18" branch="False" />
+            <line number="27" hits="18" branch="False" />
+            <line number="28" hits="18" branch="False" />
+            <line number="29" hits="18" branch="False" />
+          </lines>
+        </class>
+        <class name="IdentityService.Api.Controllers.AuthController/&lt;ChangePassword&gt;d__10" filename="/work/src/backend/services/IdentityService/IdentityService.Api/Controllers/AuthController.cs" line-rate="1" branch-rate="0.9" complexity="20">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="1" branch-rate="0.9" complexity="20">
+              <lines>
+                <line number="157" hits="9" branch="True" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="29" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="159" hits="1" branch="False" />
+                <line number="162" hits="8" branch="True" condition-coverage="75% (3/4)">
+                  <conditions>
+                    <condition number="56" type="jump" coverage="50%" />
+                    <condition number="73" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="163" hits="8" branch="True" condition-coverage="100% (4/4)">
+                  <conditions>
+                    <condition number="91" type="jump" coverage="100%" />
+                    <condition number="105" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="165" hits="3" branch="False" />
+                <line number="170" hits="5" branch="False" />
+                <line number="171" hits="2" branch="True" condition-coverage="75% (3/4)">
+                  <conditions>
+                    <condition number="258" type="jump" coverage="50%" />
+                    <condition number="279" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="172" hits="2" branch="True" condition-coverage="100% (6/6)">
+                  <conditions>
+                    <condition number="409" type="jump" coverage="100%" />
+                    <condition number="423" type="jump" coverage="100%" />
+                    <condition number="451" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="174" hits="1" branch="False" />
+                <line number="176" hits="1" branch="False" />
+                <line number="178" hits="1" branch="False" />
+                <line number="180" hits="1" branch="False" />
+                <line number="182" hits="1" branch="False" />
+                <line number="184" hits="1" branch="False" />
+                <line number="186" hits="9" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="157" hits="9" branch="True" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="29" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="159" hits="1" branch="False" />
+            <line number="162" hits="8" branch="True" condition-coverage="75% (3/4)">
+              <conditions>
+                <condition number="56" type="jump" coverage="50%" />
+                <condition number="73" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="163" hits="8" branch="True" condition-coverage="100% (4/4)">
+              <conditions>
+                <condition number="91" type="jump" coverage="100%" />
+                <condition number="105" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="165" hits="3" branch="False" />
+            <line number="170" hits="5" branch="False" />
+            <line number="171" hits="2" branch="True" condition-coverage="75% (3/4)">
+              <conditions>
+                <condition number="258" type="jump" coverage="50%" />
+                <condition number="279" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="172" hits="2" branch="True" condition-coverage="100% (6/6)">
+              <conditions>
+                <condition number="409" type="jump" coverage="100%" />
+                <condition number="423" type="jump" coverage="100%" />
+                <condition number="451" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="174" hits="1" branch="False" />
+            <line number="176" hits="1" branch="False" />
+            <line number="178" hits="1" branch="False" />
+            <line number="180" hits="1" branch="False" />
+            <line number="182" hits="1" branch="False" />
+            <line number="184" hits="1" branch="False" />
+            <line number="186" hits="9" branch="False" />
+          </lines>
+        </class>
+        <class name="IdentityService.Api.Controllers.AuthController/&lt;DeleteProfilePicture&gt;d__9" filename="/work/src/backend/services/IdentityService/IdentityService.Api/Controllers/AuthController.cs" line-rate="0.5" branch-rate="0.75" complexity="8">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="0.5" branch-rate="0.75" complexity="8">
+              <lines>
+                <line number="135" hits="3" branch="True" condition-coverage="75% (3/4)">
+                  <conditions>
+                    <condition number="24" type="jump" coverage="50%" />
+                    <condition number="41" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="136" hits="3" branch="True" condition-coverage="75% (3/4)">
+                  <conditions>
+                    <condition number="59" type="jump" coverage="100%" />
+                    <condition number="69" type="jump" coverage="50%" />
+                  </conditions>
+                </line>
+                <line number="138" hits="3" branch="False" />
+                <line number="143" hits="0" branch="False" />
+                <line number="144" hits="0" branch="False" />
+                <line number="146" hits="0" branch="False" />
+                <line number="148" hits="0" branch="False" />
+                <line number="150" hits="3" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="135" hits="3" branch="True" condition-coverage="75% (3/4)">
+              <conditions>
+                <condition number="24" type="jump" coverage="50%" />
+                <condition number="41" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="136" hits="3" branch="True" condition-coverage="75% (3/4)">
+              <conditions>
+                <condition number="59" type="jump" coverage="100%" />
+                <condition number="69" type="jump" coverage="50%" />
+              </conditions>
+            </line>
+            <line number="138" hits="3" branch="False" />
+            <line number="143" hits="0" branch="False" />
+            <line number="144" hits="0" branch="False" />
+            <line number="146" hits="0" branch="False" />
+            <line number="148" hits="0" branch="False" />
+            <line number="150" hits="3" branch="False" />
+          </lines>
+        </class>
+        <class name="IdentityService.Api.Controllers.AuthController/&lt;GetProfilePicture&gt;d__8" filename="/work/src/backend/services/IdentityService/IdentityService.Api/Controllers/AuthController.cs" line-rate="0.5" branch-rate="0.75" complexity="8">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="0.5" branch-rate="0.75" complexity="8">
+              <lines>
+                <line number="114" hits="3" branch="True" condition-coverage="75% (3/4)">
+                  <conditions>
+                    <condition number="24" type="jump" coverage="50%" />
+                    <condition number="41" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="115" hits="3" branch="True" condition-coverage="75% (3/4)">
+                  <conditions>
+                    <condition number="59" type="jump" coverage="100%" />
+                    <condition number="69" type="jump" coverage="50%" />
+                  </conditions>
+                </line>
+                <line number="117" hits="3" branch="False" />
+                <line number="122" hits="0" branch="False" />
+                <line number="123" hits="0" branch="False" />
+                <line number="125" hits="0" branch="False" />
+                <line number="127" hits="0" branch="False" />
+                <line number="129" hits="3" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="114" hits="3" branch="True" condition-coverage="75% (3/4)">
+              <conditions>
+                <condition number="24" type="jump" coverage="50%" />
+                <condition number="41" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="115" hits="3" branch="True" condition-coverage="75% (3/4)">
+              <conditions>
+                <condition number="59" type="jump" coverage="100%" />
+                <condition number="69" type="jump" coverage="50%" />
+              </conditions>
+            </line>
+            <line number="117" hits="3" branch="False" />
+            <line number="122" hits="0" branch="False" />
+            <line number="123" hits="0" branch="False" />
+            <line number="125" hits="0" branch="False" />
+            <line number="127" hits="0" branch="False" />
+            <line number="129" hits="3" branch="False" />
+          </lines>
+        </class>
+        <class name="IdentityService.Api.Controllers.AuthController/&lt;Login&gt;d__6" filename="/work/src/backend/services/IdentityService/IdentityService.Api/Controllers/AuthController.cs" line-rate="0.8571" branch-rate="0.5" complexity="4">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="0.8571" branch-rate="0.5" complexity="4">
+              <lines>
+                <line number="53" hits="6" branch="True" condition-coverage="50% (2/4)">
+                  <conditions>
+                    <condition number="36" type="jump" coverage="50%" />
+                    <condition number="47" type="jump" coverage="50%" />
+                  </conditions>
+                </line>
+                <line number="54" hits="6" branch="False" />
+                <line number="55" hits="2" branch="False" />
+                <line number="57" hits="1" branch="False" />
+                <line number="59" hits="1" branch="False" />
+                <line number="61" hits="0" branch="False" />
+                <line number="63" hits="0" branch="False" />
+                <line number="65" hits="1" branch="False" />
+                <line number="67" hits="1" branch="False" />
+                <line number="69" hits="1" branch="False" />
+                <line number="71" hits="1" branch="False" />
+                <line number="73" hits="1" branch="False" />
+                <line number="75" hits="1" branch="False" />
+                <line number="77" hits="6" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="53" hits="6" branch="True" condition-coverage="50% (2/4)">
+              <conditions>
+                <condition number="36" type="jump" coverage="50%" />
+                <condition number="47" type="jump" coverage="50%" />
+              </conditions>
+            </line>
+            <line number="54" hits="6" branch="False" />
+            <line number="55" hits="2" branch="False" />
+            <line number="57" hits="1" branch="False" />
+            <line number="59" hits="1" branch="False" />
+            <line number="61" hits="0" branch="False" />
+            <line number="63" hits="0" branch="False" />
+            <line number="65" hits="1" branch="False" />
+            <line number="67" hits="1" branch="False" />
+            <line number="69" hits="1" branch="False" />
+            <line number="71" hits="1" branch="False" />
+            <line number="73" hits="1" branch="False" />
+            <line number="75" hits="1" branch="False" />
+            <line number="77" hits="6" branch="False" />
+          </lines>
+        </class>
+        <class name="IdentityService.Api.Controllers.AuthController/&lt;Register&gt;d__5" filename="/work/src/backend/services/IdentityService/IdentityService.Api/Controllers/AuthController.cs" line-rate="0.8332999999999999" branch-rate="0.5" complexity="4">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="0.8332999999999999" branch-rate="0.5" complexity="4">
+              <lines>
+                <line number="35" hits="1" branch="True" condition-coverage="50% (2/4)">
+                  <conditions>
+                    <condition number="24" type="jump" coverage="50%" />
+                    <condition number="35" type="jump" coverage="50%" />
+                  </conditions>
+                </line>
+                <line number="38" hits="1" branch="False" />
+                <line number="39" hits="0" branch="False" />
+                <line number="41" hits="1" branch="False" />
+                <line number="43" hits="1" branch="False" />
+                <line number="45" hits="1" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="35" hits="1" branch="True" condition-coverage="50% (2/4)">
+              <conditions>
+                <condition number="24" type="jump" coverage="50%" />
+                <condition number="35" type="jump" coverage="50%" />
+              </conditions>
+            </line>
+            <line number="38" hits="1" branch="False" />
+            <line number="39" hits="0" branch="False" />
+            <line number="41" hits="1" branch="False" />
+            <line number="43" hits="1" branch="False" />
+            <line number="45" hits="1" branch="False" />
+          </lines>
+        </class>
+        <class name="IdentityService.Api.Controllers.AuthController/&lt;UploadProfilePicture&gt;d__7" filename="/work/src/backend/services/IdentityService/IdentityService.Api/Controllers/AuthController.cs" line-rate="0.6666" branch-rate="0.9" complexity="10">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="0.6666" branch-rate="0.9" complexity="10">
+              <lines>
+                <line number="84" hits="5" branch="True" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="23" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="86" hits="1" branch="False" />
+                <line number="89" hits="4" branch="True" condition-coverage="75% (3/4)">
+                  <conditions>
+                    <condition number="54" type="jump" coverage="50%" />
+                    <condition number="71" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="90" hits="4" branch="True" condition-coverage="100% (4/4)">
+                  <conditions>
+                    <condition number="89" type="jump" coverage="100%" />
+                    <condition number="99" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="92" hits="3" branch="False" />
+                <line number="97" hits="1" branch="False" />
+                <line number="98" hits="1" branch="False" />
+                <line number="100" hits="0" branch="False" />
+                <line number="102" hits="0" branch="False" />
+                <line number="104" hits="0" branch="False" />
+                <line number="106" hits="0" branch="False" />
+                <line number="108" hits="5" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="84" hits="5" branch="True" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="23" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="86" hits="1" branch="False" />
+            <line number="89" hits="4" branch="True" condition-coverage="75% (3/4)">
+              <conditions>
+                <condition number="54" type="jump" coverage="50%" />
+                <condition number="71" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="90" hits="4" branch="True" condition-coverage="100% (4/4)">
+              <conditions>
+                <condition number="89" type="jump" coverage="100%" />
+                <condition number="99" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="92" hits="3" branch="False" />
+            <line number="97" hits="1" branch="False" />
+            <line number="98" hits="1" branch="False" />
+            <line number="100" hits="0" branch="False" />
+            <line number="102" hits="0" branch="False" />
+            <line number="104" hits="0" branch="False" />
+            <line number="106" hits="0" branch="False" />
+            <line number="108" hits="5" branch="False" />
+          </lines>
+        </class>
+      </classes>
+    </package>
+  </packages>
+</coverage>

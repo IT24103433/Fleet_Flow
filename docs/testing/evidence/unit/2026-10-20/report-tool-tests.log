@@ -1,0 +1,14 @@
+test_complete_passing_results_are_accepted_with_union_coverage (test_summary.EvidenceAcceptanceTests.test_complete_passing_results_are_accepted_with_union_coverage) ... ok
+test_conflicting_coverage_in_one_project_is_rejected (test_summary.EvidenceAcceptanceTests.test_conflicting_coverage_in_one_project_is_rejected) ... ok
+test_duplicate_results_cannot_inflate_a_passing_run (test_summary.EvidenceAcceptanceTests.test_duplicate_results_cannot_inflate_a_passing_run) ... ok
+test_failed_or_skipped_cases_are_rejected (test_summary.EvidenceAcceptanceTests.test_failed_or_skipped_cases_are_rejected) ... ok
+test_missing_project_coverage_is_rejected (test_summary.EvidenceAcceptanceTests.test_missing_project_coverage_is_rejected) ... ok
+test_missing_project_result_is_rejected (test_summary.EvidenceAcceptanceTests.test_missing_project_result_is_rejected) ... ok
+test_nonzero_process_exit_is_rejected_even_when_trx_passes (test_summary.EvidenceAcceptanceTests.test_nonzero_process_exit_is_rejected_even_when_trx_passes) ... ok
+test_vstest_attachment_copy_is_accepted_without_double_counting (test_summary.EvidenceAcceptanceTests.test_vstest_attachment_copy_is_accepted_without_double_counting) ... ok
+test_zero_tests_are_rejected (test_summary.EvidenceAcceptanceTests.test_zero_tests_are_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.129s
+
+OK

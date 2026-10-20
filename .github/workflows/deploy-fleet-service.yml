@@ -1,9 +1,14 @@
 name: Deploy FleetService to Azure App Service
 
-# Sprint 4 requires a coordinated four-service release; a main merge must not
-# automatically deploy only the legacy Identity/Fleet/frontend applications.
 on:
   workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
 
 jobs:
   # =========================================================================
@@ -50,8 +55,8 @@ jobs:
           retention-days: 7
 
   # =========================================================================
-  # STAGE 2: DEPLOY TO AZURE
-  # Isolated deployment stage using the verified build package
+  # STAGE 2: DEPLOY TO AZURE & SMOKE TEST
+  # Isolated deployment stage using the verified build package with OIDC & smoke probe
   # =========================================================================
   deploy:
     name: "FleetService : Deploy to Azure"
@@ -67,9 +72,35 @@ jobs:
       - name: Ensure executable permission after artifact download
         run: chmod +x ./fleet-app/FleetService.Api
 
+      - name: Azure Login via OIDC
+        if: env.AZURE_CLIENT_ID != ''
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ secrets.AZURE_FLEET_SERVICE_APP_NAME }}
           publish-profile: ${{ secrets.AZURE_FLEET_SERVICE_PUBLISH_PROFILE }}
           package: ./fleet-app
+
+      - name: Post-Deployment Smoke Probing
+        run: |
+          APP_NAME="${{ secrets.AZURE_FLEET_SERVICE_APP_NAME }}"
+          PROBE_URL="https://${APP_NAME}.azurewebsites.net/health/ready"
+          echo "Verifying FleetService readiness at $PROBE_URL..."
+          for i in {1..25}; do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$PROBE_URL" || true)
+            if [ "$STATUS" = "200" ]; then
+              echo "FleetService is healthy and ready (HTTP 200)!"
+              exit 0
+            fi
+            echo "Attempt $i: Received HTTP $STATUS, retrying in 5s..."
+            sleep 5
+          done
+          echo "FleetService readiness probe timed out after 125s. Check application logs."
+          exit 1
+        shell: bash

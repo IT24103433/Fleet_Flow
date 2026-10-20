@@ -1,0 +1,85 @@
+.NET SDK:
+ Version:           10.0.402
+ Commit:            a8dd0577c5
+ Workload version:  10.0.400-manifests.da132f47
+ MSBuild version:   18.9.15+a8dd0577c
+
+Runtime Environment:
+ OS Name:     ubuntu
+ OS Version:  24.04
+ OS Platform: Linux
+ RID:         linux-x64
+ Base Path:   /usr/share/dotnet/sdk/10.0.402/
+
+.NET workloads installed:
+There are no installed workloads to display.
+Configured to use workload sets when installing new manifests.
+No workload sets are installed. Run "dotnet workload restore" to install a workload set.
+
+Host:
+  Version:      10.0.13
+  Architecture: x64
+  Commit:       4099f83977
+
+.NET SDKs installed:
+  10.0.402 [/usr/share/dotnet/sdk]
+
+.NET runtimes installed:
+  Microsoft.AspNetCore.App 10.0.13 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]
+  Microsoft.NETCore.App 10.0.13 [/usr/share/dotnet/shared/Microsoft.NETCore.App]
+
+Other architectures found:
+  None
+
+Environment variables:
+  DOTNET_CLI_TELEMETRY_OPTOUT              [1]
+  DOTNET_GENERATE_ASPNET_CERTIFICATE       [false]
+  DOTNET_NOLOGO                            [true]
+  DOTNET_RUNNING_IN_CONTAINER              [true]
+  DOTNET_SDK_VERSION                       [10.0.402]
+  DOTNET_USE_POLLING_FILE_WATCHER          [true]
+  DOTNET_VERSION                           [10.0.13]
+
+global.json file:
+  Not found
+
+Learn more:
+  https://aka.ms/dotnet/info
+
+Download .NET:
+  https://aka.ms/dotnet/download
+  Determining projects to restore...
+  Restored /work/src/backend/shared/FleetFlow.Contracts/FleetFlow.Contracts.csproj (in 54 ms).
+  Restored /work/src/backend/shared/FleetFlow.ServiceDefaults/FleetFlow.ServiceDefaults.csproj (in 453 ms).
+  Restored /work/tests/FleetFlow.IdentityService.Tests/FleetFlow.IdentityService.Tests.csproj (in 1.61 sec).
+  Restored /work/src/backend/services/IdentityService/IdentityService.Api/IdentityService.Api.csproj (in 1.63 sec).
+  FleetFlow.Contracts -> /work/src/backend/shared/FleetFlow.Contracts/bin/Release/net10.0/FleetFlow.Contracts.dll
+  FleetFlow.ServiceDefaults -> /work/src/backend/shared/FleetFlow.ServiceDefaults/bin/Release/net10.0/FleetFlow.ServiceDefaults.dll
+  IdentityService.Api -> /work/src/backend/services/IdentityService/IdentityService.Api/bin/Release/net10.0/IdentityService.Api.dll
+  FleetFlow.IdentityService.Tests -> /work/tests/FleetFlow.IdentityService.Tests/bin/Release/net10.0/FleetFlow.IdentityService.Tests.dll
+Test run for /work/tests/FleetFlow.IdentityService.Tests/bin/Release/net10.0/FleetFlow.IdentityService.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Results File: /results/FleetFlow.IdentityService.Tests/_b3498fe6892c_2026-10-20_08_31_14_net10.0.trx
+
+Passed!  - Failed:     0, Passed:    30, Skipped:     0, Total:    30, Duration: 116 ms - FleetFlow.IdentityService.Tests.dll (net10.0)
+
+Attachments:
+  /results/FleetFlow.IdentityService.Tests/b43a2885-f12f-4f39-834c-1b1bc52dc62e/coverage.cobertura.xml
+  /results/FleetFlow.IdentityService.Tests/b43a2885-f12f-4f39-834c-1b1bc52dc62e/coverage.json
+  Determining projects to restore...
+  Restored /work/tests/FleetFlow.VehicleService.Tests/FleetFlow.VehicleService.Tests.csproj (in 2.02 sec).
+  Restored /work/src/backend/services/FleetService/FleetService.Api/FleetService.Api.csproj (in 2.05 sec).
+  2 of 4 projects are up-to-date for restore.
+  FleetFlow.Contracts -> /work/src/backend/shared/FleetFlow.Contracts/bin/Release/net10.0/FleetFlow.Contracts.dll
+  FleetFlow.ServiceDefaults -> /work/src/backend/shared/FleetFlow.ServiceDefaults/bin/Release/net10.0/FleetFlow.ServiceDefaults.dll
+  FleetService.Api -> /work/src/backend/services/FleetService/FleetService.Api/bin/Release/net10.0/FleetService.Api.dll
+  FleetFlow.VehicleService.Tests -> /work/tests/FleetFlow.VehicleService.Tests/bin/Release/net10.0/FleetFlow.VehicleService.Tests.dll
+Test run for /work/tests/FleetFlow.VehicleService.Tests/bin/Release/net10.0/FleetFlow.VehicleService.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Results File: /results/FleetFlow.VehicleService.Tests/_b3498fe6892c_2026-10-20_08_31_23_net10.0.trx
+
+Passed!  - Failed:     0, Passed:    60, Skipped:     0, Total:    60, Duration: 126 ms - FleetFlow.VehicleService.Tests.dll (net10.0)
+
+Attachments:
+  /results/FleetFlow.VehicleService.Tests/dacbf94f-1486-4c47-89f8-3a38026ff978/coverage.json
+  /results/FleetFlow.VehicleService.Tests/dacbf94f-1486-4c47-89f8-3a38026ff978/coverage.cobertura.xml
