@@ -1,0 +1,605 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="6ee3dcb2-3bbb-46d9-b679-13fd3883ec2b" name="jadav@JADAVAN 2026-10-20 14:36:03" runUser="JADAVAN\jadav" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-20T14:36:03.4727487+05:30" queuing="2026-10-20T14:36:03.4727489+05:30" start="2026-10-20T14:36:01.9732545+05:30" finish="2026-10-20T14:36:03.5545896+05:30" />
+  <TestSettings name="default" id="cbe063f2-6dad-4914-9ee0-b6f1f84cdcd2">
+    <Deployment runDeploymentRoot="jadav_JADAVAN_2026-10-20_14_36_03" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="f4a7a939-b0fa-4876-a2f7-47ac7cbb1ec7" testId="3ad53e3b-41e0-3524-59b6-25cf3fa75d1f" testName="FleetFlow.VehicleService.Tests.AseMutation.MutationRegressionTests.MaintenanceExport_MixedSourcesPreserveTheSchemaAndBothKindsOfRows" computerName="JADAVAN" duration="00:00:00.0501314" startTime="2026-10-20T14:36:03.3022016+05:30" endTime="2026-10-20T14:36:03.3022020+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f4a7a939-b0fa-4876-a2f7-47ac7cbb1ec7" />
+    <UnitTestResult executionId="1a9b97af-2314-4840-ba28-75486fd1aa11" testId="3daa1cb1-c88a-fee6-6c06-facf7d1a9f20" testName="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: &quot;&quot;, expected: &quot;&quot;)" computerName="JADAVAN" duration="00:00:00.0000234" startTime="2026-10-20T14:36:03.4198543+05:30" endTime="2026-10-20T14:36:03.4198544+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1a9b97af-2314-4840-ba28-75486fd1aa11" />
+    <UnitTestResult executionId="d0434b40-cd80-4c4c-bda9-6f5d6ac9b904" testId="30ed84ab-c5fe-a95a-b783-638eae6eff8c" testName="FleetFlow.VehicleService.Tests.AseUnit.ReportBoundaryTests.MaintenanceExport_UnavailableSnapshot_Is503RatherThanCsv" computerName="JADAVAN" duration="00:00:00.0109675" startTime="2026-10-20T14:36:03.4159227+05:30" endTime="2026-10-20T14:36:03.4159228+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d0434b40-cd80-4c4c-bda9-6f5d6ac9b904" />
+    <UnitTestResult executionId="958aa545-76f2-4172-8b3f-a1e1268ca8c0" testId="a5543212-4887-0e20-c10c-545a6d561a14" testName="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_EscapesQuotesWithoutLosingEmbeddedDelimiters(input: &quot;Two\r\nlines&quot;, escaped: &quot;Two\r\nlines&quot;)" computerName="JADAVAN" duration="00:00:00.0003201" startTime="2026-10-20T14:36:03.4211938+05:30" endTime="2026-10-20T14:36:03.4211939+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="958aa545-76f2-4172-8b3f-a1e1268ca8c0" />
+    <UnitTestResult executionId="4c020c11-d0cd-4f1a-aa92-7051f395b1c9" testId="df9a7220-5c0c-c44e-5a1f-5df2c13f4ce4" testName="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: &quot;@cmd&quot;, expected: &quot;\t@cmd&quot;)" computerName="JADAVAN" duration="00:00:00.0000265" startTime="2026-10-20T14:36:03.4198234+05:30" endTime="2026-10-20T14:36:03.4198234+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4c020c11-d0cd-4f1a-aa92-7051f395b1c9" />
+    <UnitTestResult executionId="f084411b-2dfb-4f73-8035-16fe9693b35e" testId="6d344dc8-59a1-985f-d8bf-2bf9d04caed6" testName="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.DependencyHttpFailure_IsNotTreatedAsEligibleStaff(status: 503)" computerName="JADAVAN" duration="00:00:00.0113296" startTime="2026-10-20T14:36:03.4231452+05:30" endTime="2026-10-20T14:36:03.4231453+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f084411b-2dfb-4f73-8035-16fe9693b35e" />
+    <UnitTestResult executionId="43aee835-48cd-42da-b97d-8a59f9486de8" testId="94fd37d7-3726-477f-8e79-bca1a558d6a9" testName="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_RealAmountsKeepInvariantDecimalSeparatorsAndNegativeValues(culture: &quot;fr-FR&quot;)" computerName="JADAVAN" duration="00:00:00.0001841" startTime="2026-10-20T14:36:03.4158768+05:30" endTime="2026-10-20T14:36:03.4158769+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="43aee835-48cd-42da-b97d-8a59f9486de8" />
+    <UnitTestResult executionId="88c045de-2444-4c4e-bef6-a3b9798ee8bd" testId="1e5a3bc3-485e-eb3d-af4e-28e65bc46b47" testName="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Maintenance_RowLimit_IncludesExactBoundary(count: 9999, shouldReject: False)" computerName="JADAVAN" duration="00:00:00.0546954" startTime="2026-10-20T14:36:03.4152510+05:30" endTime="2026-10-20T14:36:03.4152513+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="88c045de-2444-4c4e-bef6-a3b9798ee8bd" />
+    <UnitTestResult executionId="72cb497b-38f0-4878-ad03-ec14ac9ea2c7" testId="6a3b78fd-2506-82ef-e927-eaf59e283a3b" testName="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.InvalidJsonOrMissingBody_FailsClosed(body: &quot;null&quot;)" computerName="JADAVAN" duration="00:00:00.1526252" startTime="2026-10-20T14:36:03.4200027+05:30" endTime="2026-10-20T14:36:03.4200028+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="72cb497b-38f0-4878-ad03-ec14ac9ea2c7" />
+    <UnitTestResult executionId="0fb77022-8a34-4191-a2f9-b29b29cde9c8" testId="50f386da-2761-c16c-098b-60d2df03548b" testName="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Bookings_MapsActualStatusAmountAndIdentifiersToTheRightColumns" computerName="JADAVAN" duration="00:00:00.0158360" startTime="2026-10-20T14:36:03.4231195+05:30" endTime="2026-10-20T14:36:03.4231196+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0fb77022-8a34-4191-a2f9-b29b29cde9c8" />
+    <UnitTestResult executionId="7fdd2477-4ba0-44e9-8535-15149f923c07" testId="a062b6ab-7531-d5fe-f170-128671a90924" testName="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: &quot;123&quot;, expected: &quot;123&quot;)" computerName="JADAVAN" duration="00:00:00.0000211" startTime="2026-10-20T14:36:03.4199263+05:30" endTime="2026-10-20T14:36:03.4199264+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7fdd2477-4ba0-44e9-8535-15149f923c07" />
+    <UnitTestResult executionId="4fa8594e-04dc-4d5d-9c73-83ce97802760" testId="e7b2953a-5cae-94e3-07cd-a27c63bbe7c6" testName="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: &quot;＝1&quot;, expected: &quot;\t＝1&quot;)" computerName="JADAVAN" duration="00:00:00.0110622" startTime="2026-10-20T14:36:03.4159707+05:30" endTime="2026-10-20T14:36:03.4159708+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4fa8594e-04dc-4d5d-9c73-83ce97802760" />
+    <UnitTestResult executionId="9bafd0de-e89c-4ea9-aa8c-421225bf751a" testId="a060cebd-78f5-154f-451b-d4bc4c953893" testName="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_RealAmountsKeepInvariantDecimalSeparatorsAndNegativeValues(culture: &quot;de-DE&quot;)" computerName="JADAVAN" duration="00:00:00.0010008" startTime="2026-10-20T14:36:03.4157771+05:30" endTime="2026-10-20T14:36:03.4157772+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9bafd0de-e89c-4ea9-aa8c-421225bf751a" />
+    <UnitTestResult executionId="b32ae9ce-785d-442d-8279-32a17e478a6a" testId="cae8a3f6-376a-9b1e-660f-0910505b5cf6" testName="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.Get_ValidAccount_UsesRestrictedServiceTokenAndPreservesIdentity" computerName="JADAVAN" duration="00:00:00.0023744" startTime="2026-10-20T14:36:03.4872000+05:30" endTime="2026-10-20T14:36:03.4872003+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b32ae9ce-785d-442d-8279-32a17e478a6a" />
+    <UnitTestResult executionId="be6831d5-02de-44e4-aa7a-a6c66773483b" testId="b10ab3ea-a33a-ed46-4653-964578a53671" testName="FleetFlow.VehicleService.Tests.AseMutation.MutationRegressionTests.Encode_LocalTimestampIsConvertedToUtcRatherThanRelabelled" computerName="JADAVAN" duration="00:00:00.0026495" startTime="2026-10-20T14:36:03.4230472+05:30" endTime="2026-10-20T14:36:03.4230473+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="be6831d5-02de-44e4-aa7a-a6c66773483b" />
+    <UnitTestResult executionId="d7c97f81-7f52-400a-9f04-6f053100e79f" testId="5cbc213b-8fde-48c3-5397-44883ac89a71" testName="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.List_ValidBoundaries_PreservesEveryAccount(count: 1000)" computerName="JADAVAN" duration="00:00:00.0141333" startTime="2026-10-20T14:36:03.4567751+05:30" endTime="2026-10-20T14:36:03.4567754+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d7c97f81-7f52-400a-9f04-6f053100e79f" />
+    <UnitTestResult executionId="76b8f523-7d6d-4787-8cce-2bf1c7619bf7" testId="427f1072-99d2-da53-caa9-bbb7aa349b8b" testName="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.WrongAccountOrBlankUsername_IsRejected(wrongId: False)" computerName="JADAVAN" duration="00:00:00.0011394" startTime="2026-10-20T14:36:03.4787117+05:30" endTime="2026-10-20T14:36:03.4787120+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="76b8f523-7d6d-4787-8cce-2bf1c7619bf7" />
+    <UnitTestResult executionId="3a5cb78c-92c0-471a-9147-59f84faac286" testId="b8b84ef9-543f-ce27-167e-c6e11d306f6d" testName="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: &quot;Toyota&quot;, expected: &quot;Toyota&quot;)" computerName="JADAVAN" duration="00:00:00.0000234" startTime="2026-10-20T14:36:03.4188690+05:30" endTime="2026-10-20T14:36:03.4188691+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3a5cb78c-92c0-471a-9147-59f84faac286" />
+    <UnitTestResult executionId="7703c8d6-c233-46d7-8896-da742219e0b3" testId="fdd5d8ee-8a60-7a19-fae4-03ee70a318dd" testName="FleetFlow.VehicleService.Tests.AseUnit.ReportBoundaryTests.BookingReport_MapsExpectedDependencyFailuresAndForwardsCancellation(failure: System.TimeoutException: Synthetic timeout, status: 503)" computerName="JADAVAN" duration="00:00:00.0030450" startTime="2026-10-20T14:36:03.4211400+05:30" endTime="2026-10-20T14:36:03.4211401+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7703c8d6-c233-46d7-8896-da742219e0b3" />
+    <UnitTestResult executionId="f1ce82c7-cab3-436a-b69d-b802abe19ea7" testId="1b393a7d-3f89-7bf6-c311-e300f60acf69" testName="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_DatesAreExplicitUtcWithRoundTripPrecision(kind: Utc)" computerName="JADAVAN" duration="00:00:00.0067280" startTime="2026-10-20T14:36:03.2527827+05:30" endTime="2026-10-20T14:36:03.2528947+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f1ce82c7-cab3-436a-b69d-b802abe19ea7" />
+    <UnitTestResult executionId="00cfda77-6d69-4d0c-a259-00c486180967" testId="4bbf06df-3d66-352c-cc54-13bdd43e69ed" testName="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: &quot;  =1&quot;, expected: &quot;\t  =1&quot;)" computerName="JADAVAN" duration="00:00:00.0000314" startTime="2026-10-20T14:36:03.4188094+05:30" endTime="2026-10-20T14:36:03.4188097+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="00cfda77-6d69-4d0c-a259-00c486180967" />
+    <UnitTestResult executionId="55ee4828-d60b-408a-9f89-c0874c7254d2" testId="e7faf2b0-6b4e-73a7-0be7-e724a9cd367d" testName="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: &quot;\rvalue&quot;, expected: &quot;\t\rvalue&quot;)" computerName="JADAVAN" duration="00:00:00.0000226" startTime="2026-10-20T14:36:03.4189606+05:30" endTime="2026-10-20T14:36:03.4189606+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="55ee4828-d60b-408a-9f89-c0874c7254d2" />
+    <UnitTestResult executionId="76b4882a-40b0-47b4-8735-b9e61f665b74" testId="0a008b57-74e5-c563-cdf4-38eff2b36ef9" testName="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: &quot;＠cmd&quot;, expected: &quot;\t＠cmd&quot;)" computerName="JADAVAN" duration="00:00:00.0003150" startTime="2026-10-20T14:36:03.4160029+05:30" endTime="2026-10-20T14:36:03.4160030+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="76b4882a-40b0-47b4-8735-b9e61f665b74" />
+    <UnitTestResult executionId="b9304361-3601-45a6-bde8-71db76549dc5" testId="386d0a04-5c70-58da-ea54-ade69621eecb" testName="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.InvalidJsonOrMissingBody_FailsClosed(body: &quot;[]&quot;)" computerName="JADAVAN" duration="00:00:00.0047768" startTime="2026-10-20T14:36:03.4210210+05:30" endTime="2026-10-20T14:36:03.4210212+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b9304361-3601-45a6-bde8-71db76549dc5" />
+    <UnitTestResult executionId="c4f40f80-18d2-40e0-9538-e05ceb90b5aa" testId="525bf077-c303-a7e8-cf52-6aea0adb9336" testName="FleetFlow.VehicleService.Tests.AseMutation.MutationRegressionTests.ErrorStatus_WithOtherwiseValidStaffJson_IsStillRejected(status: 401)" computerName="JADAVAN" duration="00:00:00.0032088" startTime="2026-10-20T14:36:03.4210520+05:30" endTime="2026-10-20T14:36:03.4210521+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c4f40f80-18d2-40e0-9538-e05ceb90b5aa" />
+    <UnitTestResult executionId="696ba6cd-e99c-4289-b715-7dd884fc61fa" testId="a4e2186b-4b56-ce19-519f-b53922b04005" testName="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.Cancellation_DistinguishesCallerCancellationFromDependencyTimeout(callerCancelled: True)" computerName="JADAVAN" duration="00:00:00.0032316" startTime="2026-10-20T14:36:03.4221815+05:30" endTime="2026-10-20T14:36:03.4221816+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="696ba6cd-e99c-4289-b715-7dd884fc61fa" />
+    <UnitTestResult executionId="c2ac0379-83ae-48b9-96bd-aac9e264442d" testId="ad906dba-7722-a339-26e8-3367fc3dcc62" testName="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Maintenance_RowLimit_IncludesExactBoundary(count: 10000, shouldReject: False)" computerName="JADAVAN" duration="00:00:00.0634258" startTime="2026-10-20T14:36:03.3155115+05:30" endTime="2026-10-20T14:36:03.3155120+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c2ac0379-83ae-48b9-96bd-aac9e264442d" />
+    <UnitTestResult executionId="3e0666e4-a94d-43a1-80c3-e7a555b18912" testId="732fc2cc-14ca-26fa-5f2e-394e940644f0" testName="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: &quot;\tvalue&quot;, expected: &quot;\t\tvalue&quot;)" computerName="JADAVAN" duration="00:00:00.0000279" startTime="2026-10-20T14:36:03.4188965+05:30" endTime="2026-10-20T14:36:03.4188965+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3e0666e4-a94d-43a1-80c3-e7a555b18912" />
+    <UnitTestResult executionId="363fbdb8-9c34-4d65-8b62-f06c2c0cb183" testId="f798100f-be4c-21d1-b11d-f43afd22cac5" testName="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.DependencyHttpFailure_IsNotTreatedAsEligibleStaff(status: 429)" computerName="JADAVAN" duration="00:00:00.0021963" startTime="2026-10-20T14:36:03.4231947+05:30" endTime="2026-10-20T14:36:03.4231947+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="363fbdb8-9c34-4d65-8b62-f06c2c0cb183" />
+    <UnitTestResult executionId="1b38515d-cfc6-470d-ab9c-e4d4064c8345" testId="ba5ff937-79dc-9bd1-e5ed-40d575e56ec4" testName="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.InvalidJsonOrMissingBody_FailsClosed(body: &quot;{&quot;)" computerName="JADAVAN" duration="00:00:00.0024784" startTime="2026-10-20T14:36:03.4220841+05:30" endTime="2026-10-20T14:36:03.4220842+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1b38515d-cfc6-470d-ab9c-e4d4064c8345" />
+    <UnitTestResult executionId="68e4294b-69f3-4cb5-b0db-f721ee988d4c" testId="c5c1f205-7e4e-8510-83c4-30c6edb2f834" testName="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_EscapesQuotesWithoutLosingEmbeddedDelimiters(input: &quot;Comma, value&quot;, escaped: &quot;Comma, value&quot;)" computerName="JADAVAN" duration="00:00:00.0002407" startTime="2026-10-20T14:36:03.4211640+05:30" endTime="2026-10-20T14:36:03.4211640+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="68e4294b-69f3-4cb5-b0db-f721ee988d4c" />
+    <UnitTestResult executionId="e12d5e1b-5750-4662-b90a-bd43d4697c9b" testId="92b85325-5294-ff14-c2af-5230ecc198c4" testName="FleetFlow.VehicleService.Tests.AseUnit.ReportBoundaryTests.CallerCancellation_IsNotRelabelledAsSuccessfulOrUnavailableReport" computerName="JADAVAN" duration="00:00:00.1275884" startTime="2026-10-20T14:36:03.3685239+05:30" endTime="2026-10-20T14:36:03.3685247+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e12d5e1b-5750-4662-b90a-bd43d4697c9b" />
+    <UnitTestResult executionId="d6989b3b-34f9-423f-81dc-fa0fd913e649" testId="64620f0c-573c-96d5-6f1d-3b27b79a65ea" testName="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: &quot;A=B&quot;, expected: &quot;A=B&quot;)" computerName="JADAVAN" duration="00:00:00.0000292" startTime="2026-10-20T14:36:03.4189410+05:30" endTime="2026-10-20T14:36:03.4189411+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d6989b3b-34f9-423f-81dc-fa0fd913e649" />
+    <UnitTestResult executionId="503eb6d1-f1a3-4825-bbb2-71f2e3a07fc8" testId="73669654-e859-a3e1-b212-c1f19f3b25a9" testName="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_DatesAreExplicitUtcWithRoundTripPrecision(kind: Unspecified)" computerName="JADAVAN" duration="00:00:00.0002963" startTime="2026-10-20T14:36:03.2591345+05:30" endTime="2026-10-20T14:36:03.2591347+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="503eb6d1-f1a3-4825-bbb2-71f2e3a07fc8" />
+    <UnitTestResult executionId="c453b060-5080-4114-b330-e863a2aa915e" testId="bd744e83-2036-ed85-9d5b-ac0b6542b258" testName="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.WrongAccountOrBlankUsername_IsRejected(wrongId: True)" computerName="JADAVAN" duration="00:00:00.0021072" startTime="2026-10-20T14:36:03.4775206+05:30" endTime="2026-10-20T14:36:03.4775208+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c453b060-5080-4114-b330-e863a2aa915e" />
+    <UnitTestResult executionId="1215cca6-8310-4a43-be76-dec1fa28d9ad" testId="ca827528-86a2-f648-5aa9-1c6fd3c770e9" testName="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.DependencyHttpFailure_IsNotTreatedAsEligibleStaff(status: 401)" computerName="JADAVAN" duration="00:00:00.0016603" startTime="2026-10-20T14:36:03.4250480+05:30" endTime="2026-10-20T14:36:03.4250481+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1215cca6-8310-4a43-be76-dec1fa28d9ad" />
+    <UnitTestResult executionId="fc6b917c-5dfb-44a8-bc46-b862a7f7d8ec" testId="98a1800e-53a6-3469-0af2-8988494a14dd" testName="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: &quot;+SUM(A1)&quot;, expected: &quot;\t+SUM(A1)&quot;)" computerName="JADAVAN" duration="00:00:00.0000210" startTime="2026-10-20T14:36:03.4197825+05:30" endTime="2026-10-20T14:36:03.4197827+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fc6b917c-5dfb-44a8-bc46-b862a7f7d8ec" />
+    <UnitTestResult executionId="79b59d8a-94c3-40f6-94ec-1648dd8b994b" testId="f029c8b0-beb4-74f9-9f56-fcf1feee8848" testName="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.TokenFailure_NeverSendsHttpRequest" computerName="JADAVAN" duration="00:00:00.0059458" startTime="2026-10-20T14:36:03.4847544+05:30" endTime="2026-10-20T14:36:03.4847552+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="79b59d8a-94c3-40f6-94ec-1648dd8b994b" />
+    <UnitTestResult executionId="e84e9955-f73e-45f4-a4dc-9c14ba700799" testId="897e5eba-dc12-d5fb-4d49-f9960ddd7a22" testName="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.List_InvalidIdentityDuplicateOrOverflow_FailsClosed(accounts: [MaintenanceStaffAccount { Id = 00000000-0000-4000-8000-000000000001, FullName = Worker, Username = worker }, MaintenanceStaffAccount { Id = 00000000-0000-4000-8000-000000000002, FullName = Worker, Username = worker }, MaintenanceStaffAccount { Id = 00000000-0000-4000-8000-000000000003, FullName = Worker, Username = worker }, MaintenanceStaffAccount { Id = 00000000-0000-4000-8000-000000000004, FullName = Worker, Username = worker }, MaintenanceStaffAccount { Id = 00000000-0000-4000-8000-000000000005, FullName = Worker, Username = worker }, ···])" computerName="JADAVAN" duration="00:00:00.0049697" startTime="2026-10-20T14:36:03.4753416+05:30" endTime="2026-10-20T14:36:03.4753420+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e84e9955-f73e-45f4-a4dc-9c14ba700799" />
+    <UnitTestResult executionId="6bdf4027-0123-40e4-82f0-7be9af8cab16" testId="f438ae7c-d4fb-29d4-9847-661e8fa224ff" testName="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.List_ValidBoundaries_PreservesEveryAccount(count: 1)" computerName="JADAVAN" duration="00:00:00.0173712" startTime="2026-10-20T14:36:03.4425406+05:30" endTime="2026-10-20T14:36:03.4425410+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6bdf4027-0123-40e4-82f0-7be9af8cab16" />
+    <UnitTestResult executionId="9bab2883-cdac-47c2-a562-97c105707a01" testId="897e5eba-dc12-d5fb-4d49-f9960ddd7a22" testName="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.List_InvalidIdentityDuplicateOrOverflow_FailsClosed(accounts: [MaintenanceStaffAccount { Id = 00000000-0000-0000-0000-000000000000, FullName = Synthetic Worker, Username = worker_unit }])" computerName="JADAVAN" duration="00:00:00.0017362" startTime="2026-10-20T14:36:03.4686624+05:30" endTime="2026-10-20T14:36:03.4686628+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9bab2883-cdac-47c2-a562-97c105707a01" />
+    <UnitTestResult executionId="8433b52e-dac9-4f2e-95ac-328e4e88c078" testId="3f441a15-9567-1d24-eceb-30ad2acf119a" testName="FleetFlow.VehicleService.Tests.AseMutation.MutationRegressionTests.ErrorStatus_WithOtherwiseValidStaffJson_IsStillRejected(status: 500)" computerName="JADAVAN" duration="00:00:00.0938759" startTime="2026-10-20T14:36:03.4200413+05:30" endTime="2026-10-20T14:36:03.4200414+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8433b52e-dac9-4f2e-95ac-328e4e88c078" />
+    <UnitTestResult executionId="11c446eb-61d0-400d-953c-33bc20f6e20d" testId="2b788666-4c6c-1f5a-3da2-a49303b3dfce" testName="FleetFlow.VehicleService.Tests.AseMutation.MutationRegressionTests.ErrorStatus_WithOtherwiseValidStaffJson_IsStillRejected(status: 403)" computerName="JADAVAN" duration="00:00:00.0026592" startTime="2026-10-20T14:36:03.4229602+05:30" endTime="2026-10-20T14:36:03.4229603+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="11c446eb-61d0-400d-953c-33bc20f6e20d" />
+    <UnitTestResult executionId="690c4127-7d4e-4e19-a4c9-f5a136de56f5" testId="cde7de66-d70a-d9e9-1182-64d2642cf41b" testName="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.DependencyHttpFailure_IsNotTreatedAsEligibleStaff(status: 500)" computerName="JADAVAN" duration="00:00:00.0019137" startTime="2026-10-20T14:36:03.4239540+05:30" endTime="2026-10-20T14:36:03.4239541+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="690c4127-7d4e-4e19-a4c9-f5a136de56f5" />
+    <UnitTestResult executionId="c07937ad-cf79-4635-98f0-99089393c934" testId="897e5eba-dc12-d5fb-4d49-f9960ddd7a22" testName="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.List_InvalidIdentityDuplicateOrOverflow_FailsClosed(accounts: [MaintenanceStaffAccount { Id = 22222222-2222-4222-8222-222222222222, FullName = Synthetic Worker, Username = worker_unit }, MaintenanceStaffAccount { Id = 22222222-2222-4222-8222-222222222222, FullName = Synthetic Worker, Username = worker_unit }])" computerName="JADAVAN" duration="00:00:00.0023641" startTime="2026-10-20T14:36:03.4668847+05:30" endTime="2026-10-20T14:36:03.4668851+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c07937ad-cf79-4635-98f0-99089393c934" />
+    <UnitTestResult executionId="d5ace4e4-ca1e-4ba1-8613-cc0a70047df7" testId="0a9a55df-3867-a07c-1d78-81950c8f1a1a" testName="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.List_ValidBoundaries_PreservesEveryAccount(count: 0)" computerName="JADAVAN" duration="00:00:00.0017415" startTime="2026-10-20T14:36:03.4585454+05:30" endTime="2026-10-20T14:36:03.4585457+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d5ace4e4-ca1e-4ba1-8613-cc0a70047df7" />
+    <UnitTestResult executionId="cfb101a2-8376-4032-b35a-ba80e0709414" testId="37ba26a8-795d-3210-c2a9-7a5728c4c47e" testName="FleetFlow.VehicleService.Tests.AseUnit.ReportBoundaryTests.BookingExport_ProducesNamedCsvFromTheReturnedSnapshot" computerName="JADAVAN" duration="00:00:00.0157283" startTime="2026-10-20T14:36:03.4231709+05:30" endTime="2026-10-20T14:36:03.4231710+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cfb101a2-8376-4032-b35a-ba80e0709414" />
+    <UnitTestResult executionId="1c2f7401-3c82-45c4-a702-1f47c0aaae16" testId="002aebff-8627-e448-41bd-ee27dded8dc0" testName="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Maintenance_RowLimit_IncludesExactBoundary(count: 10001, shouldReject: True)" computerName="JADAVAN" duration="00:00:00.0009978" startTime="2026-10-20T14:36:03.4157196+05:30" endTime="2026-10-20T14:36:03.4157198+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1c2f7401-3c82-45c4-a702-1f47c0aaae16" />
+    <UnitTestResult executionId="84ae8fb6-31e1-4ef5-afc7-7fb1082d6c2c" testId="ddc32d8d-568c-d2ae-8865-134e9b9cb8d8" testName="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.DependencyHttpFailure_IsNotTreatedAsEligibleStaff(status: 403)" computerName="JADAVAN" duration="00:00:00.0017986" startTime="2026-10-20T14:36:03.4239348+05:30" endTime="2026-10-20T14:36:03.4239349+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="84ae8fb6-31e1-4ef5-afc7-7fb1082d6c2c" />
+    <UnitTestResult executionId="724eea5c-4252-405b-be22-865e3120c3e5" testId="78e9d8a5-cc22-424d-a12c-2c442e476360" testName="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: &quot;\nvalue&quot;, expected: &quot;\t\nvalue&quot;)" computerName="JADAVAN" duration="00:00:00.0000225" startTime="2026-10-20T14:36:03.4188478+05:30" endTime="2026-10-20T14:36:03.4188479+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="724eea5c-4252-405b-be22-865e3120c3e5" />
+    <UnitTestResult executionId="a72417ea-5338-4bf2-a6a9-a553967985b1" testId="9e0c8f61-0370-0464-e588-d4e987421be9" testName="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Maintenance_CombinedCountsCannotOverflowBeforeLimitCheck" computerName="JADAVAN" duration="00:00:00.0139212" startTime="2026-10-20T14:36:03.4210753+05:30" endTime="2026-10-20T14:36:03.4210754+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a72417ea-5338-4bf2-a6a9-a553967985b1" />
+    <UnitTestResult executionId="64242c92-a1be-4da7-a0f4-e891024f1bb4" testId="57df12fc-933a-9034-a38d-1b972fc6cab9" testName="FleetFlow.VehicleService.Tests.AseMutation.MutationRegressionTests.ErrorStatus_WithOtherwiseValidStaffJson_IsStillRejected(status: 429)" computerName="JADAVAN" duration="00:00:00.0023618" startTime="2026-10-20T14:36:03.4230204+05:30" endTime="2026-10-20T14:36:03.4230205+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="64242c92-a1be-4da7-a0f4-e891024f1bb4" />
+    <UnitTestResult executionId="25f104d3-cbd2-4711-8f52-d4ee24dd5609" testId="56ca2af2-dd5f-ad9a-12f1-e6304a4a1c19" testName="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.Cancellation_DistinguishesCallerCancellationFromDependencyTimeout(callerCancelled: False)" computerName="JADAVAN" duration="00:00:00.0016245" startTime="2026-10-20T14:36:03.4229930+05:30" endTime="2026-10-20T14:36:03.4229931+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="25f104d3-cbd2-4711-8f52-d4ee24dd5609" />
+    <UnitTestResult executionId="b591edc5-dd87-47dc-8cc0-54b70e5025b6" testId="1fbc982f-0ae5-99c9-43ac-cfb99b3a9d1f" testName="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: &quot;\x01=1&quot;, expected: &quot;\t\x01=1&quot;)" computerName="JADAVAN" duration="00:00:00.0000209" startTime="2026-10-20T14:36:03.4199558+05:30" endTime="2026-10-20T14:36:03.4199559+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b591edc5-dd87-47dc-8cc0-54b70e5025b6" />
+    <UnitTestResult executionId="084d57a6-395b-49bf-a56c-06ad16f38103" testId="a397a497-2f71-9104-3602-a8ad4b8160e1" testName="FleetFlow.VehicleService.Tests.AseMutation.MutationRegressionTests.BookingExport_EmptyResultStillHasTheCompleteOrderedSchema" computerName="JADAVAN" duration="00:00:00.0067151" startTime="2026-10-20T14:36:03.2570567+05:30" endTime="2026-10-20T14:36:03.2570569+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="084d57a6-395b-49bf-a56c-06ad16f38103" />
+    <UnitTestResult executionId="859da2b1-17a2-4e57-980d-38fa738b314b" testId="fdd5d8ee-8a60-7a19-fae4-03ee70a318dd" testName="FleetFlow.VehicleService.Tests.AseUnit.ReportBoundaryTests.BookingReport_MapsExpectedDependencyFailuresAndForwardsCancellation(failure: Npgsql.NpgsqlException (0x80004005): Synthetic database outage, status: 503)" computerName="JADAVAN" duration="00:00:00.0025291" startTime="2026-10-20T14:36:03.4221496+05:30" endTime="2026-10-20T14:36:03.4221496+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="859da2b1-17a2-4e57-980d-38fa738b314b" />
+    <UnitTestResult executionId="9eefddd5-6983-4dd4-ab05-d2e0b2a8ca79" testId="d8944639-8551-2a2d-8eec-f5fc364f5c59" testName="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: &quot;-1+1&quot;, expected: &quot;\t-1+1&quot;)" computerName="JADAVAN" duration="00:00:00.0000258" startTime="2026-10-20T14:36:03.4190085+05:30" endTime="2026-10-20T14:36:03.4190085+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9eefddd5-6983-4dd4-ab05-d2e0b2a8ca79" />
+    <UnitTestResult executionId="98b311c8-093a-4c74-aa21-5a8a524960e3" testId="fdd5d8ee-8a60-7a19-fae4-03ee70a318dd" testName="FleetFlow.VehicleService.Tests.AseUnit.ReportBoundaryTests.BookingReport_MapsExpectedDependencyFailuresAndForwardsCancellation(failure: System.ArgumentException: Synthetic bad filter, status: 400)" computerName="JADAVAN" duration="00:00:00.0089556" startTime="2026-10-20T14:36:03.4209879+05:30" endTime="2026-10-20T14:36:03.4209880+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="98b311c8-093a-4c74-aa21-5a8a524960e3" />
+    <UnitTestResult executionId="b85b6657-e105-4f01-9c8d-bb0a961d240a" testId="a8752ed2-584a-8958-8464-b648b77b09da" testName="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Maintenance_UnavailableSource_ThrowsInsteadOfFabricatingEmptySuccess" computerName="JADAVAN" duration="00:00:00.0005138" startTime="2026-10-20T14:36:03.4220333+05:30" endTime="2026-10-20T14:36:03.4220334+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b85b6657-e105-4f01-9c8d-bb0a961d240a" />
+    <UnitTestResult executionId="f31ed09d-7bdf-4a7b-8536-1fe43d879324" testId="edb1de0b-f9c5-013f-812c-463e6cfe4a37" testName="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: &quot;=1+1&quot;, expected: &quot;\t=1+1&quot;)" computerName="JADAVAN" duration="00:00:00.0000236" startTime="2026-10-20T14:36:03.4189809+05:30" endTime="2026-10-20T14:36:03.4189810+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f31ed09d-7bdf-4a7b-8536-1fe43d879324" />
+    <UnitTestResult executionId="f7017d4e-56b1-444e-8d8d-62e98e1875a3" testId="b823cdd6-2e52-d129-7545-98b60fa142f9" testName="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: &quot;＋1&quot;, expected: &quot;\t＋1&quot;)" computerName="JADAVAN" duration="00:00:00.0000270" startTime="2026-10-20T14:36:03.4189165+05:30" endTime="2026-10-20T14:36:03.4189166+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f7017d4e-56b1-444e-8d8d-62e98e1875a3" />
+    <UnitTestResult executionId="e9519ce3-e106-4873-9670-2b9da7549f14" testId="659b1e23-736d-ecb7-5643-d53aebc7b59f" testName="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_RealAmountsKeepInvariantDecimalSeparatorsAndNegativeValues(culture: &quot;en-US&quot;)" computerName="JADAVAN" duration="00:00:00.0003723" startTime="2026-10-20T14:36:03.4158133+05:30" endTime="2026-10-20T14:36:03.4158134+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e9519ce3-e106-4873-9670-2b9da7549f14" />
+    <UnitTestResult executionId="3098b60c-81f6-46c6-963b-0fe6a987f3e9" testId="5ef678ce-c81f-03cc-af18-b23443c1b926" testName="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.NotFound_DiffersBetweenIndividualAndWholeDirectory" computerName="JADAVAN" duration="00:00:00.0041054" startTime="2026-10-20T14:36:03.4627244+05:30" endTime="2026-10-20T14:36:03.4627247+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3098b60c-81f6-46c6-963b-0fe6a987f3e9" />
+    <UnitTestResult executionId="3fbb76bd-4119-4e98-b9b6-2328f2cb5c90" testId="83c92a2c-baec-b9be-2dd2-8f3c64915ea0" testName="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_EscapesQuotesWithoutLosingEmbeddedDelimiters(input: &quot;He said \&quot;yes\&quot;&quot;, escaped: &quot;He said \&quot;\&quot;yes\&quot;\&quot;&quot;)" computerName="JADAVAN" duration="00:00:00.0000257" startTime="2026-10-20T14:36:03.4219818+05:30" endTime="2026-10-20T14:36:03.4219820+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3fbb76bd-4119-4e98-b9b6-2328f2cb5c90" />
+    <UnitTestResult executionId="33292686-0e91-4e84-93ce-d28d236c237b" testId="897e5eba-dc12-d5fb-4d49-f9960ddd7a22" testName="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.List_InvalidIdentityDuplicateOrOverflow_FailsClosed(accounts: [MaintenanceStaffAccount { Id = 22222222-2222-4222-8222-222222222222, FullName = Synthetic Worker, Username =   }])" computerName="JADAVAN" duration="00:00:00.0016147" startTime="2026-10-20T14:36:03.4703060+05:30" endTime="2026-10-20T14:36:03.4703062+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="33292686-0e91-4e84-93ce-d28d236c237b" />
+    <UnitTestResult executionId="fdc9469b-1b1e-4d1a-b5b8-3dbe9a3f5e0b" testId="051e3955-317e-33f4-84e2-92f5ebd4e1f5" testName="FleetFlow.VehicleService.Tests.AseMutation.MutationRegressionTests.ErrorStatus_WithOtherwiseValidStaffJson_IsStillRejected(status: 503)" computerName="JADAVAN" duration="00:00:00.0023421" startTime="2026-10-20T14:36:03.4221282+05:30" endTime="2026-10-20T14:36:03.4221283+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fdc9469b-1b1e-4d1a-b5b8-3dbe9a3f5e0b" />
+    <UnitTestResult executionId="173ed16c-a727-4595-bb74-f6cc7ce64892" testId="5e9b49d5-39d4-d05b-7beb-35deda988afa" testName="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: &quot;－1&quot;, expected: &quot;\t－1&quot;)" computerName="JADAVAN" duration="00:00:00.0000235" startTime="2026-10-20T14:36:03.4198868+05:30" endTime="2026-10-20T14:36:03.4198869+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="173ed16c-a727-4595-bb74-f6cc7ce64892" />
+    <UnitTestResult executionId="6cffb3cb-34f8-49a2-a501-0e413e66db4f" testId="4549095d-594b-e385-fee1-2b09bb6107fb" testName="FleetFlow.VehicleService.Tests.AseUnit.ReportBoundaryTests.BookingReport_ReturnsExactSnapshotIncludingUnavailableMetrics" computerName="JADAVAN" duration="00:00:00.0025428" startTime="2026-10-20T14:36:03.4239112+05:30" endTime="2026-10-20T14:36:03.4239113+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6cffb3cb-34f8-49a2-a501-0e413e66db4f" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.ReportBoundaryTests.CallerCancellation_IsNotRelabelledAsSuccessfulOrUnavailableReport" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="92b85325-5294-ff14-c2af-5230ecc198c4">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="e12d5e1b-5750-4662-b90a-bd43d4697c9b" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.ReportBoundaryTests" name="CallerCancellation_IsNotRelabelledAsSuccessfulOrUnavailableReport" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: &quot;@cmd&quot;, expected: &quot;\t@cmd&quot;)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="df9a7220-5c0c-c44e-5a1f-5df2c13f4ce4">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="4c020c11-d0cd-4f1a-aa92-7051f395b1c9" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests" name="Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: &quot;＋1&quot;, expected: &quot;\t＋1&quot;)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="b823cdd6-2e52-d129-7545-98b60fa142f9">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="f7017d4e-56b1-444e-8d8d-62e98e1875a3" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests" name="Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: &quot;A=B&quot;, expected: &quot;A=B&quot;)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="64620f0c-573c-96d5-6f1d-3b27b79a65ea">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="d6989b3b-34f9-423f-81dc-fa0fd913e649" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests" name="Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.InvalidJsonOrMissingBody_FailsClosed(body: &quot;[]&quot;)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="386d0a04-5c70-58da-ea54-ade69621eecb">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="b9304361-3601-45a6-bde8-71db76549dc5" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests" name="InvalidJsonOrMissingBody_FailsClosed" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.ReportBoundaryTests.BookingExport_ProducesNamedCsvFromTheReturnedSnapshot" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="37ba26a8-795d-3210-c2a9-7a5728c4c47e">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="cfb101a2-8376-4032-b35a-ba80e0709414" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.ReportBoundaryTests" name="BookingExport_ProducesNamedCsvFromTheReturnedSnapshot" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.List_InvalidIdentityDuplicateOrOverflow_FailsClosed" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="897e5eba-dc12-d5fb-4d49-f9960ddd7a22">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="c07937ad-cf79-4635-98f0-99089393c934" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests" name="List_InvalidIdentityDuplicateOrOverflow_FailsClosed" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Bookings_MapsActualStatusAmountAndIdentifiersToTheRightColumns" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="50f386da-2761-c16c-098b-60d2df03548b">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="0fb77022-8a34-4191-a2f9-b29b29cde9c8" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests" name="Bookings_MapsActualStatusAmountAndIdentifiersToTheRightColumns" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: &quot;Toyota&quot;, expected: &quot;Toyota&quot;)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="b8b84ef9-543f-ce27-167e-c6e11d306f6d">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="3a5cb78c-92c0-471a-9147-59f84faac286" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests" name="Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: &quot;\nvalue&quot;, expected: &quot;\t\nvalue&quot;)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="78e9d8a5-cc22-424d-a12c-2c442e476360">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="724eea5c-4252-405b-be22-865e3120c3e5" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests" name="Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: &quot;  =1&quot;, expected: &quot;\t  =1&quot;)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="4bbf06df-3d66-352c-cc54-13bdd43e69ed">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="00cfda77-6d69-4d0c-a259-00c486180967" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests" name="Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_DatesAreExplicitUtcWithRoundTripPrecision(kind: Utc)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="1b393a7d-3f89-7bf6-c311-e300f60acf69">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="f1ce82c7-cab3-436a-b69d-b802abe19ea7" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests" name="Encode_DatesAreExplicitUtcWithRoundTripPrecision" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Maintenance_RowLimit_IncludesExactBoundary(count: 10001, shouldReject: True)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="002aebff-8627-e448-41bd-ee27dded8dc0">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="1c2f7401-3c82-45c4-a702-1f47c0aaae16" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests" name="Maintenance_RowLimit_IncludesExactBoundary" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.Get_ValidAccount_UsesRestrictedServiceTokenAndPreservesIdentity" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="cae8a3f6-376a-9b1e-660f-0910505b5cf6">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="b32ae9ce-785d-442d-8279-32a17e478a6a" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests" name="Get_ValidAccount_UsesRestrictedServiceTokenAndPreservesIdentity" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.InvalidJsonOrMissingBody_FailsClosed(body: &quot;{&quot;)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="ba5ff937-79dc-9bd1-e5ed-40d575e56ec4">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="1b38515d-cfc6-470d-ab9c-e4d4064c8345" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests" name="InvalidJsonOrMissingBody_FailsClosed" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.DependencyHttpFailure_IsNotTreatedAsEligibleStaff(status: 429)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="f798100f-be4c-21d1-b11d-f43afd22cac5">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="363fbdb8-9c34-4d65-8b62-f06c2c0cb183" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests" name="DependencyHttpFailure_IsNotTreatedAsEligibleStaff" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_EscapesQuotesWithoutLosingEmbeddedDelimiters(input: &quot;He said \&quot;yes\&quot;&quot;, escaped: &quot;He said \&quot;\&quot;yes\&quot;\&quot;&quot;)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="83c92a2c-baec-b9be-2dd2-8f3c64915ea0">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="3fbb76bd-4119-4e98-b9b6-2328f2cb5c90" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests" name="Encode_EscapesQuotesWithoutLosingEmbeddedDelimiters" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.List_ValidBoundaries_PreservesEveryAccount(count: 0)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="0a9a55df-3867-a07c-1d78-81950c8f1a1a">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="d5ace4e4-ca1e-4ba1-8613-cc0a70047df7" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests" name="List_ValidBoundaries_PreservesEveryAccount" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseMutation.MutationRegressionTests.ErrorStatus_WithOtherwiseValidStaffJson_IsStillRejected(status: 503)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="051e3955-317e-33f4-84e2-92f5ebd4e1f5">
+      <Owners>
+        <Owner name="Jadavan" />
+      </Owners>
+      <Execution id="fdc9469b-1b1e-4d1a-b5b8-3dbe9a3f5e0b" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseMutation.MutationRegressionTests" name="ErrorStatus_WithOtherwiseValidStaffJson_IsStillRejected" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: &quot;=1+1&quot;, expected: &quot;\t=1+1&quot;)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="edb1de0b-f9c5-013f-812c-463e6cfe4a37">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="f31ed09d-7bdf-4a7b-8536-1fe43d879324" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests" name="Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.TokenFailure_NeverSendsHttpRequest" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="f029c8b0-beb4-74f9-9f56-fcf1feee8848">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="79b59d8a-94c3-40f6-94ec-1648dd8b994b" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests" name="TokenFailure_NeverSendsHttpRequest" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.ReportBoundaryTests.MaintenanceExport_UnavailableSnapshot_Is503RatherThanCsv" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="30ed84ab-c5fe-a95a-b783-638eae6eff8c">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="d0434b40-cd80-4c4c-bda9-6f5d6ac9b904" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.ReportBoundaryTests" name="MaintenanceExport_UnavailableSnapshot_Is503RatherThanCsv" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseMutation.MutationRegressionTests.MaintenanceExport_MixedSourcesPreserveTheSchemaAndBothKindsOfRows" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="3ad53e3b-41e0-3524-59b6-25cf3fa75d1f">
+      <Owners>
+        <Owner name="Jadavan" />
+      </Owners>
+      <Execution id="f4a7a939-b0fa-4876-a2f7-47ac7cbb1ec7" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseMutation.MutationRegressionTests" name="MaintenanceExport_MixedSourcesPreserveTheSchemaAndBothKindsOfRows" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.DependencyHttpFailure_IsNotTreatedAsEligibleStaff(status: 503)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="6d344dc8-59a1-985f-d8bf-2bf9d04caed6">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="f084411b-2dfb-4f73-8035-16fe9693b35e" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests" name="DependencyHttpFailure_IsNotTreatedAsEligibleStaff" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.DependencyHttpFailure_IsNotTreatedAsEligibleStaff(status: 403)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="ddc32d8d-568c-d2ae-8865-134e9b9cb8d8">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="84ae8fb6-31e1-4ef5-afc7-7fb1082d6c2c" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests" name="DependencyHttpFailure_IsNotTreatedAsEligibleStaff" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseMutation.MutationRegressionTests.BookingExport_EmptyResultStillHasTheCompleteOrderedSchema" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="a397a497-2f71-9104-3602-a8ad4b8160e1">
+      <Owners>
+        <Owner name="Jadavan" />
+      </Owners>
+      <Execution id="084d57a6-395b-49bf-a56c-06ad16f38103" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseMutation.MutationRegressionTests" name="BookingExport_EmptyResultStillHasTheCompleteOrderedSchema" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: &quot;+SUM(A1)&quot;, expected: &quot;\t+SUM(A1)&quot;)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="98a1800e-53a6-3469-0af2-8988494a14dd">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="fc6b917c-5dfb-44a8-bc46-b862a7f7d8ec" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests" name="Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.ReportBoundaryTests.BookingReport_MapsExpectedDependencyFailuresAndForwardsCancellation" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="fdd5d8ee-8a60-7a19-fae4-03ee70a318dd">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="98b311c8-093a-4c74-aa21-5a8a524960e3" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.ReportBoundaryTests" name="BookingReport_MapsExpectedDependencyFailuresAndForwardsCancellation" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.NotFound_DiffersBetweenIndividualAndWholeDirectory" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="5ef678ce-c81f-03cc-af18-b23443c1b926">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="3098b60c-81f6-46c6-963b-0fe6a987f3e9" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests" name="NotFound_DiffersBetweenIndividualAndWholeDirectory" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_EscapesQuotesWithoutLosingEmbeddedDelimiters(input: &quot;Comma, value&quot;, escaped: &quot;Comma, value&quot;)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="c5c1f205-7e4e-8510-83c4-30c6edb2f834">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="68e4294b-69f3-4cb5-b0db-f721ee988d4c" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests" name="Encode_EscapesQuotesWithoutLosingEmbeddedDelimiters" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: &quot;&quot;, expected: &quot;&quot;)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="3daa1cb1-c88a-fee6-6c06-facf7d1a9f20">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="1a9b97af-2314-4840-ba28-75486fd1aa11" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests" name="Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: &quot;＝1&quot;, expected: &quot;\t＝1&quot;)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="e7b2953a-5cae-94e3-07cd-a27c63bbe7c6">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="4fa8594e-04dc-4d5d-9c73-83ce97802760" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests" name="Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_RealAmountsKeepInvariantDecimalSeparatorsAndNegativeValues(culture: &quot;en-US&quot;)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="659b1e23-736d-ecb7-5643-d53aebc7b59f">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="e9519ce3-e106-4873-9670-2b9da7549f14" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests" name="Encode_RealAmountsKeepInvariantDecimalSeparatorsAndNegativeValues" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Maintenance_CombinedCountsCannotOverflowBeforeLimitCheck" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="9e0c8f61-0370-0464-e588-d4e987421be9">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="a72417ea-5338-4bf2-a6a9-a553967985b1" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests" name="Maintenance_CombinedCountsCannotOverflowBeforeLimitCheck" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.DependencyHttpFailure_IsNotTreatedAsEligibleStaff(status: 500)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="cde7de66-d70a-d9e9-1182-64d2642cf41b">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="690c4127-7d4e-4e19-a4c9-f5a136de56f5" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests" name="DependencyHttpFailure_IsNotTreatedAsEligibleStaff" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseMutation.MutationRegressionTests.ErrorStatus_WithOtherwiseValidStaffJson_IsStillRejected(status: 401)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="525bf077-c303-a7e8-cf52-6aea0adb9336">
+      <Owners>
+        <Owner name="Jadavan" />
+      </Owners>
+      <Execution id="c4f40f80-18d2-40e0-9538-e05ceb90b5aa" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseMutation.MutationRegressionTests" name="ErrorStatus_WithOtherwiseValidStaffJson_IsStillRejected" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.Cancellation_DistinguishesCallerCancellationFromDependencyTimeout(callerCancelled: True)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="a4e2186b-4b56-ce19-519f-b53922b04005">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="696ba6cd-e99c-4289-b715-7dd884fc61fa" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests" name="Cancellation_DistinguishesCallerCancellationFromDependencyTimeout" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_RealAmountsKeepInvariantDecimalSeparatorsAndNegativeValues(culture: &quot;de-DE&quot;)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="a060cebd-78f5-154f-451b-d4bc4c953893">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="9bafd0de-e89c-4ea9-aa8c-421225bf751a" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests" name="Encode_RealAmountsKeepInvariantDecimalSeparatorsAndNegativeValues" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Maintenance_UnavailableSource_ThrowsInsteadOfFabricatingEmptySuccess" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="a8752ed2-584a-8958-8464-b648b77b09da">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="b85b6657-e105-4f01-9c8d-bb0a961d240a" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests" name="Maintenance_UnavailableSource_ThrowsInsteadOfFabricatingEmptySuccess" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Maintenance_RowLimit_IncludesExactBoundary(count: 9999, shouldReject: False)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="1e5a3bc3-485e-eb3d-af4e-28e65bc46b47">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="88c045de-2444-4c4e-bef6-a3b9798ee8bd" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests" name="Maintenance_RowLimit_IncludesExactBoundary" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: &quot;-1+1&quot;, expected: &quot;\t-1+1&quot;)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="d8944639-8551-2a2d-8eec-f5fc364f5c59">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="9eefddd5-6983-4dd4-ab05-d2e0b2a8ca79" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests" name="Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: &quot;－1&quot;, expected: &quot;\t－1&quot;)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="5e9b49d5-39d4-d05b-7beb-35deda988afa">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="173ed16c-a727-4595-bb74-f6cc7ce64892" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests" name="Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.ReportBoundaryTests.BookingReport_ReturnsExactSnapshotIncludingUnavailableMetrics" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="4549095d-594b-e385-fee1-2b09bb6107fb">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="6cffb3cb-34f8-49a2-a501-0e413e66db4f" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.ReportBoundaryTests" name="BookingReport_ReturnsExactSnapshotIncludingUnavailableMetrics" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: &quot;\rvalue&quot;, expected: &quot;\t\rvalue&quot;)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="e7faf2b0-6b4e-73a7-0be7-e724a9cd367d">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="55ee4828-d60b-408a-9f89-c0874c7254d2" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests" name="Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: &quot;\tvalue&quot;, expected: &quot;\t\tvalue&quot;)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="732fc2cc-14ca-26fa-5f2e-394e940644f0">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="3e0666e4-a94d-43a1-80c3-e7a555b18912" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests" name="Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Maintenance_RowLimit_IncludesExactBoundary(count: 10000, shouldReject: False)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="ad906dba-7722-a339-26e8-3367fc3dcc62">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="c2ac0379-83ae-48b9-96bd-aac9e264442d" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests" name="Maintenance_RowLimit_IncludesExactBoundary" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: &quot;\x01=1&quot;, expected: &quot;\t\x01=1&quot;)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="1fbc982f-0ae5-99c9-43ac-cfb99b3a9d1f">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="b591edc5-dd87-47dc-8cc0-54b70e5025b6" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests" name="Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.Cancellation_DistinguishesCallerCancellationFromDependencyTimeout(callerCancelled: False)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="56ca2af2-dd5f-ad9a-12f1-e6304a4a1c19">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="25f104d3-cbd2-4711-8f52-d4ee24dd5609" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests" name="Cancellation_DistinguishesCallerCancellationFromDependencyTimeout" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.List_ValidBoundaries_PreservesEveryAccount(count: 1)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="f438ae7c-d4fb-29d4-9847-661e8fa224ff">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="6bdf4027-0123-40e4-82f0-7be9af8cab16" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests" name="List_ValidBoundaries_PreservesEveryAccount" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_EscapesQuotesWithoutLosingEmbeddedDelimiters(input: &quot;Two\r\nlines&quot;, escaped: &quot;Two\r\nlines&quot;)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="a5543212-4887-0e20-c10c-545a6d561a14">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="958aa545-76f2-4172-8b3f-a1e1268ca8c0" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests" name="Encode_EscapesQuotesWithoutLosingEmbeddedDelimiters" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.WrongAccountOrBlankUsername_IsRejected(wrongId: False)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="427f1072-99d2-da53-caa9-bbb7aa349b8b">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="76b8f523-7d6d-4787-8cce-2bf1c7619bf7" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests" name="WrongAccountOrBlankUsername_IsRejected" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseMutation.MutationRegressionTests.ErrorStatus_WithOtherwiseValidStaffJson_IsStillRejected(status: 429)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="57df12fc-933a-9034-a38d-1b972fc6cab9">
+      <Owners>
+        <Owner name="Jadavan" />
+      </Owners>
+      <Execution id="64242c92-a1be-4da7-a0f4-e891024f1bb4" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseMutation.MutationRegressionTests" name="ErrorStatus_WithOtherwiseValidStaffJson_IsStillRejected" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseMutation.MutationRegressionTests.Encode_LocalTimestampIsConvertedToUtcRatherThanRelabelled" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="b10ab3ea-a33a-ed46-4653-964578a53671">
+      <Owners>
+        <Owner name="Jadavan" />
+      </Owners>
+      <Execution id="be6831d5-02de-44e4-aa7a-a6c66773483b" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseMutation.MutationRegressionTests" name="Encode_LocalTimestampIsConvertedToUtcRatherThanRelabelled" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: &quot;123&quot;, expected: &quot;123&quot;)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="a062b6ab-7531-d5fe-f170-128671a90924">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="7fdd2477-4ba0-44e9-8535-15149f923c07" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests" name="Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_RealAmountsKeepInvariantDecimalSeparatorsAndNegativeValues(culture: &quot;fr-FR&quot;)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="94fd37d7-3726-477f-8e79-bca1a558d6a9">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="43aee835-48cd-42da-b97d-8a59f9486de8" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests" name="Encode_RealAmountsKeepInvariantDecimalSeparatorsAndNegativeValues" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.List_ValidBoundaries_PreservesEveryAccount(count: 1000)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="5cbc213b-8fde-48c3-5397-44883ac89a71">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="d7c97f81-7f52-400a-9f04-6f053100e79f" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests" name="List_ValidBoundaries_PreservesEveryAccount" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.WrongAccountOrBlankUsername_IsRejected(wrongId: True)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="bd744e83-2036-ed85-9d5b-ac0b6542b258">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="c453b060-5080-4114-b330-e863a2aa915e" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests" name="WrongAccountOrBlankUsername_IsRejected" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: &quot;＠cmd&quot;, expected: &quot;\t＠cmd&quot;)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="0a008b57-74e5-c563-cdf4-38eff2b36ef9">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="76b4882a-40b0-47b4-8735-b9e61f665b74" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests" name="Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.InvalidJsonOrMissingBody_FailsClosed(body: &quot;null&quot;)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="6a3b78fd-2506-82ef-e927-eaf59e283a3b">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="72cb497b-38f0-4878-ad03-ec14ac9ea2c7" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests" name="InvalidJsonOrMissingBody_FailsClosed" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseMutation.MutationRegressionTests.ErrorStatus_WithOtherwiseValidStaffJson_IsStillRejected(status: 403)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="2b788666-4c6c-1f5a-3da2-a49303b3dfce">
+      <Owners>
+        <Owner name="Jadavan" />
+      </Owners>
+      <Execution id="11c446eb-61d0-400d-953c-33bc20f6e20d" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseMutation.MutationRegressionTests" name="ErrorStatus_WithOtherwiseValidStaffJson_IsStillRejected" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseMutation.MutationRegressionTests.ErrorStatus_WithOtherwiseValidStaffJson_IsStillRejected(status: 500)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="3f441a15-9567-1d24-eceb-30ad2acf119a">
+      <Owners>
+        <Owner name="Jadavan" />
+      </Owners>
+      <Execution id="8433b52e-dac9-4f2e-95ac-328e4e88c078" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseMutation.MutationRegressionTests" name="ErrorStatus_WithOtherwiseValidStaffJson_IsStillRejected" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_DatesAreExplicitUtcWithRoundTripPrecision(kind: Unspecified)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="73669654-e859-a3e1-b212-c1f19f3b25a9">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="503eb6d1-f1a3-4825-bbb2-71f2e3a07fc8" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests" name="Encode_DatesAreExplicitUtcWithRoundTripPrecision" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.DependencyHttpFailure_IsNotTreatedAsEligibleStaff(status: 401)" storage="c:\users\jadav\documents\codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\fleet_flow\tests\fleetflow.vehicleservice.tests\bin\debug\net10.0\fleetflow.vehicleservice.tests.dll" id="ca827528-86a2-f648-5aa9-1c6fd3c770e9">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="1215cca6-8310-4a43-be76-dec1fa28d9ad" />
+      <TestMethod codeBase="C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests" name="DependencyHttpFailure_IsNotTreatedAsEligibleStaff" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="3ad53e3b-41e0-3524-59b6-25cf3fa75d1f" executionId="f4a7a939-b0fa-4876-a2f7-47ac7cbb1ec7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3daa1cb1-c88a-fee6-6c06-facf7d1a9f20" executionId="1a9b97af-2314-4840-ba28-75486fd1aa11" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="30ed84ab-c5fe-a95a-b783-638eae6eff8c" executionId="d0434b40-cd80-4c4c-bda9-6f5d6ac9b904" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a5543212-4887-0e20-c10c-545a6d561a14" executionId="958aa545-76f2-4172-8b3f-a1e1268ca8c0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="df9a7220-5c0c-c44e-5a1f-5df2c13f4ce4" executionId="4c020c11-d0cd-4f1a-aa92-7051f395b1c9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6d344dc8-59a1-985f-d8bf-2bf9d04caed6" executionId="f084411b-2dfb-4f73-8035-16fe9693b35e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="94fd37d7-3726-477f-8e79-bca1a558d6a9" executionId="43aee835-48cd-42da-b97d-8a59f9486de8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1e5a3bc3-485e-eb3d-af4e-28e65bc46b47" executionId="88c045de-2444-4c4e-bef6-a3b9798ee8bd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6a3b78fd-2506-82ef-e927-eaf59e283a3b" executionId="72cb497b-38f0-4878-ad03-ec14ac9ea2c7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="50f386da-2761-c16c-098b-60d2df03548b" executionId="0fb77022-8a34-4191-a2f9-b29b29cde9c8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a062b6ab-7531-d5fe-f170-128671a90924" executionId="7fdd2477-4ba0-44e9-8535-15149f923c07" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e7b2953a-5cae-94e3-07cd-a27c63bbe7c6" executionId="4fa8594e-04dc-4d5d-9c73-83ce97802760" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a060cebd-78f5-154f-451b-d4bc4c953893" executionId="9bafd0de-e89c-4ea9-aa8c-421225bf751a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="cae8a3f6-376a-9b1e-660f-0910505b5cf6" executionId="b32ae9ce-785d-442d-8279-32a17e478a6a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b10ab3ea-a33a-ed46-4653-964578a53671" executionId="be6831d5-02de-44e4-aa7a-a6c66773483b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5cbc213b-8fde-48c3-5397-44883ac89a71" executionId="d7c97f81-7f52-400a-9f04-6f053100e79f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="427f1072-99d2-da53-caa9-bbb7aa349b8b" executionId="76b8f523-7d6d-4787-8cce-2bf1c7619bf7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b8b84ef9-543f-ce27-167e-c6e11d306f6d" executionId="3a5cb78c-92c0-471a-9147-59f84faac286" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fdd5d8ee-8a60-7a19-fae4-03ee70a318dd" executionId="7703c8d6-c233-46d7-8896-da742219e0b3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1b393a7d-3f89-7bf6-c311-e300f60acf69" executionId="f1ce82c7-cab3-436a-b69d-b802abe19ea7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4bbf06df-3d66-352c-cc54-13bdd43e69ed" executionId="00cfda77-6d69-4d0c-a259-00c486180967" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e7faf2b0-6b4e-73a7-0be7-e724a9cd367d" executionId="55ee4828-d60b-408a-9f89-c0874c7254d2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0a008b57-74e5-c563-cdf4-38eff2b36ef9" executionId="76b4882a-40b0-47b4-8735-b9e61f665b74" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="386d0a04-5c70-58da-ea54-ade69621eecb" executionId="b9304361-3601-45a6-bde8-71db76549dc5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="525bf077-c303-a7e8-cf52-6aea0adb9336" executionId="c4f40f80-18d2-40e0-9538-e05ceb90b5aa" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a4e2186b-4b56-ce19-519f-b53922b04005" executionId="696ba6cd-e99c-4289-b715-7dd884fc61fa" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ad906dba-7722-a339-26e8-3367fc3dcc62" executionId="c2ac0379-83ae-48b9-96bd-aac9e264442d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="732fc2cc-14ca-26fa-5f2e-394e940644f0" executionId="3e0666e4-a94d-43a1-80c3-e7a555b18912" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f798100f-be4c-21d1-b11d-f43afd22cac5" executionId="363fbdb8-9c34-4d65-8b62-f06c2c0cb183" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ba5ff937-79dc-9bd1-e5ed-40d575e56ec4" executionId="1b38515d-cfc6-470d-ab9c-e4d4064c8345" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c5c1f205-7e4e-8510-83c4-30c6edb2f834" executionId="68e4294b-69f3-4cb5-b0db-f721ee988d4c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="92b85325-5294-ff14-c2af-5230ecc198c4" executionId="e12d5e1b-5750-4662-b90a-bd43d4697c9b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="64620f0c-573c-96d5-6f1d-3b27b79a65ea" executionId="d6989b3b-34f9-423f-81dc-fa0fd913e649" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="73669654-e859-a3e1-b212-c1f19f3b25a9" executionId="503eb6d1-f1a3-4825-bbb2-71f2e3a07fc8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bd744e83-2036-ed85-9d5b-ac0b6542b258" executionId="c453b060-5080-4114-b330-e863a2aa915e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ca827528-86a2-f648-5aa9-1c6fd3c770e9" executionId="1215cca6-8310-4a43-be76-dec1fa28d9ad" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="98a1800e-53a6-3469-0af2-8988494a14dd" executionId="fc6b917c-5dfb-44a8-bc46-b862a7f7d8ec" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f029c8b0-beb4-74f9-9f56-fcf1feee8848" executionId="79b59d8a-94c3-40f6-94ec-1648dd8b994b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="897e5eba-dc12-d5fb-4d49-f9960ddd7a22" executionId="e84e9955-f73e-45f4-a4dc-9c14ba700799" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f438ae7c-d4fb-29d4-9847-661e8fa224ff" executionId="6bdf4027-0123-40e4-82f0-7be9af8cab16" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="897e5eba-dc12-d5fb-4d49-f9960ddd7a22" executionId="9bab2883-cdac-47c2-a562-97c105707a01" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3f441a15-9567-1d24-eceb-30ad2acf119a" executionId="8433b52e-dac9-4f2e-95ac-328e4e88c078" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2b788666-4c6c-1f5a-3da2-a49303b3dfce" executionId="11c446eb-61d0-400d-953c-33bc20f6e20d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="cde7de66-d70a-d9e9-1182-64d2642cf41b" executionId="690c4127-7d4e-4e19-a4c9-f5a136de56f5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="897e5eba-dc12-d5fb-4d49-f9960ddd7a22" executionId="c07937ad-cf79-4635-98f0-99089393c934" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0a9a55df-3867-a07c-1d78-81950c8f1a1a" executionId="d5ace4e4-ca1e-4ba1-8613-cc0a70047df7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="37ba26a8-795d-3210-c2a9-7a5728c4c47e" executionId="cfb101a2-8376-4032-b35a-ba80e0709414" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="002aebff-8627-e448-41bd-ee27dded8dc0" executionId="1c2f7401-3c82-45c4-a702-1f47c0aaae16" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ddc32d8d-568c-d2ae-8865-134e9b9cb8d8" executionId="84ae8fb6-31e1-4ef5-afc7-7fb1082d6c2c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="78e9d8a5-cc22-424d-a12c-2c442e476360" executionId="724eea5c-4252-405b-be22-865e3120c3e5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9e0c8f61-0370-0464-e588-d4e987421be9" executionId="a72417ea-5338-4bf2-a6a9-a553967985b1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="57df12fc-933a-9034-a38d-1b972fc6cab9" executionId="64242c92-a1be-4da7-a0f4-e891024f1bb4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="56ca2af2-dd5f-ad9a-12f1-e6304a4a1c19" executionId="25f104d3-cbd2-4711-8f52-d4ee24dd5609" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1fbc982f-0ae5-99c9-43ac-cfb99b3a9d1f" executionId="b591edc5-dd87-47dc-8cc0-54b70e5025b6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a397a497-2f71-9104-3602-a8ad4b8160e1" executionId="084d57a6-395b-49bf-a56c-06ad16f38103" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fdd5d8ee-8a60-7a19-fae4-03ee70a318dd" executionId="859da2b1-17a2-4e57-980d-38fa738b314b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d8944639-8551-2a2d-8eec-f5fc364f5c59" executionId="9eefddd5-6983-4dd4-ab05-d2e0b2a8ca79" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fdd5d8ee-8a60-7a19-fae4-03ee70a318dd" executionId="98b311c8-093a-4c74-aa21-5a8a524960e3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a8752ed2-584a-8958-8464-b648b77b09da" executionId="b85b6657-e105-4f01-9c8d-bb0a961d240a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="edb1de0b-f9c5-013f-812c-463e6cfe4a37" executionId="f31ed09d-7bdf-4a7b-8536-1fe43d879324" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b823cdd6-2e52-d129-7545-98b60fa142f9" executionId="f7017d4e-56b1-444e-8d8d-62e98e1875a3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="659b1e23-736d-ecb7-5643-d53aebc7b59f" executionId="e9519ce3-e106-4873-9670-2b9da7549f14" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5ef678ce-c81f-03cc-af18-b23443c1b926" executionId="3098b60c-81f6-46c6-963b-0fe6a987f3e9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="83c92a2c-baec-b9be-2dd2-8f3c64915ea0" executionId="3fbb76bd-4119-4e98-b9b6-2328f2cb5c90" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="897e5eba-dc12-d5fb-4d49-f9960ddd7a22" executionId="33292686-0e91-4e84-93ce-d28d236c237b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="051e3955-317e-33f4-84e2-92f5ebd4e1f5" executionId="fdc9469b-1b1e-4d1a-b5b8-3dbe9a3f5e0b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5e9b49d5-39d4-d05b-7beb-35deda988afa" executionId="173ed16c-a727-4595-bb74-f6cc7ce64892" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4549095d-594b-e385-fee1-2b09bb6107fb" executionId="6cffb3cb-34f8-49a2-a501-0e413e66db4f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="68" executed="68" passed="68" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.5.3.1+6b60a9e56a (64-bit .NET 10.0.13)&#xD;
+[xUnit.net 00:00:00.35]   Discovering: FleetFlow.VehicleService.Tests&#xD;
+[xUnit.net 00:00:00.45]   Discovered:  FleetFlow.VehicleService.Tests&#xD;
+[xUnit.net 00:00:00.45]   Starting:    FleetFlow.VehicleService.Tests&#xD;
+[xUnit.net 00:00:00.75]   Finished:    FleetFlow.VehicleService.Tests&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

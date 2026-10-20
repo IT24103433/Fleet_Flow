@@ -1,0 +1,11 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  FleetFlow.Contracts -> C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\src\backend\shared\FleetFlow.Contracts\bin\Debug\net10.0\FleetFlow.Contracts.dll
+  FleetFlow.ServiceDefaults -> C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\src\backend\shared\FleetFlow.ServiceDefaults\bin\Debug\net10.0\FleetFlow.ServiceDefaults.dll
+  FleetService.Api -> C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\src\backend\services\FleetService\FleetService.Api\bin\Debug\net10.0\FleetService.Api.dll
+  FleetFlow.VehicleService.Tests -> C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll
+Test run for C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\bin\Debug\net10.0\FleetFlow.VehicleService.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Results File: C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\artifacts\mutation\after\preflight\preflight.trx
+
+Passed!  - Failed:     0, Passed:    68, Skipped:     0, Total:    68, Duration: 246 ms - FleetFlow.VehicleService.Tests.dll (net10.0)

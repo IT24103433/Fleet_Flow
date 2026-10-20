@@ -178,6 +178,35 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
+  # Jadavan's mutation contribution reuses the passing unit layer; no live services.
+  ase-mutation:
+    name: "ASE : Mutation Testing"
+    runs-on: ubuntu-24.04
+    needs: ase-unit
+    timeout-minutes: 25
+    env:
+      TZ: Asia/Colombo
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v5
+      - name: Setup .NET SDK 10.0
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
+      - name: Verify Mutation Evidence Rules
+        run: python3 -B -m unittest discover -s tools/testing -p test_mutation_summary.py -v
+      - name: Run Stryker against Real Unit and Mutation Tests
+        shell: pwsh
+        run: ./tools/testing/Run-Mutation.ps1 -PythonExecutable python3 -ResultsDirectory artifacts/ase-mutation
+      - name: Publish Mutation Evidence
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: ase-mutation-evidence
+          path: artifacts/ase-mutation/
+          if-no-files-found: error
+          retention-days: 30
+
   # =========================================================================
   # STAGE 3: FRONTEND LINT
   # Enforces static code quality and syntax rules
@@ -286,8 +315,20 @@ jobs:
   ci-quality-gate:
     name: "CI : Quality Gate Validation"
     runs-on: ubuntu-24.04
-    needs: [backend-build, backend-test, ase-unit, frontend-lint, frontend-test, frontend-build]
+    needs: [backend-build, backend-test, ase-unit, ase-mutation, frontend-lint, frontend-test, frontend-build]
+    if: always()
     steps:
+      - name: Require Every Dependent Job to Succeed
+        env:
+          JOB_RESULTS: ${{ join(needs.*.result, ',') }}
+        run: |
+          IFS=',' read -ra results <<< "$JOB_RESULTS"
+          for result in "${results[@]}"; do
+            if [ "$result" != "success" ]; then
+              echo "Quality gate failed: a required job was $result"
+              exit 1
+            fi
+          done
       - name: Verification Summary
         run: |
           echo "========================================================"
@@ -295,6 +336,7 @@ jobs:
           echo " - Backend Build & Publish    : SUCCESS"
           echo " - Backend Unit Tests (xUnit) : SUCCESS"
           echo " - ASE Unit + Coverage        : SUCCESS"
+          echo " - ASE Mutation Testing       : SUCCESS"
           echo " - Frontend Lint (ESLint)     : SUCCESS"
           echo " - Frontend Tests (Node test) : SUCCESS"
           echo " - Frontend Production Build  : SUCCESS"
