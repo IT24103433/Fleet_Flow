@@ -207,6 +207,89 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
+  # Aqqil's bounded load smoke uses real APIs and a disposable local database.
+  ase-load:
+    name: "ASE : k6 Load Smoke (Aqqil)"
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:18.4
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: fleetflow_ase_ci_only
+          POSTGRES_DB: postgres
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s --health-timeout 5s --health-retries 12
+    env:
+      ASE_TEST_PASSWORD: FleetFlow_ASE_CI_Only_2026!
+      ASE_DB_PASSWORD: fleetflow_ase_ci_only
+      ASE_RUN_ID: ci_${{ github.run_id }}_${{ github.run_attempt }}
+      ASE_ENV_DIR: artifacts/ase-environment
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ./.github/actions/assessment-environment
+      - name: Install Pinned k6
+        shell: bash
+        run: |
+          curl --fail --location --retry 3 https://github.com/grafana/k6/releases/download/v2.3.0/k6-v2.3.0-linux-amd64.tar.gz -o "$RUNNER_TEMP/k6.tar.gz"
+          tar -xzf "$RUNNER_TEMP/k6.tar.gz" -C "$RUNNER_TEMP"
+          echo "$RUNNER_TEMP/k6-v2.3.0-linux-amd64" >> "$GITHUB_PATH"
+      - name: Run Real Bounded Load Smoke
+        shell: pwsh
+        run: ./tools/testing/Run-Load.ps1 -Profile smoke -ResultsDirectory artifacts/ase-load
+      - name: Retain Load Results and Service Diagnostics
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: ase-load-aqqil
+          path: artifacts/
+          if-no-files-found: error
+          retention-days: 30
+
+  # Varun's browser tests exercise the actual UI and backend without API mocks.
+  ase-e2e:
+    name: "ASE : Playwright E2E (Varun)"
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:18.4
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: fleetflow_ase_ci_only
+          POSTGRES_DB: postgres
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s --health-timeout 5s --health-retries 12
+    env:
+      ASE_TEST_PASSWORD: FleetFlow_ASE_CI_Only_2026!
+      ASE_DB_PASSWORD: fleetflow_ase_ci_only
+      ASE_RUN_ID: ci_${{ github.run_id }}_${{ github.run_attempt }}
+      ASE_ENV_DIR: artifacts/ase-environment
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ./.github/actions/assessment-environment
+      - name: Install Locked Playwright and Chromium
+        run: |
+          npm ci --prefix tests/browser
+          cd tests/browser
+          npx playwright install --with-deps chromium
+      - name: Run Real Browser Journeys
+        shell: pwsh
+        run: ./tools/testing/Run-E2E.ps1 -ResultsDirectory artifacts/ase-e2e
+      - name: Retain Browser Reports and Failure Traces
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: ase-e2e-varun
+          path: artifacts/
+          if-no-files-found: error
+          retention-days: 30
+
   # =========================================================================
   # STAGE 3: FRONTEND LINT
   # Enforces static code quality and syntax rules
@@ -315,7 +398,7 @@ jobs:
   ci-quality-gate:
     name: "CI : Quality Gate Validation"
     runs-on: ubuntu-24.04
-    needs: [backend-build, backend-test, ase-unit, ase-mutation, frontend-lint, frontend-test, frontend-build]
+    needs: [backend-build, backend-test, ase-unit, ase-mutation, ase-load, ase-e2e, frontend-lint, frontend-test, frontend-build]
     if: always()
     steps:
       - name: Require Every Dependent Job to Succeed
@@ -337,6 +420,8 @@ jobs:
           echo " - Backend Unit Tests (xUnit) : SUCCESS"
           echo " - ASE Unit + Coverage        : SUCCESS"
           echo " - ASE Mutation Testing       : SUCCESS"
+          echo " - ASE k6 Load Smoke (Aqqil)   : SUCCESS"
+          echo " - ASE Playwright E2E (Varun)  : SUCCESS"
           echo " - Frontend Lint (ESLint)     : SUCCESS"
           echo " - Frontend Tests (Node test) : SUCCESS"
           echo " - Frontend Production Build  : SUCCESS"
