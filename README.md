@@ -10,7 +10,7 @@
 
 ---
 
-## Sprint 4 development release
+## Sprint development release
 
 Four independent APIs own accounts (Identity, 5001), vehicles/maintenance/availability (Fleet, 5002), bookings/pickup/return/history (Rental, 5003) and notification delivery/inboxes (Notification, 5004). Their databases remain separate on PostgreSQL; authenticated API calls and durable events connect them. S4-01–S4-10 are merged. S4-11 integration/performance and the release handoff are included here; **S4-12 stays open until DevOps deploys and QA verifies the deployed release**.
 
