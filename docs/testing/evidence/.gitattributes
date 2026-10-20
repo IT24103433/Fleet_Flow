@@ -1,3 +1,4 @@
 # Keep generated output byte-for-byte intact, including original CRLF/console spacing.
 # These captures are reviewed through reports/manifests rather than textual source diffs.
 unit/2026-10-20/** -text -diff
+mutation/2026-10-20/** -text -diff

@@ -32,6 +32,8 @@ This is an improvement of 28.28 percentage points: 26 surviving mutants and two 
 
 The checked-in execution captures are linked from [the evidence index](evidence/mutation/README.md). Each run records a base commit and an honest dirty-tree flag: execution happened on `develop` commit `db22b5e` plus the local contribution. `source-files.json` includes source hashes, including the new untracked regression file in the after run. The JSON and HTML reports retain the original generator output; captured absolute paths identify the execution machine, not a required checkout location.
 
+A final verification then ran the finalized runner against clean committed source `1c5a43f` and repeated the 68 passing cases and 95.96% score with exit 0. Its separate capture records `sourceHadUncommittedChanges=false` at run start. Subsequent handover changes concern evidence preservation and documentation only.
+
 ## Defects the original tests could miss
 
 1. **HTTP status rejection removed (staff-directory line 23).** Original error responses had empty bodies. With the explicit HTTP guard removed, JSON parsing still failed and produced the expected exception, so the mutation survived. New tests return valid staff JSON with 401, 403, 429, 500 and 503 statuses. Without the guard, a valid-looking but ineligible account would be returned. All five cases still require rejection. The mutant is now killed.

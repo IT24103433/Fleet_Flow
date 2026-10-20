@@ -1,0 +1,1262 @@
+[
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Controllers/BookingsController.cs",
+    "sha256": "7d7bc3807f5f65769e966eccfeceefc075ca65460f91214ac61708526b9f8f2b"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Controllers/MaintenanceController.cs",
+    "sha256": "a4b151f5f208ba6c2886fd9303f143882250215e1c4f16b9f6b56a28f0b63623"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Controllers/MaintenancePlanningController.cs",
+    "sha256": "13d9dbb05d5c94847fb1001fcae8b5a569e87b16146d292843a87a0f74b0c085"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Controllers/NotificationOutboxController.cs",
+    "sha256": "107e7229277ed01196c5787b25c7d17e6420c5c393f7b2365e8f54c72c27682d"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Controllers/NotificationsController.cs",
+    "sha256": "21cf893671af6d1d7fabae5827193d12252ae99be97fa32bc3232819e5d3cb79"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Controllers/RentalCompatibilityController.cs",
+    "sha256": "f92b03de3fcdbf4bc172de71e4ecc1b96156f362a3d8ee7114e91174115dc658"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Controllers/ReportsController.cs",
+    "sha256": "f0435c7cf97325d69eb145f951a6c4e66f441195aa32c1025f278be03f3c3b5a"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Controllers/ReservationsController.cs",
+    "sha256": "dc66d5a497a64727f5d0b1ba884480ed8287184bc0a26054270659aa980fa834"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Controllers/VehicleCategoriesController.cs",
+    "sha256": "03de4ac8fb97e31f92810e64d44708a796ead160ebee22d3f39f5f5f6815b0e0"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Controllers/VehicleImagesController.cs",
+    "sha256": "9600c7ec4619b8331b190856526aa1046b75e6bdcbc4d16048cd7e774b11297b"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Controllers/VehiclesController.cs",
+    "sha256": "aa63b39e1a673c346ebc18ccbec850c611c9c5b4bcc93d8dd8a36634ed007ab2"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Controllers/WeatherForecastController.cs",
+    "sha256": "17107c3e592420b7fdbea2c6ac156e885be0b80eb3d51890f29cf7c7bce3c029"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Data/FleetDbContext.cs",
+    "sha256": "74ffa9f402b7d658458aef52b82643e09c9644c0b86948de48f3e5fd9401e928"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Data/FleetReadiness.cs",
+    "sha256": "001acfad1b6c5a79e31f830be8ee6ac19c8bedb29d2fb3f191797e16ae3f5479"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Data/MaintenancePlanningSchema.cs",
+    "sha256": "afd3357d063f84f87a5bbec269b59dd6550c66f549e86e2cb08f29f3dd66c080"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Data/NotificationOutboxSchema.cs",
+    "sha256": "282cc7e33a483e7665dba20b228365c4d42302acb169a92504ba9f746e9b55d8"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Data/NotificationSchema.cs",
+    "sha256": "dcfcd41fe14a4d5aa7c5f65237663e0bd5cb392e7be9b9bee756d6ce51984b36"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Data/ReservationSchema.cs",
+    "sha256": "6f6b5dda7e070b8d428aba298b1a03fc955f5f8a4df744457bd271490268c8fe"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Data/VehicleWriteTransaction.cs",
+    "sha256": "c7f474d92c4ad8680557e0093ccd8250bdfa2457a69488c91995fd1ae8ee0276"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Dtos/CreateVehicleRequest.cs",
+    "sha256": "8000f6b60e8f807b8626e6eb37f2850ad08fedf8179616d74ed4f381da051968"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Dtos/MaintenanceDtos.cs",
+    "sha256": "3d917bd61db390e6b5069de4ed5a7e6f726a82136fdac315dd663ac3e79aeafe"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Dtos/MaintenancePlanningDtos.cs",
+    "sha256": "56d1ea69782e55360df05523661b15c12c7e4e91d0a12396daa75aa36592e594"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Dtos/PagedVehicleResult.cs",
+    "sha256": "a1a0cc5847ba919a9e9287645c71a5fe858da5f3e91a9e552e3a047cde3ed63d"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Dtos/ReportDtos.cs",
+    "sha256": "9b660c1b89688ba9932896568d040d2c09ca93a6b6c4b579587ff2c6cf9acef8"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Dtos/UpdateVehicleRequest.cs",
+    "sha256": "a0aa5d71cc2e7b2ebe7c916516c7864a12c1fb04eab58db9d875874ac5ca5442"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Dtos/UpdateVehicleStatusRequest.cs",
+    "sha256": "5dccae59e6ecc8ca352aebc7c22bfcb091bfb2836f4959bd3bcd880beaafde09"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Dtos/VehicleCategoryResponse.cs",
+    "sha256": "b202b1f1c17738a654cfa5fe4bcdcebe10554b70fdef4b6861dfd04100126712"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Dtos/VehicleImageDtos.cs",
+    "sha256": "eac9996d0c33f23a7728bd1b8384e16f656c643407a0b40910c6f03a8f0ec8b3"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Dtos/VehicleQueryParameters.cs",
+    "sha256": "7e09e207e121e465b5d6c81ad06ac07aa5b5617ba89a356cc2dcf302485302fa"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Entities/Booking.cs",
+    "sha256": "b37b6ba9243f279df6d7e0696a11941426c76dedbe917b764ae14d39da590a0f"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Entities/MaintenanceAuditEntry.cs",
+    "sha256": "f517b846795012f0ea22eeb60d57e81e40e698465d253d6287f67f23e57e5ff7"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Entities/MaintenanceRecord.cs",
+    "sha256": "2ce50c3e0de1feca4864f7f272c83a3c8072d6baa17f1872e1f7367e005586de"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Entities/MaintenanceStatus.cs",
+    "sha256": "586fb3110c9813a78705eee2fbdc84b8eab1fff06bc047828379c9ae41d788d3"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Entities/Notification.cs",
+    "sha256": "d8e29d80060736dacca8666d51a18aa517de1fe5e89b9b9b518e7e40536e704e"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Entities/NotificationOutbox.cs",
+    "sha256": "8babe819a5d378c9e6d82c67fe315dee13dceb6ee111c11ec735f9b2415e15d5"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Entities/Vehicle.cs",
+    "sha256": "83a7786bf99682293f2517b597bb0f36768e8e7724ff79f4bc164b6ed50c9e33"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Entities/VehicleCategory.cs",
+    "sha256": "782723e6aa52d568548bab3c9aec963f490d1de663a8b906bb9d7faa3e30721e"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Entities/VehicleImage.cs",
+    "sha256": "902aaf55d8a512cc97374697dd2e4e021c737ddd999ff60e601a99e3dea0cfc4"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Entities/VehicleReservation.cs",
+    "sha256": "3037e5317431324b0392f1c0b0fbe598f60278026bb3a152ecf2a4160d823ecd"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Exceptions/DuplicateException.cs",
+    "sha256": "d36d7db3269281e729720b70ed991d0ac6071f0f9a47591064ec980ffebb950b"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Exceptions/NotFoundException.cs",
+    "sha256": "92c16e571d879cd00fa340713c9756454cdebb59a6d7abc1840b35dec714cbc5"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Exceptions/ValidationException.cs",
+    "sha256": "444c2cc99cfe0577af0d65bd762a8fcb8bcda6a9607488428301832456ae91b4"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/FleetService.Api.csproj",
+    "sha256": "eb590f181d79ed793d52ce147d32b0a9d8bd3b66ec7b394f35d3b73a17c7e9a1"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Messaging/Events/VehicleCreatedEvent.cs",
+    "sha256": "ae8f2e7539cebb9543ef55805fba08ab3611c3d9408fe06b8392611a3b2bbc82"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Messaging/Events/VehicleUpdatedEvent.cs",
+    "sha256": "95c6f66df6bf0e188774260563a028272483924b9112121dae3357e2bc11c899"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Messaging/IKafkaProducerService.cs",
+    "sha256": "4c9ccedd60dc0ec78937656e0b1d3d8f873828dbf1db586e90e26c01e6289495"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Messaging/KafkaProducerService.cs",
+    "sha256": "2f801de233b0f990593d670dd1182c8e1c566472591f81ede3958b9c8764b0bb"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Messaging/KafkaSettings.cs",
+    "sha256": "72d8a28a49032bc0aa022875f8836e651252b9ffe58159711ce9d23530d8b5ab"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Messaging/NotificationEventConsumerService.cs",
+    "sha256": "b7b59e5965a2ee861cc3a871f78167bc824f66ea6f39399a472bb928901ae2d8"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Messaging/NotificationEventDispatcher.cs",
+    "sha256": "1acaf18b98367e94af4af33012cc4cba7d4a6bf15b84ad6b13dc82d611ab9db5"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Messaging/NotificationEventProcessor.cs",
+    "sha256": "a02e1ce85c3482558579ff003f9b52fbcd9bb9bbb0fca66974b4742343ec3ebc"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Messaging/NotificationRouting.cs",
+    "sha256": "5b80210e5adfca1126590db3a70df346a4fe1a8b213b5b81baee5c95585f041b"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Messaging/ReliableNotificationPublisher.cs",
+    "sha256": "544cede30c2077e464af2e36437cb9ff4ed37f6591942a5d99a1bf96c1325819"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Messaging/VehicleEventConsumerService.cs",
+    "sha256": "d91a88d8bffea8380c97ba7d1b2f14b9c39f9dfebe6297babecc0ce9a06696f9"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Middleware/ForcedPasswordChangeMiddleware.cs",
+    "sha256": "2f7651aa7163759c0a1aac6fb03cde89c3e1a7012ffad560228cf83ef4df06d5"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Middleware/RentalAvailabilityMiddleware.cs",
+    "sha256": "9c49828f5203873b833f36108cd510276e23a462b6d60e473c1bd5f069903ccd"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Program.cs",
+    "sha256": "65cf7b8baae56174de89a11e0143050a139d72dde2dba43ddff444312a889974"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Security/JwtSigningKey.cs",
+    "sha256": "4d3aeb0bcf6e44e1e771c7958b9828c7590e85c6c5c708ce6259c13cc3cf709b"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Services/BookingService.cs",
+    "sha256": "fc4d6c833e19d258c9fb6a6b4eb9c87b28847e9091393196a3058c66cfb9bc28"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Services/IBookingService.cs",
+    "sha256": "9d205a52caa24b6371e075f272b6211f912d35bdbc0cf53511e6409b4f8f82cb"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Services/IMaintenanceReportSource.cs",
+    "sha256": "1853e0a84469a4aed7d34ee02813ceb0fe2c6321af4381c1290d9d6e4af5c26b"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Services/IMaintenanceService.cs",
+    "sha256": "a98b45fca496a91232123d7b1d5c97cacb4831ed32ec503ea76711b8f5357b78"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Services/IReportingService.cs",
+    "sha256": "0481b4e28a7d182b9f9b7701e04760c43f39958550283df929d20187577902f0"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Services/IVehicleImageService.cs",
+    "sha256": "e42e85f09c14de952294422cd0137f65810cb97cd09e6a10ebc502830f723878"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Services/IVehicleService.cs",
+    "sha256": "a1a5047452151b76dbeb2e5cfa9676e73dc2eae4988ae6285bda03967fe08f42"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Services/MaintenanceAvailability.cs",
+    "sha256": "7df998d6cf71a8e5e7e411507e516fbf85f05d3a143f037245713991254a6dff"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Services/MaintenancePlanning.cs",
+    "sha256": "1cd1a9fc5ca0acc6b458ab0e75df90a8e1f9c368307dac15269114d327fa25e4"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Services/MaintenanceService.cs",
+    "sha256": "5a94f4f165a5cc6270c57e791bdd270d970cd862637cea2a19b8574ab70d48a1"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Services/MaintenanceStaffDirectory.cs",
+    "sha256": "9d2a03af6762b35cb87d02c5388f284a485a720bd68ca90d2d0089dfd50b4406"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Services/NotificationForwarder.cs",
+    "sha256": "de766f09b49205bee88d5be6d9c05b3a5c8ef0bca8891b0fc9619c0f5a54cbb2"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Services/NotificationService.cs",
+    "sha256": "7b6362e4ad812f54daeed6f730a3e49a42805399f895a9b88e46d3a084668549"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Services/RentalForwarder.cs",
+    "sha256": "a3dbd5cd5e8bc96f5843602d4f7d0337b155004fe0d345ff132348bb6c40aef9"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Services/RentalRouting.cs",
+    "sha256": "7d1b158c69cd7ae0aa8625afe902f90ba0a419d8a2a4f0845042837bdc4d5314"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Services/ReportCsv.cs",
+    "sha256": "c139c5df4415d7e02bb4b430bdfdf42465f2c7f4b15dc50113ac6f49c22ff7ba"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Services/ReportingService.cs",
+    "sha256": "c3c2e5b4a541a40af65c3d84b71a47654bd7569bf387a1c1395daf332d072d86"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Services/ReservationService.cs",
+    "sha256": "deef90a1b1e7bdd1985b962b5017d17fe3db2c619a54a6f8364856c7a3a7587e"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Services/VehicleImageService.cs",
+    "sha256": "13949373e59ad525be67d59cfd8b432a0b2f2c6bc74f392ffa205a7f574a6f4d"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/Services/VehicleService.cs",
+    "sha256": "a057e39a2b70f76ad118686363ab647501c5fe4efe3c3f408b3269cf730c1bed"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Api/WeatherForecast.cs",
+    "sha256": "44852f987764520999637ef8572ddec60f59b6e08b1d39b1059d092eb33874e3"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Tests/BookingControllerTests.cs",
+    "sha256": "8160960e80bdb80f06a16b9274b5091792dd02c82dbd6cabc3e2f33d5ce0c364"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Tests/BookingNotificationDispatchTests.cs",
+    "sha256": "79067e1c450cdec08627a07b41970e6407593d12b0ae2a19757fafbd993a1c40"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Tests/BookingServiceTests.cs",
+    "sha256": "5857240eb960be1366ca706717e3c9538a71aca011e9f25e519e00f250ce3a4b"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Tests/CustomWebApplicationFactory.cs",
+    "sha256": "c0dac5deb37d74995581172e80ebcc8540855b8f63896a83cbc780247620ee64"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Tests/DeploymentSecurityTests.cs",
+    "sha256": "1fb4b3f223e3b9fa59ffb03451f1909d64bd128bbced3a35acc4f5a993ead886"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Tests/FleetService.Tests.csproj",
+    "sha256": "95ee851d906e8d1ca4f09da6934eea418ef08cf8eaf645442cd7c0c30759892d"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Tests/JwtSigningKeyTests.cs",
+    "sha256": "174a6998f7b7d10b4a05831e7025d5d9f99eeb593758e5f198c075cb23ed9772"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Tests/KafkaProducerTests.cs",
+    "sha256": "53c6ba7f4712397270fa6e90eeb633e10edc9625da1cb3fad1b6f4d5a8321fc4"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Tests/MaintenanceControllerTests.cs",
+    "sha256": "3c6f892036f1628e1c99d1e6ea5205ba97ee618b01c45f458a0a527e3c894f40"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Tests/MaintenanceNotificationDispatchTests.cs",
+    "sha256": "c79eee31bb334ca5859682d8345825bd3eb2518eb98845ca30fd07a6814aad9d"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Tests/MaintenancePlanningTests.cs",
+    "sha256": "61894a1f6fbecff718fc2695989d5a861c137a651b6dd759fec8307f6d62642b"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Tests/MaintenanceServiceTests.cs",
+    "sha256": "f7b335a61f141bae31139f4cdca6fdd9c2fa8b27c06d6c4dc53c9f452141b29e"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Tests/NotificationControllerTests.cs",
+    "sha256": "a98744293dfe10373947a2192557a8c342f48ca3d6aab384e3962b9302f11929"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Tests/NotificationOutboxControllerTests.cs",
+    "sha256": "97e77b5efbb4fcf68540fb2c25dc5fc65ba2250cdd4d35c9829954c363236663"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Tests/NotificationOutboxTests.cs",
+    "sha256": "75f54989df25b834db64d2c2ec1550baf048f16763631ac113934f977a735762"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Tests/NotificationTests.cs",
+    "sha256": "9cae099fcf615edb1d09e82167b9988005f6c9b864abe73cb8d6534a271e7d09"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Tests/PostgresOutboxTests.cs",
+    "sha256": "8206f25d84dc5c86f245e4300e1ed13883af5440cb3866c00f07fb164cabea69"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Tests/PostgresVehicleConcurrencyTests.cs",
+    "sha256": "65a922e9052482a0c49397ff0b32a94cd833ea740991ceb81c79b36253987e39"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Tests/RbacTests.cs",
+    "sha256": "1202a702d8534405cab33cfea2abaa9445e16fce940b4343c8e06e25bb49968b"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Tests/ReportExportTests.cs",
+    "sha256": "6d9b13d7ea4be84b79d35ed4c2b2525b2d1354bd96c5e85417957418d0058063"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Tests/ReportingServiceTests.cs",
+    "sha256": "8be5062a260a03dc1a76c3721a7b94bdb8b90c16f2d6d777e6fdd4132d80f74d"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Tests/ReportsControllerTests.cs",
+    "sha256": "66f596dd9ea10d9839b417bee308a833b6682eed7d9c9359293cad93d2e88986"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Tests/VehicleControllerTests.cs",
+    "sha256": "f3a3250a42df4d5562c9a6b33e06737d3bd690a295a796cb79a630030e75e99c"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Tests/VehicleSearchFilterPaginationTests.cs",
+    "sha256": "e2a64a77f1b0846a059968e4b9fabfdd1805f64880433e1210efebda062ae949"
+  },
+  {
+    "path": "src/backend/services/FleetService/FleetService.Tests/VehicleServiceTests.cs",
+    "sha256": "59429c92f7a9c934a1113ef3eea86eff62d4b4212c367eb1466ef26349264292"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Controllers/AccountAccessController.cs",
+    "sha256": "0bccb273db92ed4e5d82921128172bf95c53a92f355d7800f7854747be2bc4f7"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Controllers/AdminUsersController.cs",
+    "sha256": "912532efc44ae5939dfd663348b652eb608b2b209c0e192919248d0cf28f6551"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Controllers/AuthController.cs",
+    "sha256": "b777970f9477c8da3a90b462841b417aeab90c0d970d25c5801d7c385591087a"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Controllers/MaintenanceStaffController.cs",
+    "sha256": "ec756f8c21167e4b596d1e22879517459c7b56b7d164331c3a7555060e993235"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Controllers/ServiceTokensController.cs",
+    "sha256": "a06a27bda1915f868d5a6d8dc8ec38c3e2405b9e7cab7ace7d16874c1802bd1b"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Controllers/WeatherForecastController.cs",
+    "sha256": "6ba14d528e65068e396c1634741ff6cb8d810fc8b02f8e4273dc8b355832f7db"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Data/AccountWriteTransaction.cs",
+    "sha256": "5277ca3001de8301026789d62447d80d01fb0007a1b5fcc5bdff8c7bd5bc00ab"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Data/IdentityDbContext.cs",
+    "sha256": "3221128da560b28fb2fab5ac3438c3df8dc6e45ed8f4ef946da0992fbb252e0c"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Dtos/AdminResetPasswordRequest.cs",
+    "sha256": "c4e0634145c77cfacdc31e53d35b34a705fedf89b07df973489047f23d0940b3"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Dtos/AdminResetPasswordResponse.cs",
+    "sha256": "6212de94590ff00f7161e7623b7480871d145f84731780b3827d163a69c52fcd"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Dtos/AdminUserResponse.cs",
+    "sha256": "9994d2ce8c6bfcb64a3043f5b0cb4b85960f6d04edefd538862d1a36feb4e9ac"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Dtos/ChangePasswordRequest.cs",
+    "sha256": "3d23824a590ca3d0adcd7eb458c5951b98eabd0d49f3ded7b3dbe8cee68e65d0"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Dtos/CreateAdminUserRequest.cs",
+    "sha256": "2d1aca2146855c5725576f47e183b70faedc4521b717968167be80a04c9e1c88"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Dtos/ForcePasswordChangeRequest.cs",
+    "sha256": "97cb3715d956d96b6ef18a973211463454cca5d5b3d594cb8e4c61eb8fc6b069"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Dtos/LoginRequest.cs",
+    "sha256": "572a69d99edd986be4095cff880453aa30b910a2f45b18fc852586934dcec89d"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Dtos/LoginResponse.cs",
+    "sha256": "5d292951849b1487a9f93ce5b84f9fb906d7aef6853369790179be8f00841e05"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Dtos/RegisterRequest.cs",
+    "sha256": "0b6e67347d1cbff619ec07c7d21b65999bb254ceef6ddf4496520b7629a667dd"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Dtos/UpdateAdminUserRequest.cs",
+    "sha256": "00ca47128437fa60bb519bcab77b5db5c881a1a613547c9f8b0c0805237183ae"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Dtos/UpdateUserStatusRequest.cs",
+    "sha256": "97ed7cba760155fc5fa3508861a931154346ef14ebc725f6d0b3bbb9d6fa9aef"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Dtos/UserResponse.cs",
+    "sha256": "e643bc2ef4559f6876f7ff6f0f0948f97e3bba8159505a95ee88816c3c1aaed6"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Entities/Role.cs",
+    "sha256": "b853f89e013f4811884a92c589f02c746b24f6ef0c431db006e27a511b68905e"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Entities/User.cs",
+    "sha256": "4d736e5ec6bdca3941a2509dee52891765a7660768991c31e803c4d3b3fe2838"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Exceptions/AccountDisabledException.cs",
+    "sha256": "e73d2dc7aaf9baabffb41d34f23f7e6be17a7c7bae2c446bc7ca1c97381651a9"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Exceptions/DuplicateException.cs",
+    "sha256": "07b683e84757bb589ef137e3ec5db39bd72fa87fb057de5ef41d596b988856fa"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Exceptions/InvalidCredentialsException.cs",
+    "sha256": "8c56bf52c479790a75925065c9d4009f5c525c1653b8acfa3158122094615ece"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Exceptions/NotFoundException.cs",
+    "sha256": "f31102f7d6462707f816e8c76f15c28475191f225770b0cf764d1a71e852fc17"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Exceptions/PortalAccessDeniedException.cs",
+    "sha256": "f756143ca9e2899fcef07f447a1756a23d4a56d8f8671a21b955ccf998c6a091"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/IdentityService.Api.csproj",
+    "sha256": "46464839f7e1b1a0224962e4db3cd8944919430c694d72364753f4e7d53f74f7"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Messaging/Events/UserCreatedEvent.cs",
+    "sha256": "32495bd4318db50e321cf983a40c3d2cbdaa0fcb0a4392cd19e7cf797d8e634d"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Messaging/Events/UserStatusChangedEvent.cs",
+    "sha256": "1f18242c5eccfcd8e7864db345bb3edb36719625a532ccb3283fc80f764c94c1"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Messaging/Events/UserUpdatedEvent.cs",
+    "sha256": "a2a1332b5916d5809ab2cd4ffe0dc4f8be89c3e2054c8754dd1cfe68e4befd1a"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Messaging/IKafkaProducerService.cs",
+    "sha256": "2539a807ccb384e3527551d9d160c08b6ca07486579c810172b4851027832e88"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Messaging/KafkaProducerService.cs",
+    "sha256": "4fb32cfbb84febabf86339bfd8791bea9612741d48978ae953c8cfff8a5d9098"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Messaging/KafkaSettings.cs",
+    "sha256": "b04283801eb2774aff601411caad9cc8f8482f8b40057578c1c5026128441e3b"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Messaging/UserEventConsumerService.cs",
+    "sha256": "603e92796b47b07eabce20840b6a898ff6428d5413f75377701eed8960756ebd"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Middleware/AccountChangeConcurrencyMiddleware.cs",
+    "sha256": "a6cd473e3f5f33e6a2f370d60d8b24a5a76514d19838e7fa6562b097bdc14ace"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Middleware/ForcedPasswordChangeMiddleware.cs",
+    "sha256": "07b1942b210597cb23ba1de6e5d0b7b829bbce40226655dd41b3d34ec82c7dcd"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Onboarding/AccountLifecycle.cs",
+    "sha256": "6c8dae8c1d73206190ab4a58fbc008908410132b21468ee44020f6546264f020"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Onboarding/AccountLifecycleGateway.cs",
+    "sha256": "9660fb9dbe8543cc0c90a63df756277edd4d3200bed60d576ba7f8b69a63ff04"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Onboarding/AccountSecurity.cs",
+    "sha256": "b7fb3b76052e50dc54127452c2675dbf1d5b1829f5125350a934daf4f1445537"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Onboarding/DocumentImage.cs",
+    "sha256": "e7c3d1974115c914e0300085f19e5d10582a648876e480a161298b44a76b3047"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Onboarding/DriverRules.cs",
+    "sha256": "870e279a337d928988338993a1660ce0b991074e3ea1d5ff92c4c5dfd87a54d2"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Onboarding/DriverVerificationService.cs",
+    "sha256": "8637ff07c5be35b8cd51190f7bf1222d152e3e250a6bdac48f69a271c9e768e6"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Onboarding/GoogleAuthentication.cs",
+    "sha256": "fa23d421ce538e508675fe3d292a85c4e4ca54b0face78dbc9f80dc9c8e1dfd4"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Onboarding/IdentityEmailWorker.cs",
+    "sha256": "417a730d9a6b03397058414e7016e2cfec6ac188b7a49c6e0deabb9c9eab93b0"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Onboarding/IdentityVault.cs",
+    "sha256": "3c08571aaa2e4b4fa2665131a36a6b2c86596c35797052c8815af9419555efa5"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Onboarding/OnboardingConfiguration.cs",
+    "sha256": "bd2eef02f031de18913b24da30c72bd393528a85db0ee22d97b1dc1b40484d5e"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Onboarding/OnboardingController.cs",
+    "sha256": "615d7465e6f831dd2f87b9d1a2a967906e3522b04278ea0e819a3c2855360d58"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Onboarding/OnboardingModels.cs",
+    "sha256": "7f3dfee4309c5a6cbd1e342c3da76ecb7951507352aae385e9c213fc8ae07a0c"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Onboarding/OnboardingSchema.cs",
+    "sha256": "a680f07595015868322170c650f5d4f48853d20a4e6317595de65059cb209982"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Onboarding/OnboardingService.cs",
+    "sha256": "df5aff1e5b02ab5fdf5c6f16d79cb81360574e275d32a5886e387fd7315ce15a"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Program.cs",
+    "sha256": "38ae0e9e98db5f867d862fc4cfdc4db34e207b574065589a64f51c4344cdd34c"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Security/JwtSigningKey.cs",
+    "sha256": "9ce23d1f22a9cf3dabd4e450f6d675288f96d74f7fe42e9bd650f8d42431c6dc"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Services/AccountAccessReader.cs",
+    "sha256": "c98b9e1e91bb99f16f0b53c979090e69694e2015dd7e8c5d3c935518599f8c73"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Services/AdminUserService.cs",
+    "sha256": "d2413621dbe8c3e8f34553690c1e460c945696d098eed83f99edf5e356d5d20b"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Services/AuthenticationService.cs",
+    "sha256": "1cc5b720a59ad65ac94c3e50444a6284f62eaee64f96fec8c60069ef36461717"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Services/IAdminUserService.cs",
+    "sha256": "4d5a84bbcf1a55c46504e78f14960f36a6f4ff8dc97b895d05801f2f596dfbc2"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Services/IAuthenticationService.cs",
+    "sha256": "8c2bacc7eba1730698a26a5bf88a20eca13fad55103f49103774fec27a28a141"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Services/IProfileImageService.cs",
+    "sha256": "e8bf7aa9854325fb45ceb94b0fe4ebbd36f78cd29f69a29dcfb775295fc5d040"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Services/IRegistrationService.cs",
+    "sha256": "4f69acf67a71ec9dd0226694d1a45fb50076893613d0d5075960ac62b54d9c82"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Services/ProfileImageService.cs",
+    "sha256": "ad66d74b8dba0787c847f361f869729250714e9efb6530136f9e0da39801c58d"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Services/QaAccountSeeder.cs",
+    "sha256": "4c067338fa8e25e15b11ec0bbbb9633274e2b343655af16d124d1b1b529d25b0"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/Services/RegistrationService.cs",
+    "sha256": "2fc408fc7b6dcceea38afa631af628f09fd3232939f9df0f4bbe6ddf46b3d612"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Api/WeatherForecast.cs",
+    "sha256": "9fb0d6d5530d99c6cb982af5f5d72e499d107084ad01da72be810f06d6a5964d"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Tests/AccountRevocationTests.cs",
+    "sha256": "605d77c3f8166263b48e795be1b277dfb28cdc75da13dca142c691ffa1929efb"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Tests/AdminPasswordResetTests.cs",
+    "sha256": "4b52f0df61dd88d6f81aa58f9f612413e112b320102b018c2f94d064f68e46e5"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Tests/AuthenticationServiceTests.cs",
+    "sha256": "5772b99533008d5fed1e4088dbb5202f1000778432bdcccc1acfe00bb4b15c28"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Tests/ForcedPasswordChangeTests.cs",
+    "sha256": "6f21f2502ac729aac7ecc7b8f90d4c9da301e9159c7a0d34493df3637b7600af"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Tests/IdentityService.Tests.csproj",
+    "sha256": "78523b18fd00092a372d7208ab3041a33a7c23e117593b0f149441d055693fda"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Tests/JwtSigningKeyTests.cs",
+    "sha256": "c088463077cf4606c565c47abd3d5dbeb8c0ba199132a6a31e639217fcce771b"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Tests/MaintenanceDirectoryTests.cs",
+    "sha256": "ead65afb89b15cabf6c4e58f60c3abb7dd31d65d30c3ea83f457c650e75041b4"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Tests/RbacSeedingTests.cs",
+    "sha256": "d548e4d0c909dff1ef652ac051d1c4ef73b361f87fc71c9516aac3f2e67ff875"
+  },
+  {
+    "path": "src/backend/services/IdentityService/IdentityService.Tests/RegistrationServiceTests.cs",
+    "sha256": "c838dc16e31f3eaf7e758f6ef0f1b4b27c20610c4c73a02cb9ea4e0c7646eece"
+  },
+  {
+    "path": "src/backend/services/NotificationService/NotificationService.Api/Controllers/NotificationsController.cs",
+    "sha256": "002189d0b62543643cabea4dbb6a9e7bf80859d1610c64e0feea61b38ade2d02"
+  },
+  {
+    "path": "src/backend/services/NotificationService/NotificationService.Api/Data/NotificationDbContext.cs",
+    "sha256": "091ecbf1821bddcb077831b06add9f9cab679714084656e004ee67fbf2687cec"
+  },
+  {
+    "path": "src/backend/services/NotificationService/NotificationService.Api/Email/EmailController.cs",
+    "sha256": "87d0ec314d67e766e95bc587eb9a10cea4428ecb6f19c3fea53eabb3aa39a5b5"
+  },
+  {
+    "path": "src/backend/services/NotificationService/NotificationService.Api/Email/EmailDelivery.cs",
+    "sha256": "c8708908ba82b2939917d6355fa92ac110e06b850351f41ee3f43a07b0ec6d41"
+  },
+  {
+    "path": "src/backend/services/NotificationService/NotificationService.Api/Email/EmailPresentation.cs",
+    "sha256": "1f627c5628cc07459bd55050269d7cd3555812e2c366df227854e67e20a98e1c"
+  },
+  {
+    "path": "src/backend/services/NotificationService/NotificationService.Api/Email/SupportController.cs",
+    "sha256": "f57abdf3ebde641335c89fecc598216a0cea0181d651bb2f8772c9b5ca2018db"
+  },
+  {
+    "path": "src/backend/services/NotificationService/NotificationService.Api/Messaging/KafkaSettings.cs",
+    "sha256": "f5bc5f20a8f9ac7ab35c2ed617366f5dcd07a8cc238a30abe48f0988d5db67d7"
+  },
+  {
+    "path": "src/backend/services/NotificationService/NotificationService.Api/Messaging/NotificationKafkaConsumer.cs",
+    "sha256": "d096ce489d87cf30190215400a12c5c3a8d8acd2333c471cce315d468b0d9692"
+  },
+  {
+    "path": "src/backend/services/NotificationService/NotificationService.Api/Middleware/ForcedPasswordChangeMiddleware.cs",
+    "sha256": "58f8e13c9b8fce86cff456a214b211e5b0ef21b96eea3d885567d52f229edf3e"
+  },
+  {
+    "path": "src/backend/services/NotificationService/NotificationService.Api/NotificationService.Api.csproj",
+    "sha256": "38e98c4efd1d21cf98e210240e10903a13c87805bd5d9d0f211ec048061ace78"
+  },
+  {
+    "path": "src/backend/services/NotificationService/NotificationService.Api/Program.cs",
+    "sha256": "d41e3bbd78abc4ce8bc221fde795ee4b2b874c896e39b2111ea5deb3ffd2b955"
+  },
+  {
+    "path": "src/backend/services/NotificationService/NotificationService.Api/Services/InboxService.cs",
+    "sha256": "6777217353b7f1d61ece3ff438a20941eb12f4a149d0613127e41e8c21efbd5b"
+  },
+  {
+    "path": "src/backend/services/NotificationService/NotificationService.Api/Services/NotificationActivation.cs",
+    "sha256": "1596e6eb44d954c99ee83f80a0e50653a30960337559cb6faf8745f2cebe5ddd"
+  },
+  {
+    "path": "src/backend/services/NotificationService/NotificationService.Api/Services/NotificationEventProcessor.cs",
+    "sha256": "ee6468d0306d3ba4418f18844a206e6b72609ec749f196b9c8afd4894e466ae8"
+  },
+  {
+    "path": "src/backend/services/NotificationService/NotificationService.Tests/ConsumerActivationTests.cs",
+    "sha256": "05d0dea807972d62a1aae2e6f33223eb9d7e0edf8577efbcea1d8306770fe0ff"
+  },
+  {
+    "path": "src/backend/services/NotificationService/NotificationService.Tests/EmailWorkspaceTests.cs",
+    "sha256": "caef7a9a042329356ae8be0292fb913d6947944e1505dbd465e27d2494ada0aa"
+  },
+  {
+    "path": "src/backend/services/NotificationService/NotificationService.Tests/InboxTests.cs",
+    "sha256": "4ca7be9d6e792f13afea6aa91663ba944374d1eb452a74267212fb7b126a83bd"
+  },
+  {
+    "path": "src/backend/services/NotificationService/NotificationService.Tests/KafkaDeliveryTests.cs",
+    "sha256": "6ff19e34b113338f8b824357fd41d2d0fc019aa5010958d60696b88fddf81ab2"
+  },
+  {
+    "path": "src/backend/services/NotificationService/NotificationService.Tests/NotificationApiTests.cs",
+    "sha256": "15dd9cbaa0c2fa6f2a067ea103fcf3ecb8c8cc96dea5b41f16dbf6fa95ea6fd7"
+  },
+  {
+    "path": "src/backend/services/NotificationService/NotificationService.Tests/NotificationService.Tests.csproj",
+    "sha256": "ae567342295ea035a0e093f8a62af054dd221261347998b278b934d9ee871f5b"
+  },
+  {
+    "path": "src/backend/services/NotificationService/NotificationService.Tests/PostgresNotificationTests.cs",
+    "sha256": "5461f830e2374c7b14883e1c748c91d8d1bb19b2661d4eebb0ee437f18c68256"
+  },
+  {
+    "path": "src/backend/services/RentalService/RentalService.Api/Controllers/AccountLifecycleController.cs",
+    "sha256": "497bac1dce33387d58169a86e69ea84afa120ea19885fee0c07927c908299551"
+  },
+  {
+    "path": "src/backend/services/RentalService/RentalService.Api/Controllers/BookingsController.cs",
+    "sha256": "615a6502498367e2f6e6c737bfac07185b780458bb641f892e3bfab9150651b4"
+  },
+  {
+    "path": "src/backend/services/RentalService/RentalService.Api/Controllers/NotificationOutboxController.cs",
+    "sha256": "14ca8eb99a648c76d3e154a77b49218372a84f333a0773feacaf364ed1cd59ec"
+  },
+  {
+    "path": "src/backend/services/RentalService/RentalService.Api/Controllers/RentalsController.cs",
+    "sha256": "1e3bd19c179f70b691aaff9421a449ada87058afb363d7beaf498e237a4ee5ff"
+  },
+  {
+    "path": "src/backend/services/RentalService/RentalService.Api/Controllers/ReportsController.cs",
+    "sha256": "b1e874f7e1a6df0e960ec57f92b0eb9b6644f506c130bcca865ef018d6dcea7e"
+  },
+  {
+    "path": "src/backend/services/RentalService/RentalService.Api/Data/BookingWorkflowLock.cs",
+    "sha256": "4e290a09b059bf3a0c41946bd8e9eabfebc38face75823626164debdefb01a49"
+  },
+  {
+    "path": "src/backend/services/RentalService/RentalService.Api/Data/NotificationOutbox.cs",
+    "sha256": "f8eba3b9dae14d69e7d668355b7a78cec0b1d504c2eadc272207df74e1e13056"
+  },
+  {
+    "path": "src/backend/services/RentalService/RentalService.Api/Data/RentalDbContext.cs",
+    "sha256": "4b2b5c6c4eab56b97faed8aedc88f46093ec7b042d357394ff54f86c7fdced9c"
+  },
+  {
+    "path": "src/backend/services/RentalService/RentalService.Api/Data/RentalPickup.cs",
+    "sha256": "259c7cebb1af9af20102e53c97641d5a28bf59474871e6f9a7a809fe4102eed5"
+  },
+  {
+    "path": "src/backend/services/RentalService/RentalService.Api/Data/RentalReturn.cs",
+    "sha256": "994b4ffdc9db6cbe1c9cf48d8834f07888460c3c51b1c0420bb5fbb7c47bcb87"
+  },
+  {
+    "path": "src/backend/services/RentalService/RentalService.Api/Messaging/KafkaSettings.cs",
+    "sha256": "14df28f8ca02ef643908a3115777648ae87160f3977ffb165c10f910016daac0"
+  },
+  {
+    "path": "src/backend/services/RentalService/RentalService.Api/Messaging/NotificationEventDispatcher.cs",
+    "sha256": "01ef634379af0b9caa9f80f42c7aa2504a5bc38f53ab32332a9b104d67c88eeb"
+  },
+  {
+    "path": "src/backend/services/RentalService/RentalService.Api/Messaging/ReliableNotificationPublisher.cs",
+    "sha256": "083111d44ee81a935f129a198cb7fa67054c3bb53bf624d9b9074172acab2c4a"
+  },
+  {
+    "path": "src/backend/services/RentalService/RentalService.Api/Middleware/BookingErrorsMiddleware.cs",
+    "sha256": "837b4f07dbae052f8a6e85c9073c640f918208646f6e6f51b8ac505ee45bb058"
+  },
+  {
+    "path": "src/backend/services/RentalService/RentalService.Api/Middleware/ForcedPasswordChangeMiddleware.cs",
+    "sha256": "f8da977e1c22ef84b8ba6256331605afb2c5f9a56b371eec25a10733d11bee9b"
+  },
+  {
+    "path": "src/backend/services/RentalService/RentalService.Api/Program.cs",
+    "sha256": "916a05b1d447ab10aee4bfa368f53f6fd3cd68a71faa50811c15239f751effff"
+  },
+  {
+    "path": "src/backend/services/RentalService/RentalService.Api/RentalService.Api.csproj",
+    "sha256": "4e3736c7936eace64fc3c2956ff6c455c6e2dea0fc99322483ca2e9d4e5ba73a"
+  },
+  {
+    "path": "src/backend/services/RentalService/RentalService.Api/Services/AccountLifecycleService.cs",
+    "sha256": "f75651b723ccff08fdfc109b2c33dc0201a76b3efbff77dcc240f999d5c0d968"
+  },
+  {
+    "path": "src/backend/services/RentalService/RentalService.Api/Services/BookingCoordinator.cs",
+    "sha256": "bcabc9e5c880fa65fc0a4a4a8b782e35b8b85a66e69a56ad33b1eb5c8b250c1b"
+  },
+  {
+    "path": "src/backend/services/RentalService/RentalService.Api/Services/BookingRecoveryWorker.cs",
+    "sha256": "9d2e87370e5c1b248a61879357995c51b6a9c7c827475f43f74e3af9a2e92520"
+  },
+  {
+    "path": "src/backend/services/RentalService/RentalService.Api/Services/DriverEligibilityClient.cs",
+    "sha256": "4edbac88cb43a03768eea4a19779f391fb1fe7fb3951991a6bb0ae52b66adee0"
+  },
+  {
+    "path": "src/backend/services/RentalService/RentalService.Api/Services/FleetGateway.cs",
+    "sha256": "41e846a8a3f1e0a80e14783e043854c11e9bc25d45184af4645219884a30d08e"
+  },
+  {
+    "path": "src/backend/services/RentalService/RentalService.Api/Services/PickupCoordinator.cs",
+    "sha256": "4d2b5d75e0f2ab6635059e17e79ca2fa470c9f15342f14efa6b96c298bd06bee"
+  },
+  {
+    "path": "src/backend/services/RentalService/RentalService.Api/Services/RentalActivation.cs",
+    "sha256": "7147ef31388a444b40df79089fa74e981958a42c2a9f06aef4fd36360c861e90"
+  },
+  {
+    "path": "src/backend/services/RentalService/RentalService.Api/Services/RentalTimelineService.cs",
+    "sha256": "85a183e5d7298c047017dfdb5e99bd069c940fa248152ba4146861d8469f967b"
+  },
+  {
+    "path": "src/backend/services/RentalService/RentalService.Api/Services/ReturnCoordinator.cs",
+    "sha256": "04686489c7c66d977d4afb11a3ef2a34b954ec73cb407b2f8a108bd633d9ab7f"
+  },
+  {
+    "path": "src/backend/services/RentalService/RentalService.Tests/AccountLifecycleTests.cs",
+    "sha256": "568c682e4f1131d10006373955bbf070eb263f29eba5905ab539754cb5bd5648"
+  },
+  {
+    "path": "src/backend/services/RentalService/RentalService.Tests/BookingRecoveryTests.cs",
+    "sha256": "ecbcb8f2b172ab359f97f3a50d02d5ddd6b09ede48791b9e5f05abd8dc43cc23"
+  },
+  {
+    "path": "src/backend/services/RentalService/RentalService.Tests/MaintenanceWindowRaceTests.cs",
+    "sha256": "28033bd4ce0ed9f7d710bf475c8e2733fbdd4b0ffb4a6bc2d4b425ce679daf2c"
+  },
+  {
+    "path": "src/backend/services/RentalService/RentalService.Tests/MigrationTests.cs",
+    "sha256": "0b3697087fbd9a4d66885c0ba604890551c8aed7772013da7d83094ac8dda537"
+  },
+  {
+    "path": "src/backend/services/RentalService/RentalService.Tests/PickupTests.cs",
+    "sha256": "45402ad1fd6d72569a103bde37fc1fcd38d78d95c4b9785df487538eb525bc9e"
+  },
+  {
+    "path": "src/backend/services/RentalService/RentalService.Tests/RentalApiTests.cs",
+    "sha256": "578d8d5bf5d4010554712ee43798d186bc475aba8e7ba750010208337a906092"
+  },
+  {
+    "path": "src/backend/services/RentalService/RentalService.Tests/RentalOutboxTests.cs",
+    "sha256": "2de5b8c187f1c3710ed2855c102df9339fcf827949e3a2eff1f4ff0b0c4006f5"
+  },
+  {
+    "path": "src/backend/services/RentalService/RentalService.Tests/RentalPostgresFixture.cs",
+    "sha256": "4736aad515f6cfa16eb90d02ddfff25ae440f80cb6bd1512ee86df4d1819c9ff"
+  },
+  {
+    "path": "src/backend/services/RentalService/RentalService.Tests/RentalService.Tests.csproj",
+    "sha256": "d6440ac4601d2f8abf3760497c87b56c2bfaa085314bdcc71c017097af22519f"
+  },
+  {
+    "path": "src/backend/services/RentalService/RentalService.Tests/ReturnTests.cs",
+    "sha256": "623f0f2899b6d682643c5a6b69c150c0f9ac192858c3607724b7d2ff4b41abd6"
+  },
+  {
+    "path": "src/backend/shared/FleetFlow.Contracts/AccountAccess.cs",
+    "sha256": "1ab90fb4a6b15c459cbf2700f06d475d84159c6a84e2903ccd846d34be5d1638"
+  },
+  {
+    "path": "src/backend/shared/FleetFlow.Contracts/Bookings/BookingReportDtos.cs",
+    "sha256": "5dba29452cc07d6590ef48bb85a85cbc252ae3cc6d4aa440d62087f5443f66dd"
+  },
+  {
+    "path": "src/backend/shared/FleetFlow.Contracts/Bookings/BookingResponse.cs",
+    "sha256": "3607105b24ba2f862db24573aeaec696a8e3814d6e401d4d3c96d33bc4bb65c8"
+  },
+  {
+    "path": "src/backend/shared/FleetFlow.Contracts/Bookings/BookingStatus.cs",
+    "sha256": "46eefc980a5a8ea805d41d4f5573e91ab965258c3d38c31a7a7919ca087cb928"
+  },
+  {
+    "path": "src/backend/shared/FleetFlow.Contracts/Bookings/CreateBookingRequest.cs",
+    "sha256": "fd458e8461fb531660b47fb0d35f3247d66d4b18c7b23f7c31f01a3f42cba8ec"
+  },
+  {
+    "path": "src/backend/shared/FleetFlow.Contracts/Bookings/ReservationContracts.cs",
+    "sha256": "af83d0df5969a8eae50224ff01399d43f3b0ef62294be256ff63e27cafea011e"
+  },
+  {
+    "path": "src/backend/shared/FleetFlow.Contracts/Bookings/VehicleImageResponse.cs",
+    "sha256": "c2d46f3e6ae0fe05810a8841723bfb093694d93937d8e50bf4235553e985bab0"
+  },
+  {
+    "path": "src/backend/shared/FleetFlow.Contracts/Bookings/VehicleResponse.cs",
+    "sha256": "6cc07e35c1bafb5a224d1272f3ce77f6480027e717f1bb5777d03fd74125880b"
+  },
+  {
+    "path": "src/backend/shared/FleetFlow.Contracts/Bookings/VehicleStatus.cs",
+    "sha256": "7212f090fe933fc7f6d70a0c207d33b007e196020900e7f5aec9c9b8e8abfbc1"
+  },
+  {
+    "path": "src/backend/shared/FleetFlow.Contracts/FleetFlow.Contracts.csproj",
+    "sha256": "76eabda9e11b1f59deadebf007abcbd68e828877a1b8dce3972b63afe86c4da4"
+  },
+  {
+    "path": "src/backend/shared/FleetFlow.Contracts/MaintenanceStaff.cs",
+    "sha256": "cb944de978551ee6d268a5d9340e48686f11943e6d9f82a7b9d65d476151b900"
+  },
+  {
+    "path": "src/backend/shared/FleetFlow.Contracts/Notifications/BookingCancelledEvent.cs",
+    "sha256": "58d3ee21214cf3781cb0a245914ef47fbf8dc097ec803ce7c67d94cbb413e851"
+  },
+  {
+    "path": "src/backend/shared/FleetFlow.Contracts/Notifications/BookingCreatedEvent.cs",
+    "sha256": "a0510de0a0f64176ecc939f5149a29a97539ccd8d9a58456c283331ffdf3a669"
+  },
+  {
+    "path": "src/backend/shared/FleetFlow.Contracts/Notifications/MaintenanceScheduledEvent.cs",
+    "sha256": "1c3e47f76144194c78d4c17ed81143e5e0904f99ca391a1ad4663fa346c88ec0"
+  },
+  {
+    "path": "src/backend/shared/FleetFlow.Contracts/Notifications/MaintenanceStatusChangedEvent.cs",
+    "sha256": "29106a125ee9f8ef29688425f83b65cc42fb0bebf3a31cc69e5af4b01f8231d9"
+  },
+  {
+    "path": "src/backend/shared/FleetFlow.Contracts/Notifications/NotificationDelivery.cs",
+    "sha256": "5741d893739c9569d7b88b70ef425d98339d8a76238fc1e16ee00fc9f1fde8d5"
+  },
+  {
+    "path": "src/backend/shared/FleetFlow.Contracts/Notifications/NotificationDomainEvent.cs",
+    "sha256": "200f009835d031cd47268819dad11f54babb8f4ab799b26a4bc98cc5a6b50d06"
+  },
+  {
+    "path": "src/backend/shared/FleetFlow.Contracts/Notifications/NotificationDtos.cs",
+    "sha256": "804a0fe45968dccd04bdc388f5a95bc94864055b373149bca3c42e7c02b77c64"
+  },
+  {
+    "path": "src/backend/shared/FleetFlow.Contracts/Notifications/NotificationEventRendering.cs",
+    "sha256": "b22f38d17ceaeda47e272b67512b947b507297b0bcdd4e8b0fd97dfc904e7621"
+  },
+  {
+    "path": "src/backend/shared/FleetFlow.Contracts/Notifications/RentalCompletedEvent.cs",
+    "sha256": "86012cd1ddc835eb0e11110ddc3581170e83c228a0bead4a172107c0da7f476f"
+  },
+  {
+    "path": "src/backend/shared/FleetFlow.Contracts/Notifications/RentalStartedEvent.cs",
+    "sha256": "ad32d0186d5ecb9d302661b169558e3d973793f1715f14d938da9d215f95cfcc"
+  },
+  {
+    "path": "src/backend/shared/FleetFlow.Contracts/OnboardingContracts.cs",
+    "sha256": "86bcd1d8ea64fd73710aa71f51d51792a3fe6a0260bd9ab70612a6792c3b8ae9"
+  },
+  {
+    "path": "src/backend/shared/FleetFlow.Contracts/Rentals/PickupContracts.cs",
+    "sha256": "bf0b5615ef8dd9268326baef6a322dcf0c579c627985bce4d6772142dc84bb66"
+  },
+  {
+    "path": "src/backend/shared/FleetFlow.Contracts/Rentals/ReturnContracts.cs",
+    "sha256": "e855ff634565e676cfff71741e6e36aad55dc7137f4dd5e34702ba2c3f72a4be"
+  },
+  {
+    "path": "src/backend/shared/FleetFlow.Contracts/ServiceContracts.cs",
+    "sha256": "efb83636b246bac18029f891015681888554a82ddbb71ca697f38cf7d9856cfa"
+  },
+  {
+    "path": "src/backend/shared/FleetFlow.ServiceDefaults/AccountAccess.cs",
+    "sha256": "28c770949ac16047fb2295ddf4bd7094406ef07af48b2ae4d01647e7590de125"
+  },
+  {
+    "path": "src/backend/shared/FleetFlow.ServiceDefaults/ApiErrorsMiddleware.cs",
+    "sha256": "9840a7907e45fa0a5833f570d3b570edff3f37d1ec2b769f4ff2ecb7269529bf"
+  },
+  {
+    "path": "src/backend/shared/FleetFlow.ServiceDefaults/FleetFlow.ServiceDefaults.csproj",
+    "sha256": "7de09cf26d31b60530a42120efdadf7de736b5ea7410d19c3545b04c1c64719c"
+  },
+  {
+    "path": "src/backend/shared/FleetFlow.ServiceDefaults/FoundationHost.cs",
+    "sha256": "e5351b7389e1bb61bb68d6fddbb1fb917e54fe9664f2e120fc9aed0a13781332"
+  },
+  {
+    "path": "src/backend/shared/FleetFlow.ServiceDefaults/InternalEndpoint.cs",
+    "sha256": "a6564d1a63b56eca380e34190cd8763229d7ece56411a3f3e724132b90dffb82"
+  },
+  {
+    "path": "src/backend/shared/FleetFlow.ServiceDefaults/OwnedDatabase.cs",
+    "sha256": "513d424e9d9f2d8c2494d5a4f072f149040512e2e846748de5c89a43369137c4"
+  },
+  {
+    "path": "src/backend/shared/FleetFlow.ServiceDefaults/ServiceAuthentication.cs",
+    "sha256": "ada1c4bbbe7d33159d9a07c62946ffbf58f1e40b595bac6396a831614cd61d8d"
+  },
+  {
+    "path": "src/backend/shared/FleetFlow.ServiceDefaults/ServiceTokenProvider.cs",
+    "sha256": "05c7b4470a4b9e555411465184191e30ea7c1c0c843515386cd556fa81ae4088"
+  },
+  {
+    "path": "tests/FleetFlow.IdentityService.Tests/AdminUserManagementTests.cs",
+    "sha256": "139147b762667cf47a8d2750ce2d9a01d99de3c70303037d50eec3dea7347a92"
+  },
+  {
+    "path": "tests/FleetFlow.IdentityService.Tests/AseUnit/AuthenticationBoundaryTests.cs",
+    "sha256": "139a83b222609c98c4607246042748fd63c4262ae0cb44757c090b0b8e15b5a1"
+  },
+  {
+    "path": "tests/FleetFlow.IdentityService.Tests/AseUnit/SessionSigningTests.cs",
+    "sha256": "8d0c357ce12d016bc6a1787455823a7ab06935e4d5dfdd4f0ed4c0cf184a5005"
+  },
+  {
+    "path": "tests/FleetFlow.IdentityService.Tests/CustomerRegistrationAndProfileTests.cs",
+    "sha256": "686ad8315a67edb81d8cb171b9cfb5c0b99a7150810004be0c9e30d0d61e9730"
+  },
+  {
+    "path": "tests/FleetFlow.IdentityService.Tests/FleetFlow.IdentityService.Tests.csproj",
+    "sha256": "86165a5d750b6c7e9d0f186c450bb104e6355b8553f1eb7342c3e505910045d2"
+  },
+  {
+    "path": "tests/FleetFlow.IdentityService.Tests/GoogleIdentityTests.cs",
+    "sha256": "29f975bfa87dc357531bc091b4ea6fb0caa866b3cceb73c31e763661994a2b43"
+  },
+  {
+    "path": "tests/FleetFlow.IdentityService.Tests/GoogleOnboardingFlowTests.cs",
+    "sha256": "4dd487c3fdad6128576229749654a52e4d72a52bc71e36dfb27f10ad23f2e6eb"
+  },
+  {
+    "path": "tests/FleetFlow.IdentityService.Tests/IdentityKafkaProducerTests.cs",
+    "sha256": "c51761249a8310f75c0f40f636c912783baff91e644e0f8d537947c1005b3bde"
+  },
+  {
+    "path": "tests/FleetFlow.IdentityService.Tests/LoginChannelAuthenticationTests.cs",
+    "sha256": "50555fb4f5bb999387fd232b48b7737074de92c9f87cf82bc04d2320ac94aae7"
+  },
+  {
+    "path": "tests/FleetFlow.IdentityService.Tests/LoginControllerTests.cs",
+    "sha256": "6cd3f2af25be2614e4eb73373f2e94e72e71170938d7327f36f44dcbea35385a"
+  },
+  {
+    "path": "tests/FleetFlow.IdentityService.Tests/OnboardingUniquenessTests.cs",
+    "sha256": "6a4777d4f4f93b6a6db5ff74cba5be441dc00c6b16a9ce4aa64732cc2e9c3951"
+  },
+  {
+    "path": "tests/FleetFlow.IdentityService.Tests/ProfilePictureTests.cs",
+    "sha256": "d00dbff5f50ff35ce21f153d1104960f91f4f7ebbba2876581013566892d57b3"
+  },
+  {
+    "path": "tests/FleetFlow.IdentityService.Tests/RbacControllerTests.cs",
+    "sha256": "0fd4cc89c9c9e05b741da86e930444b6363ac0f9e6b061ec28a1b3698e1123d8"
+  },
+  {
+    "path": "tests/FleetFlow.IdentityService.Tests/RegisterControllerTests.cs",
+    "sha256": "313c5ec23c22bbfb9528a74936b1531eebb3e12d345431c183b83e59df5c80c2"
+  },
+  {
+    "path": "tests/FleetFlow.IdentityService.Tests/UnitTest1.cs",
+    "sha256": "4176bf9d1a4e11cfd8dff812bcdd7f6f31602d005531d547041cbeb3d951134c"
+  },
+  {
+    "path": "tests/FleetFlow.IdentityService.Tests/VerifiedOnboardingTests.cs",
+    "sha256": "b80c1d04bdd7e7570297b08b58b61a405d3c7cb1c8fcd44137d7f77925f23b2c"
+  },
+  {
+    "path": "tests/FleetFlow.ServiceFoundation.Tests/AccountAccessTests.cs",
+    "sha256": "4437b23a2c64a297c8de99f96754f7e984059be683dd24f8a149c2a56938776a"
+  },
+  {
+    "path": "tests/FleetFlow.ServiceFoundation.Tests/CrossServiceAccessTests.cs",
+    "sha256": "8ca4f499561e88c2fa2b2298875d8442f62189523e6a569cfa7b9d0a0d0f7df8"
+  },
+  {
+    "path": "tests/FleetFlow.ServiceFoundation.Tests/FleetFlow.ServiceFoundation.Tests.csproj",
+    "sha256": "d4d798bc7461e5829d5f655c7c8a8fbff9ee8ee969172ae9e01e432e6098aa66"
+  },
+  {
+    "path": "tests/FleetFlow.ServiceFoundation.Tests/HostTests.cs",
+    "sha256": "81f3814df7e32898951a23284217716edf81de746b6b9c44f1242ed82cdac3d6"
+  },
+  {
+    "path": "tests/FleetFlow.ServiceFoundation.Tests/MigrationTests.cs",
+    "sha256": "f96f4b80490461799c1f84a6a0894f4173a3bf75c7d62a7f5ecf8a91a27c15ab"
+  },
+  {
+    "path": "tests/FleetFlow.ServiceFoundation.Tests/SecurityTests.cs",
+    "sha256": "e240a05968de2f3b92bd5e9faa37ddb49fd3b36d05a936f0babb848d8a913b7c"
+  },
+  {
+    "path": "tests/FleetFlow.ServiceFoundation.Tests/ServiceBrokerHttpTests.cs",
+    "sha256": "e528c473f1ff977c3bf0f5babd09d669d1bf8ee0e3b0ba3400fd155d78a2b3b0"
+  },
+  {
+    "path": "tests/FleetFlow.ServiceFoundation.Tests/TokenProviderTests.cs",
+    "sha256": "db46f91dcb642a13bc277c6aa42202207e15f820ced6f05956bdcb3506c9975d"
+  },
+  {
+    "path": "tests/FleetFlow.VehicleService.Tests/AseMutation/MutationRegressionTests.cs",
+    "sha256": "fd25b95a55c556128d6376589095dcc6780bcb18cdf19189c48923721da611f8"
+  },
+  {
+    "path": "tests/FleetFlow.VehicleService.Tests/AseUnit/MaintenanceStaffDirectoryTests.cs",
+    "sha256": "5c5fa6549a9073611122ac4bd185725b0bd658645ddcdbc40a173b501acb18b2"
+  },
+  {
+    "path": "tests/FleetFlow.VehicleService.Tests/AseUnit/ReportBoundaryTests.cs",
+    "sha256": "e65ece1adc05ce8bcdf3db92520726dce1db87740063aec4cda49d7c2bc7bfe3"
+  },
+  {
+    "path": "tests/FleetFlow.VehicleService.Tests/AseUnit/ReportCsvSafetyTests.cs",
+    "sha256": "10e14a9f5f64f65cf605e9f38f337e3ab2d0aa804996c195af1d8adac5bf4c30"
+  },
+  {
+    "path": "tests/FleetFlow.VehicleService.Tests/BookingServiceTests.cs",
+    "sha256": "0e4db561e6d8f8c507e2d4ca56d0f0aef17da20825f11a714f8153cdcaad92c2"
+  },
+  {
+    "path": "tests/FleetFlow.VehicleService.Tests/FleetFlow.VehicleService.Tests.csproj",
+    "sha256": "2d760a4752a460ad5cd915b39c2ba1bae25dcf1541f4a1ce61bd12fb6e4be208"
+  },
+  {
+    "path": "tests/FleetFlow.VehicleService.Tests/MaintenanceDashboardTests.cs",
+    "sha256": "0d64335653357aabfe29df47847b657f3a9c1647026b2244a84c22258c0c2c79"
+  },
+  {
+    "path": "tests/FleetFlow.VehicleService.Tests/UnitTest1.cs",
+    "sha256": "6d7f87babf32976cdc59b784d93d5af18dca927ba3bf4434dd7d8386e86c13b7"
+  },
+  {
+    "path": "tests/FleetFlow.VehicleService.Tests/VehicleEditTests.cs",
+    "sha256": "149d951276befe21be3ffd33d8127f9bee196093dab83918e5a8d861645eb061"
+  },
+  {
+    "path": "tests/FleetFlow.VehicleService.Tests/VehicleImageTests.cs",
+    "sha256": "6a95fd3eabe21c032cccfadcbccc4dd7bf16ba3f66173fb322d28da402306c87"
+  },
+  {
+    "path": "tests/FleetFlow.VehicleService.Tests/VehicleStatusTests.cs",
+    "sha256": "27e1c73dac857a969290036a8b2784b0b75bac313624bd2b5f2baae745227b62"
+  },
+  {
+    "path": "tools/NotificationMigration/NotificationDataMigration.cs",
+    "sha256": "2864561066fc2a844492bb3e54970f5f7e2bbe79e9858c14e6f0a53eec960bbe"
+  },
+  {
+    "path": "tools/NotificationMigration/NotificationMigration.csproj",
+    "sha256": "fa2f2a761b006006124150d2131cd544b149a4d53728e59f0166e0d4e1149361"
+  },
+  {
+    "path": "tools/NotificationMigration/Program.cs",
+    "sha256": "82e444b69ec5090a19e30f2285b4f103ed5ac793218936336e9abddb01728539"
+  },
+  {
+    "path": "tools/RentalMigration/PickupSchemaUpgrade.cs",
+    "sha256": "5e6df74a1f5ed57574144b085ddd9a21318152aeb389f8d8ace8b6f5b980667d"
+  },
+  {
+    "path": "tools/RentalMigration/Program.cs",
+    "sha256": "4ac52643e7e5e8e825e097c1c5b2f857d49ffe53e5d1ce3851a14d4a30fffdcc"
+  },
+  {
+    "path": "tools/RentalMigration/RentalDataMigration.cs",
+    "sha256": "5997156ecdf68d19b99e8b4a1bd79a191432cc4c652f19086656981f579a8e6a"
+  },
+  {
+    "path": "tools/RentalMigration/RentalMigration.csproj",
+    "sha256": "bfaf3e96b93fa5a0fa94cbb602bd62ed4e3804eaea7f32608fa3ecdc0bb8c1b8"
+  },
+  {
+    "path": "tools/RentalMigration/ReturnSchemaUpgrade.cs",
+    "sha256": "e769bafb6bf5b0244df73812241d69f3f854cbaa7e3c4025101b44186049a553"
+  },
+  {
+    "path": "tools/SeedQaUsers/Program.cs",
+    "sha256": "60236b1e6162675654dbd75abcce712bb8601d156abb8604158b50ee65a40d76"
+  },
+  {
+    "path": "tools/SeedQaUsers/SeedQaUsers.csproj",
+    "sha256": "2e63bcbc6bbda33fa3401d7004c884b20203cba146a3740967810a2bd3be7a86"
+  },
+  {
+    "path": "tools/ServiceDatabaseTool/FoundationMigration.cs",
+    "sha256": "bba6d8109d974ae9f28c120e5c0ee3faf3f1e8509be312f33101ce6daf743563"
+  },
+  {
+    "path": "tools/ServiceDatabaseTool/Program.cs",
+    "sha256": "f9954a46715510ae550b1e37716649688dd099bb2e777c56e09a08645a1f977d"
+  },
+  {
+    "path": "tools/ServiceDatabaseTool/ServiceDatabaseTool.csproj",
+    "sha256": "0e93e02fd7adcaa4ac452b143f454ee7378dbb6e899543a1246cec0b678bc062"
+  }
+]

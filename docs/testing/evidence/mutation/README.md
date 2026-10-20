@@ -5,6 +5,8 @@
 - [Completed before run: HTML](2026-10-20/before/stryker/reports/mutation-report.html) / [JSON](2026-10-20/before/stryker/reports/mutation-report.json) / [metadata](2026-10-20/before/run.json)
 - [Completed after run: HTML](2026-10-20/after/stryker/reports/mutation-report.html) / [JSON](2026-10-20/after/stryker/reports/mutation-report.json) / [metadata](2026-10-20/after/run.json)
 - [Machine-readable before/after comparison](2026-10-20/comparison.json)
+- [Final verification of the committed code: HTML](2026-10-20/final-verification/stryker/reports/mutation-report.html) / [metadata](2026-10-20/final-verification/run.json)
+- [Independent original Identity baseline TRX](2026-10-20/unit-baselines/baseline-identity.trx)
 - [Capture integrity manifest](2026-10-20/CAPTURE-SHA256SUMS.txt)
 - [Analysis, commands and remaining gaps](../../mutation.md)
 
@@ -15,3 +17,5 @@ Each capture preserves the generated HTML/JSON, real logs, preflight TRX, runtim
 The raw JSON and HTML retain original absolute source paths and generator content. Do not edit their counts, statuses, source or timestamps. `CAPTURE-SHA256SUMS.txt` protects the captured file bytes; per-run `SHA256SUMS.txt` protects files within each original run. Local paths and original result-directory names in logs are historical execution details. They are not prerequisites for reproducing the run elsewhere.
 
 This evidence demonstrates local execution only. A verified hosted GitHub Actions run URL must be added after pushing and observing the pipeline. Load and Playwright evidence are separate team deliverables.
+
+After finalizing the runner, a third genuine execution verified clean committed source `1c5a43f` (`sourceHadUncommittedChanges=false` at execution start). It again passed 68 unmutated cases and produced 95 killed, 2 surviving, 2 uncovered and 0 timeout mutants: 95.96%, exit 0. Later handover commits preserve raw report bytes and add evidence links; production and test logic are unchanged from that verified source. The independent original Identity and Fleet TRX files are also retained under `unit-baselines/`.

@@ -1,0 +1,52 @@
+
+   _____ _              _               _   _ ______ _______  
+  / ____| |            | |             | \ | |  ____|__   __| 
+ | (___ | |_ _ __ _   _| | _____ _ __  |  \| | |__     | |    
+  \___ \| __| '__| | | | |/ / _ \ '__| | . ` |  __|    | |    
+  ____) | |_| |  | |_| |   <  __/ |    | |\  | |____   | |    
+ |_____/ \__|_|   \__, |_|\_\___|_| (_)|_| \_|______|  |_|    
+                   __/ |                                      
+                  |___/                                       
+
+
+Version: 5.0.0
+
+[14:43:02 INF] Stryker will use a max of 2 parallel testsessions.
+[14:43:02 INF] Analysis starting.
+[14:43:02 INF] Analyzing 1 test project(s).
+[14:43:07 INF] Picking net10.0 for project C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\src\backend\services\FleetService\FleetService.Api\FleetService.Api.csproj. 
+[14:43:07 INF] Found project C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\src\backend\services\FleetService\FleetService.Api\FleetService.Api.csproj to mutate.
+[14:43:07 INF] Analysis complete.
+[14:43:07 INF] Building test project C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests\FleetFlow.VehicleService.Tests.csproj (1/1)
+[14:43:08 INF] Building project FleetFlow.VehicleService.Tests.csproj using dotnet build FleetFlow.VehicleService.Tests.csproj -c Debug --property:Platform=AnyCPU (directory C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\tests\FleetFlow.VehicleService.Tests.)
+[14:43:17 INF] Number of tests found: 63 for project C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\src\backend\services\FleetService\FleetService.Api\FleetService.Api.csproj. Initial test run started.
+[14:43:36 WRN] An unidentified mutation in C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\src\backend\services\FleetService\FleetService.Api\Services\ReportingService.cs resulted in a compile error (at 158:12) with id: CS1503, message: Argument 3: cannot convert from 'target-typed conditional expression' to 'int?' (Source code: workOrders.Available ? (StrykernQVXHRT7EQpbG2i.MutantControl.IsActive(2418)?workOrders.Records.Sum:workOrders.Records.Count ) : null)
+[14:43:36 INF] Safe Mode! Stryker will remove all mutations in GetOperationalStatisticsAsync and mark them as 'compile error'.
+[14:43:36 WRN] An unidentified mutation in C:\Users\jadav\Documents\Codex\2026-10-20\referenced-chatgpt-conversation-this-is-an\work\Fleet_Flow\src\backend\services\FleetService\FleetService.Api\Services\ReportingService.cs resulted in a compile error (at 159:12) with id: CS1503, message: Argument 4: cannot convert from 'target-typed conditional expression' to 'int?' (Source code: workOrders.Available ? (StrykernQVXHRT7EQpbG2i.MutantControl.IsActive(2421)?costed.Sum:costed.Count ) : null)
+[14:43:36 INF] Safe Mode! Stryker will remove all mutations in GetOperationalStatisticsAsync and mark them as 'compile error'.
+[14:43:38 INF] 3386 mutants created
+[14:43:38 INF] Capture mutant coverage using 'CoverageBasedTest' mode.
+Hint: by passing "--open-report or -o" the report will open automatically and 
+update the report in real-time.
+[14:43:40 INF] 118   mutants got status CompileError. Reason: Mutant caused compile errors
+[14:43:40 INF] 2     mutants got status NoCoverage.   Reason: Not covered by any test.
+[14:43:40 INF] 9     mutants got status Ignored.      Reason: Removed by block already covered filter
+[14:43:40 INF] 3160  mutants got status Ignored.      Reason: Removed by mutate filter
+[14:43:40 INF] 3289  total mutants are skipped for the above mentioned reasons
+[14:43:40 INF] 97    total mutants will be tested
+
+
+All mutants have been tested, and your mutation score has been calculated
+…
+Your json report has been generated at:
+file://C:/Users/jadav/Documents/Codex/2026-10-20/referenced-chatgpt-conversation
+-this-is-an/work/Fleet_Flow/artifacts/mutation/final-verification/stryker/report
+s/mutation-report.json
+
+Your html report has been generated at:
+file://C:/Users/jadav/Documents/Codex/2026-10-20/referenced-chatgpt-conversation
+-this-is-an/work/Fleet_Flow/artifacts/mutation/final-verification/stryker/report
+s/mutation-report.html
+You can open it in your browser of choice.
+[14:44:19 INF] Time Elapsed 00:01:16.8226033
+[14:44:19 INF] The final mutation score is 95.96 %

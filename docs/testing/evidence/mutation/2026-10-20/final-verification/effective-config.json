@@ -1,0 +1,23 @@
+{
+  "stryker-config": {
+    "project": "FleetService.Api.csproj",
+    "test-case-filter": "Category=ASE.Unit|Category=ASE.Mutation",
+    "mutate": [
+      "Services/ReportCsv.cs",
+      "Services/MaintenanceStaffDirectory.cs"
+    ],
+    "mutation-level": "Standard",
+    "reporters": [
+      "html",
+      "json",
+      "cleartext"
+    ],
+    "concurrency": 2,
+    "additional-timeout": 5000,
+    "thresholds": {
+      "high": 90,
+      "low": 70,
+      "break": 70
+    }
+  }
+}

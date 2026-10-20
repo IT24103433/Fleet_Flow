@@ -1,0 +1,17 @@
+{
+  "owner": "Jadavan M. (IT24103433)",
+  "area": "Mutation Testing",
+  "sourceCommit": "1c5a43f1f2e4bb0b32111dd66b7cdec98a4d7bf8",
+  "sourceHadUncommittedChanges": false,
+  "startedUtc": "2026-10-20T09:12:53.4976558Z",
+  "localTimeZone": "Sri Lanka Standard Time",
+  "completedUtc": "2026-10-20T09:14:19.6139765Z",
+  "baseline": false,
+  "testFilter": "Category=ASE.Unit|Category=ASE.Mutation",
+  "scope": [
+    "Services/ReportCsv.cs",
+    "Services/MaintenanceStaffDirectory.cs"
+  ],
+  "exitCode": 0,
+  "error": null
+}
