@@ -1,0 +1,34 @@
+<testsuites id="" name="" tests="5" failures="0" skipped="0" errors="0" time="15.52454">
+<testsuite name="fleetflow.spec.js" timestamp="2026-10-20T09:53:14.034Z" hostname="chromium" tests="5" failures="0" skipped="0" time="14.017" errors="0">
+<testcase name="Varun K. - FleetFlow UI/E2E › empty login validates required fields before submission" classname="fleetflow.spec.js" time="2.484">
+<properties>
+<property name="assigned-owner" value="Varun K. (IT24103696)">
+</property>
+</properties>
+</testcase>
+<testcase name="Varun K. - FleetFlow UI/E2E › invalid credentials produce the real API rejection" classname="fleetflow.spec.js" time="2.732">
+<properties>
+<property name="assigned-owner" value="Varun K. (IT24103696)">
+</property>
+</properties>
+</testcase>
+<testcase name="Varun K. - FleetFlow UI/E2E › customer authenticates and sees their booking workspace" classname="fleetflow.spec.js" time="2.757">
+<properties>
+<property name="assigned-owner" value="Varun K. (IT24103696)">
+</property>
+</properties>
+</testcase>
+<testcase name="Varun K. - FleetFlow UI/E2E › customer is denied access through the staff login portal" classname="fleetflow.spec.js" time="2.537">
+<properties>
+<property name="assigned-owner" value="Varun K. (IT24103696)">
+</property>
+</properties>
+</testcase>
+<testcase name="Varun K. - FleetFlow UI/E2E › catalogue filter, empty state, reset and vehicle detail use real seeded data" classname="fleetflow.spec.js" time="3.507">
+<properties>
+<property name="assigned-owner" value="Varun K. (IT24103696)">
+</property>
+</properties>
+</testcase>
+</testsuite>
+</testsuites>

@@ -1,0 +1,12 @@
+
+Running 5 tests using 1 worker
+
+(node:21292) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 [chromium] › specs\fleetflow.spec.js:15:3 › Varun K. - FleetFlow UI/E2E › empty login validates required fields before submission (2.5s)
+  ok 2 [chromium] › specs\fleetflow.spec.js:23:3 › Varun K. - FleetFlow UI/E2E › invalid credentials produce the real API rejection (2.7s)
+  ok 3 [chromium] › specs\fleetflow.spec.js:31:3 › Varun K. - FleetFlow UI/E2E › customer authenticates and sees their booking workspace (2.8s)
+  ok 4 [chromium] › specs\fleetflow.spec.js:41:3 › Varun K. - FleetFlow UI/E2E › customer is denied access through the staff login portal (2.5s)
+  ok 5 [chromium] › specs\fleetflow.spec.js:49:3 › Varun K. - FleetFlow UI/E2E › catalogue filter, empty state, reset and vehicle detail use real seeded data (3.5s)
+
+  5 passed (15.5s)
