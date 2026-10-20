@@ -31,7 +31,7 @@ cd ../..
 ./tools/testing/Run-E2E.ps1 -ResultsDirectory artifacts/e2e-run
 ```
 
-`ASE_TEST_PASSWORD` must match the seed password. For an already installed local Chrome, set `ASE_BROWSER_CHANNEL=chrome` and omit the Chromium download. The base URL is the deliberately fixed local UI at `http://127.0.0.1:15173`; application API URLs are explicitly set by the environment helper. Production deployments are outside this suite.
+`ASE_TEST_PASSWORD` must match the seed password. For an already installed local Chrome, set `ASE_BROWSER_CHANNEL=chrome`, omit the Chromium download, and install the small video dependency with `npx playwright install ffmpeg` from `tests/browser`. The base URL is the deliberately fixed local UI at `http://127.0.0.1:15173`; application API URLs are explicitly set by the environment helper. Production deployments are outside this suite.
 
 Each new output folder contains an HTML report, JSON results, JUnit XML, execution log and source/run metadata. Successful journey screenshots are attached to the HTML report. Failed attempts retain screenshots, traces and video. Retries are **zero**: a flaky attempt cannot silently become a passing result. The runner rejects empty, failed, skipped or flaky summaries and preserves non-zero execution status. `forbidOnly` prevents accidentally committing a focused subset.
 

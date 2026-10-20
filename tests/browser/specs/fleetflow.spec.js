@@ -7,16 +7,18 @@ test.describe('Varun K. - FleetFlow UI/E2E', () => {
     if (info.status === 'passed') await info.attach('journey-result', { body:await page.screenshot(), contentType:'image/png' });
   });
   async function fillLogin(page, username='customer', password=process.env.ASE_TEST_PASSWORD) {
-    await page.getByLabel('Username or Email').fill(username);
-    await page.getByLabel('Password', { exact:true }).fill(password);
-    await page.getByRole('button', { name:'Sign In', exact:true }).click();
+    const form=page.locator('form');
+    await form.getByLabel(/Username|Work Email/).fill(username);
+    await form.getByLabel(/^Password/).fill(password);
+    await form.getByRole('button', { name:/^Sign in$/i }).click();
   }
   test('empty login validates required fields before submission', async ({ page }) => {
     await page.goto('/#/login');
-    await page.getByRole('button', { name:'Sign In', exact:true }).click();
+    await page.locator('form').getByLabel(/Username or Email/).waitFor();
+    await page.locator('form').getByRole('button', { name:/^Sign in$/i }).click();
     await expect(page.getByText('Username or email is required.', { exact:true })).toBeVisible();
     await expect(page.getByText('Password is required.', { exact:true })).toBeVisible();
-    await expect(page.getByLabel('Username or Email')).toBeFocused();
+    await expect(page.locator('form').getByLabel(/Username or Email/)).toBeFocused();
   });
   test('invalid credentials produce the real API rejection', async ({ page }) => {
     await page.goto('/#/login');
