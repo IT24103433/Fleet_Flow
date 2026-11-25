@@ -1,0 +1,4669 @@
+{
+  "metadata": {
+    "version": "1.0.0-sprint1",
+    "author": "Aqqil Mohammed (IT24104314)",
+    "generated_date": "2026-09-04",
+    "purpose": "Synthetic high-volume stress payloads for FleetFlow IdentityService endpoints"
+  },
+  "identity_service": {
+    "registration_batches": [
+      {
+        "test_case_id": "REG-TC-0001",
+        "payload_type": "FLEET_OPERATOR",
+        "request": {
+          "email": "benchmark.user.1@fleetflow-test.org",
+          "password": "SecurePass@2026#001",
+          "firstName": "TestFirst1",
+          "lastName": "TestLast1",
+          "phoneNumber": "+1-555-0101",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1991-02-15",
+          "driverLicenseNumber": "DL-CA-2026-000001",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 341,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0002",
+        "payload_type": "INDIVIDUAL_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.2@fleetflow-test.org",
+          "password": "SecurePass@2026#002",
+          "firstName": "TestFirst2",
+          "lastName": "TestLast2",
+          "phoneNumber": "+1-555-0102",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1992-03-15",
+          "driverLicenseNumber": "DL-CA-2026-000002",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 342,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0003",
+        "payload_type": "CORPORATE_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.3@fleetflow-test.org",
+          "password": "SecurePass@2026#003",
+          "firstName": "TestFirst3",
+          "lastName": "TestLast3",
+          "phoneNumber": "+1-555-0103",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1993-04-15",
+          "driverLicenseNumber": "DL-CA-2026-000003",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 343,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0004",
+        "payload_type": "INDIVIDUAL_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.4@fleetflow-test.org",
+          "password": "SecurePass@2026#004",
+          "firstName": "TestFirst4",
+          "lastName": "TestLast4",
+          "phoneNumber": "+1-555-0104",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1994-05-15",
+          "driverLicenseNumber": "DL-CA-2026-000004",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 344,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0005",
+        "payload_type": "FLEET_OPERATOR",
+        "request": {
+          "email": "benchmark.user.5@fleetflow-test.org",
+          "password": "SecurePass@2026#005",
+          "firstName": "TestFirst5",
+          "lastName": "TestLast5",
+          "phoneNumber": "+1-555-0105",
+          "accountRole": "FLEET_MANAGER",
+          "dateOfBirth": "1995-06-15",
+          "driverLicenseNumber": "DL-CA-2026-000005",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 345,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0006",
+        "payload_type": "CORPORATE_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.6@fleetflow-test.org",
+          "password": "SecurePass@2026#006",
+          "firstName": "TestFirst6",
+          "lastName": "TestLast6",
+          "phoneNumber": "+1-555-0106",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1996-07-15",
+          "driverLicenseNumber": "DL-CA-2026-000006",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 346,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0007",
+        "payload_type": "FLEET_OPERATOR",
+        "request": {
+          "email": "benchmark.user.7@fleetflow-test.org",
+          "password": "SecurePass@2026#007",
+          "firstName": "TestFirst7",
+          "lastName": "TestLast7",
+          "phoneNumber": "+1-555-0107",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1997-08-15",
+          "driverLicenseNumber": "DL-CA-2026-000007",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 347,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0008",
+        "payload_type": "INDIVIDUAL_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.8@fleetflow-test.org",
+          "password": "SecurePass@2026#008",
+          "firstName": "TestFirst8",
+          "lastName": "TestLast8",
+          "phoneNumber": "+1-555-0108",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1998-01-15",
+          "driverLicenseNumber": "DL-CA-2026-000008",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 348,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0009",
+        "payload_type": "CORPORATE_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.9@fleetflow-test.org",
+          "password": "SecurePass@2026#009",
+          "firstName": "TestFirst9",
+          "lastName": "TestLast9",
+          "phoneNumber": "+1-555-0109",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1990-02-15",
+          "driverLicenseNumber": "DL-CA-2026-000009",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 349,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0010",
+        "payload_type": "INDIVIDUAL_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.10@fleetflow-test.org",
+          "password": "SecurePass@2026#010",
+          "firstName": "TestFirst10",
+          "lastName": "TestLast10",
+          "phoneNumber": "+1-555-0110",
+          "accountRole": "FLEET_MANAGER",
+          "dateOfBirth": "1991-03-15",
+          "driverLicenseNumber": "DL-CA-2026-000010",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 350,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0011",
+        "payload_type": "FLEET_OPERATOR",
+        "request": {
+          "email": "benchmark.user.11@fleetflow-test.org",
+          "password": "SecurePass@2026#011",
+          "firstName": "TestFirst11",
+          "lastName": "TestLast11",
+          "phoneNumber": "+1-555-0111",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1992-04-15",
+          "driverLicenseNumber": "DL-CA-2026-000011",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 351,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0012",
+        "payload_type": "CORPORATE_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.12@fleetflow-test.org",
+          "password": "SecurePass@2026#012",
+          "firstName": "TestFirst12",
+          "lastName": "TestLast12",
+          "phoneNumber": "+1-555-0112",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1993-05-15",
+          "driverLicenseNumber": "DL-CA-2026-000012",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 352,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0013",
+        "payload_type": "FLEET_OPERATOR",
+        "request": {
+          "email": "benchmark.user.13@fleetflow-test.org",
+          "password": "SecurePass@2026#013",
+          "firstName": "TestFirst13",
+          "lastName": "TestLast13",
+          "phoneNumber": "+1-555-0113",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1994-06-15",
+          "driverLicenseNumber": "DL-CA-2026-000013",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 353,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0014",
+        "payload_type": "INDIVIDUAL_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.14@fleetflow-test.org",
+          "password": "SecurePass@2026#014",
+          "firstName": "TestFirst14",
+          "lastName": "TestLast14",
+          "phoneNumber": "+1-555-0114",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1995-07-15",
+          "driverLicenseNumber": "DL-CA-2026-000014",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 354,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0015",
+        "payload_type": "CORPORATE_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.15@fleetflow-test.org",
+          "password": "SecurePass@2026#015",
+          "firstName": "TestFirst15",
+          "lastName": "TestLast15",
+          "phoneNumber": "+1-555-0115",
+          "accountRole": "FLEET_MANAGER",
+          "dateOfBirth": "1996-08-15",
+          "driverLicenseNumber": "DL-CA-2026-000015",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 355,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0016",
+        "payload_type": "INDIVIDUAL_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.16@fleetflow-test.org",
+          "password": "SecurePass@2026#016",
+          "firstName": "TestFirst16",
+          "lastName": "TestLast16",
+          "phoneNumber": "+1-555-0116",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1997-01-15",
+          "driverLicenseNumber": "DL-CA-2026-000016",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 356,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0017",
+        "payload_type": "FLEET_OPERATOR",
+        "request": {
+          "email": "benchmark.user.17@fleetflow-test.org",
+          "password": "SecurePass@2026#017",
+          "firstName": "TestFirst17",
+          "lastName": "TestLast17",
+          "phoneNumber": "+1-555-0117",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1998-02-15",
+          "driverLicenseNumber": "DL-CA-2026-000017",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 357,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0018",
+        "payload_type": "CORPORATE_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.18@fleetflow-test.org",
+          "password": "SecurePass@2026#018",
+          "firstName": "TestFirst18",
+          "lastName": "TestLast18",
+          "phoneNumber": "+1-555-0118",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1990-03-15",
+          "driverLicenseNumber": "DL-CA-2026-000018",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 358,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0019",
+        "payload_type": "FLEET_OPERATOR",
+        "request": {
+          "email": "benchmark.user.19@fleetflow-test.org",
+          "password": "SecurePass@2026#019",
+          "firstName": "TestFirst19",
+          "lastName": "TestLast19",
+          "phoneNumber": "+1-555-0119",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1991-04-15",
+          "driverLicenseNumber": "DL-CA-2026-000019",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 359,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0020",
+        "payload_type": "INDIVIDUAL_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.20@fleetflow-test.org",
+          "password": "SecurePass@2026#020",
+          "firstName": "TestFirst20",
+          "lastName": "TestLast20",
+          "phoneNumber": "+1-555-0120",
+          "accountRole": "FLEET_MANAGER",
+          "dateOfBirth": "1992-05-15",
+          "driverLicenseNumber": "DL-CA-2026-000020",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 340,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0021",
+        "payload_type": "CORPORATE_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.21@fleetflow-test.org",
+          "password": "SecurePass@2026#021",
+          "firstName": "TestFirst21",
+          "lastName": "TestLast21",
+          "phoneNumber": "+1-555-0121",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1993-06-15",
+          "driverLicenseNumber": "DL-CA-2026-000021",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 341,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0022",
+        "payload_type": "INDIVIDUAL_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.22@fleetflow-test.org",
+          "password": "SecurePass@2026#022",
+          "firstName": "TestFirst22",
+          "lastName": "TestLast22",
+          "phoneNumber": "+1-555-0122",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1994-07-15",
+          "driverLicenseNumber": "DL-CA-2026-000022",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 342,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0023",
+        "payload_type": "FLEET_OPERATOR",
+        "request": {
+          "email": "benchmark.user.23@fleetflow-test.org",
+          "password": "SecurePass@2026#023",
+          "firstName": "TestFirst23",
+          "lastName": "TestLast23",
+          "phoneNumber": "+1-555-0123",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1995-08-15",
+          "driverLicenseNumber": "DL-CA-2026-000023",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 343,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0024",
+        "payload_type": "CORPORATE_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.24@fleetflow-test.org",
+          "password": "SecurePass@2026#024",
+          "firstName": "TestFirst24",
+          "lastName": "TestLast24",
+          "phoneNumber": "+1-555-0124",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1996-01-15",
+          "driverLicenseNumber": "DL-CA-2026-000024",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 344,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0025",
+        "payload_type": "FLEET_OPERATOR",
+        "request": {
+          "email": "benchmark.user.25@fleetflow-test.org",
+          "password": "SecurePass@2026#025",
+          "firstName": "TestFirst25",
+          "lastName": "TestLast25",
+          "phoneNumber": "+1-555-0125",
+          "accountRole": "FLEET_MANAGER",
+          "dateOfBirth": "1997-02-15",
+          "driverLicenseNumber": "DL-CA-2026-000025",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 345,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0026",
+        "payload_type": "INDIVIDUAL_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.26@fleetflow-test.org",
+          "password": "SecurePass@2026#026",
+          "firstName": "TestFirst26",
+          "lastName": "TestLast26",
+          "phoneNumber": "+1-555-0126",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1998-03-15",
+          "driverLicenseNumber": "DL-CA-2026-000026",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 346,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0027",
+        "payload_type": "CORPORATE_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.27@fleetflow-test.org",
+          "password": "SecurePass@2026#027",
+          "firstName": "TestFirst27",
+          "lastName": "TestLast27",
+          "phoneNumber": "+1-555-0127",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1990-04-15",
+          "driverLicenseNumber": "DL-CA-2026-000027",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 347,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0028",
+        "payload_type": "INDIVIDUAL_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.28@fleetflow-test.org",
+          "password": "SecurePass@2026#028",
+          "firstName": "TestFirst28",
+          "lastName": "TestLast28",
+          "phoneNumber": "+1-555-0128",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1991-05-15",
+          "driverLicenseNumber": "DL-CA-2026-000028",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 348,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0029",
+        "payload_type": "FLEET_OPERATOR",
+        "request": {
+          "email": "benchmark.user.29@fleetflow-test.org",
+          "password": "SecurePass@2026#029",
+          "firstName": "TestFirst29",
+          "lastName": "TestLast29",
+          "phoneNumber": "+1-555-0129",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1992-06-15",
+          "driverLicenseNumber": "DL-CA-2026-000029",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 349,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0030",
+        "payload_type": "CORPORATE_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.30@fleetflow-test.org",
+          "password": "SecurePass@2026#030",
+          "firstName": "TestFirst30",
+          "lastName": "TestLast30",
+          "phoneNumber": "+1-555-0130",
+          "accountRole": "FLEET_MANAGER",
+          "dateOfBirth": "1993-07-15",
+          "driverLicenseNumber": "DL-CA-2026-000030",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 350,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0031",
+        "payload_type": "FLEET_OPERATOR",
+        "request": {
+          "email": "benchmark.user.31@fleetflow-test.org",
+          "password": "SecurePass@2026#031",
+          "firstName": "TestFirst31",
+          "lastName": "TestLast31",
+          "phoneNumber": "+1-555-0131",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1994-08-15",
+          "driverLicenseNumber": "DL-CA-2026-000031",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 351,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0032",
+        "payload_type": "INDIVIDUAL_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.32@fleetflow-test.org",
+          "password": "SecurePass@2026#032",
+          "firstName": "TestFirst32",
+          "lastName": "TestLast32",
+          "phoneNumber": "+1-555-0132",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1995-01-15",
+          "driverLicenseNumber": "DL-CA-2026-000032",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 352,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0033",
+        "payload_type": "CORPORATE_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.33@fleetflow-test.org",
+          "password": "SecurePass@2026#033",
+          "firstName": "TestFirst33",
+          "lastName": "TestLast33",
+          "phoneNumber": "+1-555-0133",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1996-02-15",
+          "driverLicenseNumber": "DL-CA-2026-000033",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 353,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0034",
+        "payload_type": "INDIVIDUAL_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.34@fleetflow-test.org",
+          "password": "SecurePass@2026#034",
+          "firstName": "TestFirst34",
+          "lastName": "TestLast34",
+          "phoneNumber": "+1-555-0134",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1997-03-15",
+          "driverLicenseNumber": "DL-CA-2026-000034",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 354,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0035",
+        "payload_type": "FLEET_OPERATOR",
+        "request": {
+          "email": "benchmark.user.35@fleetflow-test.org",
+          "password": "SecurePass@2026#035",
+          "firstName": "TestFirst35",
+          "lastName": "TestLast35",
+          "phoneNumber": "+1-555-0135",
+          "accountRole": "FLEET_MANAGER",
+          "dateOfBirth": "1998-04-15",
+          "driverLicenseNumber": "DL-CA-2026-000035",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 355,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0036",
+        "payload_type": "CORPORATE_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.36@fleetflow-test.org",
+          "password": "SecurePass@2026#036",
+          "firstName": "TestFirst36",
+          "lastName": "TestLast36",
+          "phoneNumber": "+1-555-0136",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1990-05-15",
+          "driverLicenseNumber": "DL-CA-2026-000036",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 356,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0037",
+        "payload_type": "FLEET_OPERATOR",
+        "request": {
+          "email": "benchmark.user.37@fleetflow-test.org",
+          "password": "SecurePass@2026#037",
+          "firstName": "TestFirst37",
+          "lastName": "TestLast37",
+          "phoneNumber": "+1-555-0137",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1991-06-15",
+          "driverLicenseNumber": "DL-CA-2026-000037",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 357,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0038",
+        "payload_type": "INDIVIDUAL_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.38@fleetflow-test.org",
+          "password": "SecurePass@2026#038",
+          "firstName": "TestFirst38",
+          "lastName": "TestLast38",
+          "phoneNumber": "+1-555-0138",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1992-07-15",
+          "driverLicenseNumber": "DL-CA-2026-000038",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 358,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0039",
+        "payload_type": "CORPORATE_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.39@fleetflow-test.org",
+          "password": "SecurePass@2026#039",
+          "firstName": "TestFirst39",
+          "lastName": "TestLast39",
+          "phoneNumber": "+1-555-0139",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1993-08-15",
+          "driverLicenseNumber": "DL-CA-2026-000039",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 359,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0040",
+        "payload_type": "INDIVIDUAL_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.40@fleetflow-test.org",
+          "password": "SecurePass@2026#040",
+          "firstName": "TestFirst40",
+          "lastName": "TestLast40",
+          "phoneNumber": "+1-555-0140",
+          "accountRole": "FLEET_MANAGER",
+          "dateOfBirth": "1994-01-15",
+          "driverLicenseNumber": "DL-CA-2026-000040",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 340,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0041",
+        "payload_type": "FLEET_OPERATOR",
+        "request": {
+          "email": "benchmark.user.41@fleetflow-test.org",
+          "password": "SecurePass@2026#041",
+          "firstName": "TestFirst41",
+          "lastName": "TestLast41",
+          "phoneNumber": "+1-555-0141",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1995-02-15",
+          "driverLicenseNumber": "DL-CA-2026-000041",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 341,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0042",
+        "payload_type": "CORPORATE_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.42@fleetflow-test.org",
+          "password": "SecurePass@2026#042",
+          "firstName": "TestFirst42",
+          "lastName": "TestLast42",
+          "phoneNumber": "+1-555-0142",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1996-03-15",
+          "driverLicenseNumber": "DL-CA-2026-000042",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 342,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0043",
+        "payload_type": "FLEET_OPERATOR",
+        "request": {
+          "email": "benchmark.user.43@fleetflow-test.org",
+          "password": "SecurePass@2026#043",
+          "firstName": "TestFirst43",
+          "lastName": "TestLast43",
+          "phoneNumber": "+1-555-0143",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1997-04-15",
+          "driverLicenseNumber": "DL-CA-2026-000043",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 343,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0044",
+        "payload_type": "INDIVIDUAL_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.44@fleetflow-test.org",
+          "password": "SecurePass@2026#044",
+          "firstName": "TestFirst44",
+          "lastName": "TestLast44",
+          "phoneNumber": "+1-555-0144",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1998-05-15",
+          "driverLicenseNumber": "DL-CA-2026-000044",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 344,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0045",
+        "payload_type": "CORPORATE_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.45@fleetflow-test.org",
+          "password": "SecurePass@2026#045",
+          "firstName": "TestFirst45",
+          "lastName": "TestLast45",
+          "phoneNumber": "+1-555-0145",
+          "accountRole": "FLEET_MANAGER",
+          "dateOfBirth": "1990-06-15",
+          "driverLicenseNumber": "DL-CA-2026-000045",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 345,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0046",
+        "payload_type": "INDIVIDUAL_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.46@fleetflow-test.org",
+          "password": "SecurePass@2026#046",
+          "firstName": "TestFirst46",
+          "lastName": "TestLast46",
+          "phoneNumber": "+1-555-0146",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1991-07-15",
+          "driverLicenseNumber": "DL-CA-2026-000046",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 346,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0047",
+        "payload_type": "FLEET_OPERATOR",
+        "request": {
+          "email": "benchmark.user.47@fleetflow-test.org",
+          "password": "SecurePass@2026#047",
+          "firstName": "TestFirst47",
+          "lastName": "TestLast47",
+          "phoneNumber": "+1-555-0147",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1992-08-15",
+          "driverLicenseNumber": "DL-CA-2026-000047",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 347,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0048",
+        "payload_type": "CORPORATE_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.48@fleetflow-test.org",
+          "password": "SecurePass@2026#048",
+          "firstName": "TestFirst48",
+          "lastName": "TestLast48",
+          "phoneNumber": "+1-555-0148",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1993-01-15",
+          "driverLicenseNumber": "DL-CA-2026-000048",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 348,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0049",
+        "payload_type": "FLEET_OPERATOR",
+        "request": {
+          "email": "benchmark.user.49@fleetflow-test.org",
+          "password": "SecurePass@2026#049",
+          "firstName": "TestFirst49",
+          "lastName": "TestLast49",
+          "phoneNumber": "+1-555-0149",
+          "accountRole": "CUSTOMER",
+          "dateOfBirth": "1994-02-15",
+          "driverLicenseNumber": "DL-CA-2026-000049",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 349,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      },
+      {
+        "test_case_id": "REG-TC-0050",
+        "payload_type": "INDIVIDUAL_CUSTOMER",
+        "request": {
+          "email": "benchmark.user.50@fleetflow-test.org",
+          "password": "SecurePass@2026#050",
+          "firstName": "TestFirst50",
+          "lastName": "TestLast50",
+          "phoneNumber": "+1-555-0150",
+          "accountRole": "FLEET_MANAGER",
+          "dateOfBirth": "1995-03-15",
+          "driverLicenseNumber": "DL-CA-2026-000050",
+          "licenseExpiryDate": "2029-12-31"
+        },
+        "expected_status": 201,
+        "stress_characteristics": {
+          "payload_size_bytes": 350,
+          "hashing_work_factor": 11,
+          "expected_db_writes": 2
+        }
+      }
+    ],
+    "login_fixtures": [
+      {
+        "fixture_id": "AUTH-FIX-0001",
+        "channel": "MOBILE_APP",
+        "request": {
+          "email": "benchmark.user.1@fleetflow-test.org",
+          "password": "SecurePass@2026#001",
+          "rememberMe": false,
+          "clientDeviceId": "device-uuid-00001"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0002",
+        "channel": "WEB_PORTAL",
+        "request": {
+          "email": "benchmark.user.2@fleetflow-test.org",
+          "password": "SecurePass@2026#002",
+          "rememberMe": true,
+          "clientDeviceId": "device-uuid-00002"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0003",
+        "channel": "MOBILE_APP",
+        "request": {
+          "email": "benchmark.user.3@fleetflow-test.org",
+          "password": "SecurePass@2026#003",
+          "rememberMe": false,
+          "clientDeviceId": "device-uuid-00003"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0004",
+        "channel": "WEB_PORTAL",
+        "request": {
+          "email": "benchmark.user.4@fleetflow-test.org",
+          "password": "SecurePass@2026#004",
+          "rememberMe": true,
+          "clientDeviceId": "device-uuid-00004"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0005",
+        "channel": "MOBILE_APP",
+        "request": {
+          "email": "benchmark.user.5@fleetflow-test.org",
+          "password": "SecurePass@2026#005",
+          "rememberMe": false,
+          "clientDeviceId": "device-uuid-00005"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "FLEET_MANAGER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0006",
+        "channel": "WEB_PORTAL",
+        "request": {
+          "email": "benchmark.user.6@fleetflow-test.org",
+          "password": "SecurePass@2026#006",
+          "rememberMe": true,
+          "clientDeviceId": "device-uuid-00006"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0007",
+        "channel": "MOBILE_APP",
+        "request": {
+          "email": "benchmark.user.7@fleetflow-test.org",
+          "password": "SecurePass@2026#007",
+          "rememberMe": false,
+          "clientDeviceId": "device-uuid-00007"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0008",
+        "channel": "WEB_PORTAL",
+        "request": {
+          "email": "benchmark.user.8@fleetflow-test.org",
+          "password": "SecurePass@2026#008",
+          "rememberMe": true,
+          "clientDeviceId": "device-uuid-00008"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0009",
+        "channel": "MOBILE_APP",
+        "request": {
+          "email": "benchmark.user.9@fleetflow-test.org",
+          "password": "SecurePass@2026#009",
+          "rememberMe": false,
+          "clientDeviceId": "device-uuid-00009"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0010",
+        "channel": "WEB_PORTAL",
+        "request": {
+          "email": "benchmark.user.10@fleetflow-test.org",
+          "password": "SecurePass@2026#010",
+          "rememberMe": true,
+          "clientDeviceId": "device-uuid-00010"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "FLEET_MANAGER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0011",
+        "channel": "MOBILE_APP",
+        "request": {
+          "email": "benchmark.user.11@fleetflow-test.org",
+          "password": "SecurePass@2026#011",
+          "rememberMe": false,
+          "clientDeviceId": "device-uuid-00011"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0012",
+        "channel": "WEB_PORTAL",
+        "request": {
+          "email": "benchmark.user.12@fleetflow-test.org",
+          "password": "SecurePass@2026#012",
+          "rememberMe": true,
+          "clientDeviceId": "device-uuid-00012"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0013",
+        "channel": "MOBILE_APP",
+        "request": {
+          "email": "benchmark.user.13@fleetflow-test.org",
+          "password": "SecurePass@2026#013",
+          "rememberMe": false,
+          "clientDeviceId": "device-uuid-00013"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0014",
+        "channel": "WEB_PORTAL",
+        "request": {
+          "email": "benchmark.user.14@fleetflow-test.org",
+          "password": "SecurePass@2026#014",
+          "rememberMe": true,
+          "clientDeviceId": "device-uuid-00014"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0015",
+        "channel": "MOBILE_APP",
+        "request": {
+          "email": "benchmark.user.15@fleetflow-test.org",
+          "password": "SecurePass@2026#015",
+          "rememberMe": false,
+          "clientDeviceId": "device-uuid-00015"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "FLEET_MANAGER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0016",
+        "channel": "WEB_PORTAL",
+        "request": {
+          "email": "benchmark.user.16@fleetflow-test.org",
+          "password": "SecurePass@2026#016",
+          "rememberMe": true,
+          "clientDeviceId": "device-uuid-00016"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0017",
+        "channel": "MOBILE_APP",
+        "request": {
+          "email": "benchmark.user.17@fleetflow-test.org",
+          "password": "SecurePass@2026#017",
+          "rememberMe": false,
+          "clientDeviceId": "device-uuid-00017"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0018",
+        "channel": "WEB_PORTAL",
+        "request": {
+          "email": "benchmark.user.18@fleetflow-test.org",
+          "password": "SecurePass@2026#018",
+          "rememberMe": true,
+          "clientDeviceId": "device-uuid-00018"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0019",
+        "channel": "MOBILE_APP",
+        "request": {
+          "email": "benchmark.user.19@fleetflow-test.org",
+          "password": "SecurePass@2026#019",
+          "rememberMe": false,
+          "clientDeviceId": "device-uuid-00019"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0020",
+        "channel": "WEB_PORTAL",
+        "request": {
+          "email": "benchmark.user.20@fleetflow-test.org",
+          "password": "SecurePass@2026#020",
+          "rememberMe": true,
+          "clientDeviceId": "device-uuid-00020"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "FLEET_MANAGER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0021",
+        "channel": "MOBILE_APP",
+        "request": {
+          "email": "benchmark.user.21@fleetflow-test.org",
+          "password": "SecurePass@2026#021",
+          "rememberMe": false,
+          "clientDeviceId": "device-uuid-00021"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0022",
+        "channel": "WEB_PORTAL",
+        "request": {
+          "email": "benchmark.user.22@fleetflow-test.org",
+          "password": "SecurePass@2026#022",
+          "rememberMe": true,
+          "clientDeviceId": "device-uuid-00022"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0023",
+        "channel": "MOBILE_APP",
+        "request": {
+          "email": "benchmark.user.23@fleetflow-test.org",
+          "password": "SecurePass@2026#023",
+          "rememberMe": false,
+          "clientDeviceId": "device-uuid-00023"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0024",
+        "channel": "WEB_PORTAL",
+        "request": {
+          "email": "benchmark.user.24@fleetflow-test.org",
+          "password": "SecurePass@2026#024",
+          "rememberMe": true,
+          "clientDeviceId": "device-uuid-00024"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0025",
+        "channel": "MOBILE_APP",
+        "request": {
+          "email": "benchmark.user.25@fleetflow-test.org",
+          "password": "SecurePass@2026#025",
+          "rememberMe": false,
+          "clientDeviceId": "device-uuid-00025"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "FLEET_MANAGER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0026",
+        "channel": "WEB_PORTAL",
+        "request": {
+          "email": "benchmark.user.26@fleetflow-test.org",
+          "password": "SecurePass@2026#026",
+          "rememberMe": true,
+          "clientDeviceId": "device-uuid-00026"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0027",
+        "channel": "MOBILE_APP",
+        "request": {
+          "email": "benchmark.user.27@fleetflow-test.org",
+          "password": "SecurePass@2026#027",
+          "rememberMe": false,
+          "clientDeviceId": "device-uuid-00027"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0028",
+        "channel": "WEB_PORTAL",
+        "request": {
+          "email": "benchmark.user.28@fleetflow-test.org",
+          "password": "SecurePass@2026#028",
+          "rememberMe": true,
+          "clientDeviceId": "device-uuid-00028"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0029",
+        "channel": "MOBILE_APP",
+        "request": {
+          "email": "benchmark.user.29@fleetflow-test.org",
+          "password": "SecurePass@2026#029",
+          "rememberMe": false,
+          "clientDeviceId": "device-uuid-00029"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0030",
+        "channel": "WEB_PORTAL",
+        "request": {
+          "email": "benchmark.user.30@fleetflow-test.org",
+          "password": "SecurePass@2026#030",
+          "rememberMe": true,
+          "clientDeviceId": "device-uuid-00030"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "FLEET_MANAGER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0031",
+        "channel": "MOBILE_APP",
+        "request": {
+          "email": "benchmark.user.31@fleetflow-test.org",
+          "password": "SecurePass@2026#031",
+          "rememberMe": false,
+          "clientDeviceId": "device-uuid-00031"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0032",
+        "channel": "WEB_PORTAL",
+        "request": {
+          "email": "benchmark.user.32@fleetflow-test.org",
+          "password": "SecurePass@2026#032",
+          "rememberMe": true,
+          "clientDeviceId": "device-uuid-00032"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0033",
+        "channel": "MOBILE_APP",
+        "request": {
+          "email": "benchmark.user.33@fleetflow-test.org",
+          "password": "SecurePass@2026#033",
+          "rememberMe": false,
+          "clientDeviceId": "device-uuid-00033"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0034",
+        "channel": "WEB_PORTAL",
+        "request": {
+          "email": "benchmark.user.34@fleetflow-test.org",
+          "password": "SecurePass@2026#034",
+          "rememberMe": true,
+          "clientDeviceId": "device-uuid-00034"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "CUSTOMER",
+          "token_ttl_seconds": 3600
+        }
+      },
+      {
+        "fixture_id": "AUTH-FIX-0035",
+        "channel": "MOBILE_APP",
+        "request": {
+          "email": "benchmark.user.35@fleetflow-test.org",
+          "password": "SecurePass@2026#035",
+          "rememberMe": false,
+          "clientDeviceId": "device-uuid-00035"
+        },
+        "expected_status": 200,
+        "token_claims": {
+          "role": "FLEET_MANAGER",
+          "token_ttl_seconds": 3600
+        }
+      }
+    ]
+  },
+  "fleet_service": {
+    "catalog_search_queries": [
+      {
+        "query_id": "FLEET-QRY-0001",
+        "params": {
+          "category": "SUV",
+          "make": "Ford",
+          "status": "RENTED",
+          "minDailyRate": 47,
+          "maxDailyRate": 125,
+          "pageNumber": 2,
+          "pageSize": 20,
+          "sortBy": "ModelYear",
+          "sortDirection": "Ascending"
+        },
+        "filter_complexity": "MODERATE_INDEXED",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0002",
+        "params": {
+          "category": "ELECTRIC",
+          "make": "BMW",
+          "status": "MAINTENANCE",
+          "minDailyRate": 49,
+          "maxDailyRate": 130,
+          "pageNumber": 3,
+          "pageSize": 20,
+          "sortBy": "DailyRate",
+          "sortDirection": "Ascending"
+        },
+        "filter_complexity": "MODERATE_INDEXED",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0003",
+        "params": {
+          "category": "LUXURY",
+          "make": "Mercedes-Benz",
+          "status": "RESERVED",
+          "minDailyRate": 51,
+          "maxDailyRate": 135,
+          "pageNumber": 4,
+          "pageSize": 20,
+          "sortBy": "ModelYear",
+          "sortDirection": "Descending"
+        },
+        "filter_complexity": "MODERATE_INDEXED",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0004",
+        "params": {
+          "category": "VAN",
+          "make": "Hyundai",
+          "status": "AVAILABLE",
+          "minDailyRate": 53,
+          "maxDailyRate": 140,
+          "pageNumber": 5,
+          "pageSize": 20,
+          "sortBy": "DailyRate",
+          "sortDirection": "Ascending"
+        },
+        "filter_complexity": "HIGH_COMPOSITE",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0005",
+        "params": {
+          "category": "COMPACT",
+          "make": "Tesla",
+          "status": "RENTED",
+          "minDailyRate": 55,
+          "maxDailyRate": 145,
+          "pageNumber": 1,
+          "pageSize": 20,
+          "sortBy": "ModelYear",
+          "sortDirection": "Ascending"
+        },
+        "filter_complexity": "MODERATE_INDEXED",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0006",
+        "params": {
+          "category": "SEDAN",
+          "make": "Audi",
+          "status": "MAINTENANCE",
+          "minDailyRate": 57,
+          "maxDailyRate": 150,
+          "pageNumber": 2,
+          "pageSize": 20,
+          "sortBy": "DailyRate",
+          "sortDirection": "Descending"
+        },
+        "filter_complexity": "MODERATE_INDEXED",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0007",
+        "params": {
+          "category": "SUV",
+          "make": "Volvo",
+          "status": "RESERVED",
+          "minDailyRate": 59,
+          "maxDailyRate": 155,
+          "pageNumber": 3,
+          "pageSize": 20,
+          "sortBy": "ModelYear",
+          "sortDirection": "Ascending"
+        },
+        "filter_complexity": "MODERATE_INDEXED",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0008",
+        "params": {
+          "category": "ELECTRIC",
+          "make": "Toyota",
+          "status": "AVAILABLE",
+          "minDailyRate": 61,
+          "maxDailyRate": 160,
+          "pageNumber": 4,
+          "pageSize": 20,
+          "sortBy": "DailyRate",
+          "sortDirection": "Ascending"
+        },
+        "filter_complexity": "HIGH_COMPOSITE",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0009",
+        "params": {
+          "category": "LUXURY",
+          "make": "Ford",
+          "status": "RENTED",
+          "minDailyRate": 63,
+          "maxDailyRate": 165,
+          "pageNumber": 5,
+          "pageSize": 20,
+          "sortBy": "ModelYear",
+          "sortDirection": "Descending"
+        },
+        "filter_complexity": "MODERATE_INDEXED",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0010",
+        "params": {
+          "category": "VAN",
+          "make": "BMW",
+          "status": "MAINTENANCE",
+          "minDailyRate": 65,
+          "maxDailyRate": 170,
+          "pageNumber": 1,
+          "pageSize": 20,
+          "sortBy": "DailyRate",
+          "sortDirection": "Ascending"
+        },
+        "filter_complexity": "MODERATE_INDEXED",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0011",
+        "params": {
+          "category": "COMPACT",
+          "make": "Mercedes-Benz",
+          "status": "RESERVED",
+          "minDailyRate": 67,
+          "maxDailyRate": 175,
+          "pageNumber": 2,
+          "pageSize": 20,
+          "sortBy": "ModelYear",
+          "sortDirection": "Ascending"
+        },
+        "filter_complexity": "MODERATE_INDEXED",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0012",
+        "params": {
+          "category": "SEDAN",
+          "make": "Hyundai",
+          "status": "AVAILABLE",
+          "minDailyRate": 69,
+          "maxDailyRate": 180,
+          "pageNumber": 3,
+          "pageSize": 20,
+          "sortBy": "DailyRate",
+          "sortDirection": "Descending"
+        },
+        "filter_complexity": "HIGH_COMPOSITE",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0013",
+        "params": {
+          "category": "SUV",
+          "make": "Tesla",
+          "status": "RENTED",
+          "minDailyRate": 71,
+          "maxDailyRate": 185,
+          "pageNumber": 4,
+          "pageSize": 20,
+          "sortBy": "ModelYear",
+          "sortDirection": "Ascending"
+        },
+        "filter_complexity": "MODERATE_INDEXED",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0014",
+        "params": {
+          "category": "ELECTRIC",
+          "make": "Audi",
+          "status": "MAINTENANCE",
+          "minDailyRate": 73,
+          "maxDailyRate": 190,
+          "pageNumber": 5,
+          "pageSize": 20,
+          "sortBy": "DailyRate",
+          "sortDirection": "Ascending"
+        },
+        "filter_complexity": "MODERATE_INDEXED",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0015",
+        "params": {
+          "category": "LUXURY",
+          "make": "Volvo",
+          "status": "RESERVED",
+          "minDailyRate": 75,
+          "maxDailyRate": 195,
+          "pageNumber": 1,
+          "pageSize": 20,
+          "sortBy": "ModelYear",
+          "sortDirection": "Descending"
+        },
+        "filter_complexity": "MODERATE_INDEXED",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0016",
+        "params": {
+          "category": "VAN",
+          "make": "Toyota",
+          "status": "AVAILABLE",
+          "minDailyRate": 77,
+          "maxDailyRate": 200,
+          "pageNumber": 2,
+          "pageSize": 20,
+          "sortBy": "DailyRate",
+          "sortDirection": "Ascending"
+        },
+        "filter_complexity": "HIGH_COMPOSITE",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0017",
+        "params": {
+          "category": "COMPACT",
+          "make": "Ford",
+          "status": "RENTED",
+          "minDailyRate": 79,
+          "maxDailyRate": 205,
+          "pageNumber": 3,
+          "pageSize": 20,
+          "sortBy": "ModelYear",
+          "sortDirection": "Ascending"
+        },
+        "filter_complexity": "MODERATE_INDEXED",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0018",
+        "params": {
+          "category": "SEDAN",
+          "make": "BMW",
+          "status": "MAINTENANCE",
+          "minDailyRate": 81,
+          "maxDailyRate": 210,
+          "pageNumber": 4,
+          "pageSize": 20,
+          "sortBy": "DailyRate",
+          "sortDirection": "Descending"
+        },
+        "filter_complexity": "MODERATE_INDEXED",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0019",
+        "params": {
+          "category": "SUV",
+          "make": "Mercedes-Benz",
+          "status": "RESERVED",
+          "minDailyRate": 83,
+          "maxDailyRate": 215,
+          "pageNumber": 5,
+          "pageSize": 20,
+          "sortBy": "ModelYear",
+          "sortDirection": "Ascending"
+        },
+        "filter_complexity": "MODERATE_INDEXED",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0020",
+        "params": {
+          "category": "ELECTRIC",
+          "make": "Hyundai",
+          "status": "AVAILABLE",
+          "minDailyRate": 85,
+          "maxDailyRate": 220,
+          "pageNumber": 1,
+          "pageSize": 20,
+          "sortBy": "DailyRate",
+          "sortDirection": "Ascending"
+        },
+        "filter_complexity": "HIGH_COMPOSITE",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0021",
+        "params": {
+          "category": "LUXURY",
+          "make": "Tesla",
+          "status": "RENTED",
+          "minDailyRate": 87,
+          "maxDailyRate": 225,
+          "pageNumber": 2,
+          "pageSize": 20,
+          "sortBy": "ModelYear",
+          "sortDirection": "Descending"
+        },
+        "filter_complexity": "MODERATE_INDEXED",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0022",
+        "params": {
+          "category": "VAN",
+          "make": "Audi",
+          "status": "MAINTENANCE",
+          "minDailyRate": 89,
+          "maxDailyRate": 230,
+          "pageNumber": 3,
+          "pageSize": 20,
+          "sortBy": "DailyRate",
+          "sortDirection": "Ascending"
+        },
+        "filter_complexity": "MODERATE_INDEXED",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0023",
+        "params": {
+          "category": "COMPACT",
+          "make": "Volvo",
+          "status": "RESERVED",
+          "minDailyRate": 91,
+          "maxDailyRate": 235,
+          "pageNumber": 4,
+          "pageSize": 20,
+          "sortBy": "ModelYear",
+          "sortDirection": "Ascending"
+        },
+        "filter_complexity": "MODERATE_INDEXED",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0024",
+        "params": {
+          "category": "SEDAN",
+          "make": "Toyota",
+          "status": "AVAILABLE",
+          "minDailyRate": 93,
+          "maxDailyRate": 240,
+          "pageNumber": 5,
+          "pageSize": 20,
+          "sortBy": "DailyRate",
+          "sortDirection": "Descending"
+        },
+        "filter_complexity": "HIGH_COMPOSITE",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0025",
+        "params": {
+          "category": "SUV",
+          "make": "Ford",
+          "status": "RENTED",
+          "minDailyRate": 95,
+          "maxDailyRate": 245,
+          "pageNumber": 1,
+          "pageSize": 20,
+          "sortBy": "ModelYear",
+          "sortDirection": "Ascending"
+        },
+        "filter_complexity": "MODERATE_INDEXED",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0026",
+        "params": {
+          "category": "ELECTRIC",
+          "make": "BMW",
+          "status": "MAINTENANCE",
+          "minDailyRate": 97,
+          "maxDailyRate": 250,
+          "pageNumber": 2,
+          "pageSize": 20,
+          "sortBy": "DailyRate",
+          "sortDirection": "Ascending"
+        },
+        "filter_complexity": "MODERATE_INDEXED",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0027",
+        "params": {
+          "category": "LUXURY",
+          "make": "Mercedes-Benz",
+          "status": "RESERVED",
+          "minDailyRate": 99,
+          "maxDailyRate": 255,
+          "pageNumber": 3,
+          "pageSize": 20,
+          "sortBy": "ModelYear",
+          "sortDirection": "Descending"
+        },
+        "filter_complexity": "MODERATE_INDEXED",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0028",
+        "params": {
+          "category": "VAN",
+          "make": "Hyundai",
+          "status": "AVAILABLE",
+          "minDailyRate": 101,
+          "maxDailyRate": 260,
+          "pageNumber": 4,
+          "pageSize": 20,
+          "sortBy": "DailyRate",
+          "sortDirection": "Ascending"
+        },
+        "filter_complexity": "HIGH_COMPOSITE",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0029",
+        "params": {
+          "category": "COMPACT",
+          "make": "Tesla",
+          "status": "RENTED",
+          "minDailyRate": 103,
+          "maxDailyRate": 265,
+          "pageNumber": 5,
+          "pageSize": 20,
+          "sortBy": "ModelYear",
+          "sortDirection": "Ascending"
+        },
+        "filter_complexity": "MODERATE_INDEXED",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0030",
+        "params": {
+          "category": "SEDAN",
+          "make": "Audi",
+          "status": "MAINTENANCE",
+          "minDailyRate": 105,
+          "maxDailyRate": 270,
+          "pageNumber": 1,
+          "pageSize": 20,
+          "sortBy": "DailyRate",
+          "sortDirection": "Descending"
+        },
+        "filter_complexity": "MODERATE_INDEXED",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0031",
+        "params": {
+          "category": "SUV",
+          "make": "Volvo",
+          "status": "RESERVED",
+          "minDailyRate": 107,
+          "maxDailyRate": 275,
+          "pageNumber": 2,
+          "pageSize": 20,
+          "sortBy": "ModelYear",
+          "sortDirection": "Ascending"
+        },
+        "filter_complexity": "MODERATE_INDEXED",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0032",
+        "params": {
+          "category": "ELECTRIC",
+          "make": "Toyota",
+          "status": "AVAILABLE",
+          "minDailyRate": 109,
+          "maxDailyRate": 280,
+          "pageNumber": 3,
+          "pageSize": 20,
+          "sortBy": "DailyRate",
+          "sortDirection": "Ascending"
+        },
+        "filter_complexity": "HIGH_COMPOSITE",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0033",
+        "params": {
+          "category": "LUXURY",
+          "make": "Ford",
+          "status": "RENTED",
+          "minDailyRate": 111,
+          "maxDailyRate": 285,
+          "pageNumber": 4,
+          "pageSize": 20,
+          "sortBy": "ModelYear",
+          "sortDirection": "Descending"
+        },
+        "filter_complexity": "MODERATE_INDEXED",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0034",
+        "params": {
+          "category": "VAN",
+          "make": "BMW",
+          "status": "MAINTENANCE",
+          "minDailyRate": 113,
+          "maxDailyRate": 290,
+          "pageNumber": 5,
+          "pageSize": 20,
+          "sortBy": "DailyRate",
+          "sortDirection": "Ascending"
+        },
+        "filter_complexity": "MODERATE_INDEXED",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0035",
+        "params": {
+          "category": "COMPACT",
+          "make": "Mercedes-Benz",
+          "status": "RESERVED",
+          "minDailyRate": 115,
+          "maxDailyRate": 295,
+          "pageNumber": 1,
+          "pageSize": 20,
+          "sortBy": "ModelYear",
+          "sortDirection": "Ascending"
+        },
+        "filter_complexity": "MODERATE_INDEXED",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0036",
+        "params": {
+          "category": "SEDAN",
+          "make": "Hyundai",
+          "status": "AVAILABLE",
+          "minDailyRate": 117,
+          "maxDailyRate": 300,
+          "pageNumber": 2,
+          "pageSize": 20,
+          "sortBy": "DailyRate",
+          "sortDirection": "Descending"
+        },
+        "filter_complexity": "HIGH_COMPOSITE",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0037",
+        "params": {
+          "category": "SUV",
+          "make": "Tesla",
+          "status": "RENTED",
+          "minDailyRate": 119,
+          "maxDailyRate": 305,
+          "pageNumber": 3,
+          "pageSize": 20,
+          "sortBy": "ModelYear",
+          "sortDirection": "Ascending"
+        },
+        "filter_complexity": "MODERATE_INDEXED",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0038",
+        "params": {
+          "category": "ELECTRIC",
+          "make": "Audi",
+          "status": "MAINTENANCE",
+          "minDailyRate": 121,
+          "maxDailyRate": 310,
+          "pageNumber": 4,
+          "pageSize": 20,
+          "sortBy": "DailyRate",
+          "sortDirection": "Ascending"
+        },
+        "filter_complexity": "MODERATE_INDEXED",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0039",
+        "params": {
+          "category": "LUXURY",
+          "make": "Volvo",
+          "status": "RESERVED",
+          "minDailyRate": 123,
+          "maxDailyRate": 315,
+          "pageNumber": 5,
+          "pageSize": 20,
+          "sortBy": "ModelYear",
+          "sortDirection": "Descending"
+        },
+        "filter_complexity": "MODERATE_INDEXED",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0040",
+        "params": {
+          "category": "VAN",
+          "make": "Toyota",
+          "status": "AVAILABLE",
+          "minDailyRate": 125,
+          "maxDailyRate": 320,
+          "pageNumber": 1,
+          "pageSize": 20,
+          "sortBy": "DailyRate",
+          "sortDirection": "Ascending"
+        },
+        "filter_complexity": "HIGH_COMPOSITE",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0041",
+        "params": {
+          "category": "COMPACT",
+          "make": "Ford",
+          "status": "RENTED",
+          "minDailyRate": 127,
+          "maxDailyRate": 325,
+          "pageNumber": 2,
+          "pageSize": 20,
+          "sortBy": "ModelYear",
+          "sortDirection": "Ascending"
+        },
+        "filter_complexity": "MODERATE_INDEXED",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0042",
+        "params": {
+          "category": "SEDAN",
+          "make": "BMW",
+          "status": "MAINTENANCE",
+          "minDailyRate": 129,
+          "maxDailyRate": 330,
+          "pageNumber": 3,
+          "pageSize": 20,
+          "sortBy": "DailyRate",
+          "sortDirection": "Descending"
+        },
+        "filter_complexity": "MODERATE_INDEXED",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0043",
+        "params": {
+          "category": "SUV",
+          "make": "Mercedes-Benz",
+          "status": "RESERVED",
+          "minDailyRate": 131,
+          "maxDailyRate": 335,
+          "pageNumber": 4,
+          "pageSize": 20,
+          "sortBy": "ModelYear",
+          "sortDirection": "Ascending"
+        },
+        "filter_complexity": "MODERATE_INDEXED",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0044",
+        "params": {
+          "category": "ELECTRIC",
+          "make": "Hyundai",
+          "status": "AVAILABLE",
+          "minDailyRate": 133,
+          "maxDailyRate": 340,
+          "pageNumber": 5,
+          "pageSize": 20,
+          "sortBy": "DailyRate",
+          "sortDirection": "Ascending"
+        },
+        "filter_complexity": "HIGH_COMPOSITE",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      },
+      {
+        "query_id": "FLEET-QRY-0045",
+        "params": {
+          "category": "LUXURY",
+          "make": "Tesla",
+          "status": "RENTED",
+          "minDailyRate": 135,
+          "maxDailyRate": 345,
+          "pageNumber": 1,
+          "pageSize": 20,
+          "sortBy": "ModelYear",
+          "sortDirection": "Descending"
+        },
+        "filter_complexity": "MODERATE_INDEXED",
+        "expected_result_range": {
+          "min_count": 5,
+          "max_count": 50
+        }
+      }
+    ],
+    "vehicle_creation_stress_fixtures": [
+      {
+        "fixture_id": "VEH-CRT-0001",
+        "endpoint": "/api/vehicles",
+        "method": "POST",
+        "body": {
+          "vin": "1HGCR2F8001A100001",
+          "licensePlate": "FLT-1001",
+          "make": "Ford",
+          "model": "Model-B",
+          "modelYear": 2023,
+          "category": "SUV",
+          "dailyRate": 57.5,
+          "mileage": 13350,
+          "fuelType": "Gasoline",
+          "transmission": "Automatic",
+          "operationalStatus": "Available"
+        },
+        "expected_status": 201
+      },
+      {
+        "fixture_id": "VEH-CRT-0002",
+        "endpoint": "/api/vehicles",
+        "method": "POST",
+        "body": {
+          "vin": "1HGCR2F8002A100002",
+          "licensePlate": "FLT-1002",
+          "make": "BMW",
+          "model": "Model-C",
+          "modelYear": 2024,
+          "category": "ELECTRIC",
+          "dailyRate": 60,
+          "mileage": 14200,
+          "fuelType": "Gasoline",
+          "transmission": "Automatic",
+          "operationalStatus": "Available"
+        },
+        "expected_status": 201
+      },
+      {
+        "fixture_id": "VEH-CRT-0003",
+        "endpoint": "/api/vehicles",
+        "method": "POST",
+        "body": {
+          "vin": "1HGCR2F8003A100003",
+          "licensePlate": "FLT-1003",
+          "make": "Mercedes-Benz",
+          "model": "Model-D",
+          "modelYear": 2025,
+          "category": "LUXURY",
+          "dailyRate": 62.5,
+          "mileage": 15050,
+          "fuelType": "Electric",
+          "transmission": "Automatic",
+          "operationalStatus": "Available"
+        },
+        "expected_status": 201
+      },
+      {
+        "fixture_id": "VEH-CRT-0004",
+        "endpoint": "/api/vehicles",
+        "method": "POST",
+        "body": {
+          "vin": "1HGCR2F8004A100004",
+          "licensePlate": "FLT-1004",
+          "make": "Hyundai",
+          "model": "Model-E",
+          "modelYear": 2022,
+          "category": "VAN",
+          "dailyRate": 65,
+          "mileage": 15900,
+          "fuelType": "Gasoline",
+          "transmission": "Manual",
+          "operationalStatus": "Available"
+        },
+        "expected_status": 201
+      },
+      {
+        "fixture_id": "VEH-CRT-0005",
+        "endpoint": "/api/vehicles",
+        "method": "POST",
+        "body": {
+          "vin": "1HGCR2F8005A100005",
+          "licensePlate": "FLT-1005",
+          "make": "Tesla",
+          "model": "Model-F",
+          "modelYear": 2023,
+          "category": "COMPACT",
+          "dailyRate": 67.5,
+          "mileage": 16750,
+          "fuelType": "Gasoline",
+          "transmission": "Automatic",
+          "operationalStatus": "Available"
+        },
+        "expected_status": 201
+      },
+      {
+        "fixture_id": "VEH-CRT-0006",
+        "endpoint": "/api/vehicles",
+        "method": "POST",
+        "body": {
+          "vin": "1HGCR2F8006A100006",
+          "licensePlate": "FLT-1006",
+          "make": "Audi",
+          "model": "Model-G",
+          "modelYear": 2024,
+          "category": "SEDAN",
+          "dailyRate": 70,
+          "mileage": 17600,
+          "fuelType": "Electric",
+          "transmission": "Automatic",
+          "operationalStatus": "Available"
+        },
+        "expected_status": 201
+      },
+      {
+        "fixture_id": "VEH-CRT-0007",
+        "endpoint": "/api/vehicles",
+        "method": "POST",
+        "body": {
+          "vin": "1HGCR2F8007A100007",
+          "licensePlate": "FLT-1007",
+          "make": "Volvo",
+          "model": "Model-H",
+          "modelYear": 2025,
+          "category": "SUV",
+          "dailyRate": 72.5,
+          "mileage": 18450,
+          "fuelType": "Gasoline",
+          "transmission": "Automatic",
+          "operationalStatus": "Available"
+        },
+        "expected_status": 201
+      },
+      {
+        "fixture_id": "VEH-CRT-0008",
+        "endpoint": "/api/vehicles",
+        "method": "POST",
+        "body": {
+          "vin": "1HGCR2F8008A100008",
+          "licensePlate": "FLT-1008",
+          "make": "Toyota",
+          "model": "Model-A",
+          "modelYear": 2022,
+          "category": "ELECTRIC",
+          "dailyRate": 75,
+          "mileage": 19300,
+          "fuelType": "Gasoline",
+          "transmission": "Manual",
+          "operationalStatus": "Available"
+        },
+        "expected_status": 201
+      },
+      {
+        "fixture_id": "VEH-CRT-0009",
+        "endpoint": "/api/vehicles",
+        "method": "POST",
+        "body": {
+          "vin": "1HGCR2F8009A100009",
+          "licensePlate": "FLT-1009",
+          "make": "Ford",
+          "model": "Model-B",
+          "modelYear": 2023,
+          "category": "LUXURY",
+          "dailyRate": 77.5,
+          "mileage": 20150,
+          "fuelType": "Electric",
+          "transmission": "Automatic",
+          "operationalStatus": "Available"
+        },
+        "expected_status": 201
+      },
+      {
+        "fixture_id": "VEH-CRT-0010",
+        "endpoint": "/api/vehicles",
+        "method": "POST",
+        "body": {
+          "vin": "1HGCR2F8010A100010",
+          "licensePlate": "FLT-1010",
+          "make": "BMW",
+          "model": "Model-C",
+          "modelYear": 2024,
+          "category": "VAN",
+          "dailyRate": 80,
+          "mileage": 21000,
+          "fuelType": "Gasoline",
+          "transmission": "Automatic",
+          "operationalStatus": "Available"
+        },
+        "expected_status": 201
+      },
+      {
+        "fixture_id": "VEH-CRT-0011",
+        "endpoint": "/api/vehicles",
+        "method": "POST",
+        "body": {
+          "vin": "1HGCR2F8011A100011",
+          "licensePlate": "FLT-1011",
+          "make": "Mercedes-Benz",
+          "model": "Model-D",
+          "modelYear": 2025,
+          "category": "COMPACT",
+          "dailyRate": 82.5,
+          "mileage": 21850,
+          "fuelType": "Gasoline",
+          "transmission": "Automatic",
+          "operationalStatus": "Available"
+        },
+        "expected_status": 201
+      },
+      {
+        "fixture_id": "VEH-CRT-0012",
+        "endpoint": "/api/vehicles",
+        "method": "POST",
+        "body": {
+          "vin": "1HGCR2F8012A100012",
+          "licensePlate": "FLT-1012",
+          "make": "Hyundai",
+          "model": "Model-E",
+          "modelYear": 2022,
+          "category": "SEDAN",
+          "dailyRate": 85,
+          "mileage": 22700,
+          "fuelType": "Electric",
+          "transmission": "Manual",
+          "operationalStatus": "Available"
+        },
+        "expected_status": 201
+      },
+      {
+        "fixture_id": "VEH-CRT-0013",
+        "endpoint": "/api/vehicles",
+        "method": "POST",
+        "body": {
+          "vin": "1HGCR2F8013A100013",
+          "licensePlate": "FLT-1013",
+          "make": "Tesla",
+          "model": "Model-F",
+          "modelYear": 2023,
+          "category": "SUV",
+          "dailyRate": 87.5,
+          "mileage": 23550,
+          "fuelType": "Gasoline",
+          "transmission": "Automatic",
+          "operationalStatus": "Available"
+        },
+        "expected_status": 201
+      },
+      {
+        "fixture_id": "VEH-CRT-0014",
+        "endpoint": "/api/vehicles",
+        "method": "POST",
+        "body": {
+          "vin": "1HGCR2F8014A100014",
+          "licensePlate": "FLT-1014",
+          "make": "Audi",
+          "model": "Model-G",
+          "modelYear": 2024,
+          "category": "ELECTRIC",
+          "dailyRate": 90,
+          "mileage": 24400,
+          "fuelType": "Gasoline",
+          "transmission": "Automatic",
+          "operationalStatus": "Available"
+        },
+        "expected_status": 201
+      },
+      {
+        "fixture_id": "VEH-CRT-0015",
+        "endpoint": "/api/vehicles",
+        "method": "POST",
+        "body": {
+          "vin": "1HGCR2F8015A100015",
+          "licensePlate": "FLT-1015",
+          "make": "Volvo",
+          "model": "Model-H",
+          "modelYear": 2025,
+          "category": "LUXURY",
+          "dailyRate": 92.5,
+          "mileage": 25250,
+          "fuelType": "Electric",
+          "transmission": "Automatic",
+          "operationalStatus": "Available"
+        },
+        "expected_status": 201
+      },
+      {
+        "fixture_id": "VEH-CRT-0016",
+        "endpoint": "/api/vehicles",
+        "method": "POST",
+        "body": {
+          "vin": "1HGCR2F8016A100016",
+          "licensePlate": "FLT-1016",
+          "make": "Toyota",
+          "model": "Model-A",
+          "modelYear": 2022,
+          "category": "VAN",
+          "dailyRate": 95,
+          "mileage": 26100,
+          "fuelType": "Gasoline",
+          "transmission": "Manual",
+          "operationalStatus": "Available"
+        },
+        "expected_status": 201
+      },
+      {
+        "fixture_id": "VEH-CRT-0017",
+        "endpoint": "/api/vehicles",
+        "method": "POST",
+        "body": {
+          "vin": "1HGCR2F8017A100017",
+          "licensePlate": "FLT-1017",
+          "make": "Ford",
+          "model": "Model-B",
+          "modelYear": 2023,
+          "category": "COMPACT",
+          "dailyRate": 97.5,
+          "mileage": 26950,
+          "fuelType": "Gasoline",
+          "transmission": "Automatic",
+          "operationalStatus": "Available"
+        },
+        "expected_status": 201
+      },
+      {
+        "fixture_id": "VEH-CRT-0018",
+        "endpoint": "/api/vehicles",
+        "method": "POST",
+        "body": {
+          "vin": "1HGCR2F8018A100018",
+          "licensePlate": "FLT-1018",
+          "make": "BMW",
+          "model": "Model-C",
+          "modelYear": 2024,
+          "category": "SEDAN",
+          "dailyRate": 100,
+          "mileage": 27800,
+          "fuelType": "Electric",
+          "transmission": "Automatic",
+          "operationalStatus": "Available"
+        },
+        "expected_status": 201
+      },
+      {
+        "fixture_id": "VEH-CRT-0019",
+        "endpoint": "/api/vehicles",
+        "method": "POST",
+        "body": {
+          "vin": "1HGCR2F8019A100019",
+          "licensePlate": "FLT-1019",
+          "make": "Mercedes-Benz",
+          "model": "Model-D",
+          "modelYear": 2025,
+          "category": "SUV",
+          "dailyRate": 102.5,
+          "mileage": 28650,
+          "fuelType": "Gasoline",
+          "transmission": "Automatic",
+          "operationalStatus": "Available"
+        },
+        "expected_status": 201
+      },
+      {
+        "fixture_id": "VEH-CRT-0020",
+        "endpoint": "/api/vehicles",
+        "method": "POST",
+        "body": {
+          "vin": "1HGCR2F8020A100020",
+          "licensePlate": "FLT-1020",
+          "make": "Hyundai",
+          "model": "Model-E",
+          "modelYear": 2022,
+          "category": "ELECTRIC",
+          "dailyRate": 105,
+          "mileage": 29500,
+          "fuelType": "Gasoline",
+          "transmission": "Manual",
+          "operationalStatus": "Available"
+        },
+        "expected_status": 201
+      },
+      {
+        "fixture_id": "VEH-CRT-0021",
+        "endpoint": "/api/vehicles",
+        "method": "POST",
+        "body": {
+          "vin": "1HGCR2F8021A100021",
+          "licensePlate": "FLT-1021",
+          "make": "Tesla",
+          "model": "Model-F",
+          "modelYear": 2023,
+          "category": "LUXURY",
+          "dailyRate": 107.5,
+          "mileage": 30350,
+          "fuelType": "Electric",
+          "transmission": "Automatic",
+          "operationalStatus": "Available"
+        },
+        "expected_status": 201
+      },
+      {
+        "fixture_id": "VEH-CRT-0022",
+        "endpoint": "/api/vehicles",
+        "method": "POST",
+        "body": {
+          "vin": "1HGCR2F8022A100022",
+          "licensePlate": "FLT-1022",
+          "make": "Audi",
+          "model": "Model-G",
+          "modelYear": 2024,
+          "category": "VAN",
+          "dailyRate": 110,
+          "mileage": 31200,
+          "fuelType": "Gasoline",
+          "transmission": "Automatic",
+          "operationalStatus": "Available"
+        },
+        "expected_status": 201
+      },
+      {
+        "fixture_id": "VEH-CRT-0023",
+        "endpoint": "/api/vehicles",
+        "method": "POST",
+        "body": {
+          "vin": "1HGCR2F8023A100023",
+          "licensePlate": "FLT-1023",
+          "make": "Volvo",
+          "model": "Model-H",
+          "modelYear": 2025,
+          "category": "COMPACT",
+          "dailyRate": 112.5,
+          "mileage": 32050,
+          "fuelType": "Gasoline",
+          "transmission": "Automatic",
+          "operationalStatus": "Available"
+        },
+        "expected_status": 201
+      },
+      {
+        "fixture_id": "VEH-CRT-0024",
+        "endpoint": "/api/vehicles",
+        "method": "POST",
+        "body": {
+          "vin": "1HGCR2F8024A100024",
+          "licensePlate": "FLT-1024",
+          "make": "Toyota",
+          "model": "Model-A",
+          "modelYear": 2022,
+          "category": "SEDAN",
+          "dailyRate": 115,
+          "mileage": 32900,
+          "fuelType": "Electric",
+          "transmission": "Manual",
+          "operationalStatus": "Available"
+        },
+        "expected_status": 201
+      },
+      {
+        "fixture_id": "VEH-CRT-0025",
+        "endpoint": "/api/vehicles",
+        "method": "POST",
+        "body": {
+          "vin": "1HGCR2F8025A100025",
+          "licensePlate": "FLT-1025",
+          "make": "Ford",
+          "model": "Model-B",
+          "modelYear": 2023,
+          "category": "SUV",
+          "dailyRate": 117.5,
+          "mileage": 33750,
+          "fuelType": "Gasoline",
+          "transmission": "Automatic",
+          "operationalStatus": "Available"
+        },
+        "expected_status": 201
+      },
+      {
+        "fixture_id": "VEH-CRT-0026",
+        "endpoint": "/api/vehicles",
+        "method": "POST",
+        "body": {
+          "vin": "1HGCR2F8026A100026",
+          "licensePlate": "FLT-1026",
+          "make": "BMW",
+          "model": "Model-C",
+          "modelYear": 2024,
+          "category": "ELECTRIC",
+          "dailyRate": 120,
+          "mileage": 34600,
+          "fuelType": "Gasoline",
+          "transmission": "Automatic",
+          "operationalStatus": "Available"
+        },
+        "expected_status": 201
+      },
+      {
+        "fixture_id": "VEH-CRT-0027",
+        "endpoint": "/api/vehicles",
+        "method": "POST",
+        "body": {
+          "vin": "1HGCR2F8027A100027",
+          "licensePlate": "FLT-1027",
+          "make": "Mercedes-Benz",
+          "model": "Model-D",
+          "modelYear": 2025,
+          "category": "LUXURY",
+          "dailyRate": 122.5,
+          "mileage": 35450,
+          "fuelType": "Electric",
+          "transmission": "Automatic",
+          "operationalStatus": "Available"
+        },
+        "expected_status": 201
+      },
+      {
+        "fixture_id": "VEH-CRT-0028",
+        "endpoint": "/api/vehicles",
+        "method": "POST",
+        "body": {
+          "vin": "1HGCR2F8028A100028",
+          "licensePlate": "FLT-1028",
+          "make": "Hyundai",
+          "model": "Model-E",
+          "modelYear": 2022,
+          "category": "VAN",
+          "dailyRate": 125,
+          "mileage": 36300,
+          "fuelType": "Gasoline",
+          "transmission": "Manual",
+          "operationalStatus": "Available"
+        },
+        "expected_status": 201
+      },
+      {
+        "fixture_id": "VEH-CRT-0029",
+        "endpoint": "/api/vehicles",
+        "method": "POST",
+        "body": {
+          "vin": "1HGCR2F8029A100029",
+          "licensePlate": "FLT-1029",
+          "make": "Tesla",
+          "model": "Model-F",
+          "modelYear": 2023,
+          "category": "COMPACT",
+          "dailyRate": 127.5,
+          "mileage": 37150,
+          "fuelType": "Gasoline",
+          "transmission": "Automatic",
+          "operationalStatus": "Available"
+        },
+        "expected_status": 201
+      },
+      {
+        "fixture_id": "VEH-CRT-0030",
+        "endpoint": "/api/vehicles",
+        "method": "POST",
+        "body": {
+          "vin": "1HGCR2F8030A100030",
+          "licensePlate": "FLT-1030",
+          "make": "Audi",
+          "model": "Model-G",
+          "modelYear": 2024,
+          "category": "SEDAN",
+          "dailyRate": 130,
+          "mileage": 38000,
+          "fuelType": "Electric",
+          "transmission": "Automatic",
+          "operationalStatus": "Available"
+        },
+        "expected_status": 201
+      },
+      {
+        "fixture_id": "VEH-CRT-0031",
+        "endpoint": "/api/vehicles",
+        "method": "POST",
+        "body": {
+          "vin": "1HGCR2F8031A100031",
+          "licensePlate": "FLT-1031",
+          "make": "Volvo",
+          "model": "Model-H",
+          "modelYear": 2025,
+          "category": "SUV",
+          "dailyRate": 132.5,
+          "mileage": 38850,
+          "fuelType": "Gasoline",
+          "transmission": "Automatic",
+          "operationalStatus": "Available"
+        },
+        "expected_status": 201
+      },
+      {
+        "fixture_id": "VEH-CRT-0032",
+        "endpoint": "/api/vehicles",
+        "method": "POST",
+        "body": {
+          "vin": "1HGCR2F8032A100032",
+          "licensePlate": "FLT-1032",
+          "make": "Toyota",
+          "model": "Model-A",
+          "modelYear": 2022,
+          "category": "ELECTRIC",
+          "dailyRate": 135,
+          "mileage": 39700,
+          "fuelType": "Gasoline",
+          "transmission": "Manual",
+          "operationalStatus": "Available"
+        },
+        "expected_status": 201
+      },
+      {
+        "fixture_id": "VEH-CRT-0033",
+        "endpoint": "/api/vehicles",
+        "method": "POST",
+        "body": {
+          "vin": "1HGCR2F8033A100033",
+          "licensePlate": "FLT-1033",
+          "make": "Ford",
+          "model": "Model-B",
+          "modelYear": 2023,
+          "category": "LUXURY",
+          "dailyRate": 137.5,
+          "mileage": 40550,
+          "fuelType": "Electric",
+          "transmission": "Automatic",
+          "operationalStatus": "Available"
+        },
+        "expected_status": 201
+      },
+      {
+        "fixture_id": "VEH-CRT-0034",
+        "endpoint": "/api/vehicles",
+        "method": "POST",
+        "body": {
+          "vin": "1HGCR2F8034A100034",
+          "licensePlate": "FLT-1034",
+          "make": "BMW",
+          "model": "Model-C",
+          "modelYear": 2024,
+          "category": "VAN",
+          "dailyRate": 140,
+          "mileage": 41400,
+          "fuelType": "Gasoline",
+          "transmission": "Automatic",
+          "operationalStatus": "Available"
+        },
+        "expected_status": 201
+      },
+      {
+        "fixture_id": "VEH-CRT-0035",
+        "endpoint": "/api/vehicles",
+        "method": "POST",
+        "body": {
+          "vin": "1HGCR2F8035A100035",
+          "licensePlate": "FLT-1035",
+          "make": "Mercedes-Benz",
+          "model": "Model-D",
+          "modelYear": 2025,
+          "category": "COMPACT",
+          "dailyRate": 142.5,
+          "mileage": 42250,
+          "fuelType": "Gasoline",
+          "transmission": "Automatic",
+          "operationalStatus": "Available"
+        },
+        "expected_status": 201
+      }
+    ]
+  },
+  "rental_service": {
+    "booking_creation_matrix": [
+      {
+        "booking_stress_id": "BKG-COLLISION-0001",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000001",
+        "customer_id": "customer-guid-200001",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-002",
+        "dropoff_branch_id": "branch-002",
+        "insurance_package": "BASIC_LIABILITY",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 250.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_1"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0002",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000002",
+        "customer_id": "customer-guid-200002",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-003",
+        "dropoff_branch_id": "branch-003",
+        "insurance_package": "FULL_COMPREHENSIVE",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 255.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_2"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0003",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000003",
+        "customer_id": "customer-guid-200003",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-004",
+        "dropoff_branch_id": "branch-004",
+        "insurance_package": "BASIC_LIABILITY",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 260.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_3"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0004",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000004",
+        "customer_id": "customer-guid-200004",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-005",
+        "dropoff_branch_id": "branch-005",
+        "insurance_package": "FULL_COMPREHENSIVE",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 265.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_4"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0005",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000005",
+        "customer_id": "customer-guid-200005",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-001",
+        "dropoff_branch_id": "branch-001",
+        "insurance_package": "BASIC_LIABILITY",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 270.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_5"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0006",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000006",
+        "customer_id": "customer-guid-200006",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-002",
+        "dropoff_branch_id": "branch-002",
+        "insurance_package": "FULL_COMPREHENSIVE",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 275.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_6"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0007",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000007",
+        "customer_id": "customer-guid-200007",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-003",
+        "dropoff_branch_id": "branch-003",
+        "insurance_package": "BASIC_LIABILITY",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 280.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_7"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0008",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000000",
+        "customer_id": "customer-guid-200008",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-004",
+        "dropoff_branch_id": "branch-004",
+        "insurance_package": "FULL_COMPREHENSIVE",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 285.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_8"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0009",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000001",
+        "customer_id": "customer-guid-200009",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-005",
+        "dropoff_branch_id": "branch-005",
+        "insurance_package": "BASIC_LIABILITY",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 290.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_9"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0010",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000002",
+        "customer_id": "customer-guid-200010",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-001",
+        "dropoff_branch_id": "branch-001",
+        "insurance_package": "FULL_COMPREHENSIVE",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 295.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_0"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0011",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000003",
+        "customer_id": "customer-guid-200011",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-002",
+        "dropoff_branch_id": "branch-002",
+        "insurance_package": "BASIC_LIABILITY",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 300.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_1"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0012",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000004",
+        "customer_id": "customer-guid-200012",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-003",
+        "dropoff_branch_id": "branch-003",
+        "insurance_package": "FULL_COMPREHENSIVE",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 305.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_2"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0013",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000005",
+        "customer_id": "customer-guid-200013",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-004",
+        "dropoff_branch_id": "branch-004",
+        "insurance_package": "BASIC_LIABILITY",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 310.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_3"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0014",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000006",
+        "customer_id": "customer-guid-200014",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-005",
+        "dropoff_branch_id": "branch-005",
+        "insurance_package": "FULL_COMPREHENSIVE",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 315.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_4"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0015",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000007",
+        "customer_id": "customer-guid-200015",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-001",
+        "dropoff_branch_id": "branch-001",
+        "insurance_package": "BASIC_LIABILITY",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 320.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_5"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0016",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000000",
+        "customer_id": "customer-guid-200016",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-002",
+        "dropoff_branch_id": "branch-002",
+        "insurance_package": "FULL_COMPREHENSIVE",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 325.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_6"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0017",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000001",
+        "customer_id": "customer-guid-200017",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-003",
+        "dropoff_branch_id": "branch-003",
+        "insurance_package": "BASIC_LIABILITY",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 330.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_7"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0018",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000002",
+        "customer_id": "customer-guid-200018",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-004",
+        "dropoff_branch_id": "branch-004",
+        "insurance_package": "FULL_COMPREHENSIVE",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 335.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_8"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0019",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000003",
+        "customer_id": "customer-guid-200019",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-005",
+        "dropoff_branch_id": "branch-005",
+        "insurance_package": "BASIC_LIABILITY",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 340.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_9"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0020",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000004",
+        "customer_id": "customer-guid-200020",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-001",
+        "dropoff_branch_id": "branch-001",
+        "insurance_package": "FULL_COMPREHENSIVE",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 345.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_0"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0021",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000005",
+        "customer_id": "customer-guid-200021",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-002",
+        "dropoff_branch_id": "branch-002",
+        "insurance_package": "BASIC_LIABILITY",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 350.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_1"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0022",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000006",
+        "customer_id": "customer-guid-200022",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-003",
+        "dropoff_branch_id": "branch-003",
+        "insurance_package": "FULL_COMPREHENSIVE",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 355.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_2"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0023",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000007",
+        "customer_id": "customer-guid-200023",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-004",
+        "dropoff_branch_id": "branch-004",
+        "insurance_package": "BASIC_LIABILITY",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 360.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_3"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0024",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000000",
+        "customer_id": "customer-guid-200024",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-005",
+        "dropoff_branch_id": "branch-005",
+        "insurance_package": "FULL_COMPREHENSIVE",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 365.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_4"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0025",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000001",
+        "customer_id": "customer-guid-200025",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-001",
+        "dropoff_branch_id": "branch-001",
+        "insurance_package": "BASIC_LIABILITY",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 370.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_5"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0026",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000002",
+        "customer_id": "customer-guid-200026",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-002",
+        "dropoff_branch_id": "branch-002",
+        "insurance_package": "FULL_COMPREHENSIVE",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 375.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_6"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0027",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000003",
+        "customer_id": "customer-guid-200027",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-003",
+        "dropoff_branch_id": "branch-003",
+        "insurance_package": "BASIC_LIABILITY",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 380.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_7"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0028",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000004",
+        "customer_id": "customer-guid-200028",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-004",
+        "dropoff_branch_id": "branch-004",
+        "insurance_package": "FULL_COMPREHENSIVE",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 385.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_8"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0029",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000005",
+        "customer_id": "customer-guid-200029",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-005",
+        "dropoff_branch_id": "branch-005",
+        "insurance_package": "BASIC_LIABILITY",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 390.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_9"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0030",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000006",
+        "customer_id": "customer-guid-200030",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-001",
+        "dropoff_branch_id": "branch-001",
+        "insurance_package": "FULL_COMPREHENSIVE",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 395.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_0"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0031",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000007",
+        "customer_id": "customer-guid-200031",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-002",
+        "dropoff_branch_id": "branch-002",
+        "insurance_package": "BASIC_LIABILITY",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 400.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_1"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0032",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000000",
+        "customer_id": "customer-guid-200032",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-003",
+        "dropoff_branch_id": "branch-003",
+        "insurance_package": "FULL_COMPREHENSIVE",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 405.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_2"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0033",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000001",
+        "customer_id": "customer-guid-200033",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-004",
+        "dropoff_branch_id": "branch-004",
+        "insurance_package": "BASIC_LIABILITY",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 410.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_3"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0034",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000002",
+        "customer_id": "customer-guid-200034",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-005",
+        "dropoff_branch_id": "branch-005",
+        "insurance_package": "FULL_COMPREHENSIVE",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 415.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_4"
+      },
+      {
+        "booking_stress_id": "BKG-COLLISION-0035",
+        "vehicle_id": "3fa85f64-5717-4562-b3fc-100000000003",
+        "customer_id": "customer-guid-200035",
+        "pickup_date": "2026-10-15T09:00:00Z",
+        "return_date": "2026-10-18T18:00:00Z",
+        "pickup_branch_id": "branch-001",
+        "dropoff_branch_id": "branch-001",
+        "insurance_package": "BASIC_LIABILITY",
+        "selected_addons": [
+          "GPS_NAVIGATION",
+          "CHILD_SEAT",
+          "ADDITIONAL_DRIVER"
+        ],
+        "estimated_amount": 420.5,
+        "concurrency_bucket": "CONCURRENT_GROUP_5"
+      }
+    ],
+    "schema_definition": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "RentalBookingCreationStressPayload",
+      "type": "object",
+      "required": [
+        "booking_stress_id",
+        "vehicle_id",
+        "customer_id",
+        "pickup_date",
+        "return_date"
+      ],
+      "properties": {
+        "booking_stress_id": {
+          "type": "string"
+        },
+        "vehicle_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "customer_id": {
+          "type": "string"
+        },
+        "pickup_date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "return_date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "estimated_amount": {
+          "type": "number",
+          "minimum": 10
+        }
+      },
+      "normalization_status": "STANDARDIZED_SCHEMA_V1"
+    },
+    "pickup_return_stress_scenarios": [
+      {
+        "scenario_id": "RENTAL-CYCLE-0001",
+        "booking_id": "bkg-guid-500001",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500001/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-2",
+          "initial_odometer_km": 45320,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100001",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500001/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-2",
+          "final_odometer_km": 45770,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0002",
+        "booking_id": "bkg-guid-500002",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500002/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-3",
+          "initial_odometer_km": 45440,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100002",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500002/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-3",
+          "final_odometer_km": 45890,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0003",
+        "booking_id": "bkg-guid-500003",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500003/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-4",
+          "initial_odometer_km": 45560,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100003",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500003/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-4",
+          "final_odometer_km": 46010,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0004",
+        "booking_id": "bkg-guid-500004",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500004/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-5",
+          "initial_odometer_km": 45680,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100004",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500004/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-5",
+          "final_odometer_km": 46130,
+          "final_fuel_level_pct": 85,
+          "fuel_refill_charge": 25,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0005",
+        "booking_id": "bkg-guid-500005",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500005/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-6",
+          "initial_odometer_km": 45800,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100005",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500005/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-6",
+          "final_odometer_km": 46250,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0006",
+        "booking_id": "bkg-guid-500006",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500006/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-7",
+          "initial_odometer_km": 45920,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100006",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500006/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-7",
+          "final_odometer_km": 46370,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0007",
+        "booking_id": "bkg-guid-500007",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500007/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-8",
+          "initial_odometer_km": 46040,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100007",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500007/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-8",
+          "final_odometer_km": 46490,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0008",
+        "booking_id": "bkg-guid-500008",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500008/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-9",
+          "initial_odometer_km": 46160,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100008",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500008/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-9",
+          "final_odometer_km": 46610,
+          "final_fuel_level_pct": 85,
+          "fuel_refill_charge": 25,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0009",
+        "booking_id": "bkg-guid-500009",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500009/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-10",
+          "initial_odometer_km": 46280,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100009",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500009/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-10",
+          "final_odometer_km": 46730,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0010",
+        "booking_id": "bkg-guid-500010",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500010/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-1",
+          "initial_odometer_km": 46400,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100010",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500010/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-1",
+          "final_odometer_km": 46850,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0011",
+        "booking_id": "bkg-guid-500011",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500011/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-2",
+          "initial_odometer_km": 46520,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100011",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500011/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-2",
+          "final_odometer_km": 46970,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0012",
+        "booking_id": "bkg-guid-500012",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500012/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-3",
+          "initial_odometer_km": 46640,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100012",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500012/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-3",
+          "final_odometer_km": 47090,
+          "final_fuel_level_pct": 85,
+          "fuel_refill_charge": 25,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0013",
+        "booking_id": "bkg-guid-500013",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500013/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-4",
+          "initial_odometer_km": 46760,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100013",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500013/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-4",
+          "final_odometer_km": 47210,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0014",
+        "booking_id": "bkg-guid-500014",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500014/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-5",
+          "initial_odometer_km": 46880,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100014",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500014/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-5",
+          "final_odometer_km": 47330,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0015",
+        "booking_id": "bkg-guid-500015",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500015/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-6",
+          "initial_odometer_km": 47000,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100015",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500015/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-6",
+          "final_odometer_km": 47450,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0016",
+        "booking_id": "bkg-guid-500016",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500016/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-7",
+          "initial_odometer_km": 47120,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100016",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500016/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-7",
+          "final_odometer_km": 47570,
+          "final_fuel_level_pct": 85,
+          "fuel_refill_charge": 25,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0017",
+        "booking_id": "bkg-guid-500017",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500017/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-8",
+          "initial_odometer_km": 47240,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100017",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500017/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-8",
+          "final_odometer_km": 47690,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0018",
+        "booking_id": "bkg-guid-500018",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500018/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-9",
+          "initial_odometer_km": 47360,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100018",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500018/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-9",
+          "final_odometer_km": 47810,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0019",
+        "booking_id": "bkg-guid-500019",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500019/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-10",
+          "initial_odometer_km": 47480,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100019",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500019/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-10",
+          "final_odometer_km": 47930,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0020",
+        "booking_id": "bkg-guid-500020",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500020/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-1",
+          "initial_odometer_km": 47600,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100020",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500020/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-1",
+          "final_odometer_km": 48050,
+          "final_fuel_level_pct": 85,
+          "fuel_refill_charge": 25,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0021",
+        "booking_id": "bkg-guid-500021",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500021/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-2",
+          "initial_odometer_km": 47720,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100021",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500021/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-2",
+          "final_odometer_km": 48170,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0022",
+        "booking_id": "bkg-guid-500022",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500022/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-3",
+          "initial_odometer_km": 47840,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100022",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500022/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-3",
+          "final_odometer_km": 48290,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0023",
+        "booking_id": "bkg-guid-500023",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500023/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-4",
+          "initial_odometer_km": 47960,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100023",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500023/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-4",
+          "final_odometer_km": 48410,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0024",
+        "booking_id": "bkg-guid-500024",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500024/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-5",
+          "initial_odometer_km": 48080,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100024",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500024/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-5",
+          "final_odometer_km": 48530,
+          "final_fuel_level_pct": 85,
+          "fuel_refill_charge": 25,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0025",
+        "booking_id": "bkg-guid-500025",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500025/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-6",
+          "initial_odometer_km": 48200,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100025",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500025/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-6",
+          "final_odometer_km": 48650,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0026",
+        "booking_id": "bkg-guid-500026",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500026/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-7",
+          "initial_odometer_km": 48320,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100026",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500026/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-7",
+          "final_odometer_km": 48770,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0027",
+        "booking_id": "bkg-guid-500027",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500027/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-8",
+          "initial_odometer_km": 48440,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100027",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500027/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-8",
+          "final_odometer_km": 48890,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0028",
+        "booking_id": "bkg-guid-500028",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500028/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-9",
+          "initial_odometer_km": 48560,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100028",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500028/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-9",
+          "final_odometer_km": 49010,
+          "final_fuel_level_pct": 85,
+          "fuel_refill_charge": 25,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0029",
+        "booking_id": "bkg-guid-500029",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500029/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-10",
+          "initial_odometer_km": 48680,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100029",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500029/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-10",
+          "final_odometer_km": 49130,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0030",
+        "booking_id": "bkg-guid-500030",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500030/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-1",
+          "initial_odometer_km": 48800,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100030",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500030/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-1",
+          "final_odometer_km": 49250,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0031",
+        "booking_id": "bkg-guid-500031",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500031/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-2",
+          "initial_odometer_km": 48920,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100031",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500031/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-2",
+          "final_odometer_km": 49370,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0032",
+        "booking_id": "bkg-guid-500032",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500032/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-3",
+          "initial_odometer_km": 49040,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100032",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500032/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-3",
+          "final_odometer_km": 49490,
+          "final_fuel_level_pct": 85,
+          "fuel_refill_charge": 25,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0033",
+        "booking_id": "bkg-guid-500033",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500033/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-4",
+          "initial_odometer_km": 49160,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100033",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500033/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-4",
+          "final_odometer_km": 49610,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0034",
+        "booking_id": "bkg-guid-500034",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500034/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-5",
+          "initial_odometer_km": 49280,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100034",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500034/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-5",
+          "final_odometer_km": 49730,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      },
+      {
+        "scenario_id": "RENTAL-CYCLE-0035",
+        "booking_id": "bkg-guid-500035",
+        "pickup_payload": {
+          "endpoint": "/api/rentals/bookings/bkg-guid-500035/pickup",
+          "method": "POST",
+          "recorded_by_staff_id": "staff-usr-6",
+          "initial_odometer_km": 49400,
+          "initial_fuel_level_pct": 100,
+          "inspection_notes": "Vehicle clean, no visible exterior scratches.",
+          "key_card_rfid": "RFID-100035",
+          "pickup_timestamp": "2026-09-25T10:00:00Z"
+        },
+        "return_payload": {
+          "endpoint": "/api/rentals/bkg-guid-500035/complete",
+          "method": "POST",
+          "completed_by_staff_id": "staff-usr-6",
+          "final_odometer_km": 49850,
+          "final_fuel_level_pct": 100,
+          "fuel_refill_charge": 0,
+          "late_return_penalty": 0,
+          "condition_verified": true,
+          "return_timestamp": "2026-09-28T16:30:00Z"
+        },
+        "expected_status": 200
+      }
+    ],
+    "contract_version": "SPRINT4_DECOUPLED_V2",
+    "service_boundaries": {
+      "booking_lifecycle_owner": "RentalService",
+      "vehicle_inventory_owner": "FleetService",
+      "audit_and_notification_owner": "NotificationService"
+    }
+  }
+}
