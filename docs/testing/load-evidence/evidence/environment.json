@@ -1,0 +1,27 @@
+{
+  "runId": "local_20261020",
+  "readyUtc": "2026-10-20T09:46:26.731Z",
+  "identity": "http://127.0.0.1:15001",
+  "fleet": "http://127.0.0.1:15002",
+  "frontend": "http://127.0.0.1:15173",
+  "databaseHost": "127.0.0.1",
+  "databasePort": "15432",
+  "childPids": [
+    15632,
+    416,
+    28344
+  ],
+  "vehicles": [
+    {
+      "id": "d2c684c7-d659-447e-b2ad-21dfe0e5bb1a",
+      "make": "ASE",
+      "model": "Roadster"
+    },
+    {
+      "id": "69bac4eb-2371-4eba-8cb2-0b186036a3e8",
+      "make": "ASE",
+      "model": "City"
+    }
+  ],
+  "limitations": "Legacy onboarding, rental and notifications; Kafka disabled; disposable synthetic accounts and vehicles"
+}

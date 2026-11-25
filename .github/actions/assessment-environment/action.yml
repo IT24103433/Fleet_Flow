@@ -1,0 +1,22 @@
+name: Start isolated assessment environment
+description: Build and start real local Identity/Fleet APIs and React UI using the job's disposable PostgreSQL.
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-dotnet@v5
+      with:
+        dotnet-version: '10.0.x'
+    - uses: actions/setup-node@v5
+      with:
+        node-version: '22.x'
+        cache: npm
+        cache-dependency-path: src/frontend/package-lock.json
+    - name: Install Locked Frontend Dependencies
+      shell: bash
+      run: npm ci --prefix src/frontend
+    - name: Start Real Application and Seed Disposable Data
+      shell: bash
+      run: |
+        mkdir -p artifacts
+        node tools/testing/serve-assessment.mjs > artifacts/assessment-startup.log 2>&1 &
+        node tools/testing/wait-assessment.mjs "$ASE_ENV_DIR/environment.json"
