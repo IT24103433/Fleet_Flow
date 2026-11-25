@@ -1,0 +1,41 @@
+# Job reference: merge beneath jobs: in the existing workflow.
+jobs:
+  ase-e2e:
+    name: "ASE : Playwright E2E (Varun)"
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:18.4
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: fleetflow_ase_ci_only
+          POSTGRES_DB: postgres
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s --health-timeout 5s --health-retries 12
+    env:
+      ASE_TEST_PASSWORD: FleetFlow_ASE_CI_Only_2026!
+      ASE_DB_PASSWORD: fleetflow_ase_ci_only
+      ASE_RUN_ID: ci_${{ github.run_id }}_${{ github.run_attempt }}
+      ASE_ENV_DIR: artifacts/ase-environment
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ./.github/actions/assessment-environment
+      - name: Install Locked Playwright and Chromium
+        run: |
+          npm ci --prefix tests/browser
+          cd tests/browser
+          npx playwright install --with-deps chromium
+      - name: Run Real Browser Journeys
+        shell: pwsh
+        run: ./tools/testing/Run-E2E.ps1 -ResultsDirectory artifacts/ase-e2e
+      - name: Retain Browser Reports and Failure Traces
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: ase-e2e-varun
+          path: artifacts/
+          if-no-files-found: error
+          retention-days: 30

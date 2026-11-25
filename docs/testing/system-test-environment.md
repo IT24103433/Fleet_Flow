@@ -48,4 +48,4 @@ Stop the helper with Ctrl+C after testing. It tracks and stops its own spawned c
 
 ## Reproduction and acceptance
 
-Run [the Aqqil testing commands](load.md) from the repository root with a fresh evidence path. Preserve actual exit status. Inspect `run.json`, raw reports and environment logs together. Database-ready health probes are stronger than a listening port. Setup failures must stop the run; never substitute a passing fixture for an unavailable application.
+Run [Varun's E2E testing commands](e2e.md) or [Aqqil's load testing commands](load.md) from the repository root with a fresh evidence path. Preserve actual exit status. Inspect `run.json`, raw reports and environment logs together. Database-ready health probes are stronger than a listening port. Setup failures must stop the run; never substitute a passing fixture for an unavailable application.
