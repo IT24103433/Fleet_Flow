@@ -1,0 +1,42 @@
+# Job reference: merge beneath jobs: in the existing workflow.
+jobs:
+  ase-load:
+    name: "ASE : k6 Load Smoke (Aqqil)"
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:18.4
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: fleetflow_ase_ci_only
+          POSTGRES_DB: postgres
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s --health-timeout 5s --health-retries 12
+    env:
+      ASE_TEST_PASSWORD: FleetFlow_ASE_CI_Only_2026!
+      ASE_DB_PASSWORD: fleetflow_ase_ci_only
+      ASE_RUN_ID: ci_${{ github.run_id }}_${{ github.run_attempt }}
+      ASE_ENV_DIR: artifacts/ase-environment
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ./.github/actions/assessment-environment
+      - name: Install Pinned k6
+        shell: bash
+        run: |
+          curl --fail --location --retry 3 https://github.com/grafana/k6/releases/download/v2.3.0/k6-v2.3.0-linux-amd64.tar.gz -o "$RUNNER_TEMP/k6.tar.gz"
+          tar -xzf "$RUNNER_TEMP/k6.tar.gz" -C "$RUNNER_TEMP"
+          echo "$RUNNER_TEMP/k6-v2.3.0-linux-amd64" >> "$GITHUB_PATH"
+      - name: Run Real Bounded Load Smoke
+        shell: pwsh
+        run: ./tools/testing/Run-Load.ps1 -Profile smoke -ResultsDirectory artifacts/ase-load
+      - name: Retain Load Results and Service Diagnostics
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: ase-load-aqqil
+          path: artifacts/
+          if-no-files-found: error
+          retention-days: 30
