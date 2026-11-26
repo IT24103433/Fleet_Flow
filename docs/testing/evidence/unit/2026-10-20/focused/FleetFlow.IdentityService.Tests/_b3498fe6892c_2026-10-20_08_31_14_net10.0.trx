@@ -1,0 +1,275 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="bf80bed6-1b4f-4134-ace8-b3682f412467" name="@b3498fe6892c 2026-10-20 08:31:14" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-20T08:31:14.1870198+00:00" queuing="2026-10-20T08:31:14.1870199+00:00" start="2026-10-20T08:31:13.1323957+00:00" finish="2026-10-20T08:31:14.4356450+00:00" />
+  <TestSettings name="default" id="176bd092-b703-40b6-9241-46d9f584bc85">
+    <Deployment runDeploymentRoot="_b3498fe6892c_2026-10-20_08_31_14" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="a74024ae-3fb0-42eb-9d16-aec271957ccc" testId="6b876853-7d5e-b430-5397-423825d32d3e" testName="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.Login_Success_ForwardsExactRequestAndPreservesSession(channel: &quot;customer&quot;)" computerName="b3498fe6892c" duration="00:00:00.0006890" startTime="2026-10-20T08:31:14.1631940+00:00" endTime="2026-10-20T08:31:14.1631940+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a74024ae-3fb0-42eb-9d16-aec271957ccc" />
+    <UnitTestResult executionId="5d44a402-f35b-451a-ae4f-5d44a5e6aa4c" testId="7da11b8d-3b31-22e3-95c9-0836b26be9c8" testName="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.Login_DependencyFailure_MapsStatusWithoutLeakingInfrastructure(failure: IdentityService.Api.Exceptions.AccountDisabledException: Disabled., expectedStatus: 403, expectedMessage: &quot;Disabled.&quot;)" computerName="b3498fe6892c" duration="00:00:00.0012603" startTime="2026-10-20T08:31:14.1638301+00:00" endTime="2026-10-20T08:31:14.1638301+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5d44a402-f35b-451a-ae4f-5d44a5e6aa4c" />
+    <UnitTestResult executionId="df09039d-368e-4eb3-9e81-c1d239c35cd6" testId="7da11b8d-3b31-22e3-95c9-0836b26be9c8" testName="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.Login_DependencyFailure_MapsStatusWithoutLeakingInfrastructure(failure: System.TimeoutException: private database host must never escape, expectedStatus: 500, expectedMessage: &quot;Sign-in is temporarily unavailable. Please try aga&quot;···)" computerName="b3498fe6892c" duration="00:00:00.0005950" startTime="2026-10-20T08:31:14.1638431+00:00" endTime="2026-10-20T08:31:14.1638432+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="df09039d-368e-4eb3-9e81-c1d239c35cd6" />
+    <UnitTestResult executionId="87255d95-5b34-49ce-b0ab-de2d16ee2ff7" testId="0d0fcacc-687e-5134-a3c2-eb2789ac9fbb" testName="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.InvalidSubject_DeniesProfileAndPasswordActionsBeforeCallingDependencies(subject: null)" computerName="b3498fe6892c" duration="00:00:00.0000888" startTime="2026-10-20T08:31:14.1304482+00:00" endTime="2026-10-20T08:31:14.1304482+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="87255d95-5b34-49ce-b0ab-de2d16ee2ff7" />
+    <UnitTestResult executionId="cc0c0206-d244-44d0-86ed-af8e8846396d" testId="4a7763e5-a75c-8fd3-bf18-67486f68543b" testName="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.Registration_Duplicate_IsConflictAndNeverStartsLogin" computerName="b3498fe6892c" duration="00:00:00.0026725" startTime="2026-10-20T08:31:14.1634579+00:00" endTime="2026-10-20T08:31:14.1634579+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cc0c0206-d244-44d0-86ed-af8e8846396d" />
+    <UnitTestResult executionId="693d5e67-81e1-430e-acf5-a39755e463ee" testId="c072cf21-823f-c69b-719d-dbd9021e7d9d" testName="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.InvalidSubject_DeniesProfileAndPasswordActionsBeforeCallingDependencies(subject: &quot;&quot;)" computerName="b3498fe6892c" duration="00:00:00.0001769" startTime="2026-10-20T08:31:14.1301709+00:00" endTime="2026-10-20T08:31:14.1301709+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="693d5e67-81e1-430e-acf5-a39755e463ee" />
+    <UnitTestResult executionId="df38765b-112d-4346-9482-097a7082ef74" testId="843d151f-006d-f865-2139-8c4a4dc4bb5c" testName="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.PasswordChange_FailureNeverRenewsSession(failure: IdentityService.Api.Exceptions.NotFoundException: Unknown user., status: 404)" computerName="b3498fe6892c" duration="00:00:00.0016371" startTime="2026-10-20T08:31:14.1656068+00:00" endTime="2026-10-20T08:31:14.1656069+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="df38765b-112d-4346-9482-097a7082ef74" />
+    <UnitTestResult executionId="736b5461-77b7-46fd-af3a-ce56bb96be20" testId="f43e4121-cc12-65bc-2a9d-a04e08544fa1" testName="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.InvalidSubject_DeniesProfileAndPasswordActionsBeforeCallingDependencies(subject: &quot;not-a-guid&quot;)" computerName="b3498fe6892c" duration="00:00:00.0027044" startTime="2026-10-20T08:31:14.1298293+00:00" endTime="2026-10-20T08:31:14.1298293+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="736b5461-77b7-46fd-af3a-ce56bb96be20" />
+    <UnitTestResult executionId="6e0bc717-9d7c-412a-8ab6-f69f918e43e6" testId="7b0301e9-9d70-1cf9-082c-367102e58b3b" testName="FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests.CreateSession_InvalidExpiryUsesTheDocumentedSixtyMinuteDefault(minutes: &quot;&quot;)" computerName="b3498fe6892c" duration="00:00:00.0002665" startTime="2026-10-20T08:31:14.1204870+00:00" endTime="2026-10-20T08:31:14.1204870+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6e0bc717-9d7c-412a-8ab6-f69f918e43e6" />
+    <UnitTestResult executionId="3088594e-d24a-4e1e-a960-0af7453d5f7d" testId="9a62ece6-ce06-265b-9343-8ff500cb98ec" testName="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.MissingPhoto_IsBadRequestWithoutUsingStorage" computerName="b3498fe6892c" duration="00:00:00.0003262" startTime="2026-10-20T08:31:14.1624825+00:00" endTime="2026-10-20T08:31:14.1624825+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3088594e-d24a-4e1e-a960-0af7453d5f7d" />
+    <UnitTestResult executionId="d8573cdb-9774-42af-90ce-9b9c752cd957" testId="e3f9a2a1-d6f4-22ef-a42f-3671b930e7f1" testName="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.Login_Success_ForwardsExactRequestAndPreservesSession(channel: &quot;staff&quot;)" computerName="b3498fe6892c" duration="00:00:00.0019063" startTime="2026-10-20T08:31:14.1629815+00:00" endTime="2026-10-20T08:31:14.1629815+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d8573cdb-9774-42af-90ce-9b9c752cd957" />
+    <UnitTestResult executionId="c43fb637-03cc-4043-aa20-4e1524b01dee" testId="e907e1e7-a85f-ab6e-0ce1-d86ec73f0882" testName="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.PasswordChange_RenewsOnlyForcedPasswordSession(forced: False)" computerName="b3498fe6892c" duration="00:00:00.0010376" startTime="2026-10-20T08:31:14.1622349+00:00" endTime="2026-10-20T08:31:14.1622349+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c43fb637-03cc-4043-aa20-4e1524b01dee" />
+    <UnitTestResult executionId="c1d28311-7136-4bee-8341-9414eff16927" testId="843d151f-006d-f865-2139-8c4a4dc4bb5c" testName="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.PasswordChange_FailureNeverRenewsSession(failure: System.ArgumentException: Current password mismatch., status: 400)" computerName="b3498fe6892c" duration="00:00:00.0005447" startTime="2026-10-20T08:31:14.1669701+00:00" endTime="2026-10-20T08:31:14.1669702+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c1d28311-7136-4bee-8341-9414eff16927" />
+    <UnitTestResult executionId="89415ba6-4ab5-4be6-9b07-c3100099ba7c" testId="7da11b8d-3b31-22e3-95c9-0836b26be9c8" testName="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.Login_DependencyFailure_MapsStatusWithoutLeakingInfrastructure(failure: IdentityService.Api.Exceptions.PortalAccessDeniedException: Use staff portal., expectedStatus: 403, expectedMessage: &quot;Use staff portal.&quot;)" computerName="b3498fe6892c" duration="00:00:00.0007001" startTime="2026-10-20T08:31:14.1638374+00:00" endTime="2026-10-20T08:31:14.1638374+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="89415ba6-4ab5-4be6-9b07-c3100099ba7c" />
+    <UnitTestResult executionId="a3d0b269-1a80-4654-88cd-d9c7944fe874" testId="93e635aa-34ee-b6a5-489d-ee8b7e49f03f" testName="FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests.CreateSession_WeakOrMissingKeyNeverProducesToken(key: &quot;&quot;)" computerName="b3498fe6892c" duration="00:00:00.0007249" startTime="2026-10-20T08:31:14.1590885+00:00" endTime="2026-10-20T08:31:14.1590885+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a3d0b269-1a80-4654-88cd-d9c7944fe874" />
+    <UnitTestResult executionId="930d3c48-4498-40b0-917b-89f9754994c1" testId="bda59574-45eb-5bd6-192a-57317270a177" testName="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.PhotoUpload_UsesAuthenticatedOwnerAndExactFile" computerName="b3498fe6892c" duration="00:00:00.0761080" startTime="2026-10-20T08:31:14.1270142+00:00" endTime="2026-10-20T08:31:14.1270143+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="930d3c48-4498-40b0-917b-89f9754994c1" />
+    <UnitTestResult executionId="ca3f70d5-3f0d-4673-92ee-999eef599781" testId="3e51a7b8-0244-b4c2-f4ea-639303c5fca8" testName="FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests.CreateSession_WeakOrMissingKeyNeverProducesToken(key: &quot;short&quot;)" computerName="b3498fe6892c" duration="00:00:00.0000309" startTime="2026-10-20T08:31:14.1596081+00:00" endTime="2026-10-20T08:31:14.1596081+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ca3f70d5-3f0d-4673-92ee-999eef599781" />
+    <UnitTestResult executionId="a559b88c-759f-4aac-9e47-6fba808927fa" testId="95309864-e683-8a6f-1973-6723fa4d6003" testName="FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests.CreateSession_InvalidExpiryUsesTheDocumentedSixtyMinuteDefault(minutes: null)" computerName="b3498fe6892c" duration="00:00:00.0029109" startTime="2026-10-20T08:31:14.1195444+00:00" endTime="2026-10-20T08:31:14.1195445+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a559b88c-759f-4aac-9e47-6fba808927fa" />
+    <UnitTestResult executionId="e81b9921-6ec7-48d4-b1cf-9814fb233df5" testId="3009f91f-61e1-6e21-ec52-b6055e3a3653" testName="FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests.CreateSession_MinimumKeyLengthIsUtf8BytesRatherThanCharacterCount(key: &quot;éééééééééééééééé&quot;)" computerName="b3498fe6892c" duration="00:00:00.0016070" startTime="2026-10-20T08:31:14.1603890+00:00" endTime="2026-10-20T08:31:14.1603891+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e81b9921-6ec7-48d4-b1cf-9814fb233df5" />
+    <UnitTestResult executionId="c90046c3-794c-47ea-bad2-6e24e86badc5" testId="7da11b8d-3b31-22e3-95c9-0836b26be9c8" testName="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.Login_DependencyFailure_MapsStatusWithoutLeakingInfrastructure(failure: IdentityService.Api.Exceptions.InvalidCredentialsException: Invalid credentials., expectedStatus: 401, expectedMessage: &quot;Invalid credentials.&quot;)" computerName="b3498fe6892c" duration="00:00:00.0030172" startTime="2026-10-20T08:31:14.1636917+00:00" endTime="2026-10-20T08:31:14.1636917+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c90046c3-794c-47ea-bad2-6e24e86badc5" />
+    <UnitTestResult executionId="2eb0995b-aa13-4208-9543-a975e58a23ab" testId="5cfacfb5-fe45-9163-28c1-5a62fdb6ec67" testName="FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests.CreateSession_WeakOrMissingKeyNeverProducesToken(key: null)" computerName="b3498fe6892c" duration="00:00:00.0000263" startTime="2026-10-20T08:31:14.1598345+00:00" endTime="2026-10-20T08:31:14.1598345+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2eb0995b-aa13-4208-9543-a975e58a23ab" />
+    <UnitTestResult executionId="0dffc22f-7582-4972-9954-ea515d529103" testId="843d151f-006d-f865-2139-8c4a4dc4bb5c" testName="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.PasswordChange_FailureNeverRenewsSession(failure: IdentityService.Api.Exceptions.AccountDisabledException: Disabled user., status: 403)" computerName="b3498fe6892c" duration="00:00:00.0007432" startTime="2026-10-20T08:31:14.1663642+00:00" endTime="2026-10-20T08:31:14.1663642+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0dffc22f-7582-4972-9954-ea515d529103" />
+    <UnitTestResult executionId="4bb8852d-7c85-45f9-bd25-403dcb03718c" testId="f1657e84-a73d-e345-380d-1970d1c89c08" testName="FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests.CreateSession_WeakOrMissingKeyNeverProducesToken(key: &quot; &quot;)" computerName="b3498fe6892c" duration="00:00:00.0001814" startTime="2026-10-20T08:31:14.1593404+00:00" endTime="2026-10-20T08:31:14.1593404+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4bb8852d-7c85-45f9-bd25-403dcb03718c" />
+    <UnitTestResult executionId="8ba2b9c9-295d-430d-a8e8-bb8017c3803c" testId="a326fb5a-eeef-9d10-0179-92e5ff42be87" testName="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.InvalidModel_NeverChangesPassword" computerName="b3498fe6892c" duration="00:00:00.0006689" startTime="2026-10-20T08:31:14.1627570+00:00" endTime="2026-10-20T08:31:14.1627570+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8ba2b9c9-295d-430d-a8e8-bb8017c3803c" />
+    <UnitTestResult executionId="1652d58d-be7f-436b-a449-2a185d375290" testId="cdb8bdd9-1295-4987-4d22-33c14b9c6f68" testName="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.PasswordChange_RenewsOnlyForcedPasswordSession(forced: True)" computerName="b3498fe6892c" duration="00:00:00.0176574" startTime="2026-10-20T08:31:14.1607866+00:00" endTime="2026-10-20T08:31:14.1607866+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1652d58d-be7f-436b-a449-2a185d375290" />
+    <UnitTestResult executionId="1b592b86-1334-45b4-abe9-5b05ed3102c6" testId="5a19051f-b755-32ce-aeab-90f115479cc4" testName="FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests.CreateSession_SignsClaimsAndPreservesRevocationAndPasswordFlags(forced: True)" computerName="b3498fe6892c" duration="00:00:00.0011146" startTime="2026-10-20T08:31:14.1584183+00:00" endTime="2026-10-20T08:31:14.1584183+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1b592b86-1334-45b4-abe9-5b05ed3102c6" />
+    <UnitTestResult executionId="ac8da816-e5d1-4687-967c-2473a8cd865f" testId="35af85e7-2fa5-ea70-f212-7ada8e877b36" testName="FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests.CreateSession_WeakOrMissingKeyNeverProducesToken(key: &quot;1234567890123456789012345678901&quot;)" computerName="b3498fe6892c" duration="00:00:00.0000190" startTime="2026-10-20T08:31:14.1600912+00:00" endTime="2026-10-20T08:31:14.1600912+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ac8da816-e5d1-4687-967c-2473a8cd865f" />
+    <UnitTestResult executionId="60c21ab7-a930-451b-804c-147a3c7d27e8" testId="05201bb4-3bb8-1c75-d3d6-c26b2ae8b997" testName="FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests.CreateSession_SignsClaimsAndPreservesRevocationAndPasswordFlags(forced: False)" computerName="b3498fe6892c" duration="00:00:00.0251612" startTime="2026-10-20T08:31:14.1406977+00:00" endTime="2026-10-20T08:31:14.1406978+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="60c21ab7-a930-451b-804c-147a3c7d27e8" />
+    <UnitTestResult executionId="10c8f2d9-ec2c-44c1-9a11-442f0395f262" testId="fed9bf7d-997a-10fb-d343-a164f4fcabd2" testName="FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests.CreateSession_MinimumKeyLengthIsUtf8BytesRatherThanCharacterCount(key: &quot;12345678901234567890123456789012&quot;)" computerName="b3498fe6892c" duration="00:00:00.0004716" startTime="2026-10-20T08:31:14.1606593+00:00" endTime="2026-10-20T08:31:14.1606594+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="10c8f2d9-ec2c-44c1-9a11-442f0395f262" />
+    <UnitTestResult executionId="100803ab-e219-4181-93de-71b9ab87dc49" testId="574e24fb-b8f1-eb21-f6e2-1fa217263804" testName="FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests.CreateSession_InvalidExpiryUsesTheDocumentedSixtyMinuteDefault(minutes: &quot;not-a-number&quot;)" computerName="b3498fe6892c" duration="00:00:00.0574221" startTime="2026-10-20T08:31:14.1126899+00:00" endTime="2026-10-20T08:31:14.1127373+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="100803ab-e219-4181-93de-71b9ab87dc49" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests.CreateSession_MinimumKeyLengthIsUtf8BytesRatherThanCharacterCount(key: &quot;éééééééééééééééé&quot;)" storage="/work/tests/fleetflow.identityservice.tests/bin/release/net10.0/fleetflow.identityservice.tests.dll" id="3009f91f-61e1-6e21-ec52-b6055e3a3653">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="e81b9921-6ec7-48d4-b1cf-9814fb233df5" />
+      <TestMethod codeBase="/work/tests/FleetFlow.IdentityService.Tests/bin/Release/net10.0/FleetFlow.IdentityService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests" name="CreateSession_MinimumKeyLengthIsUtf8BytesRatherThanCharacterCount" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests.CreateSession_SignsClaimsAndPreservesRevocationAndPasswordFlags(forced: False)" storage="/work/tests/fleetflow.identityservice.tests/bin/release/net10.0/fleetflow.identityservice.tests.dll" id="05201bb4-3bb8-1c75-d3d6-c26b2ae8b997">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="60c21ab7-a930-451b-804c-147a3c7d27e8" />
+      <TestMethod codeBase="/work/tests/FleetFlow.IdentityService.Tests/bin/Release/net10.0/FleetFlow.IdentityService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests" name="CreateSession_SignsClaimsAndPreservesRevocationAndPasswordFlags" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests.CreateSession_WeakOrMissingKeyNeverProducesToken(key: &quot;1234567890123456789012345678901&quot;)" storage="/work/tests/fleetflow.identityservice.tests/bin/release/net10.0/fleetflow.identityservice.tests.dll" id="35af85e7-2fa5-ea70-f212-7ada8e877b36">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="ac8da816-e5d1-4687-967c-2473a8cd865f" />
+      <TestMethod codeBase="/work/tests/FleetFlow.IdentityService.Tests/bin/Release/net10.0/FleetFlow.IdentityService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests" name="CreateSession_WeakOrMissingKeyNeverProducesToken" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.InvalidSubject_DeniesProfileAndPasswordActionsBeforeCallingDependencies(subject: null)" storage="/work/tests/fleetflow.identityservice.tests/bin/release/net10.0/fleetflow.identityservice.tests.dll" id="0d0fcacc-687e-5134-a3c2-eb2789ac9fbb">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="87255d95-5b34-49ce-b0ab-de2d16ee2ff7" />
+      <TestMethod codeBase="/work/tests/FleetFlow.IdentityService.Tests/bin/Release/net10.0/FleetFlow.IdentityService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests" name="InvalidSubject_DeniesProfileAndPasswordActionsBeforeCallingDependencies" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests.CreateSession_WeakOrMissingKeyNeverProducesToken(key: null)" storage="/work/tests/fleetflow.identityservice.tests/bin/release/net10.0/fleetflow.identityservice.tests.dll" id="5cfacfb5-fe45-9163-28c1-5a62fdb6ec67">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="2eb0995b-aa13-4208-9543-a975e58a23ab" />
+      <TestMethod codeBase="/work/tests/FleetFlow.IdentityService.Tests/bin/Release/net10.0/FleetFlow.IdentityService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests" name="CreateSession_WeakOrMissingKeyNeverProducesToken" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.MissingPhoto_IsBadRequestWithoutUsingStorage" storage="/work/tests/fleetflow.identityservice.tests/bin/release/net10.0/fleetflow.identityservice.tests.dll" id="9a62ece6-ce06-265b-9343-8ff500cb98ec">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="3088594e-d24a-4e1e-a960-0af7453d5f7d" />
+      <TestMethod codeBase="/work/tests/FleetFlow.IdentityService.Tests/bin/Release/net10.0/FleetFlow.IdentityService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests" name="MissingPhoto_IsBadRequestWithoutUsingStorage" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.Login_Success_ForwardsExactRequestAndPreservesSession(channel: &quot;customer&quot;)" storage="/work/tests/fleetflow.identityservice.tests/bin/release/net10.0/fleetflow.identityservice.tests.dll" id="6b876853-7d5e-b430-5397-423825d32d3e">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="a74024ae-3fb0-42eb-9d16-aec271957ccc" />
+      <TestMethod codeBase="/work/tests/FleetFlow.IdentityService.Tests/bin/Release/net10.0/FleetFlow.IdentityService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests" name="Login_Success_ForwardsExactRequestAndPreservesSession" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.InvalidSubject_DeniesProfileAndPasswordActionsBeforeCallingDependencies(subject: &quot;&quot;)" storage="/work/tests/fleetflow.identityservice.tests/bin/release/net10.0/fleetflow.identityservice.tests.dll" id="c072cf21-823f-c69b-719d-dbd9021e7d9d">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="693d5e67-81e1-430e-acf5-a39755e463ee" />
+      <TestMethod codeBase="/work/tests/FleetFlow.IdentityService.Tests/bin/Release/net10.0/FleetFlow.IdentityService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests" name="InvalidSubject_DeniesProfileAndPasswordActionsBeforeCallingDependencies" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.Login_Success_ForwardsExactRequestAndPreservesSession(channel: &quot;staff&quot;)" storage="/work/tests/fleetflow.identityservice.tests/bin/release/net10.0/fleetflow.identityservice.tests.dll" id="e3f9a2a1-d6f4-22ef-a42f-3671b930e7f1">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="d8573cdb-9774-42af-90ce-9b9c752cd957" />
+      <TestMethod codeBase="/work/tests/FleetFlow.IdentityService.Tests/bin/Release/net10.0/FleetFlow.IdentityService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests" name="Login_Success_ForwardsExactRequestAndPreservesSession" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.PasswordChange_FailureNeverRenewsSession" storage="/work/tests/fleetflow.identityservice.tests/bin/release/net10.0/fleetflow.identityservice.tests.dll" id="843d151f-006d-f865-2139-8c4a4dc4bb5c">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="df38765b-112d-4346-9482-097a7082ef74" />
+      <TestMethod codeBase="/work/tests/FleetFlow.IdentityService.Tests/bin/Release/net10.0/FleetFlow.IdentityService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests" name="PasswordChange_FailureNeverRenewsSession" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.PasswordChange_RenewsOnlyForcedPasswordSession(forced: False)" storage="/work/tests/fleetflow.identityservice.tests/bin/release/net10.0/fleetflow.identityservice.tests.dll" id="e907e1e7-a85f-ab6e-0ce1-d86ec73f0882">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="c43fb637-03cc-4043-aa20-4e1524b01dee" />
+      <TestMethod codeBase="/work/tests/FleetFlow.IdentityService.Tests/bin/Release/net10.0/FleetFlow.IdentityService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests" name="PasswordChange_RenewsOnlyForcedPasswordSession" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.InvalidModel_NeverChangesPassword" storage="/work/tests/fleetflow.identityservice.tests/bin/release/net10.0/fleetflow.identityservice.tests.dll" id="a326fb5a-eeef-9d10-0179-92e5ff42be87">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="8ba2b9c9-295d-430d-a8e8-bb8017c3803c" />
+      <TestMethod codeBase="/work/tests/FleetFlow.IdentityService.Tests/bin/Release/net10.0/FleetFlow.IdentityService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests" name="InvalidModel_NeverChangesPassword" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.Registration_Duplicate_IsConflictAndNeverStartsLogin" storage="/work/tests/fleetflow.identityservice.tests/bin/release/net10.0/fleetflow.identityservice.tests.dll" id="4a7763e5-a75c-8fd3-bf18-67486f68543b">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="cc0c0206-d244-44d0-86ed-af8e8846396d" />
+      <TestMethod codeBase="/work/tests/FleetFlow.IdentityService.Tests/bin/Release/net10.0/FleetFlow.IdentityService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests" name="Registration_Duplicate_IsConflictAndNeverStartsLogin" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.InvalidSubject_DeniesProfileAndPasswordActionsBeforeCallingDependencies(subject: &quot;not-a-guid&quot;)" storage="/work/tests/fleetflow.identityservice.tests/bin/release/net10.0/fleetflow.identityservice.tests.dll" id="f43e4121-cc12-65bc-2a9d-a04e08544fa1">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="736b5461-77b7-46fd-af3a-ce56bb96be20" />
+      <TestMethod codeBase="/work/tests/FleetFlow.IdentityService.Tests/bin/Release/net10.0/FleetFlow.IdentityService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests" name="InvalidSubject_DeniesProfileAndPasswordActionsBeforeCallingDependencies" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests.CreateSession_InvalidExpiryUsesTheDocumentedSixtyMinuteDefault(minutes: &quot;not-a-number&quot;)" storage="/work/tests/fleetflow.identityservice.tests/bin/release/net10.0/fleetflow.identityservice.tests.dll" id="574e24fb-b8f1-eb21-f6e2-1fa217263804">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="100803ab-e219-4181-93de-71b9ab87dc49" />
+      <TestMethod codeBase="/work/tests/FleetFlow.IdentityService.Tests/bin/Release/net10.0/FleetFlow.IdentityService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests" name="CreateSession_InvalidExpiryUsesTheDocumentedSixtyMinuteDefault" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests.CreateSession_SignsClaimsAndPreservesRevocationAndPasswordFlags(forced: True)" storage="/work/tests/fleetflow.identityservice.tests/bin/release/net10.0/fleetflow.identityservice.tests.dll" id="5a19051f-b755-32ce-aeab-90f115479cc4">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="1b592b86-1334-45b4-abe9-5b05ed3102c6" />
+      <TestMethod codeBase="/work/tests/FleetFlow.IdentityService.Tests/bin/Release/net10.0/FleetFlow.IdentityService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests" name="CreateSession_SignsClaimsAndPreservesRevocationAndPasswordFlags" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests.CreateSession_MinimumKeyLengthIsUtf8BytesRatherThanCharacterCount(key: &quot;12345678901234567890123456789012&quot;)" storage="/work/tests/fleetflow.identityservice.tests/bin/release/net10.0/fleetflow.identityservice.tests.dll" id="fed9bf7d-997a-10fb-d343-a164f4fcabd2">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="10c8f2d9-ec2c-44c1-9a11-442f0395f262" />
+      <TestMethod codeBase="/work/tests/FleetFlow.IdentityService.Tests/bin/Release/net10.0/FleetFlow.IdentityService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests" name="CreateSession_MinimumKeyLengthIsUtf8BytesRatherThanCharacterCount" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests.CreateSession_InvalidExpiryUsesTheDocumentedSixtyMinuteDefault(minutes: null)" storage="/work/tests/fleetflow.identityservice.tests/bin/release/net10.0/fleetflow.identityservice.tests.dll" id="95309864-e683-8a6f-1973-6723fa4d6003">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="a559b88c-759f-4aac-9e47-6fba808927fa" />
+      <TestMethod codeBase="/work/tests/FleetFlow.IdentityService.Tests/bin/Release/net10.0/FleetFlow.IdentityService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests" name="CreateSession_InvalidExpiryUsesTheDocumentedSixtyMinuteDefault" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.Login_DependencyFailure_MapsStatusWithoutLeakingInfrastructure" storage="/work/tests/fleetflow.identityservice.tests/bin/release/net10.0/fleetflow.identityservice.tests.dll" id="7da11b8d-3b31-22e3-95c9-0836b26be9c8">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="c90046c3-794c-47ea-bad2-6e24e86badc5" />
+      <TestMethod codeBase="/work/tests/FleetFlow.IdentityService.Tests/bin/Release/net10.0/FleetFlow.IdentityService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests" name="Login_DependencyFailure_MapsStatusWithoutLeakingInfrastructure" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests.CreateSession_InvalidExpiryUsesTheDocumentedSixtyMinuteDefault(minutes: &quot;&quot;)" storage="/work/tests/fleetflow.identityservice.tests/bin/release/net10.0/fleetflow.identityservice.tests.dll" id="7b0301e9-9d70-1cf9-082c-367102e58b3b">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="6e0bc717-9d7c-412a-8ab6-f69f918e43e6" />
+      <TestMethod codeBase="/work/tests/FleetFlow.IdentityService.Tests/bin/Release/net10.0/FleetFlow.IdentityService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests" name="CreateSession_InvalidExpiryUsesTheDocumentedSixtyMinuteDefault" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests.CreateSession_WeakOrMissingKeyNeverProducesToken(key: &quot;short&quot;)" storage="/work/tests/fleetflow.identityservice.tests/bin/release/net10.0/fleetflow.identityservice.tests.dll" id="3e51a7b8-0244-b4c2-f4ea-639303c5fca8">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="ca3f70d5-3f0d-4673-92ee-999eef599781" />
+      <TestMethod codeBase="/work/tests/FleetFlow.IdentityService.Tests/bin/Release/net10.0/FleetFlow.IdentityService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests" name="CreateSession_WeakOrMissingKeyNeverProducesToken" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.PasswordChange_RenewsOnlyForcedPasswordSession(forced: True)" storage="/work/tests/fleetflow.identityservice.tests/bin/release/net10.0/fleetflow.identityservice.tests.dll" id="cdb8bdd9-1295-4987-4d22-33c14b9c6f68">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="1652d58d-be7f-436b-a449-2a185d375290" />
+      <TestMethod codeBase="/work/tests/FleetFlow.IdentityService.Tests/bin/Release/net10.0/FleetFlow.IdentityService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests" name="PasswordChange_RenewsOnlyForcedPasswordSession" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests.CreateSession_WeakOrMissingKeyNeverProducesToken(key: &quot; &quot;)" storage="/work/tests/fleetflow.identityservice.tests/bin/release/net10.0/fleetflow.identityservice.tests.dll" id="f1657e84-a73d-e345-380d-1970d1c89c08">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="4bb8852d-7c85-45f9-bd25-403dcb03718c" />
+      <TestMethod codeBase="/work/tests/FleetFlow.IdentityService.Tests/bin/Release/net10.0/FleetFlow.IdentityService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests" name="CreateSession_WeakOrMissingKeyNeverProducesToken" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.PhotoUpload_UsesAuthenticatedOwnerAndExactFile" storage="/work/tests/fleetflow.identityservice.tests/bin/release/net10.0/fleetflow.identityservice.tests.dll" id="bda59574-45eb-5bd6-192a-57317270a177">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="930d3c48-4498-40b0-917b-89f9754994c1" />
+      <TestMethod codeBase="/work/tests/FleetFlow.IdentityService.Tests/bin/Release/net10.0/FleetFlow.IdentityService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests" name="PhotoUpload_UsesAuthenticatedOwnerAndExactFile" />
+    </UnitTest>
+    <UnitTest name="FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests.CreateSession_WeakOrMissingKeyNeverProducesToken(key: &quot;&quot;)" storage="/work/tests/fleetflow.identityservice.tests/bin/release/net10.0/fleetflow.identityservice.tests.dll" id="93e635aa-34ee-b6a5-489d-ee8b7e49f03f">
+      <Owners>
+        <Owner name="Sanjeevsaran" />
+      </Owners>
+      <Execution id="a3d0b269-1a80-4654-88cd-d9c7944fe874" />
+      <TestMethod codeBase="/work/tests/FleetFlow.IdentityService.Tests/bin/Release/net10.0/FleetFlow.IdentityService.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests" name="CreateSession_WeakOrMissingKeyNeverProducesToken" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="6b876853-7d5e-b430-5397-423825d32d3e" executionId="a74024ae-3fb0-42eb-9d16-aec271957ccc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7da11b8d-3b31-22e3-95c9-0836b26be9c8" executionId="5d44a402-f35b-451a-ae4f-5d44a5e6aa4c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7da11b8d-3b31-22e3-95c9-0836b26be9c8" executionId="df09039d-368e-4eb3-9e81-c1d239c35cd6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0d0fcacc-687e-5134-a3c2-eb2789ac9fbb" executionId="87255d95-5b34-49ce-b0ab-de2d16ee2ff7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4a7763e5-a75c-8fd3-bf18-67486f68543b" executionId="cc0c0206-d244-44d0-86ed-af8e8846396d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c072cf21-823f-c69b-719d-dbd9021e7d9d" executionId="693d5e67-81e1-430e-acf5-a39755e463ee" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="843d151f-006d-f865-2139-8c4a4dc4bb5c" executionId="df38765b-112d-4346-9482-097a7082ef74" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f43e4121-cc12-65bc-2a9d-a04e08544fa1" executionId="736b5461-77b7-46fd-af3a-ce56bb96be20" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7b0301e9-9d70-1cf9-082c-367102e58b3b" executionId="6e0bc717-9d7c-412a-8ab6-f69f918e43e6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9a62ece6-ce06-265b-9343-8ff500cb98ec" executionId="3088594e-d24a-4e1e-a960-0af7453d5f7d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e3f9a2a1-d6f4-22ef-a42f-3671b930e7f1" executionId="d8573cdb-9774-42af-90ce-9b9c752cd957" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e907e1e7-a85f-ab6e-0ce1-d86ec73f0882" executionId="c43fb637-03cc-4043-aa20-4e1524b01dee" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="843d151f-006d-f865-2139-8c4a4dc4bb5c" executionId="c1d28311-7136-4bee-8341-9414eff16927" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7da11b8d-3b31-22e3-95c9-0836b26be9c8" executionId="89415ba6-4ab5-4be6-9b07-c3100099ba7c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="93e635aa-34ee-b6a5-489d-ee8b7e49f03f" executionId="a3d0b269-1a80-4654-88cd-d9c7944fe874" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bda59574-45eb-5bd6-192a-57317270a177" executionId="930d3c48-4498-40b0-917b-89f9754994c1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3e51a7b8-0244-b4c2-f4ea-639303c5fca8" executionId="ca3f70d5-3f0d-4673-92ee-999eef599781" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="95309864-e683-8a6f-1973-6723fa4d6003" executionId="a559b88c-759f-4aac-9e47-6fba808927fa" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3009f91f-61e1-6e21-ec52-b6055e3a3653" executionId="e81b9921-6ec7-48d4-b1cf-9814fb233df5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7da11b8d-3b31-22e3-95c9-0836b26be9c8" executionId="c90046c3-794c-47ea-bad2-6e24e86badc5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5cfacfb5-fe45-9163-28c1-5a62fdb6ec67" executionId="2eb0995b-aa13-4208-9543-a975e58a23ab" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="843d151f-006d-f865-2139-8c4a4dc4bb5c" executionId="0dffc22f-7582-4972-9954-ea515d529103" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f1657e84-a73d-e345-380d-1970d1c89c08" executionId="4bb8852d-7c85-45f9-bd25-403dcb03718c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a326fb5a-eeef-9d10-0179-92e5ff42be87" executionId="8ba2b9c9-295d-430d-a8e8-bb8017c3803c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="cdb8bdd9-1295-4987-4d22-33c14b9c6f68" executionId="1652d58d-be7f-436b-a449-2a185d375290" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5a19051f-b755-32ce-aeab-90f115479cc4" executionId="1b592b86-1334-45b4-abe9-5b05ed3102c6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="35af85e7-2fa5-ea70-f212-7ada8e877b36" executionId="ac8da816-e5d1-4687-967c-2473a8cd865f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="05201bb4-3bb8-1c75-d3d6-c26b2ae8b997" executionId="60c21ab7-a930-451b-804c-147a3c7d27e8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fed9bf7d-997a-10fb-d343-a164f4fcabd2" executionId="10c8f2d9-ec2c-44c1-9a11-442f0395f262" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="574e24fb-b8f1-eb21-f6e2-1fa217263804" executionId="100803ab-e219-4181-93de-71b9ab87dc49" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="30" executed="30" passed="30" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.5.3.1+6b60a9e56a (64-bit .NET 10.0.13)
+[xUnit.net 00:00:00.04]   Discovering: FleetFlow.IdentityService.Tests
+[xUnit.net 00:00:00.10]   Discovered:  FleetFlow.IdentityService.Tests
+[xUnit.net 00:00:00.10]   Starting:    FleetFlow.IdentityService.Tests
+[xUnit.net 00:00:00.24]   Finished:    FleetFlow.IdentityService.Tests
+</StdOut>
+    </Output>
+    <CollectorDataEntries>
+      <Collector agentName="b3498fe6892c" uri="datacollector://microsoft/CoverletCodeCoverage/1.0" collectorDisplayName="XPlat code coverage">
+        <UriAttachments>
+          <UriAttachment>
+            <A href="b3498fe6892c/coverage.cobertura.xml"></A>
+          </UriAttachment>
+          <UriAttachment>
+            <A href="b3498fe6892c/coverage.json"></A>
+          </UriAttachment>
+        </UriAttachments>
+      </Collector>
+    </CollectorDataEntries>
+  </ResultSummary>
+</TestRun>

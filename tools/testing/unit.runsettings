@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+  <DataCollectionRunSettings>
+    <DataCollectors>
+      <DataCollector friendlyName="XPlat Code Coverage">
+        <Configuration>
+          <Format>cobertura,json</Format>
+          <Include>[IdentityService.Api]IdentityService.Api.Controllers.AuthController*,[IdentityService.Api]IdentityService.Api.Services.AuthenticationService*,[FleetService.Api]FleetService.Api.Services.MaintenanceStaffDirectory*,[FleetService.Api]FleetService.Api.Services.ReportCsv*,[FleetService.Api]FleetService.Api.Controllers.ReportsController*</Include>
+          <Exclude>[*.Tests]*,[Moq]*,[Castle.*]*</Exclude>
+          <IncludeTestAssembly>false</IncludeTestAssembly>
+          <DeterministicReport>true</DeterministicReport>
+        </Configuration>
+      </DataCollector>
+    </DataCollectors>
+  </DataCollectionRunSettings>
+</RunSettings>

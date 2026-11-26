@@ -1,0 +1,23 @@
+{
+  "testedSourceCommit": "5599029d1b460679c546c01c012393971db400f4",
+  "startingBaseline": "19683670e8069a3f1f0d4e75536677a7658aa461",
+  "description": "SHA-256 of changed source files as present in the tested working tree; Git retains the complete source tree.",
+  "files": {
+    ".github/workflows/ci.yml": "e13e4ca7fa28a67509ee7c285e65340d9002e250faae7290bf669ba858b7bd43",
+    "README.md": "4f0051c32dba26716ce9d7b6a24915f0a2a82201fdc3ff5e28042f6723ef8cce",
+    "docs/testing/README.md": "cae3b75d732d73d06d8ed3bef5070d8300472cdd1e5cf7f505dd83f6c7d3cef6",
+    "docs/testing/unit-demo.md": "6eae50b915a9a471903b229a0ecc5342172fb8db2d2035ac43dd5edcb2eb4030",
+    "docs/testing/unit.md": "8eab13488fa38a7c54998ca682b8d2dbf46e63ce56b8b0484254c23bea6aebf9",
+    "tests/FleetFlow.IdentityService.Tests/AseUnit/AuthenticationBoundaryTests.cs": "1679ae0eb7b548d5777922e60840f1dce3bf14b451561f45b166ffd5dca91f45",
+    "tests/FleetFlow.IdentityService.Tests/AseUnit/SessionSigningTests.cs": "17359bf657fbb26ad6d4aff1671e91aff7a6cb619e77bd712312cec4a2c3bd21",
+    "tests/FleetFlow.IdentityService.Tests/FleetFlow.IdentityService.Tests.csproj": "86165a5d750b6c7e9d0f186c450bb104e6355b8553f1eb7342c3e505910045d2",
+    "tests/FleetFlow.VehicleService.Tests/AseUnit/MaintenanceStaffDirectoryTests.cs": "5b99ddad705538c50a202cb229a1e4e7987fb7b474413e12c3f8046e890cec8f",
+    "tests/FleetFlow.VehicleService.Tests/AseUnit/ReportBoundaryTests.cs": "5c8167c867b8d16531482ef4d8e24780df48165f75f0290b64aa2baef66a9ca1",
+    "tests/FleetFlow.VehicleService.Tests/AseUnit/ReportCsvSafetyTests.cs": "a61d9775e62ecd0f45f314195569a1869f70e812716d05ec63668402ac9824ba",
+    "tests/FleetFlow.VehicleService.Tests/FleetFlow.VehicleService.Tests.csproj": "2d760a4752a460ad5cd915b39c2ba1bae25dcf1541f4a1ce61bd12fb6e4be208",
+    "tools/testing/Run-Unit.ps1": "dd641e938bffa204f1a2c4da10971b773843549720034cd65792ce63a8a40192",
+    "tools/testing/summarise_unit.py": "221bf3ddb0d520a5444444744ae4f2b83f6e84f15852a75527d61dd1bb50f9ac",
+    "tools/testing/test_summary.py": "9649eae81bbec475bbe139e0d5bc7424ff6cc852cf612a59b0f0107c976c92c8",
+    "tools/testing/unit.runsettings": "41a57fb82e9a61e70a58b6cc75646dfe4c6af2b461184a65edc6c4d962e693be"
+  }
+}

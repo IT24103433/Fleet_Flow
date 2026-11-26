@@ -1,0 +1,1561 @@
+{
+  "run": {
+    "owner": "Sanjeevsaran J. (IT24104155)",
+    "area": "Unit Testing and Mocking",
+    "sourceCommit": "5599029d1b460679c546c01c012393971db400f4",
+    "sourceHadUncommittedChanges": false,
+    "runUtc": "2026-10-20T08:31:00.7427613Z",
+    "engine": "Docker",
+    "filter": "FullyQualifiedName!~FleetFlow.IdentityService.Tests.OnboardingUniquenessTests",
+    "exclusions": "One existing PostgreSQL integration case is outside this offline unit run; retained in the ordinary backend CI job.",
+    "network": "disabled (--network none)",
+    "exitCode": 0
+  },
+  "tests": 292,
+  "passed": 292,
+  "nonPassing": 0,
+  "lineCoverage": {
+    "covered": 210,
+    "total": 262,
+    "percent": 80.15
+  },
+  "branchCoverage": {
+    "covered": 126,
+    "total": 190,
+    "percent": 66.32
+  },
+  "coverageScope": "Five selected production types; full types include untested methods. Not whole-system coverage.",
+  "coverageByType": {
+    "FleetService.Api.Controllers.ReportsController": {
+      "lines": {
+        "covered": 17,
+        "total": 20,
+        "percent": 85.0
+      },
+      "branches": {
+        "covered": 0,
+        "total": 0,
+        "percent": null
+      }
+    },
+    "FleetService.Api.Services.MaintenanceStaffDirectory": {
+      "lines": {
+        "covered": 18,
+        "total": 18,
+        "percent": 100.0
+      },
+      "branches": {
+        "covered": 22,
+        "total": 22,
+        "percent": 100.0
+      }
+    },
+    "FleetService.Api.Services.ReportCsv": {
+      "lines": {
+        "covered": 32,
+        "total": 32,
+        "percent": 100.0
+      },
+      "branches": {
+        "covered": 28,
+        "total": 30,
+        "percent": 93.33
+      }
+    },
+    "IdentityService.Api.Controllers.AuthController": {
+      "lines": {
+        "covered": 58,
+        "total": 73,
+        "percent": 79.45
+      },
+      "branches": {
+        "covered": 43,
+        "total": 54,
+        "percent": 79.63
+      }
+    },
+    "IdentityService.Api.Services.AuthenticationService": {
+      "lines": {
+        "covered": 85,
+        "total": 119,
+        "percent": 71.43
+      },
+      "branches": {
+        "covered": 33,
+        "total": 84,
+        "percent": 39.29
+      }
+    }
+  },
+  "cases": [
+    {
+      "name": "FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.Registration_Duplicate_IsConflictAndNeverStartsLogin",
+      "outcome": "Passed",
+      "duration": "00:00:00.0025219"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.Login_DependencyFailure_MapsStatusWithoutLeakingInfrastructure(failure: System.TimeoutException: private database host must never escape, expectedStatus: 500, expectedMessage: \"Sign-in is temporarily unavailable. Please try aga\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0004232"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.RegisterControllerTests.TC_REG_05_WeakPassword_FailsPolicy",
+      "outcome": "Passed",
+      "duration": "00:00:00.0009513"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.GoogleIdentityTests.SignatureAudienceIssuerNonceExpiryAndVerifiedEmailAreValidated(scenario: \"audience\", accepted: False)",
+      "outcome": "Passed",
+      "duration": "00:00:00.1322499"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminUsersController_ClassHasAuthorizeAdminAttribute",
+      "outcome": "Passed",
+      "duration": "00:00:00.0001730"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.CustomerRegistrationAndProfileTests.TC_REG_01_RegistrationWithAllValidFields_Succeeds",
+      "outcome": "Passed",
+      "duration": "00:00:00.0410058"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminCreate_InvalidRole_Returns400BadRequest(invalidRole: \"SUPERUSER\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0005708"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests.CreateSession_SignsClaimsAndPreservesRevocationAndPasswordFlags(forced: True)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0008821"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests.CreateSession_WeakOrMissingKeyNeverProducesToken(key: \"1234567890123456789012345678901\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0000674"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.LoginChannelAuthenticationTests.AuthController_InvalidCredentials_ReturnsHttp401Unauthorized",
+      "outcome": "Passed",
+      "duration": "00:00:00.0028909"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.RbacControllerTests.TC_RBAC_02_CustomerRole_AccessesAllowedEndpoints",
+      "outcome": "Passed",
+      "duration": "00:00:00.0000645"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminEdit_DuplicateEmail_Returns409Conflict",
+      "outcome": "Passed",
+      "duration": "00:00:00.0020266"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminCreate_PasswordTooShort_Returns400BadRequest",
+      "outcome": "Passed",
+      "duration": "00:00:00.0011147"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.GoogleOnboardingFlowTests.GoogleOnlyEmailChangeNeedsTheLinkedSubjectAndConsumesItsGrantOnce",
+      "outcome": "Passed",
+      "duration": "00:00:00.1308274"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.PhotoUpload_UsesAuthenticatedOwnerAndExactFile",
+      "outcome": "Passed",
+      "duration": "00:00:00.1490899"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.NonAdminRoles_AreExcludedFromAdminAuthorizationPolicy(role: \"MAINTENANCE_STAFF\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0008819"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminCreate_MaintenanceStaffRole_Returns201Created",
+      "outcome": "Passed",
+      "duration": "00:00:00.0481863"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminCreate_AdminRole_Returns201Created",
+      "outcome": "Passed",
+      "duration": "00:00:00.0468014"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.SelfDisableProtection_AdminCannotDisableTheirOwnAccount_Returns400BadRequest",
+      "outcome": "Passed",
+      "duration": "00:00:00.0018602"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests.CreateSession_MinimumKeyLengthIsUtf8BytesRatherThanCharacterCount(key: \"\u00e9\u00e9\u00e9\u00e9\u00e9\u00e9\u00e9\u00e9\u00e9\u00e9\u00e9\u00e9\u00e9\u00e9\u00e9\u00e9\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0012483"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.Login_DependencyFailure_MapsStatusWithoutLeakingInfrastructure(failure: IdentityService.Api.Exceptions.InvalidCredentialsException: Invalid credentials., expectedStatus: 401, expectedMessage: \"Invalid credentials.\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0032069"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.VerifiedOnboardingTests.VaultRejectsCrossPurposeDecryptionAndDoesNotExposePlainIdentityNumbers",
+      "outcome": "Passed",
+      "duration": "00:00:00.0010515"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.VerifiedOnboardingTests.NicFormatsPreserveLeadingZerosAndDoNotClaimAuthenticity(number: \"012345678v\", accepted: True)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0000217"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.RegisterControllerTests.TC_REG_03_InvalidEmailFormat_FailsValidation",
+      "outcome": "Passed",
+      "duration": "00:00:00.0005350"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests.CreateSession_WeakOrMissingKeyNeverProducesToken(key: \"\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0007215"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.NonAdminRoles_AreExcludedFromAdminAuthorizationPolicy(role: \"FLEET_MANAGER\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0003258"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.LoginControllerTests.TC_LOG_05_SensitiveDataNotExposed_ExcludesPasswordFromResponse",
+      "outcome": "Passed",
+      "duration": "00:00:00.0010146"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.RbacControllerTests.TC_RBAC_01_DefaultRole_AssignedCustomerOnRegistration",
+      "outcome": "Passed",
+      "duration": "00:00:00.0010233"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminEdit_ChannelIntegration_RoleChangeUpdatesLoginAccess",
+      "outcome": "Passed",
+      "duration": "00:00:00.2037115"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.CustomerRegistrationAndProfileTests.TC_REG_07_Password_NotStoredAsPlaintext",
+      "outcome": "Passed",
+      "duration": "00:00:00.0794438"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.CustomerRegistrationAndProfileTests.TC_REG_08_MissingRequiredFields_Rejected(fullName: \"Alex\", username: \"alex\", email: \"alex@test.com\", phone: \"12345678\", address: \"123 Main St\", license: \"\", expectedParam: \"DrivingLicenseNumber\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0007551"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.CustomerRegistrationAndProfileTests.TC_REG_06_DuplicateUsernameAndEmail_RejectedWithDuplicateException",
+      "outcome": "Passed",
+      "duration": "00:00:00.0392188"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.VerifiedOnboardingTests.NicFormatsPreserveLeadingZerosAndDoNotClaimAuthenticity(number: \"123456789A\", accepted: False)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0097391"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.LastAdminProtection_CannotDisableLastRemainingActiveAdmin_Returns400BadRequest",
+      "outcome": "Passed",
+      "duration": "00:00:00.0082307"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminDelete_Self_Returns400",
+      "outcome": "Passed",
+      "duration": "00:00:00.0018189"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.InvalidSubject_DeniesProfileAndPasswordActionsBeforeCallingDependencies(subject: null)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0000431"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.LoginControllerTests.TC_LOG_02_WrongPassword_FailsAuthentication",
+      "outcome": "Passed",
+      "duration": "00:00:00.0183754"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminCreate_DuplicateUsername_Returns409Conflict",
+      "outcome": "Passed",
+      "duration": "00:00:00.0382888"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.InvalidModel_NeverChangesPassword",
+      "outcome": "Passed",
+      "duration": "00:00:00.0007212"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.LoginChannelAuthenticationTests.StaffChannel_FleetManagerRole_SucceedsWithExpectedRoleClaim",
+      "outcome": "Passed",
+      "duration": "00:00:00.1995483"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.LoginChannelAuthenticationTests.CustomerChannel_CustomerRole_SucceedsWithExpectedRoleClaim",
+      "outcome": "Passed",
+      "duration": "00:00:00.1836590"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminGetUsers_ReturnsAllPersistedUsersOrderedNewestFirst",
+      "outcome": "Passed",
+      "duration": "00:00:00.0930917"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.PasswordChange_FailureNeverRenewsSession(failure: IdentityService.Api.Exceptions.AccountDisabledException: Disabled user., status: 403)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0009897"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.VerifiedOnboardingTests.NicFormatsPreserveLeadingZerosAndDoNotClaimAuthenticity(number: \"001234567890\", accepted: True)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0006597"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.GoogleIdentityTests.SignatureAudienceIssuerNonceExpiryAndVerifiedEmailAreValidated(scenario: \"valid\", accepted: True)",
+      "outcome": "Passed",
+      "duration": "00:00:00.1886614"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.LoginChannelAuthenticationTests.CustomerChannel_MaintenanceStaffRole_ThrowsPortalAccessDeniedException",
+      "outcome": "Passed",
+      "duration": "00:00:00.5997435"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.GoogleOnboardingFlowTests.ProfileCompletionNeedsLiveProofAndAllowsCorrectingAClaimedUsername",
+      "outcome": "Passed",
+      "duration": "00:00:00.1503997"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests.CreateSession_SignsClaimsAndPreservesRevocationAndPasswordFlags(forced: False)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0247128"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminCreate_StaffWithoutOptionalProfile_LeavesFieldsEmptyAndNotFaked",
+      "outcome": "Passed",
+      "duration": "00:00:00.0488194"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.LoginChannelAuthenticationTests.StaffChannel_MaintenanceStaffRole_SucceedsWithExpectedRoleClaim",
+      "outcome": "Passed",
+      "duration": "00:00:00.1944084"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.RbacControllerTests.TC_RBAC_06_ServerSideAuthorization_EnforcedIndependentOfFrontend",
+      "outcome": "Passed",
+      "duration": "00:00:00.0006142"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminDelete_RemovesUserRoleMapping",
+      "outcome": "Passed",
+      "duration": "00:00:00.0117255"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.VerifiedOnboardingTests.AfterThirtyDaysCleanupReleasesClaimsAndAnonymisesWithoutDeletingAccountHistoryId",
+      "outcome": "Passed",
+      "duration": "00:00:00.1269498"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.GoogleIdentityTests.SignatureAudienceIssuerNonceExpiryAndVerifiedEmailAreValidated(scenario: \"issuer\", accepted: False)",
+      "outcome": "Passed",
+      "duration": "00:00:00.1197825"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.ProfilePictureTests.AuthController_ProfilePictureEndpoints_RequireAuthorization",
+      "outcome": "Passed",
+      "duration": "00:00:00.0008585"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.LoginChannelAuthenticationTests.CustomerChannel_FleetManagerRole_ThrowsPortalAccessDeniedException",
+      "outcome": "Passed",
+      "duration": "00:00:00.2019958"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminCreatedFleetManager_CanLoginViaStaffChannel_DeniedFromCustomerChannel",
+      "outcome": "Passed",
+      "duration": "00:00:00.1264518"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.GoogleOnboardingFlowTests.MatchingLocalEmailNeverAutomaticallyLinksGoogle",
+      "outcome": "Passed",
+      "duration": "00:00:00.0917125"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.IdentityKafkaProducerTests.AdminUserService_SetUserStatus_PublishesUserStatusChangedEventToKafka",
+      "outcome": "Passed",
+      "duration": "00:00:00.4844548"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.RegisterControllerTests.TC_REG_01_ValidRegistration_PayloadIsValid",
+      "outcome": "Passed",
+      "duration": "00:00:00.0003989"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminDelete_Unauthenticated_Returns401",
+      "outcome": "Passed",
+      "duration": "00:00:00.0002884"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.RegisterControllerTests.TC_REG_02_RequiredFields_ValidationFailsWhenEmpty",
+      "outcome": "Passed",
+      "duration": "00:00:00.0183666"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminCreate_PersistsHashedPassword_NeverStoresOrReturnsPlaintext",
+      "outcome": "Passed",
+      "duration": "00:00:00.0769323"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.GoogleIdentityTests.NonGmailWithoutValidatedWorkspaceStillNeedsFleetFlowEmailVerification",
+      "outcome": "Passed",
+      "duration": "00:00:00.2090033"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.RbacControllerTests.TC_RBAC_03_AdminRole_CanAccessProtectedVehicleCreation",
+      "outcome": "Passed",
+      "duration": "00:00:00.0027956"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.PasswordChange_RenewsOnlyForcedPasswordSession(forced: False)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0010944"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.VerifiedOnboardingTests.InitialStaffVerificationAndOptionalSecondStepNeverReturnAnEarlyToken",
+      "outcome": "Passed",
+      "duration": "00:00:00.0767419"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests.CreateSession_InvalidExpiryUsesTheDocumentedSixtyMinuteDefault(minutes: \"not-a-number\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.1241640"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.GoogleIdentityTests.SignatureAudienceIssuerNonceExpiryAndVerifiedEmailAreValidated(scenario: \"expired\", accepted: False)",
+      "outcome": "Passed",
+      "duration": "00:00:00.2822103"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.IdentityKafkaProducerTests.AdminUserService_CreateUser_PublishesUserCreatedEventToKafka",
+      "outcome": "Passed",
+      "duration": "00:00:00.0385482"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminCreate_InvalidRole_Returns400BadRequest(invalidRole: \"GUEST\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0178748"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.CustomerRegistrationAndProfileTests.TC_REG_08_MissingRequiredFields_Rejected(fullName: \"Alex\", username: \"alex\", email: \"alex@test.com\", phone: \"\", address: \"123 Main St\", license: \"DL-1234\", expectedParam: \"PhoneNumber\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0710163"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.RbacControllerTests.TC_RBAC_05_UnauthenticatedRequest_ReturnsUnauthorized",
+      "outcome": "Passed",
+      "duration": "00:00:00.0183731"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.CustomerRegistrationAndProfileTests.TC_REG_04_Address_PersistedCorrectly",
+      "outcome": "Passed",
+      "duration": "00:00:00.0442880"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminEdit_InvalidRole_Returns400BadRequest",
+      "outcome": "Passed",
+      "duration": "00:00:00.0008461"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests.CreateSession_WeakOrMissingKeyNeverProducesToken(key: \" \")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0002042"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminEdit_ToCustomerRole_MissingRequiredFields_Returns400BadRequest",
+      "outcome": "Passed",
+      "duration": "00:00:00.0022981"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.VerifiedOnboardingTests.DriverApprovalClaimsIdentifiersAndRejectsAnotherOwnersDuplicate",
+      "outcome": "Passed",
+      "duration": "00:00:00.0881600"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.UserRecordsAndHistoricalDataStrictlyPreserved_WhenDisabledAndReEnabled",
+      "outcome": "Passed",
+      "duration": "00:00:00.0938467"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminCreate_FleetManagerRole_Returns201Created",
+      "outcome": "Passed",
+      "duration": "00:00:00.0542579"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminCreate_InvalidRole_Returns400BadRequest(invalidRole: \"ROOT\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0002352"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.GoogleIdentityTests.SignatureAudienceIssuerNonceExpiryAndVerifiedEmailAreValidated(scenario: \"unverified\", accepted: False)",
+      "outcome": "Passed",
+      "duration": "00:00:00.1020500"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.LoginControllerTests.TC_LOG_04_MissingRequiredFields_FailsValidation",
+      "outcome": "Passed",
+      "duration": "00:00:00.0002088"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.Login_Success_ForwardsExactRequestAndPreservesSession(channel: \"staff\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0019406"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.IdentityKafkaProducerTests.KafkaProducerService_WhenDisabled_DoesNotThrowAndCompletes",
+      "outcome": "Passed",
+      "duration": "00:00:00.0004983"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.LoginChannelAuthenticationTests.StaffChannel_CustomerRole_ThrowsPortalAccessDeniedException",
+      "outcome": "Passed",
+      "duration": "00:00:00.1879324"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.GetUsers_ReflectsActiveAndDisabledStatusCorrectly",
+      "outcome": "Passed",
+      "duration": "00:00:00.4841207"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.DisabledUserCannotAuthenticate_ThrowsAccountDisabledException_AndAuthControllerReturns403",
+      "outcome": "Passed",
+      "duration": "00:00:00.0826637"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.CustomerRegistrationAndProfileTests.TC_SEC_01_ResponsesDoNotExposePasswordHashOrCredentials",
+      "outcome": "Passed",
+      "duration": "00:00:00.0774874"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.VerifiedOnboardingTests.SignupCreatesNoAccountOrTokenUntilOtpAndRejectsReplay",
+      "outcome": "Passed",
+      "duration": "00:00:00.0573217"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.VerifiedOnboardingTests.UnknownRecoveryHasSameShapeAndPersistsNoEmail",
+      "outcome": "Passed",
+      "duration": "00:00:00.4907425"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.VerifiedOnboardingTests.AHeaderDisguisedAsAnImageCannotPassDocumentDecoding",
+      "outcome": "Passed",
+      "duration": "00:00:00.0053083"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.PasswordChange_FailureNeverRenewsSession(failure: IdentityService.Api.Exceptions.NotFoundException: Unknown user., status: 404)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0018965"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.UnitTest1.Test1",
+      "outcome": "Passed",
+      "duration": "00:00:00.0036797"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminCreatedCustomer_CanLoginViaCustomerChannel_DeniedFromStaffChannel",
+      "outcome": "Passed",
+      "duration": "00:00:00.1155970"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.ProfilePictureTests.DeleteProfilePictureAsync_RemovesPhysicalFileAndClearsDbField",
+      "outcome": "Passed",
+      "duration": "00:00:00.0037549"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.MissingPhoto_IsBadRequestWithoutUsingStorage",
+      "outcome": "Passed",
+      "duration": "00:00:00.0004486"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.VerifiedOnboardingTests.VerifiedDeletionRevokesAccessAndAuditedRestorationDoesNotReviveOldSessions",
+      "outcome": "Passed",
+      "duration": "00:00:00.0490828"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.CustomerRegistrationAndProfileTests.TC_REG_10_LoginReturnsPersistedCustomerProfileData",
+      "outcome": "Passed",
+      "duration": "00:00:00.0939292"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.PasswordChange_RenewsOnlyForcedPasswordSession(forced: True)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0166711"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.IdentityKafkaProducerTests.RegistrationService_Register_PublishesUserCreatedEventToKafka",
+      "outcome": "Passed",
+      "duration": "00:00:00.0370339"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.VerifiedOnboardingTests.LegalRevisionInvalidatesApprovalButContactEditingDoesNotReleaseClaims",
+      "outcome": "Passed",
+      "duration": "00:00:00.0423100"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.ProfilePictureTests.UploadProfilePictureAsync_OversizedFile_ThrowsArgumentException",
+      "outcome": "Passed",
+      "duration": "00:00:00.0091694"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.CustomerRegistrationAndProfileTests.TC_REG_02_FullName_PersistedCorrectly",
+      "outcome": "Passed",
+      "duration": "00:00:00.0401564"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminEdit_LastAdminDemotion_Returns400BadRequest",
+      "outcome": "Passed",
+      "duration": "00:00:00.0028590"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.Login_Success_ForwardsExactRequestAndPreservesSession(channel: \"customer\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0005477"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.CustomerRegistrationAndProfileTests.TC_REG_03_PhoneNumber_PersistedCorrectly",
+      "outcome": "Passed",
+      "duration": "00:00:00.4290910"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.PasswordChange_FailureNeverRenewsSession(failure: System.ArgumentException: Current password mismatch., status: 400)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0005243"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests.CreateSession_WeakOrMissingKeyNeverProducesToken(key: \"short\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0000779"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminCreate_InvalidRole_Returns400BadRequest(invalidRole: \"UNKNOWN_ROLE\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0003817"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.InvalidSubject_DeniesProfileAndPasswordActionsBeforeCallingDependencies(subject: \"\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0004409"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.InvalidSubject_DeniesProfileAndPasswordActionsBeforeCallingDependencies(subject: \"not-a-guid\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0022532"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.Login_DependencyFailure_MapsStatusWithoutLeakingInfrastructure(failure: IdentityService.Api.Exceptions.AccountDisabledException: Disabled., expectedStatus: 403, expectedMessage: \"Disabled.\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0008846"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminDelete_NonExistentUser_Returns404",
+      "outcome": "Passed",
+      "duration": "00:00:00.0012434"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminCreate_StaffWithExplicitProfile_PreservesExplicitValues",
+      "outcome": "Passed",
+      "duration": "00:00:00.0416262"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.CustomerRegistrationAndProfileTests.TC_REG_05_DrivingLicenseNumber_PersistedCorrectly",
+      "outcome": "Passed",
+      "duration": "00:00:00.0394647"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminCanDisableActiveUserAccount_Returns200WithDisabledStatus",
+      "outcome": "Passed",
+      "duration": "00:00:00.0013796"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.LoginControllerTests.TC_LOG_03_UnknownUser_ReturnsNotFoundOrUnauthorized",
+      "outcome": "Passed",
+      "duration": "00:00:00.0000791"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminUsersController_HasAuthorizeAttributeWithAdminRole",
+      "outcome": "Passed",
+      "duration": "00:00:00.0001892"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.VerifiedOnboardingTests.RecoveryIsPurposeBoundAndRevokesOldAccessVersion",
+      "outcome": "Passed",
+      "duration": "00:00:00.1523633"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.GoogleOnboardingFlowTests.NewGoogleIdentityCompletesProfileAfterVerificationAndExistingIdentitySignsInWithoutIt",
+      "outcome": "Passed",
+      "duration": "00:00:00.2902999"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.GoogleOnboardingFlowTests.GoogleOnlyPasswordCreationRequiresItsOwnEmailChallengeAndRevokesPreviousSessions",
+      "outcome": "Passed",
+      "duration": "00:00:00.6702397"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AseUnit.AuthenticationBoundaryTests.Login_DependencyFailure_MapsStatusWithoutLeakingInfrastructure(failure: IdentityService.Api.Exceptions.PortalAccessDeniedException: Use staff portal., expectedStatus: 403, expectedMessage: \"Use staff portal.\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0004689"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests.CreateSession_WeakOrMissingKeyNeverProducesToken(key: null)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0000315"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.VerifiedOnboardingTests.ResendSupersedesOldChallengeAndCooldownDoesNotConsumeIt",
+      "outcome": "Passed",
+      "duration": "00:00:00.0434567"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminCanReEnableDisabledUserAccount_LoginSucceedsAfterReEnablement",
+      "outcome": "Passed",
+      "duration": "00:00:00.0826639"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.LoginControllerTests.TC_LOG_01_ValidCredentials_ReturnsSuccessAndToken",
+      "outcome": "Passed",
+      "duration": "00:00:00.0009687"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.CustomerRegistrationAndProfileTests.TC_REG_08_MissingRequiredFields_Rejected(fullName: \"Alex\", username: \"alex\", email: \"alex@test.com\", phone: \"12345678\", address: \"\", license: \"DL-1234\", expectedParam: \"Address\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0003188"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.ProfilePictureTests.UploadProfilePictureAsync_ReplacesOldPhoto_DeletesPreviousPhysicalFile",
+      "outcome": "Passed",
+      "duration": "00:00:00.0307637"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.CustomerRegistrationAndProfileTests.TC_REG_09_CustomerLoginWorksAfterRegistration",
+      "outcome": "Passed",
+      "duration": "00:00:00.0822626"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.NonAdminRoles_AreExcludedFromAdminAuthorizationPolicy(role: \"CUSTOMER\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0120828"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.VerifiedOnboardingTests.NicFormatsPreserveLeadingZerosAndDoNotClaimAuthenticity(number: \"12345678V\", accepted: False)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0000030"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminEdit_ValidStaffUser_Returns200AndUpdatesFields",
+      "outcome": "Passed",
+      "duration": "00:00:00.0535156"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminEdit_DuplicateUsername_Returns409Conflict",
+      "outcome": "Passed",
+      "duration": "00:00:00.0016398"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests.CreateSession_MinimumKeyLengthIsUtf8BytesRatherThanCharacterCount(key: \"12345678901234567890123456789012\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0002486"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.LastAdminProtection_CanDisableAdminWhenAnotherActiveAdminExists",
+      "outcome": "Passed",
+      "duration": "00:00:00.0033929"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.VerifiedOnboardingTests.PrivateDocumentLookupRejectsUnrelatedCustomersBeforeReadingStorage",
+      "outcome": "Passed",
+      "duration": "00:00:00.0454831"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminDelete_NonAdminRole_Returns403",
+      "outcome": "Passed",
+      "duration": "00:00:00.0001519"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminDelete_NormalUser_Returns204AndRemovesUser",
+      "outcome": "Passed",
+      "duration": "00:00:00.0172290"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminCreate_CustomerMissingRequiredProfileField_Returns400BadRequest",
+      "outcome": "Passed",
+      "duration": "00:00:00.0008892"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.IdentityKafkaProducerTests.AdminUserService_UpdateUser_PublishesUserUpdatedEventToKafka",
+      "outcome": "Passed",
+      "duration": "00:00:00.0069045"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests.CreateSession_InvalidExpiryUsesTheDocumentedSixtyMinuteDefault(minutes: \"\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0002212"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.CustomerRegistrationAndProfileTests.TC_REG_08_MissingRequiredFields_Rejected(fullName: \"\", username: \"alex\", email: \"alex@test.com\", phone: \"12345678\", address: \"123 Main St\", license: \"DL-1234\", expectedParam: \"FullName\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0003279"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.LoginChannelAuthenticationTests.StaffChannel_AdminRole_SucceedsWithExpectedRoleClaim",
+      "outcome": "Passed",
+      "duration": "00:00:00.2022514"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminCreate_CustomerRole_Returns201CreatedAndPersistsUser",
+      "outcome": "Passed",
+      "duration": "00:00:00.0482791"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.VerifiedOnboardingTests.ForeignDocumentsAndSriLankanExpiryBoundaryUseTheirOwnRules",
+      "outcome": "Passed",
+      "duration": "00:00:00.0050417"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminEdit_SelfDemotion_Returns400BadRequest",
+      "outcome": "Passed",
+      "duration": "00:00:00.0014736"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.ProfilePictureTests.UploadProfilePictureAsync_DisallowedMime_ThrowsArgumentException",
+      "outcome": "Passed",
+      "duration": "00:00:00.0178238"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.RbacControllerTests.TC_RBAC_04_CustomerRole_DeniedFromAdminEndpoints",
+      "outcome": "Passed",
+      "duration": "00:00:00.0000703"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminEdit_RetainingOwnUsernameAndEmail_Returns200Ok",
+      "outcome": "Passed",
+      "duration": "00:00:00.0023181"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminDelete_LastAdmin_Returns400",
+      "outcome": "Passed",
+      "duration": "00:00:00.0159484"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminDelete_DoesNotAffectOtherUsers",
+      "outcome": "Passed",
+      "duration": "00:00:00.0107143"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminEdit_NonExistentUser_Returns404NotFound",
+      "outcome": "Passed",
+      "duration": "00:00:00.0037043"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.LoginChannelAuthenticationTests.CustomerChannel_AdminRole_ThrowsPortalAccessDeniedException",
+      "outcome": "Passed",
+      "duration": "00:00:00.1872055"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.IdentityKafkaProducerTests.KafkaProducerService_WhenUnreachableBroker_GracefullyHandlesFailureWithoutThrowing",
+      "outcome": "Passed",
+      "duration": "00:00:06.1572798"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.VerifiedOnboardingTests.WrongOtpLocksAtFiveAttemptsAndExpiredCodesCannotCreateUsers",
+      "outcome": "Passed",
+      "duration": "00:00:00.0453367"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AdminUserManagementTests.AdminCreate_DuplicateEmail_Returns409Conflict",
+      "outcome": "Passed",
+      "duration": "00:00:00.0385097"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.VerifiedOnboardingTests.BackupCodesAreSingleUseAndNeverReplaceInitialVerification",
+      "outcome": "Passed",
+      "duration": "00:00:00.1911380"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.LoginChannelAuthenticationTests.AuthController_PortalAccessDenied_ReturnsHttp403Forbidden",
+      "outcome": "Passed",
+      "duration": "00:00:00.0008349"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.GoogleIdentityTests.SignatureAudienceIssuerNonceExpiryAndVerifiedEmailAreValidated(scenario: \"nonce\", accepted: False)",
+      "outcome": "Passed",
+      "duration": "00:00:00.1034635"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.ProfilePictureTests.UploadProfilePictureAsync_ValidJpeg_PersistsPortableRelativeUrlAndPhysicalFile",
+      "outcome": "Passed",
+      "duration": "00:00:00.4668014"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.VerifiedOnboardingTests.EmailChangeKeepsOldAddressUntilOtpAndCollisionCannotBeOverridden",
+      "outcome": "Passed",
+      "duration": "00:00:00.0813546"
+    },
+    {
+      "name": "FleetFlow.IdentityService.Tests.AseUnit.SessionSigningTests.CreateSession_InvalidExpiryUsesTheDocumentedSixtyMinuteDefault(minutes: null)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0003930"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_DatesAreExplicitUtcWithRoundTripPrecision(kind: Unspecified)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0001604"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleImageTests.ReplaceImageAsync_NonExistentImage_ThrowsNotFoundException",
+      "outcome": "Passed",
+      "duration": "00:00:00.0623959"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleStatusTests.UpdateVehicleStatus_AsMaintenanceStaff_DisallowedStatuses_Returns403Forbidden(disallowedStatus: Retired)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0003665"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleStatusTests.UpdateVehicleStatus_InvalidEnumStatus_Returns400BadRequest",
+      "outcome": "Passed",
+      "duration": "00:00:00.0014529"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleStatusTests.UpdateVehicleStatus_AsAdmin_Returns200AndPersistsStatus(targetStatus: Available)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0005916"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleStatusTests.UpdateVehicleStatus_AsMaintenanceStaff_OperationalHealthStatuses_Returns200Ok(healthStatus: Available)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0015017"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.List_ValidBoundaries_PreservesEveryAccount(count: 1)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0125241"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.ReportBoundaryTests.CallerCancellation_IsNotRelabelledAsSuccessfulOrUnavailableReport",
+      "outcome": "Passed",
+      "duration": "00:00:00.0744293"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleImageTests.UploadImageAsync_DisallowedMimeType_ThrowsArgumentException",
+      "outcome": "Passed",
+      "duration": "00:00:00.0016531"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_DatesAreExplicitUtcWithRoundTripPrecision(kind: Utc)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0060812"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Maintenance_RowLimit_IncludesExactBoundary(count: 10000, shouldReject: False)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0573142"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.ReportBoundaryTests.BookingReport_MapsExpectedDependencyFailuresAndForwardsCancellation(failure: Npgsql.NpgsqlException (0x80004005): Synthetic database outage, status: 503)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0020562"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleEditTests.UpdateVehicle_DuplicateVinOnAnotherVehicle_Returns409Conflict",
+      "outcome": "Passed",
+      "duration": "00:00:00.0019702"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.DependencyHttpFailure_IsNotTreatedAsEligibleStaff(status: 503)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0042484"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Maintenance_RowLimit_IncludesExactBoundary(count: 9999, shouldReject: False)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0375229"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_RealAmountsKeepInvariantDecimalSeparatorsAndNegativeValues(culture: \"fr-FR\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0000238"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.MaintenanceDashboardTests.GetDashboard_WithVariousStatuses_AggregatesPersistedCountsAccurately",
+      "outcome": "Passed",
+      "duration": "00:00:00.0013928"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleImageTests.GetImagesAsync_ReturnsOnlyImagesForRequestedVehicle",
+      "outcome": "Passed",
+      "duration": "00:00:00.0338019"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: \"+SUM(A1)\", expected: \"\\t+SUM(A1)\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0007115"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.BookingServiceTests.CancelBookingAsync_CancelledBooking_RemainsInHistoryAndNoLongerBlocksAvailability",
+      "outcome": "Passed",
+      "duration": "00:00:00.6109772"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleStatusTests.UpdateVehicleStatus_AsAdmin_Returns200AndPersistsStatus(targetStatus: Maintenance)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0003998"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleImageTests.UploadImageAsync_Exceeding5Mb_ThrowsArgumentException",
+      "outcome": "Passed",
+      "duration": "00:00:00.0053498"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleImageTests.ReplaceImageAsync_Exceeding5Mb_ThrowsArgumentExceptionAndPreservesOldFile",
+      "outcome": "Passed",
+      "duration": "00:00:00.0087663"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleStatusTests.UpdateVehicleStatus_AsMaintenanceStaff_DisallowedStatuses_Returns403Forbidden(disallowedStatus: InUse)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0007863"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.List_InvalidIdentityDuplicateOrOverflow_FailsClosed(accounts: [MaintenanceStaffAccount { Id = 00000000-0000-0000-0000-000000000000, FullName = Synthetic Worker, Username = worker_unit }])",
+      "outcome": "Passed",
+      "duration": "00:00:00.0006110"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: \"-1+1\", expected: \"\\t-1+1\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0000083"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: \"\uff0b1\", expected: \"\\t\uff0b1\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0000070"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_EscapesQuotesWithoutLosingEmbeddedDelimiters(input: \"Two\\r\\nlines\", escaped: \"Two\\r\\nlines\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0000835"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleEditTests.UpdateVehicle_AsFleetManager_Returns200AndUpdatesFields",
+      "outcome": "Passed",
+      "duration": "00:00:00.0134215"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.MaintenanceDashboardTests.GetDashboard_IdentifiesProlongedMaintenance_WithHighUrgency",
+      "outcome": "Passed",
+      "duration": "00:00:00.0082799"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.InvalidJsonOrMissingBody_FailsClosed(body: \"{\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0013215"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleEditTests.UpdateVehicle_InvalidDailyRate_Returns400BadRequest",
+      "outcome": "Passed",
+      "duration": "00:00:00.0009310"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleEditTests.UpdateVehicle_InvalidCategory_Returns400BadRequest",
+      "outcome": "Passed",
+      "duration": "00:00:00.0009133"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleStatusTests.UpdateVehicleStatus_AsAdmin_Returns200AndPersistsStatus(targetStatus: Retired)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0005836"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.BookingServiceTests.CreateBookingAsync_VehicleNotFound_ThrowsNotFoundException",
+      "outcome": "Passed",
+      "duration": "00:00:00.0006782"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Bookings_MapsActualStatusAmountAndIdentifiersToTheRightColumns",
+      "outcome": "Passed",
+      "duration": "00:00:00.0008012"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.WrongAccountOrBlankUsername_IsRejected(wrongId: True)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0013176"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: \"Toyota\", expected: \"Toyota\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0000066"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleImageTests.DeleteImageAsync_RemovesEntityAndPhysicalFile",
+      "outcome": "Passed",
+      "duration": "00:00:00.0065421"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleStatusTests.UpdateVehicleStatus_AsFleetManager_Returns200AndPersistsStatus(targetStatus: Maintenance)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0026603"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_RealAmountsKeepInvariantDecimalSeparatorsAndNegativeValues(culture: \"en-US\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0002412"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleImageTests.DeleteAllImagesForVehicleAsync_RemovesAllAssociatedDbRecordsAndPhysicalFiles",
+      "outcome": "Passed",
+      "duration": "00:00:00.0127284"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleStatusTests.UpdateVehicleStatusEndpoint_AcceptsBothHttpPatchAndHttpPut",
+      "outcome": "Passed",
+      "duration": "00:00:00.0022275"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.List_ValidBoundaries_PreservesEveryAccount(count: 0)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0007791"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_EscapesQuotesWithoutLosingEmbeddedDelimiters(input: \"Comma, value\", escaped: \"Comma, value\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0000660"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleStatusTests.UpdateVehicleStatus_AsAdmin_Returns200AndPersistsStatus(targetStatus: InUse)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0009790"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.MaintenanceDashboardTests.GetDashboard_WithAuthorizedRoles_Returns200Ok(role: \"FLEET_MANAGER\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0004516"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleImageTests.UploadImageAsync_NonExistentVehicle_ThrowsNotFoundException",
+      "outcome": "Passed",
+      "duration": "00:00:00.0013035"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleImageTests.UploadImageAsync_ValidPng_PersistsCorrectExtensionAndRelativeUrl",
+      "outcome": "Passed",
+      "duration": "00:00:00.0020990"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleStatusTests.UpdateVehicleStatus_ModelErrors_Returns400BadRequest",
+      "outcome": "Passed",
+      "duration": "00:00:00.4350938"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleStatusTests.RetireVehicleEndpoint_HasAuthorizeRolesAttribute",
+      "outcome": "Passed",
+      "duration": "00:00:00.0001810"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: \"\uff1d1\", expected: \"\\t\uff1d1\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0043513"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: \"123\", expected: \"123\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0000058"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.List_InvalidIdentityDuplicateOrOverflow_FailsClosed(accounts: [MaintenanceStaffAccount { Id = 22222222-2222-4222-8222-222222222222, FullName = Synthetic Worker, Username = worker_unit }, MaintenanceStaffAccount { Id = 22222222-2222-4222-8222-222222222222, FullName = Synthetic Worker, Username = worker_unit }])",
+      "outcome": "Passed",
+      "duration": "00:00:00.0010108"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.TokenFailure_NeverSendsHttpRequest",
+      "outcome": "Passed",
+      "duration": "00:00:00.0031901"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.ReportBoundaryTests.MaintenanceExport_UnavailableSnapshot_Is503RatherThanCsv",
+      "outcome": "Passed",
+      "duration": "00:00:00.0093950"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleStatusTests.UpdateVehicleStatus_AsFleetManager_Returns200AndPersistsStatus(targetStatus: InUse)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0027304"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Maintenance_RowLimit_IncludesExactBoundary(count: 10001, shouldReject: True)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0003683"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.MaintenanceDashboardTests.GetDashboard_OnEmptyDatabase_ReturnsExactZerosAndEmptyListsWithoutFabrication",
+      "outcome": "Passed",
+      "duration": "00:00:00.0025935"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleStatusTests.GetPagedVehicles_IncludeRetiredTrue_ReturnsBothActiveAndRetired",
+      "outcome": "Passed",
+      "duration": "00:00:00.0098979"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.ReportBoundaryTests.BookingExport_ProducesNamedCsvFromTheReturnedSnapshot",
+      "outcome": "Passed",
+      "duration": "00:00:00.0185984"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.DependencyHttpFailure_IsNotTreatedAsEligibleStaff(status: 500)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0004738"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.BookingServiceTests.CreateBookingAsync_EndDateTimeBeforeStartDateTime_ThrowsValidationException",
+      "outcome": "Passed",
+      "duration": "00:00:00.0006617"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleStatusTests.UpdateVehicleStatus_PreservesAllOtherVehicleAttributes",
+      "outcome": "Passed",
+      "duration": "00:00:00.0065547"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.List_ValidBoundaries_PreservesEveryAccount(count: 1000)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0041167"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleStatusTests.GetPagedVehicles_StatusRetired_ReturnsOnlyRetiredVehicles",
+      "outcome": "Passed",
+      "duration": "00:00:00.0123161"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.MaintenanceDashboardTests.GetDashboard_IdentifiesVehiclesInMaintenance_AsAttentionItems",
+      "outcome": "Passed",
+      "duration": "00:00:00.0011486"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: \"\uff0d1\", expected: \"\\t\uff0d1\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0000076"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleStatusTests.UpdateVehicleStatusEndpoint_HasAuthorizeAttributeWithAuthorizedStaffRoles",
+      "outcome": "Passed",
+      "duration": "00:00:00.0001439"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: \"=1+1\", expected: \"\\t=1+1\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0000065"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleStatusTests.UpdateVehicleStatus_AsFleetManager_Returns200AndPersistsStatus(targetStatus: Available)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0056502"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.Get_ValidAccount_UsesRestrictedServiceTokenAndPreservesIdentity",
+      "outcome": "Passed",
+      "duration": "00:00:00.0012811"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleStatusTests.RetireVehicle_VehicleInUse_Returns400BadRequest",
+      "outcome": "Passed",
+      "duration": "00:00:00.0138190"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleStatusTests.UpdateVehicleStatus_AsMaintenanceStaff_OperationalHealthStatuses_Returns200Ok(healthStatus: Maintenance)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0009704"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_EscapesQuotesWithoutLosingEmbeddedDelimiters(input: \"He said \\\"yes\\\"\", escaped: \"He said \\\"\\\"yes\\\"\\\"\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0000045"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.BookingServiceTests.CreateBookingAsync_ValidRequest_CreatesAndReturnsBookingResponse",
+      "outcome": "Passed",
+      "duration": "00:00:00.0035287"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleEditTests.UpdateVehicle_NonExistentVehicle_Returns404NotFound",
+      "outcome": "Passed",
+      "duration": "00:00:00.5079354"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.List_InvalidIdentityDuplicateOrOverflow_FailsClosed(accounts: [MaintenanceStaffAccount { Id = 22222222-2222-4222-8222-222222222222, FullName = Synthetic Worker, Username =   }])",
+      "outcome": "Passed",
+      "duration": "00:00:00.0006946"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.DependencyHttpFailure_IsNotTreatedAsEligibleStaff(status: 429)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0007994"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.WrongAccountOrBlankUsername_IsRejected(wrongId: False)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0005097"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleImageTests.VehicleImagesController_AuthorizationDecorators_AreConfiguredProperly",
+      "outcome": "Passed",
+      "duration": "00:00:00.0006233"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.BookingServiceTests.CreateBookingAsync_StartDateTimeInPast_ThrowsValidationException",
+      "outcome": "Passed",
+      "duration": "00:00:00.0006638"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleStatusTests.GetPagedVehicles_ExcludesRetiredVehiclesByDefault",
+      "outcome": "Passed",
+      "duration": "00:00:00.0159522"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.MaintenanceDashboardTests.MaintenanceController_HasAuthorizeAttribute_RestrictingToStaffRoles",
+      "outcome": "Passed",
+      "duration": "00:00:00.0002602"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.BookingServiceTests.CreateBookingAsync_OverlappingBookingExists_ThrowsDuplicateException",
+      "outcome": "Passed",
+      "duration": "00:00:00.0013517"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.MaintenanceDashboardTests.GetDashboard_WithAuthorizedRoles_Returns200Ok(role: \"ADMIN\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0003163"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.MaintenanceDashboardTests.GetDashboard_WithAuthorizedRoles_Returns200Ok(role: \"MAINTENANCE_STAFF\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0015495"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleStatusTests.UpdateVehicleStatus_NonExistentVehicle_Returns404NotFound",
+      "outcome": "Passed",
+      "duration": "00:00:00.0011974"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleImageTests.ReplaceImageAsync_ValidPng_ReplacesImageRemovesOldFileAndUpdatesDb",
+      "outcome": "Passed",
+      "duration": "00:00:00.0047957"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: \"\", expected: \"\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0000075"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleImageTests.UploadImageAsync_ValidJpeg_PersistsPortableRelativeUrlAndSavesFile",
+      "outcome": "Passed",
+      "duration": "00:00:00.0060710"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleImageTests.GetVehicleByIdAsync_RetrievesImagesForVehicle",
+      "outcome": "Passed",
+      "duration": "00:00:00.0194201"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.InvalidJsonOrMissingBody_FailsClosed(body: \"null\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.1142041"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.DependencyHttpFailure_IsNotTreatedAsEligibleStaff(status: 403)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0004784"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.ReportBoundaryTests.BookingReport_MapsExpectedDependencyFailuresAndForwardsCancellation(failure: System.TimeoutException: Synthetic timeout, status: 503)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0015782"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.ReportBoundaryTests.BookingReport_MapsExpectedDependencyFailuresAndForwardsCancellation(failure: System.ArgumentException: Synthetic bad filter, status: 400)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0029913"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.MaintenanceDashboardTests.GetDashboard_WithHubFilter_OnlyAggregatesMatchingHub",
+      "outcome": "Passed",
+      "duration": "00:00:00.5156123"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: \"\\x01=1\", expected: \"\\t\\x01=1\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0000061"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.Cancellation_DistinguishesCallerCancellationFromDependencyTimeout(callerCancelled: True)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0009005"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.MaintenanceDashboardTests.GetDashboard_IdentifiesHighMileageAvailableVehicles_AsPreventiveAttentionItems",
+      "outcome": "Passed",
+      "duration": "00:00:00.0012387"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: \"\\rvalue\", expected: \"\\t\\rvalue\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0000066"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleEditTests.UpdateVehicle_AsAdmin_Returns200Ok",
+      "outcome": "Passed",
+      "duration": "00:00:00.0010847"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleStatusTests.ReactivateVehicle_AsAdmin_RestoresStatusToAvailable",
+      "outcome": "Passed",
+      "duration": "00:00:00.0042761"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_RealAmountsKeepInvariantDecimalSeparatorsAndNegativeValues(culture: \"de-DE\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0007321"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.UnitTest1.Test1",
+      "outcome": "Passed",
+      "duration": "00:00:00.0018909"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleImageTests.UploadImageAsync_CorruptedHeader_ThrowsArgumentException",
+      "outcome": "Passed",
+      "duration": "00:00:00.4439950"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleEditTests.UpdateVehicle_RetainingOwnPlateAndVin_Returns200Ok",
+      "outcome": "Passed",
+      "duration": "00:00:00.0011136"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.BookingServiceTests.CreateBookingAsync_VehicleNotAvailable_ThrowsValidationException",
+      "outcome": "Passed",
+      "duration": "00:00:00.0008251"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleEditTests.UpdateVehicleEndpoint_HasAuthorizeAttributeWithFleetManagerAndAdmin",
+      "outcome": "Passed",
+      "duration": "00:00:00.0002389"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleImageTests.DeleteImageAsync_NonExistentImage_ThrowsNotFoundException",
+      "outcome": "Passed",
+      "duration": "00:00:00.0020601"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleStatusTests.UpdateVehicleStatus_NullPayload_Returns400BadRequest",
+      "outcome": "Passed",
+      "duration": "00:00:00.0006811"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.InvalidJsonOrMissingBody_FailsClosed(body: \"[]\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0014087"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleEditTests.UpdateVehicle_DuplicatePlateOnAnotherVehicle_Returns409Conflict",
+      "outcome": "Passed",
+      "duration": "00:00:00.0015950"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleImageTests.ReplaceImageAsync_CorruptedHeader_ThrowsArgumentException",
+      "outcome": "Passed",
+      "duration": "00:00:00.0021004"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: \"  =1\", expected: \"\\t  =1\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0000148"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: \"\uff20cmd\", expected: \"\\t\uff20cmd\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0002416"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.List_InvalidIdentityDuplicateOrOverflow_FailsClosed(accounts: [MaintenanceStaffAccount { Id = 00000000-0000-4000-8000-000000000001, FullName = Worker, Username = worker }, MaintenanceStaffAccount { Id = 00000000-0000-4000-8000-000000000002, FullName = Worker, Username = worker }, MaintenanceStaffAccount { Id = 00000000-0000-4000-8000-000000000003, FullName = Worker, Username = worker }, MaintenanceStaffAccount { Id = 00000000-0000-4000-8000-000000000004, FullName = Worker, Username = worker }, MaintenanceStaffAccount { Id = 00000000-0000-4000-8000-000000000005, FullName = Worker, Username = worker }, \u00b7\u00b7\u00b7])",
+      "outcome": "Passed",
+      "duration": "00:00:00.0030612"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: \"A=B\", expected: \"A=B\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0000064"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleStatusTests.UpdateVehicleStatus_AsFleetManager_Returns200AndPersistsStatus(targetStatus: Retired)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0859126"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.VehicleStatusTests.RetireVehicle_AsFleetManager_RetiresVehicleAndPreservesHistory",
+      "outcome": "Passed",
+      "duration": "00:00:00.0040302"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.DependencyHttpFailure_IsNotTreatedAsEligibleStaff(status: 401)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0004332"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Maintenance_UnavailableSource_ThrowsInsteadOfFabricatingEmptySuccess",
+      "outcome": "Passed",
+      "duration": "00:00:00.0001878"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.ReportBoundaryTests.BookingReport_ReturnsExactSnapshotIncludingUnavailableMetrics",
+      "outcome": "Passed",
+      "duration": "00:00:00.0011407"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.NotFound_DiffersBetweenIndividualAndWholeDirectory",
+      "outcome": "Passed",
+      "duration": "00:00:00.0021013"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Maintenance_CombinedCountsCannotOverflowBeforeLimitCheck",
+      "outcome": "Passed",
+      "duration": "00:00:00.0060218"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: \"@cmd\", expected: \"\\t@cmd\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0000187"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.MaintenanceStaffDirectoryTests.Cancellation_DistinguishesCallerCancellationFromDependencyTimeout(callerCancelled: False)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0004857"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: \"\\nvalue\", expected: \"\\t\\nvalue\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0000072"
+    },
+    {
+      "name": "FleetFlow.VehicleService.Tests.AseUnit.ReportCsvSafetyTests.Encode_UntrustedStrings_AreQuotedAndFormulaTriggersAreNeutralised(input: \"\\tvalue\", expected: \"\\t\\tvalue\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0000067"
+    }
+  ],
+  "projectsWithResults": [
+    "FleetFlow.IdentityService.Tests",
+    "FleetFlow.VehicleService.Tests"
+  ],
+  "projectsWithCoverage": [
+    "FleetFlow.IdentityService.Tests",
+    "FleetFlow.VehicleService.Tests"
+  ],
+  "accepted": true
+}

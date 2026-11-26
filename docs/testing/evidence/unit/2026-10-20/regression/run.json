@@ -1,0 +1,12 @@
+{
+  "owner": "Sanjeevsaran J. (IT24104155)",
+  "area": "Unit Testing and Mocking",
+  "sourceCommit": "5599029d1b460679c546c01c012393971db400f4",
+  "sourceHadUncommittedChanges": false,
+  "runUtc": "2026-10-20T08:31:00.7427613Z",
+  "engine": "Docker",
+  "filter": "FullyQualifiedName!~FleetFlow.IdentityService.Tests.OnboardingUniquenessTests",
+  "exclusions": "One existing PostgreSQL integration case is outside this offline unit run; retained in the ordinary backend CI job.",
+  "network": "disabled (--network none)",
+  "exitCode": 0
+}

@@ -1,0 +1,616 @@
+{
+  "FleetService.Api.dll": {
+    "/work/src/backend/services/FleetService/FleetService.Api/Services/MaintenanceStaffDirectory.cs": {
+      "FleetService.Api.Services.MaintenanceStaffDirectory": {
+        "System.Void FleetService.Api.Services.MaintenanceStaffDirectory::.ctor(System.Net.Http.HttpClient,FleetFlow.ServiceDefaults.IServiceTokenProvider)": {
+          "Lines": {
+            "13": 23
+          },
+          "Branches": []
+        }
+      },
+      "FleetService.Api.Services.MaintenanceStaffDirectory/<>c": {
+        "System.Boolean FleetService.Api.Services.MaintenanceStaffDirectory/<>c::<ListAsync>b__4_0(FleetFlow.Contracts.MaintenanceStaffAccount)": {
+          "Lines": {
+            "32": 2019
+          },
+          "Branches": [
+            {
+              "Line": 32,
+              "Offset": 16,
+              "EndOffset": 18,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 1004
+            },
+            {
+              "Line": 32,
+              "Offset": 16,
+              "EndOffset": 30,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 1
+            }
+          ]
+        }
+      },
+      "FleetService.Api.Services.MaintenanceStaffDirectory/<GetAsync>d__5": {
+        "System.Void FleetService.Api.Services.MaintenanceStaffDirectory/<GetAsync>d__5::MoveNext()": {
+          "Lines": {
+            "37": 15,
+            "38": 6,
+            "39": 2,
+            "40": 2
+          },
+          "Branches": [
+            {
+              "Line": 38,
+              "Offset": 171,
+              "EndOffset": 173,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 3
+            },
+            {
+              "Line": 38,
+              "Offset": 190,
+              "EndOffset": 192,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 2
+            },
+            {
+              "Line": 38,
+              "Offset": 190,
+              "EndOffset": 205,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 2
+            },
+            {
+              "Line": 38,
+              "Offset": 203,
+              "EndOffset": 205,
+              "Path": 0,
+              "Ordinal": 4,
+              "Hits": 2
+            },
+            {
+              "Line": 38,
+              "Offset": 171,
+              "EndOffset": 211,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 2
+            },
+            {
+              "Line": 38,
+              "Offset": 203,
+              "EndOffset": 211,
+              "Path": 1,
+              "Ordinal": 5,
+              "Hits": 2
+            }
+          ]
+        }
+      },
+      "FleetService.Api.Services.MaintenanceStaffDirectory/<ListAsync>d__4": {
+        "System.Void FleetService.Api.Services.MaintenanceStaffDirectory/<ListAsync>d__4::MoveNext()": {
+          "Lines": {
+            "31": 8,
+            "33": 3,
+            "34": 3
+          },
+          "Branches": [
+            {
+              "Line": 31,
+              "Offset": 127,
+              "EndOffset": 129,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 1
+            },
+            {
+              "Line": 31,
+              "Offset": 127,
+              "EndOffset": 136,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 7
+            },
+            {
+              "Line": 32,
+              "Offset": 148,
+              "EndOffset": 150,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 6
+            },
+            {
+              "Line": 32,
+              "Offset": 187,
+              "EndOffset": 189,
+              "Path": 0,
+              "Ordinal": 4,
+              "Hits": 4
+            },
+            {
+              "Line": 32,
+              "Offset": 148,
+              "EndOffset": 244,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 4
+            },
+            {
+              "Line": 32,
+              "Offset": 187,
+              "EndOffset": 244,
+              "Path": 1,
+              "Ordinal": 5,
+              "Hits": 4
+            },
+            {
+              "Line": 32,
+              "Offset": 242,
+              "EndOffset": 244,
+              "Path": 0,
+              "Ordinal": 6,
+              "Hits": 4
+            },
+            {
+              "Line": 32,
+              "Offset": 242,
+              "EndOffset": 250,
+              "Path": 1,
+              "Ordinal": 7,
+              "Hits": 3
+            }
+          ]
+        }
+      },
+      "FleetService.Api.Services.MaintenanceStaffDirectory/<Send>d__3`1": {
+        "System.Void FleetService.Api.Services.MaintenanceStaffDirectory/<Send>d__3`1::MoveNext()": {
+          "Lines": {
+            "19": 23,
+            "20": 23,
+            "21": 22,
+            "22": 22,
+            "23": 23,
+            "24": 13,
+            "26": 11,
+            "27": 4,
+            "28": 12
+          },
+          "Branches": [
+            {
+              "Line": 22,
+              "Offset": 358,
+              "EndOffset": 360,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 2
+            },
+            {
+              "Line": 22,
+              "Offset": 358,
+              "EndOffset": 373,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 18
+            },
+            {
+              "Line": 23,
+              "Offset": 384,
+              "EndOffset": 386,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 5
+            },
+            {
+              "Line": 23,
+              "Offset": 384,
+              "EndOffset": 392,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 13
+            },
+            {
+              "Line": 24,
+              "Offset": 515,
+              "EndOffset": 517,
+              "Path": 0,
+              "Ordinal": 4,
+              "Hits": 1
+            },
+            {
+              "Line": 24,
+              "Offset": 515,
+              "EndOffset": 523,
+              "Path": 1,
+              "Ordinal": 5,
+              "Hits": 10
+            }
+          ]
+        }
+      }
+    },
+    "/work/src/backend/services/FleetService/FleetService.Api/Services/ReportCsv.cs": {
+      "FleetService.Api.Services.ReportCsv": {
+        "System.Byte[] FleetService.Api.Services.ReportCsv::Bookings(FleetService.Api.Dtos.BookingExportResponse)": {
+          "Lines": {
+            "9": 2,
+            "10": 2,
+            "11": 2,
+            "12": 3,
+            "13": 3
+          },
+          "Branches": []
+        },
+        "System.Byte[] FleetService.Api.Services.ReportCsv::Maintenance(FleetService.Api.Dtos.MaintenanceReportResponse)": {
+          "Lines": {
+            "17": 8,
+            "18": 4,
+            "19": 2,
+            "20": 20001,
+            "21": 20001,
+            "22": 20001,
+            "23": 2,
+            "24": 2,
+            "25": 2,
+            "26": 2,
+            "27": 2,
+            "28": 2
+          },
+          "Branches": [
+            {
+              "Line": 17,
+              "Offset": 11,
+              "EndOffset": 13,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 2
+            },
+            {
+              "Line": 17,
+              "Offset": 11,
+              "EndOffset": 24,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 4
+            },
+            {
+              "Line": 18,
+              "Offset": 60,
+              "EndOffset": 62,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 2
+            },
+            {
+              "Line": 18,
+              "Offset": 60,
+              "EndOffset": 73,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 2
+            }
+          ]
+        },
+        "System.Byte[] FleetService.Api.Services.ReportCsv::Encode(System.String[],System.Collections.Generic.IEnumerable`1<System.Object[]>)": {
+          "Lines": {
+            "33": 29,
+            "35": 29,
+            "36": 60133,
+            "37": 29
+          },
+          "Branches": [
+            {
+              "Line": 36,
+              "Offset": 55,
+              "EndOffset": 34,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 20025
+            },
+            {
+              "Line": 36,
+              "Offset": 55,
+              "EndOffset": 57,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 29
+            }
+          ]
+        },
+        "System.String FleetService.Api.Services.ReportCsv::Cell(System.Object)": {
+          "Lines": {
+            "42": 300113,
+            "43": 119998,
+            "44": 5,
+            "45": 60007,
+            "46": 120103,
+            "47": 300113,
+            "48": 300113,
+            "50": 240211,
+            "53": 120116,
+            "55": 300113
+          },
+          "Branches": [
+            {
+              "Line": 42,
+              "Offset": 1,
+              "EndOffset": 3,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 180115
+            },
+            {
+              "Line": 42,
+              "Offset": 9,
+              "EndOffset": 11,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 5
+            },
+            {
+              "Line": 42,
+              "Offset": 9,
+              "EndOffset": 20,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 180110
+            },
+            {
+              "Line": 42,
+              "Offset": 1,
+              "EndOffset": 32,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 119998
+            },
+            {
+              "Line": 44,
+              "Offset": 47,
+              "EndOffset": 49,
+              "Path": 0,
+              "Ordinal": 6,
+              "Hits": 4
+            },
+            {
+              "Line": 44,
+              "Offset": 47,
+              "EndOffset": 58,
+              "Path": 1,
+              "Ordinal": 7,
+              "Hits": 1
+            },
+            {
+              "Line": 42,
+              "Offset": 28,
+              "EndOffset": 87,
+              "Path": 1,
+              "Ordinal": 5,
+              "Hits": 60007
+            },
+            {
+              "Line": 45,
+              "Offset": 100,
+              "EndOffset": 102,
+              "Path": 0,
+              "Ordinal": 8,
+              "Hits": 0
+            },
+            {
+              "Line": 45,
+              "Offset": 100,
+              "EndOffset": 108,
+              "Path": 1,
+              "Ordinal": 9,
+              "Hits": 60007
+            },
+            {
+              "Line": 42,
+              "Offset": 28,
+              "EndOffset": 111,
+              "Path": 0,
+              "Ordinal": 4,
+              "Hits": 120103
+            },
+            {
+              "Line": 46,
+              "Offset": 118,
+              "EndOffset": 120,
+              "Path": 0,
+              "Ordinal": 10,
+              "Hits": 0
+            },
+            {
+              "Line": 46,
+              "Offset": 118,
+              "EndOffset": 126,
+              "Path": 1,
+              "Ordinal": 11,
+              "Hits": 120103
+            },
+            {
+              "Line": 48,
+              "Offset": 135,
+              "EndOffset": 137,
+              "Path": 0,
+              "Ordinal": 12,
+              "Hits": 120103
+            },
+            {
+              "Line": 53,
+              "Offset": 193,
+              "EndOffset": 195,
+              "Path": 0,
+              "Ordinal": 14,
+              "Hits": 120093
+            },
+            {
+              "Line": 53,
+              "Offset": 203,
+              "EndOffset": 205,
+              "Path": 0,
+              "Ordinal": 16,
+              "Hits": 120092
+            },
+            {
+              "Line": 53,
+              "Offset": 213,
+              "EndOffset": 215,
+              "Path": 0,
+              "Ordinal": 18,
+              "Hits": 120091
+            },
+            {
+              "Line": 53,
+              "Offset": 193,
+              "EndOffset": 225,
+              "Path": 1,
+              "Ordinal": 15,
+              "Hits": 13
+            },
+            {
+              "Line": 53,
+              "Offset": 203,
+              "EndOffset": 225,
+              "Path": 1,
+              "Ordinal": 17,
+              "Hits": 13
+            },
+            {
+              "Line": 53,
+              "Offset": 213,
+              "EndOffset": 225,
+              "Path": 1,
+              "Ordinal": 19,
+              "Hits": 13
+            },
+            {
+              "Line": 53,
+              "Offset": 223,
+              "EndOffset": 225,
+              "Path": 0,
+              "Ordinal": 20,
+              "Hits": 13
+            },
+            {
+              "Line": 48,
+              "Offset": 135,
+              "EndOffset": 237,
+              "Path": 1,
+              "Ordinal": 13,
+              "Hits": 300113
+            },
+            {
+              "Line": 53,
+              "Offset": 223,
+              "EndOffset": 237,
+              "Path": 1,
+              "Ordinal": 21,
+              "Hits": 300113
+            },
+            {
+              "Line": 50,
+              "Offset": 6,
+              "EndOffset": 8,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 120103
+            },
+            {
+              "Line": 50,
+              "Offset": 6,
+              "EndOffset": 15,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 5
+            }
+          ]
+        },
+        "System.Void FleetService.Api.Services.ReportCsv::<Encode>g__Line|2_0(System.Collections.Generic.IEnumerable`1<System.Object>,FleetService.Api.Services.ReportCsv/<>c__DisplayClass2_0&)": {
+          "Lines": {
+            "34": 20054
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/work/src/backend/services/FleetService/FleetService.Api/Controllers/ReportsController.cs": {
+      "FleetService.Api.Controllers.ReportsController": {
+        "System.Threading.Tasks.Task`1<Microsoft.AspNetCore.Mvc.ActionResult`1<FleetService.Api.Dtos.FleetSummaryResponse>> FleetService.Api.Controllers.ReportsController::GetFleetSummary(System.Threading.CancellationToken)": {
+          "Lines": {
+            "15": 4
+          },
+          "Branches": []
+        },
+        "System.Threading.Tasks.Task`1<Microsoft.AspNetCore.Mvc.ActionResult`1<FleetService.Api.Dtos.BookingReportResponse>> FleetService.Api.Controllers.ReportsController::GetBookings(FleetService.Api.Dtos.BookingReportQuery,System.Threading.CancellationToken)": {
+          "Lines": {
+            "19": 6
+          },
+          "Branches": []
+        },
+        "System.Threading.Tasks.Task`1<Microsoft.AspNetCore.Mvc.ActionResult`1<FleetService.Api.Dtos.MaintenanceReportResponse>> FleetService.Api.Controllers.ReportsController::GetMaintenance(System.Threading.CancellationToken)": {
+          "Lines": {
+            "23": 0
+          },
+          "Branches": []
+        },
+        "System.Threading.Tasks.Task`1<Microsoft.AspNetCore.Mvc.ActionResult`1<FleetService.Api.Dtos.OperationalStatisticsResponse>> FleetService.Api.Controllers.ReportsController::GetOperationalStatistics(System.Threading.CancellationToken)": {
+          "Lines": {
+            "27": 0
+          },
+          "Branches": []
+        },
+        "System.Threading.Tasks.Task`1<Microsoft.AspNetCore.Mvc.IActionResult> FleetService.Api.Controllers.ReportsController::ExportBookings(FleetService.Api.Dtos.BookingExportQuery,System.Threading.CancellationToken)": {
+          "Lines": {
+            "31": 2
+          },
+          "Branches": []
+        },
+        "System.Threading.Tasks.Task`1<Microsoft.AspNetCore.Mvc.IActionResult> FleetService.Api.Controllers.ReportsController::ExportMaintenance(System.Threading.CancellationToken)": {
+          "Lines": {
+            "35": 2
+          },
+          "Branches": []
+        },
+        "System.Void FleetService.Api.Controllers.ReportsController::.ctor(FleetService.Api.Services.IReportingService,Microsoft.Extensions.Logging.ILogger`1<FleetService.Api.Controllers.ReportsController>)": {
+          "Lines": {
+            "11": 7
+          },
+          "Branches": []
+        }
+      },
+      "FleetService.Api.Controllers.ReportsController/<Export>d__9": {
+        "System.Void FleetService.Api.Controllers.ReportsController/<Export>d__9::MoveNext()": {
+          "Lines": {
+            "39": 2,
+            "40": 0,
+            "41": 1,
+            "43": 1,
+            "44": 1,
+            "46": 2
+          },
+          "Branches": []
+        }
+      },
+      "FleetService.Api.Controllers.ReportsController/<Read>d__10`1": {
+        "System.Void FleetService.Api.Controllers.ReportsController/<Read>d__10`1::MoveNext()": {
+          "Lines": {
+            "50": 5,
+            "51": 2,
+            "52": 3,
+            "54": 2,
+            "55": 2,
+            "56": 2,
+            "58": 4
+          },
+          "Branches": []
+        }
+      }
+    }
+  }
+}
