@@ -49,7 +49,11 @@ exit "$status"
   $script=$script.Replace("`r`n","`n").Replace("`r","`n")
   $envArgs=@('-e','DOTNET_CLI_TELEMETRY_OPTOUT=1')
   if($NuGetCache){$envArgs+=@('-e','NUGET_PACKAGES=/packages')}
-  & docker run --rm --network none @mounts @envArgs mcr.microsoft.com/dotnet/sdk:10.0 sh -c $script 2>&1 | Tee-Object -FilePath (Join-Path $output 'execution.log')
+  # Windows PowerShell 5.1 can strip nested quotes in native arguments.
+  # Transfer the script as data and let the container shell decode it.
+  $encodedScript=[Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($script))
+  $containerCommand="echo $encodedScript | base64 -d | sh"
+  & docker run --rm --network none @mounts @envArgs mcr.microsoft.com/dotnet/sdk:10.0 sh -c $containerCommand 2>&1 | Tee-Object -FilePath (Join-Path $output 'execution.log')
   $status=$LASTEXITCODE
  }else{
   foreach($project in $projects){
